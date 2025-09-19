@@ -7,8 +7,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io/' : '',
+  // 移除 basePath 和 assetPrefix，让 GitHub Pages 使用根路径
+  // basePath: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io' : '',
+  // assetPrefix: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io/' : '',
 };
 
 export default withContentlayer(nextConfig);
