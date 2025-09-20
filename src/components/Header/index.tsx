@@ -82,6 +82,11 @@ export default function Header() {
     setActiveSubmenu('__search')
   }, [])
 
+  // 处理语言切换点击
+  const handleLanguageClick = useCallback(() => {
+    setActiveSubmenu('__language')
+  }, [])
+
   // 处理导航项悬停
   const handleNavHover = useCallback((itemType: string) => {
     setActiveSubmenu(itemType)
@@ -106,6 +111,21 @@ export default function Header() {
     href: '#',
     submenu: searchSubmenu
   }), [searchSubmenu])
+
+  // 语言导航项的子菜单配置
+  const languageSubmenu = useMemo(() => ({
+    title: '',
+    description: '',
+    items: []
+  }), [])
+
+  // 语言导航项 - 使用useMemo避免在渲染中创建新对象
+  const languageNavigationItem = useMemo(() => ({
+    type: '__language' as const,
+    label: '语言',
+    href: '#',
+    submenu: languageSubmenu
+  }), [languageSubmenu])
 
 
   return (
@@ -167,7 +187,7 @@ export default function Header() {
             </div>
 
               {/* 语言切换 */}
-              <LanguageToggle />
+              <LanguageToggle onLanguageClick={handleLanguageClick} />
 
               {/* 主题切换 */}
               <ThemeToggle />
@@ -198,6 +218,8 @@ export default function Header() {
           navigationItem={
             activeSubmenu === '__search' 
               ? searchNavigationItem 
+              : activeSubmenu === '__language'
+              ? languageNavigationItem
               : navigationItems.find(item => item.type === activeSubmenu) || searchNavigationItem
           }
         />

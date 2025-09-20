@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { SubmenuItem, NavigationItem } from '@/constants'
+import { SubmenuItem, NavigationItem, LANGUAGES } from '@/constants'
+import { useLanguage } from '@/hooks'
 import NestedMenuGroup from './NestedMenuGroup'
 
 interface FullscreenDropdownProps {
@@ -19,6 +20,12 @@ export default function FullscreenDropdown({
 
   // 判断是否为搜索模式
   const isSearchMode = navigationItem.type === '__search'
+  
+  // 判断是否为语言选择模式
+  const isLanguageMode = navigationItem.type === '__language'
+
+  // 语言选择的状态
+  const { currentLang, changeLanguage } = useLanguage()
 
   // 搜索模式的状态 - 仅用于UI显示
   const [query, setQuery] = useState('')
@@ -34,6 +41,12 @@ export default function FullscreenDropdown({
     setQuery('')
     inputRef.current?.focus()
   }, [])
+
+  // 处理语言选择
+  const handleLanguageChange = useCallback((langCode: string) => {
+    changeLanguage(langCode)
+    onClose()
+  }, [changeLanguage, onClose])
 
   // 关闭时清空搜索状态
   const handleClose = useCallback(() => {
@@ -104,17 +117,19 @@ export default function FullscreenDropdown({
         }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* 标题区域 - 减小字体 */}
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-              {title || navigationItem.label}
-            </h2>
-            {description && (
-              <p className="text-base text-gray-600 dark:text-gray-400">
-                {description}
-              </p>
-            )}
-          </div>
+          {/* 标题区域 - 仅在非语言模式下显示 */}
+          {!isLanguageMode && (
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                {title || navigationItem.label}
+              </h2>
+              {description && (
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  {description}
+                </p>
+              )}
+            </div>
+          )}
 
           {/* 搜索框区域 - 仅在搜索模式下显示 */}
           {isSearchMode && (
@@ -171,6 +186,26 @@ export default function FullscreenDropdown({
                 {searchDisplayText.description}
               </p>
             </div>
+          ) : isLanguageMode ? (
+            // 语言选择模式的内容
+            <div className="w-full">
+              <div className="space-y-2">
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => handleLanguageChange(lang.code)}
+                    className="w-full flex items-center px-4 py-3 text-left rounded-lg transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                  >
+                    <span className="text-sm font-bold">
+                      {currentLang === lang.code 
+                        ? `${lang.nativeName} ✓` 
+                        : `${lang.nativeName} (${lang.translations[currentLang as keyof typeof lang.translations]})`
+                      }
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : (
             // 普通导航模式的内容 - 统一使用嵌套菜单布局
             <div className="mb-8">
@@ -181,31 +216,33 @@ export default function FullscreenDropdown({
             </div>
           )}
 
-          {/* 底部操作区域 - 减小字体和间距 */}
-          <div className="text-center border-t border-gray-200 dark:border-gray-700 pt-6">
-            {isSearchMode ? (
-              <button
-                onClick={handleClose}
-                className="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
-              >
-                关闭搜索
-                <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            ) : (
-              <Link
-                href={navigationItem.href}
-                className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
-                onClick={onClose}
-              >
-                {bottomButtonText}
-                <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            )}
-          </div>
+          {/* 底部操作区域 - 仅在非语言模式下显示 */}
+          {!isLanguageMode && (
+            <div className="text-center border-t border-gray-200 dark:border-gray-700 pt-6">
+              {isSearchMode ? (
+                <button
+                  onClick={handleClose}
+                  className="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
+                >
+                  关闭搜索
+                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              ) : (
+                <Link
+                  href={navigationItem.href}
+                  className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
+                  onClick={onClose}
+                >
+                  {bottomButtonText}
+                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>

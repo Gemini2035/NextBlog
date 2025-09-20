@@ -1,7 +1,6 @@
 // 应用常量 - 从JSON配置文件加载
 
 import siteConfigData from './site-config.json'
-import navigationData from './navigation.json'
 import { getAllPosts } from '@/lib/posts'
 
 export const SITE_CONFIG = siteConfigData.site
@@ -18,7 +17,7 @@ export interface SubmenuItem {
 }
 
 export interface NavigationItem {
-  type: '__blog' | '__about' | '__projects' | '__resources' | '__timeline' | '__search' // 唯一标识符，用于程序逻辑判断
+  type: '__blog' | '__about' | '__projects' | '__resources' | '__timeline' | '__search' | '__language' // 唯一标识符，用于程序逻辑判断
   label: string
   href: string
   submenu?: {
@@ -28,7 +27,7 @@ export interface NavigationItem {
   }
 }
 
-export const NAVIGATION_ITEMS: NavigationItem[] = navigationData as NavigationItem[]
+export const NAVIGATION_ITEMS: NavigationItem[] = siteConfigData.app.header.navigation as NavigationItem[]
 
 // 生成带有动态子菜单的导航项
 export function getNavigationItemsWithSubmenus(): NavigationItem[] {
@@ -56,3 +55,6 @@ export function getNavigationItemsWithSubmenus(): NavigationItem[] {
 
 export const POSTS_PER_PAGE = siteConfigData.app.postsPerPage
 export const TAG_COLORS = siteConfigData.app.tagColors
+
+// 语言配置
+export const LANGUAGES = siteConfigData.app.languages

@@ -12,10 +12,30 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* 浅色主题 */
+[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* 深色主题 */
+[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* 跟随系统主题 - 使用媒体查询 */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --background: #ffffff;
+    --foreground: #171717;
   }
 }
 
