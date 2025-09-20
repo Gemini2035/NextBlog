@@ -2,9 +2,11 @@
 
 import siteConfigData from './site-config.json'
 import navigationData from './navigation.json'
+import { getAllPosts } from '@/lib/posts'
 
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
+export const HEADER_CONFIG = siteConfigData.app.header
 
 // 导航项类型定义
 export interface SubmenuItem {
@@ -16,7 +18,7 @@ export interface SubmenuItem {
 }
 
 export interface NavigationItem {
-  type: '__blog' | '__about' | '__projects' | '__resources' | '__timeline' // 唯一标识符，用于程序逻辑判断
+  type: '__blog' | '__about' | '__projects' | '__resources' | '__timeline' | '__search' // 唯一标识符，用于程序逻辑判断
   label: string
   href: string
   submenu?: {
@@ -27,6 +29,30 @@ export interface NavigationItem {
 }
 
 export const NAVIGATION_ITEMS: NavigationItem[] = navigationData as NavigationItem[]
+
+// 生成带有动态子菜单的导航项
+export function getNavigationItemsWithSubmenus(): NavigationItem[] {
+  // 获取所有文章用于子菜单
+  const allPosts = getAllPosts()
+  
+  // 为有submenu的导航项动态填充内容
+  return NAVIGATION_ITEMS.map(item => {
+    if (item.type === '__blog' && item.submenu) {
+      return {
+        ...item,
+        submenu: {
+          ...item.submenu,
+          items: allPosts.slice(0, 5).map(post => ({
+            label: post.title,
+            href: `/posts/${post.slug}`,
+            description: post.description
+          }))
+        }
+      }
+    }
+    return item
+  })
+}
 
 export const POSTS_PER_PAGE = siteConfigData.app.postsPerPage
 export const TAG_COLORS = siteConfigData.app.tagColors

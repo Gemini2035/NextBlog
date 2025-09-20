@@ -4,6 +4,7 @@ import { getPostBySlug, getAllPosts } from '@/lib/posts'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { useMDXComponent } from 'next-contentlayer2/hooks'
+import { MDXProvider } from '@mdx-js/react'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface PostPageProps {
@@ -78,7 +79,9 @@ function PostContent({ post }: { post: Post }) {
           {/* Article Content */}
           <div className="p-8">
             <div className="prose prose-lg max-w-none dark:prose-invert">
-              <MDXContent />
+              <MDXProvider>
+                <MDXContent />
+              </MDXProvider>
             </div>
           </div>
         </article>

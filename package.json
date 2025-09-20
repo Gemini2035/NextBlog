@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "export": "next build && next export",
+    "export": "next build",
     "contentlayer": "contentlayer build"
   },
   "dependencies": {
