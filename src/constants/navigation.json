@@ -1,0 +1,354 @@
+[
+  {
+    "type": "__blog",
+    "label": "博客",
+    "href": "/posts",
+    "submenu": {
+      "title": "最新文章",
+      "description": "探索我们的最新技术见解和开发经验",
+      "items": []
+    }
+  },
+  {
+    "type": "__about",
+    "label": "关于",
+    "href": "/about",
+    "submenu": {
+      "title": "关于我",
+      "description": "深入了解我的个人信息和联系方式",
+      "items": [
+        {
+          "label": "个人简介",
+          "href": "/about",
+          "description": "了解我的背景和经历"
+        },
+        {
+          "label": "技能专长",
+          "href": "/about#skills",
+          "description": "查看我的技术栈和专业能力",
+          "items": [
+            {
+              "label": "前端技术",
+              "href": "/about#frontend",
+              "description": "React, Vue, TypeScript等前端技术栈"
+            },
+            {
+              "label": "后端技术",
+              "href": "/about#backend",
+              "description": "Node.js, Python, 数据库等技术"
+            },
+            {
+              "label": "工具与平台",
+              "href": "/about#tools",
+              "description": "Docker, AWS, Git等开发工具"
+            }
+          ]
+        },
+        {
+          "label": "项目作品",
+          "href": "/about#projects",
+          "description": "浏览我的开源项目和作品集",
+          "items": [
+            {
+              "label": "开源项目",
+              "href": "/about#open-source",
+              "description": "GitHub上的开源项目"
+            },
+            {
+              "label": "商业项目",
+              "href": "/about#commercial",
+              "description": "参与的商业项目案例"
+            }
+          ]
+        },
+        {
+          "label": "联系方式",
+          "href": "/about#contact",
+          "description": "与我取得联系",
+          "items": [
+            {
+              "label": "社交媒体",
+              "href": "/about#social",
+              "description": "GitHub, Twitter等社交媒体"
+            },
+            {
+              "label": "邮箱联系",
+              "href": "/about#email",
+              "description": "通过邮箱与我联系"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "__projects",
+    "label": "项目",
+    "href": "/projects",
+    "submenu": {
+      "title": "我的项目",
+      "description": "展示我的技术项目和作品集",
+      "items": [
+        {
+          "label": "开源项目",
+          "href": "/projects#open-source",
+          "description": "GitHub上的开源项目和贡献",
+          "items": [
+            {
+              "label": "前端项目",
+              "href": "/projects#frontend",
+              "description": "React, Vue, Next.js等前端项目"
+            },
+            {
+              "label": "全栈项目",
+              "href": "/projects#fullstack",
+              "description": "完整的前后端项目"
+            },
+            {
+              "label": "工具库",
+              "href": "/projects#tools",
+              "description": "实用的开发工具和库"
+            }
+          ]
+        },
+        {
+          "label": "商业项目",
+          "href": "/projects#commercial",
+          "description": "参与的商业项目案例",
+          "items": [
+            {
+              "label": "企业级应用",
+              "href": "/projects#enterprise",
+              "description": "大型企业级应用开发"
+            },
+            {
+              "label": "移动应用",
+              "href": "/projects#mobile",
+              "description": "React Native, Flutter移动应用"
+            },
+            {
+              "label": "电商平台",
+              "href": "/projects#ecommerce",
+              "description": "电商相关项目经验"
+            }
+          ]
+        },
+        {
+          "label": "学习项目",
+          "href": "/projects#learning",
+          "description": "技术学习和实验项目",
+          "items": [
+            {
+              "label": "算法实现",
+              "href": "/projects#algorithms",
+              "description": "数据结构和算法实现"
+            },
+            {
+              "label": "技术实验",
+              "href": "/projects#experiments",
+              "description": "新技术探索和实验"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "__resources",
+    "label": "资源",
+    "href": "/resources",
+    "submenu": {
+      "title": "技术资源",
+      "description": "分享有用的技术资源和工具",
+      "items": [
+        {
+          "label": "学习资源",
+          "href": "/resources#learning",
+          "description": "推荐的学习材料和教程",
+          "items": [
+            {
+              "label": "在线课程",
+              "href": "/resources#courses",
+              "description": "优质的在线编程课程推荐"
+            },
+            {
+              "label": "技术书籍",
+              "href": "/resources#books",
+              "description": "值得阅读的技术书籍"
+            },
+            {
+              "label": "开发文档",
+              "href": "/resources#docs",
+              "description": "官方文档和API参考"
+            }
+          ]
+        },
+        {
+          "label": "开发工具",
+          "href": "/resources#tools",
+          "description": "提高开发效率的工具推荐",
+          "items": [
+            {
+              "label": "代码编辑器",
+              "href": "/resources#editors",
+              "description": "VSCode, Vim等编辑器配置"
+            },
+            {
+              "label": "浏览器插件",
+              "href": "/resources#extensions",
+              "description": "实用的浏览器开发插件"
+            },
+            {
+              "label": "命令行工具",
+              "href": "/resources#cli",
+              "description": "终端和命令行工具"
+            }
+          ]
+        },
+        {
+          "label": "设计资源",
+          "href": "/resources#design",
+          "description": "UI/UX设计和素材资源",
+          "items": [
+            {
+              "label": "图标库",
+              "href": "/resources#icons",
+              "description": "免费的图标和插画资源"
+            },
+            {
+              "label": "配色方案",
+              "href": "/resources#colors",
+              "description": "网页和应用的配色参考"
+            },
+            {
+              "label": "字体资源",
+              "href": "/resources#fonts",
+              "description": "网页字体和排版资源"
+            }
+          ]
+        },
+        {
+          "label": "在线服务",
+          "href": "/resources#services",
+          "description": "有用的在线开发服务",
+          "items": [
+            {
+              "label": "代码托管",
+              "href": "/resources#hosting",
+              "description": "GitHub, GitLab等代码托管平台"
+            },
+            {
+              "label": "云服务",
+              "href": "/resources#cloud",
+              "description": "AWS, Vercel等云服务平台"
+            },
+            {
+              "label": "API服务",
+              "href": "/resources#apis",
+              "description": "第三方API和Webhook服务"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "type": "__timeline",
+    "label": "经历",
+    "href": "/timeline",
+    "submenu": {
+      "title": "我的经历",
+      "description": "职业发展和学习历程时间线",
+      "items": [
+        {
+          "label": "工作经历",
+          "href": "/timeline#work",
+          "description": "职业生涯中的重要工作经历",
+          "items": [
+            {
+              "label": "当前工作",
+              "href": "/timeline#current",
+              "description": "目前的工作职位和职责"
+            },
+            {
+              "label": "历史工作",
+              "href": "/timeline#history",
+              "description": "之前的工作经历和项目"
+            },
+            {
+              "label": "实习经历",
+              "href": "/timeline#internships",
+              "description": "实习和兼职工作经历"
+            }
+          ]
+        },
+        {
+          "label": "教育背景",
+          "href": "/timeline#education",
+          "description": "学习和教育经历",
+          "items": [
+            {
+              "label": "高等教育",
+              "href": "/timeline#university",
+              "description": "大学和研究生的学习经历"
+            },
+            {
+              "label": "专业认证",
+              "href": "/timeline#certifications",
+              "description": "获得的技术认证和证书"
+            },
+            {
+              "label": "在线学习",
+              "href": "/timeline#online",
+              "description": "在线课程和培训经历"
+            }
+          ]
+        },
+        {
+          "label": "技术成长",
+          "href": "/timeline#tech-growth",
+          "description": "技术能力和知识的发展历程",
+          "items": [
+            {
+              "label": "技能里程碑",
+              "href": "/timeline#milestones",
+              "description": "重要技能的学习和掌握时间点"
+            },
+            {
+              "label": "项目里程碑",
+              "href": "/timeline#project-milestones",
+              "description": "重要项目的完成和发布"
+            },
+            {
+              "label": "技术趋势",
+              "href": "/timeline#trends",
+              "description": "跟随和学习的技术趋势"
+            }
+          ]
+        },
+        {
+          "label": "个人成就",
+          "href": "/timeline#achievements",
+          "description": "个人和职业成就",
+          "items": [
+            {
+              "label": "奖项荣誉",
+              "href": "/timeline#awards",
+              "description": "获得的奖项和荣誉"
+            },
+            {
+              "label": "开源贡献",
+              "href": "/timeline#contributions",
+              "description": "对开源项目的贡献"
+            },
+            {
+              "label": "技术分享",
+              "href": "/timeline#sharing",
+              "description": "技术分享和演讲经历"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]
