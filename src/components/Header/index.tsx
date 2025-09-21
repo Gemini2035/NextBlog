@@ -2,11 +2,50 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG } from '@/constants'
+import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG, NavigationItem } from '@/constants'
 import { ChevronDownIcon, MenuIcon } from '@/assets/icons'
 import FullscreenDropdown from './FullscreenDropdown'
 import SearchBar from './SearchBar'
 import LanguageToggle from './LanguageToggle'
+
+// 导航项组件 - 减少三目选择器的使用
+interface NavItemProps {
+  item: NavigationItem
+  activeSubmenu: string | null
+  onNavHover: (itemType: string) => void
+}
+
+function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
+  const hasSubmenu = item.submenu && item.submenu.items && item.submenu.items.length > 0
+  
+  if (hasSubmenu) {
+    return (
+      <div
+        className="relative"
+        onMouseEnter={() => onNavHover(item.type)}
+      >
+        <Link 
+          href={item.href} 
+          className="text-gray-700 hover:text-gray-800 transition-colors flex items-center"
+          aria-haspopup="true"
+          aria-expanded={activeSubmenu === item.type}
+        >
+          {item.label}
+          <ChevronDownIcon className="ml-1 h-4 w-4" />
+        </Link>
+      </div>
+    )
+  }
+  
+  return (
+    <Link 
+      href={item.href} 
+      className="text-gray-700 hover:text-gray-800 transition-colors"
+    >
+      {item.label}
+    </Link>
+  )
+}
 
 export default function Header() {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
@@ -187,51 +226,43 @@ export default function Header() {
           {/* 右侧区域：导航菜单 + Action Bar */}
           <div className="flex items-center space-x-6">
             {/* 导航菜单 */}
-            <nav ref={navItemsRef} className="hidden lg:flex space-x-8">
-              {navigationItems.map((item) => (
-                <div key={item.href} className="relative">
-                  {item.submenu && item.submenu.items && item.submenu.items.length > 0 ? (
-                    <div
-                      className="relative"
-                      onMouseEnter={() => handleNavHover(item.type)}
-                    >
-                      <Link 
-                        href={item.href} 
-                        className="text-gray-700  hover:text-gray-800  transition-colors flex items-center"
-                      >
-                        {item.label}
-                        <ChevronDownIcon className="ml-1 h-4 w-4" />
-                      </Link>
-                    </div>
-                  ) : (
-                    <Link 
-                      href={item.href} 
-                      className="text-gray-700  hover:text-gray-800  transition-colors"
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
+            <nav ref={navItemsRef} className="hidden lg:flex" aria-label="主导航">
+              <ul className="flex space-x-8">
+                {navigationItems.map((item) => (
+                  <li key={item.href} className="relative">
+                    <NavItem 
+                      item={item}
+                      activeSubmenu={activeSubmenu}
+                      onNavHover={handleNavHover}
+                    />
+                  </li>
+                ))}
+              </ul>
             </nav>
 
             {/* Action Bar */}
-            <div className="flex items-center space-x-2">
-            {/* 搜索功能 */}
-            <div className="hidden md:block">
-              <SearchBar onSearchClick={handleSearchClick} />
-            </div>
+            <ul className="flex items-center space-x-2" role="toolbar" aria-label="操作工具栏">
+              {/* 搜索功能 */}
+              <li className="hidden md:block">
+                <SearchBar onSearchClick={handleSearchClick} />
+              </li>
 
               {/* 语言切换 */}
-              <LanguageToggle onLanguageClick={handleLanguageClick} />
+              <li>
+                <LanguageToggle onLanguageClick={handleLanguageClick} />
+              </li>
 
               {/* 移动端菜单按钮 */}
-              <div className="lg:hidden">
-                <button className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200">
+              <li className="lg:hidden">
+                <button 
+                  className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
+                  aria-label="打开移动端菜单"
+                  aria-expanded="false"
+                >
                   <MenuIcon className="h-6 w-6" />
                 </button>
-              </div>
-            </div>
+              </li>
+            </ul>
           </div>
         </div>
 

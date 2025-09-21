@@ -3,7 +3,20 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { SubmenuItem } from '@/constants'
-import { ChevronRightIcon } from '@/assets/icons'
+
+// 样式辅助函数 - 减少三目选择器的使用
+function getItemStyles(columnIndex: number) {
+  const isPrimaryColumn = columnIndex === 0
+  
+  return {
+    titleClass: `font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-200 ${
+      isPrimaryColumn ? 'text-lg font-bold' : 'text-base font-normal'
+    }`,
+    descriptionClass: `text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200 ${
+      isPrimaryColumn ? 'text-sm' : 'text-sm'
+    }`
+  }
+}
 
 interface NestedMenuGroupProps {
   items: SubmenuItem[]
@@ -64,78 +77,76 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
             </motion.div>
 
             {/* 列内容 */}
-            <motion.div 
+            <motion.ul 
               className="space-y-3"
               variants={containerVariants}
               transition={{ staggerChildren: 0.05 }}
             >
-              {columnItems.map((item, itemIndex) => (
-                <motion.div
-                  key={itemIndex}
-                  variants={itemVariants}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <Link
-                    href={item.href}
-                    className="block group"
-                    onClick={onClose}
-                    onMouseEnter={(e) => {
-                      // 阻止事件冒泡，确保submenu保持打开
-                      e.stopPropagation()
-                    }}
+              {columnItems.map((item, itemIndex) => {
+                const styles = getItemStyles(columnIndex)
+                
+                return (
+                  <motion.li
+                    key={itemIndex}
+                    variants={itemVariants}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h4 className={`font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-200 ${
-                          columnIndex === 0 ? 'text-lg font-bold' : 'text-base font-normal'
-                        }`}>
-                          {item.label}
-                        </h4>
-                        {item.description && (
-                          <p className={`text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200 ${
-                            columnIndex === 0 ? 'text-sm' : 'text-sm'
-                          }`}>
-                            {item.description}
-                          </p>
-                        )}
-                      </div>
-                      {columnIndex === 0 && (
-                        <ChevronRightIcon className="ml-3 h-4 w-4 text-gray-400 group-hover:text-gray-800 transition-colors duration-200 flex-shrink-0 mt-0.5" />
-                      )}
-                    </div>
-                  </Link>
-
-                  {/* 子菜单项 */}
-                  {item.items && item.items.length > 0 && (
-                    <motion.div 
-                      className="mt-4 space-y-2"
-                      variants={itemVariants}
-                      transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+                    <Link
+                      href={item.href}
+                      className="block group"
+                      onClick={onClose}
+                      onMouseEnter={(e) => {
+                        // 阻止事件冒泡，确保submenu保持打开
+                        e.stopPropagation()
+                      }}
                     >
-                      {item.items.slice(0, 6).map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={subItem.href}
-                          className="block text-sm text-gray-700 hover:text-gray-800 transition-colors duration-200 leading-relaxed"
-                          onClick={onClose}
-                          onMouseEnter={(e) => {
-                            // 阻止事件冒泡，确保submenu保持打开
-                            e.stopPropagation()
-                          }}
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                      {item.items.length > 6 && (
-                        <div className="text-xs text-gray-500 mt-2">
-                          还有 {item.items.length - 6} 个...
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className={styles.titleClass}>
+                            {item.label}
+                          </h4>
+                          {item.description && (
+                            <p className={styles.descriptionClass}>
+                              {item.description}
+                            </p>
+                          )}
                         </div>
-                      )}
-                    </motion.div>
-                  )}
-                </motion.div>
-              ))}
-            </motion.div>
+                      </div>
+                    </Link>
+
+                    {/* 子菜单项 */}
+                    {item.items && item.items.length > 0 && (
+                      <motion.ul 
+                        className="mt-4 space-y-2"
+                        variants={itemVariants}
+                        transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+                      >
+                        {item.items.slice(0, 6).map((subItem, subIndex) => (
+                          <li key={subIndex}>
+                            <Link
+                              href={subItem.href}
+                              className="block text-sm text-gray-700 hover:text-gray-800 transition-colors duration-200 leading-relaxed"
+                              onClick={onClose}
+                              onMouseEnter={(e) => {
+                                // 阻止事件冒泡，确保submenu保持打开
+                                e.stopPropagation()
+                              }}
+                            >
+                              {subItem.label}
+                            </Link>
+                          </li>
+                        ))}
+                        {item.items.length > 6 && (
+                          <li className="text-xs text-gray-500 mt-2">
+                            还有 {item.items.length - 6} 个...
+                          </li>
+                        )}
+                      </motion.ul>
+                    )}
+                  </motion.li>
+                )
+              })}
+            </motion.ul>
           </motion.div>
         ))}
       </motion.div>
@@ -144,14 +155,14 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
 
   // 嵌套级别使用不同的布局 - 减小字体和间距
   return (
-    <motion.div 
+    <motion.ul 
       className="space-y-3"
       variants={containerVariants}
       initial="hidden"
       animate={isAnimating ? "visible" : "hidden"}
     >
       {items.map((item, index) => (
-        <motion.div 
+        <motion.li 
           key={index} 
           className="border-l-2 border-gray-200 pl-3"
           variants={itemVariants}
@@ -186,8 +197,8 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
               />
             </div>
           )}
-        </motion.div>
+        </motion.li>
       ))}
-    </motion.div>
+    </motion.ul>
   )
 }

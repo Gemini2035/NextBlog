@@ -1,12 +1,99 @@
 'use client'
 
-import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
 import { SearchIcon, CloseIcon } from '@/assets/icons'
 import NestedMenuGroup from './NestedMenuGroup'
+
+// 搜索模式组件
+interface SearchModeProps {
+  searchDisplayText: { title: string; description: string }
+  itemVariants: any
+}
+
+function SearchMode({ searchDisplayText, itemVariants }: SearchModeProps) {
+  return (
+    <motion.div 
+      className="text-center py-12" 
+      variants={itemVariants}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <SearchIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" strokeWidth={1} />
+      <h3 className="text-lg font-medium text-gray-900 mb-2">
+        {searchDisplayText.title}
+      </h3>
+      <p className="text-sm text-gray-500">
+        {searchDisplayText.description}
+      </p>
+    </motion.div>
+  )
+}
+
+// 语言选择模式组件
+interface LanguageModeProps {
+  currentLang: string
+  onLanguageChange: (langCode: string) => void
+  itemVariants: any
+}
+
+function LanguageMode({ currentLang, onLanguageChange, itemVariants }: LanguageModeProps) {
+  return (
+    <motion.div 
+      className="w-full" 
+      variants={itemVariants}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <ul className="space-y-2" role="listbox" aria-label="语言选择">
+        {LANGUAGES.map((lang, index) => (
+          <motion.li 
+            key={lang.code}
+            variants={itemVariants}
+            transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.03 }}
+          >
+            <button
+              onClick={() => onLanguageChange(lang.code)}
+              className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 text-gray-900"
+              role="option"
+              aria-selected={currentLang === lang.code}
+            >
+              <span className="text-sm font-bold">
+                {currentLang === lang.code 
+                  ? `${lang.nativeName} ✓` 
+                  : `${lang.nativeName} (${lang.translations[currentLang as keyof typeof lang.translations]})`
+                }
+              </span>
+            </button>
+          </motion.li>
+        ))}
+      </ul>
+    </motion.div>
+  )
+}
+
+// 普通导航模式组件
+interface NavigationModeProps {
+  navigationItem: NavigationItem
+  onClose: () => void
+  itemVariants: any
+}
+
+function NavigationMode({ navigationItem, onClose, itemVariants }: NavigationModeProps) {
+  return (
+    <motion.div 
+      className="mb-8" 
+      variants={itemVariants}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
+      <NestedMenuGroup 
+        items={navigationItem.submenu?.items || []} 
+        onClose={onClose}
+        isAnimating={true}
+      />
+    </motion.div>
+  )
+}
 
 interface FullscreenDropdownProps {
   isOpen: boolean
@@ -285,60 +372,27 @@ export default function FullscreenDropdown({
               )}
 
               {/* 内容区域 */}
-              {isSearchMode ? (
-                // 搜索模式的内容 - 仅UI展示
-                <motion.div 
-                  className="text-center py-12" 
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-              <SearchIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" strokeWidth={1} />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                {searchDisplayText.title}
-              </h3>
-                  <p className="text-sm text-gray-500">
-                    {searchDisplayText.description}
-                  </p>
-                </motion.div>
-              ) : isLanguageMode ? (
-                // 语言选择模式的内容
-                <motion.div 
-                  className="w-full" 
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-                  <div className="space-y-2">
-                    {LANGUAGES.map((lang, index) => (
-                      <motion.button
-                        key={lang.code}
-                        onClick={() => handleLanguageChange(lang.code)}
-                        className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 text-gray-900"
-                        variants={itemVariants}
-                        transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.03 }}
-                      >
-                        <span className="text-sm font-bold">
-                          {currentLang === lang.code 
-                            ? `${lang.nativeName} ✓` 
-                            : `${lang.nativeName} (${lang.translations[currentLang as keyof typeof lang.translations]})`
-                          }
-                        </span>
-                      </motion.button>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : (
-                // 普通导航模式的内容 - 使用苹果风格的菜单布局
-                <motion.div 
-                  className="mb-8" 
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-                  <NestedMenuGroup 
-                    items={currentNavigationItem.submenu?.items || []} 
-                    onClose={onClose}
-                    isAnimating={true}
-                  />
-                </motion.div>
+              {isSearchMode && (
+                <SearchMode 
+                  searchDisplayText={searchDisplayText}
+                  itemVariants={itemVariants}
+                />
+              )}
+              
+              {isLanguageMode && (
+                <LanguageMode 
+                  currentLang={currentLang}
+                  onLanguageChange={handleLanguageChange}
+                  itemVariants={itemVariants}
+                />
+              )}
+              
+              {!isSearchMode && !isLanguageMode && (
+                <NavigationMode 
+                  navigationItem={currentNavigationItem}
+                  onClose={onClose}
+                  itemVariants={itemVariants}
+                />
               )}
 
             </motion.div>
