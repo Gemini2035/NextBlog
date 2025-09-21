@@ -158,12 +158,7 @@
               {
                 "label": "学习资源",
                 "href": "/resources#learning",
-                "description": "课程、书籍、文档等学习材料",
                 "items": [
-                  {
-                    "label": "在线课程",
-                    "href": "/resources#courses"
-                  },
                   {
                     "label": "技术书籍",
                     "href": "/resources#books"
@@ -177,7 +172,6 @@
               {
                 "label": "工具服务",
                 "href": "/resources#tools-services",
-                "description": "开发工具和在线服务",
                 "items": [
                   {
                     "label": "开发工具",
