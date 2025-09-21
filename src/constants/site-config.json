@@ -73,150 +73,41 @@
           "href": "/about",
           "submenu": {
             "title": "关于我",
-            "description": "深入了解我的个人信息和联系方式",
+            "description": "了解我的背景、技能、经历和联系方式",
             "items": [
               {
-                "label": "个人简介",
-                "href": "/about",
-                "description": "了解我的背景和经历"
-              },
-              {
-                "label": "技能专长",
-                "href": "/about#skills",
-                "description": "查看我的技术栈和专业能力"
-              },
-              {
-                "label": "项目作品",
-                "href": "/about#projects",
-                "description": "浏览我的开源项目和作品集"
-              },
-              {
-                "label": "联系方式",
-                "href": "/about#contact",
-                "description": "与我取得联系"
-              },
-              {
-                "label": "前端技术",
-                "href": "/about#frontend",
-                "description": "React, Vue, TypeScript等前端技术栈",
+                "label": "基础信息",
+                "href": "/about#basic",
                 "items": [
                   {
-                    "label": "React",
-                    "href": "/about#react",
-                    "description": "React生态系统和最佳实践"
+                    "label": "个人简介",
+                    "href": "/about"
                   },
                   {
-                    "label": "Vue",
-                    "href": "/about#vue",
-                    "description": "Vue.js开发经验"
-                  },
-                  {
-                    "label": "TypeScript",
-                    "href": "/about#typescript",
-                    "description": "TypeScript类型系统"
-                  },
-                  {
-                    "label": "Next.js",
-                    "href": "/about#nextjs",
-                    "description": "Next.js全栈开发"
+                    "label": "联系方式",
+                    "href": "/about#contact"
                   }
                 ]
               },
               {
-                "label": "后端技术",
-                "href": "/about#backend",
-                "description": "Node.js, Python, 数据库等技术",
+                "label": "专业信息",
+                "href": "/about#professional",
                 "items": [
                   {
-                    "label": "Node.js",
-                    "href": "/about#nodejs",
-                    "description": "Node.js服务器开发"
+                    "label": "技能专长",
+                    "href": "/about#skills"
                   },
                   {
-                    "label": "Python",
-                    "href": "/about#python",
-                    "description": "Python Web开发"
+                    "label": "工作经历",
+                    "href": "/about#work"
                   },
                   {
-                    "label": "数据库",
-                    "href": "/about#database",
-                    "description": "MySQL, MongoDB, Redis"
+                    "label": "教育背景",
+                    "href": "/about#education"
                   },
                   {
-                    "label": "API设计",
-                    "href": "/about#api",
-                    "description": "RESTful API设计"
-                  }
-                ]
-              },
-              {
-                "label": "工具与平台",
-                "href": "/about#tools",
-                "description": "Docker, AWS, Git等开发工具",
-                "items": [
-                  {
-                    "label": "Docker",
-                    "href": "/about#docker",
-                    "description": "容器化部署"
-                  },
-                  {
-                    "label": "AWS",
-                    "href": "/about#aws",
-                    "description": "云服务部署"
-                  },
-                  {
-                    "label": "Git",
-                    "href": "/about#git",
-                    "description": "版本控制"
-                  },
-                  {
-                    "label": "CI/CD",
-                    "href": "/about#cicd",
-                    "description": "持续集成部署"
-                  }
-                ]
-              },
-              {
-                "label": "开源项目",
-                "href": "/about#open-source",
-                "description": "GitHub上的开源项目",
-                "items": [
-                  {
-                    "label": "前端组件库",
-                    "href": "/about#components",
-                    "description": "可复用的UI组件"
-                  },
-                  {
-                    "label": "工具库",
-                    "href": "/about#utils",
-                    "description": "开发工具和库"
-                  },
-                  {
-                    "label": "学习项目",
-                    "href": "/about#learning",
-                    "description": "技术学习项目"
-                  }
-                ]
-              },
-              {
-                "label": "商业项目",
-                "href": "/about#commercial",
-                "description": "参与的商业项目案例",
-                "items": [
-                  {
-                    "label": "企业级应用",
-                    "href": "/about#enterprise",
-                    "description": "大型企业应用"
-                  },
-                  {
-                    "label": "电商平台",
-                    "href": "/about#ecommerce",
-                    "description": "电商系统开发"
-                  },
-                  {
-                    "label": "移动应用",
-                    "href": "/about#mobile",
-                    "description": "跨平台移动应用"
+                    "label": "个人成就",
+                    "href": "/about#achievements"
                   }
                 ]
               }
@@ -232,179 +123,36 @@
             "description": "展示我的技术项目和作品集",
             "items": [
               {
-                "label": "开源项目",
-                "href": "/projects#open-source",
-                "description": "GitHub上的开源项目和贡献"
-              },
-              {
-                "label": "商业项目",
-                "href": "/projects#commercial",
-                "description": "参与的商业项目案例"
-              },
-              {
-                "label": "学习项目",
-                "href": "/projects#learning",
-                "description": "技术学习和实验项目"
-              },
-              {
-                "label": "前端项目",
-                "href": "/projects#frontend",
-                "description": "React, Vue, Next.js等前端项目",
+                "label": "项目类型",
+                "href": "/projects#types",
+                "description": "按项目性质分类",
                 "items": [
                   {
-                    "label": "React应用",
-                    "href": "/projects#react",
-                    "description": "React生态系统项目"
+                    "label": "开源项目",
+                    "href": "/projects#open-source"
                   },
                   {
-                    "label": "Vue应用",
-                    "href": "/projects#vue",
-                    "description": "Vue.js项目经验"
+                    "label": "商业项目",
+                    "href": "/projects#commercial"
                   },
                   {
-                    "label": "Next.js应用",
-                    "href": "/projects#nextjs",
-                    "description": "全栈Next.js应用"
-                  },
-                  {
-                    "label": "移动端",
-                    "href": "/projects#mobile-web",
-                    "description": "响应式移动端应用"
+                    "label": "学习项目",
+                    "href": "/projects#learning"
                   }
                 ]
               },
               {
-                "label": "全栈项目",
-                "href": "/projects#fullstack",
-                "description": "完整的前后端项目",
+                "label": "技术分类",
+                "href": "/projects#tech",
+                "description": "按技术栈和类型分类",
                 "items": [
                   {
-                    "label": "Web应用",
-                    "href": "/projects#web-app",
-                    "description": "完整的Web应用"
+                    "label": "按技术分类",
+                    "href": "/projects#by-tech"
                   },
                   {
-                    "label": "API服务",
-                    "href": "/projects#api-service",
-                    "description": "RESTful API服务"
-                  },
-                  {
-                    "label": "数据库设计",
-                    "href": "/projects#database",
-                    "description": "数据库架构设计"
-                  },
-                  {
-                    "label": "部署运维",
-                    "href": "/projects#deployment",
-                    "description": "CI/CD和部署"
-                  }
-                ]
-              },
-              {
-                "label": "工具库",
-                "href": "/projects#tools",
-                "description": "实用的开发工具和库",
-                "items": [
-                  {
-                    "label": "UI组件库",
-                    "href": "/projects#ui-components",
-                    "description": "可复用UI组件"
-                  },
-                  {
-                    "label": "工具函数",
-                    "href": "/projects#utils",
-                    "description": "JavaScript工具函数"
-                  },
-                  {
-                    "label": "开发工具",
-                    "href": "/projects#dev-tools",
-                    "description": "提高效率的工具"
-                  },
-                  {
-                    "label": "CLI工具",
-                    "href": "/projects#cli",
-                    "description": "命令行工具"
-                  }
-                ]
-              },
-              {
-                "label": "企业级应用",
-                "href": "/projects#enterprise",
-                "description": "大型企业级应用开发",
-                "items": [
-                  {
-                    "label": "管理系统",
-                    "href": "/projects#management",
-                    "description": "企业管理后台"
-                  },
-                  {
-                    "label": "数据可视化",
-                    "href": "/projects#data-viz",
-                    "description": "数据图表展示"
-                  },
-                  {
-                    "label": "权限系统",
-                    "href": "/projects#auth",
-                    "description": "用户权限管理"
-                  },
-                  {
-                    "label": "工作流",
-                    "href": "/projects#workflow",
-                    "description": "业务流程管理"
-                  }
-                ]
-              },
-              {
-                "label": "移动应用",
-                "href": "/projects#mobile",
-                "description": "React Native, Flutter移动应用",
-                "items": [
-                  {
-                    "label": "React Native",
-                    "href": "/projects#react-native",
-                    "description": "跨平台移动应用"
-                  },
-                  {
-                    "label": "Flutter",
-                    "href": "/projects#flutter",
-                    "description": "Flutter应用开发"
-                  },
-                  {
-                    "label": "PWA",
-                    "href": "/projects#pwa",
-                    "description": "渐进式Web应用"
-                  },
-                  {
-                    "label": "混合开发",
-                    "href": "/projects#hybrid",
-                    "description": "混合应用开发"
-                  }
-                ]
-              },
-              {
-                "label": "电商平台",
-                "href": "/projects#ecommerce",
-                "description": "电商相关项目经验",
-                "items": [
-                  {
-                    "label": "商城系统",
-                    "href": "/projects#shop",
-                    "description": "在线商城开发"
-                  },
-                  {
-                    "label": "支付集成",
-                    "href": "/projects#payment",
-                    "description": "支付系统集成"
-                  },
-                  {
-                    "label": "订单管理",
-                    "href": "/projects#orders",
-                    "description": "订单处理系统"
-                  },
-                  {
-                    "label": "库存管理",
-                    "href": "/projects#inventory",
-                    "description": "库存管理系统"
+                    "label": "按类型分类",
+                    "href": "/projects#by-type"
                   }
                 ]
               }
@@ -422,187 +170,38 @@
               {
                 "label": "学习资源",
                 "href": "/resources#learning",
-                "description": "推荐的学习材料和教程",
+                "description": "课程、书籍、文档等学习材料",
                 "items": [
                   {
                     "label": "在线课程",
-                    "href": "/resources#courses",
-                    "description": "优质的在线编程课程推荐"
+                    "href": "/resources#courses"
                   },
                   {
                     "label": "技术书籍",
-                    "href": "/resources#books",
-                    "description": "值得阅读的技术书籍"
+                    "href": "/resources#books"
                   },
                   {
                     "label": "开发文档",
-                    "href": "/resources#docs",
-                    "description": "官方文档和API参考"
+                    "href": "/resources#docs"
                   }
                 ]
               },
               {
-                "label": "开发工具",
-                "href": "/resources#tools",
-                "description": "提高开发效率的工具推荐",
+                "label": "工具服务",
+                "href": "/resources#tools-services",
+                "description": "开发工具和在线服务",
                 "items": [
                   {
-                    "label": "代码编辑器",
-                    "href": "/resources#editors",
-                    "description": "VSCode, Vim等编辑器配置"
+                    "label": "开发工具",
+                    "href": "/resources#tools"
                   },
                   {
-                    "label": "浏览器插件",
-                    "href": "/resources#extensions",
-                    "description": "实用的浏览器开发插件"
+                    "label": "设计资源",
+                    "href": "/resources#design"
                   },
                   {
-                    "label": "命令行工具",
-                    "href": "/resources#cli",
-                    "description": "终端和命令行工具"
-                  }
-                ]
-              },
-              {
-                "label": "设计资源",
-                "href": "/resources#design",
-                "description": "UI/UX设计和素材资源",
-                "items": [
-                  {
-                    "label": "图标库",
-                    "href": "/resources#icons",
-                    "description": "免费的图标和插画资源"
-                  },
-                  {
-                    "label": "配色方案",
-                    "href": "/resources#colors",
-                    "description": "网页和应用的配色参考"
-                  },
-                  {
-                    "label": "字体资源",
-                    "href": "/resources#fonts",
-                    "description": "网页字体和排版资源"
-                  }
-                ]
-              },
-              {
-                "label": "在线服务",
-                "href": "/resources#services",
-                "description": "有用的在线开发服务",
-                "items": [
-                  {
-                    "label": "代码托管",
-                    "href": "/resources#hosting",
-                    "description": "GitHub, GitLab等代码托管平台"
-                  },
-                  {
-                    "label": "云服务",
-                    "href": "/resources#cloud",
-                    "description": "AWS, Vercel等云服务平台"
-                  },
-                  {
-                    "label": "API服务",
-                    "href": "/resources#apis",
-                    "description": "第三方API和Webhook服务"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "type": "__timeline",
-          "label": "经历",
-          "href": "/timeline",
-          "submenu": {
-            "title": "我的经历",
-            "description": "职业发展和学习历程时间线",
-            "items": [
-              {
-                "label": "工作经历",
-                "href": "/timeline#work",
-                "description": "职业生涯中的重要工作经历",
-                "items": [
-                  {
-                    "label": "当前工作",
-                    "href": "/timeline#current",
-                    "description": "目前的工作职位和职责"
-                  },
-                  {
-                    "label": "历史工作",
-                    "href": "/timeline#history",
-                    "description": "之前的工作经历和项目"
-                  },
-                  {
-                    "label": "实习经历",
-                    "href": "/timeline#internships",
-                    "description": "实习和兼职工作经历"
-                  }
-                ]
-              },
-              {
-                "label": "教育背景",
-                "href": "/timeline#education",
-                "description": "学习和教育经历",
-                "items": [
-                  {
-                    "label": "高等教育",
-                    "href": "/timeline#university",
-                    "description": "大学和研究生的学习经历"
-                  },
-                  {
-                    "label": "专业认证",
-                    "href": "/timeline#certifications",
-                    "description": "获得的技术认证和证书"
-                  },
-                  {
-                    "label": "在线学习",
-                    "href": "/timeline#online",
-                    "description": "在线课程和培训经历"
-                  }
-                ]
-              },
-              {
-                "label": "技术成长",
-                "href": "/timeline#tech-growth",
-                "description": "技术能力和知识的发展历程",
-                "items": [
-                  {
-                    "label": "技能里程碑",
-                    "href": "/timeline#milestones",
-                    "description": "重要技能的学习和掌握时间点"
-                  },
-                  {
-                    "label": "项目里程碑",
-                    "href": "/timeline#project-milestones",
-                    "description": "重要项目的完成和发布"
-                  },
-                  {
-                    "label": "技术趋势",
-                    "href": "/timeline#trends",
-                    "description": "跟随和学习的技术趋势"
-                  }
-                ]
-              },
-              {
-                "label": "个人成就",
-                "href": "/timeline#achievements",
-                "description": "个人和职业成就",
-                "items": [
-                  {
-                    "label": "奖项荣誉",
-                    "href": "/timeline#awards",
-                    "description": "获得的奖项和荣誉"
-                  },
-                  {
-                    "label": "开源贡献",
-                    "href": "/timeline#contributions",
-                    "description": "对开源项目的贡献"
-                  },
-                  {
-                    "label": "技术分享",
-                    "href": "/timeline#sharing",
-                    "description": "技术分享和演讲经历"
+                    "label": "在线服务",
+                    "href": "/resources#services"
                   }
                 ]
               }
