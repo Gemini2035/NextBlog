@@ -210,6 +210,40 @@ export default function FullscreenDropdown({
     onClose()
   }, [onClose])
 
+  // 处理子菜单鼠标离开事件
+  const handleSubmenuMouseLeave = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    // 使用延迟检查，避免快速鼠标移动导致的意外关闭
+    setTimeout(() => {
+      // 使用ref来获取元素，避免DOM查询
+      if (!submenuRef.current) return
+      
+      const rect = submenuRef.current.getBoundingClientRect()
+      const x = e.clientX
+      const y = e.clientY
+      
+      // 检查鼠标是否真的在submenu区域外，并增加一些容错范围
+      const tolerance = 10 // 增加10px的容错范围
+      if (x < rect.left - tolerance || x > rect.right + tolerance || 
+          y < rect.top - tolerance || y > rect.bottom + tolerance) {
+        // 再次检查鼠标是否在submenu或其父元素内
+        try {
+          const elementUnderMouse = document.elementFromPoint(x, y)
+          if (!elementUnderMouse) return
+          
+          const isInSubmenu = elementUnderMouse.closest('[data-submenu]')
+          const isInHeader = elementUnderMouse.closest('header')
+          
+          if (!isInSubmenu && !isInHeader) {
+            onClose()
+          }
+        } catch (error) {
+          // 静默处理错误，避免在组件卸载时抛出异常
+          console.warn('Submenu mouse tracking error:', error)
+        }
+      }
+    }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
+  }, [onClose])
+
   // 搜索模式下的标题和描述
   const title = isSearchMode ? '搜索文章' : currentNavigationItem.submenu?.title || currentNavigationItem.label
   const description = isSearchMode ? '输入关键词搜索相关文章' : currentNavigationItem.submenu?.description
@@ -257,38 +291,7 @@ export default function FullscreenDropdown({
               // 阻止事件冒泡，确保submenu保持打开
               e.stopPropagation()
             }}
-            onMouseLeave={(e) => {
-              // 使用延迟检查，避免快速鼠标移动导致的意外关闭
-              setTimeout(() => {
-                // 使用ref来获取元素，避免DOM查询
-                if (!submenuRef.current) return
-                
-                const rect = submenuRef.current.getBoundingClientRect()
-                const x = e.clientX
-                const y = e.clientY
-                
-                // 检查鼠标是否真的在submenu区域外，并增加一些容错范围
-                const tolerance = 10 // 增加10px的容错范围
-                if (x < rect.left - tolerance || x > rect.right + tolerance || 
-                    y < rect.top - tolerance || y > rect.bottom + tolerance) {
-                  // 再次检查鼠标是否在submenu或其父元素内
-                  try {
-                    const elementUnderMouse = document.elementFromPoint(x, y)
-                    if (!elementUnderMouse) return
-                    
-                    const isInSubmenu = elementUnderMouse.closest('[data-submenu]')
-                    const isInHeader = elementUnderMouse.closest('header')
-                    
-                    if (!isInSubmenu && !isInHeader) {
-                      onClose()
-                    }
-                  } catch (error) {
-                    // 静默处理错误，避免在组件卸载时抛出异常
-                    console.warn('Submenu mouse tracking error:', error)
-                  }
-                }
-              }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
-            }}
+            onMouseLeave={handleSubmenuMouseLeave}
           >
             <motion.div 
               className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6"
