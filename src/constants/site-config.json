@@ -83,56 +83,140 @@
               {
                 "label": "技能专长",
                 "href": "/about#skills",
-                "description": "查看我的技术栈和专业能力",
-                "items": [
-                  {
-                    "label": "前端技术",
-                    "href": "/about#frontend",
-                    "description": "React, Vue, TypeScript等前端技术栈"
-                  },
-                  {
-                    "label": "后端技术",
-                    "href": "/about#backend",
-                    "description": "Node.js, Python, 数据库等技术"
-                  },
-                  {
-                    "label": "工具与平台",
-                    "href": "/about#tools",
-                    "description": "Docker, AWS, Git等开发工具"
-                  }
-                ]
+                "description": "查看我的技术栈和专业能力"
               },
               {
                 "label": "项目作品",
                 "href": "/about#projects",
-                "description": "浏览我的开源项目和作品集",
-                "items": [
-                  {
-                    "label": "开源项目",
-                    "href": "/about#open-source",
-                    "description": "GitHub上的开源项目"
-                  },
-                  {
-                    "label": "商业项目",
-                    "href": "/about#commercial",
-                    "description": "参与的商业项目案例"
-                  }
-                ]
+                "description": "浏览我的开源项目和作品集"
               },
               {
                 "label": "联系方式",
                 "href": "/about#contact",
-                "description": "与我取得联系",
+                "description": "与我取得联系"
+              },
+              {
+                "label": "前端技术",
+                "href": "/about#frontend",
+                "description": "React, Vue, TypeScript等前端技术栈",
                 "items": [
                   {
-                    "label": "社交媒体",
-                    "href": "/about#social",
-                    "description": "GitHub, Twitter等社交媒体"
+                    "label": "React",
+                    "href": "/about#react",
+                    "description": "React生态系统和最佳实践"
                   },
                   {
-                    "label": "邮箱联系",
-                    "href": "/about#email",
-                    "description": "通过邮箱与我联系"
+                    "label": "Vue",
+                    "href": "/about#vue",
+                    "description": "Vue.js开发经验"
+                  },
+                  {
+                    "label": "TypeScript",
+                    "href": "/about#typescript",
+                    "description": "TypeScript类型系统"
+                  },
+                  {
+                    "label": "Next.js",
+                    "href": "/about#nextjs",
+                    "description": "Next.js全栈开发"
+                  }
+                ]
+              },
+              {
+                "label": "后端技术",
+                "href": "/about#backend",
+                "description": "Node.js, Python, 数据库等技术",
+                "items": [
+                  {
+                    "label": "Node.js",
+                    "href": "/about#nodejs",
+                    "description": "Node.js服务器开发"
+                  },
+                  {
+                    "label": "Python",
+                    "href": "/about#python",
+                    "description": "Python Web开发"
+                  },
+                  {
+                    "label": "数据库",
+                    "href": "/about#database",
+                    "description": "MySQL, MongoDB, Redis"
+                  },
+                  {
+                    "label": "API设计",
+                    "href": "/about#api",
+                    "description": "RESTful API设计"
+                  }
+                ]
+              },
+              {
+                "label": "工具与平台",
+                "href": "/about#tools",
+                "description": "Docker, AWS, Git等开发工具",
+                "items": [
+                  {
+                    "label": "Docker",
+                    "href": "/about#docker",
+                    "description": "容器化部署"
+                  },
+                  {
+                    "label": "AWS",
+                    "href": "/about#aws",
+                    "description": "云服务部署"
+                  },
+                  {
+                    "label": "Git",
+                    "href": "/about#git",
+                    "description": "版本控制"
+                  },
+                  {
+                    "label": "CI/CD",
+                    "href": "/about#cicd",
+                    "description": "持续集成部署"
+                  }
+                ]
+              },
+              {
+                "label": "开源项目",
+                "href": "/about#open-source",
+                "description": "GitHub上的开源项目",
+                "items": [
+                  {
+                    "label": "前端组件库",
+                    "href": "/about#components",
+                    "description": "可复用的UI组件"
+                  },
+                  {
+                    "label": "工具库",
+                    "href": "/about#utils",
+                    "description": "开发工具和库"
+                  },
+                  {
+                    "label": "学习项目",
+                    "href": "/about#learning",
+                    "description": "技术学习项目"
+                  }
+                ]
+              },
+              {
+                "label": "商业项目",
+                "href": "/about#commercial",
+                "description": "参与的商业项目案例",
+                "items": [
+                  {
+                    "label": "企业级应用",
+                    "href": "/about#enterprise",
+                    "description": "大型企业应用"
+                  },
+                  {
+                    "label": "电商平台",
+                    "href": "/about#ecommerce",
+                    "description": "电商系统开发"
+                  },
+                  {
+                    "label": "移动应用",
+                    "href": "/about#mobile",
+                    "description": "跨平台移动应用"
                   }
                 ]
               }
@@ -150,61 +234,177 @@
               {
                 "label": "开源项目",
                 "href": "/projects#open-source",
-                "description": "GitHub上的开源项目和贡献",
-                "items": [
-                  {
-                    "label": "前端项目",
-                    "href": "/projects#frontend",
-                    "description": "React, Vue, Next.js等前端项目"
-                  },
-                  {
-                    "label": "全栈项目",
-                    "href": "/projects#fullstack",
-                    "description": "完整的前后端项目"
-                  },
-                  {
-                    "label": "工具库",
-                    "href": "/projects#tools",
-                    "description": "实用的开发工具和库"
-                  }
-                ]
+                "description": "GitHub上的开源项目和贡献"
               },
               {
                 "label": "商业项目",
                 "href": "/projects#commercial",
-                "description": "参与的商业项目案例",
-                "items": [
-                  {
-                    "label": "企业级应用",
-                    "href": "/projects#enterprise",
-                    "description": "大型企业级应用开发"
-                  },
-                  {
-                    "label": "移动应用",
-                    "href": "/projects#mobile",
-                    "description": "React Native, Flutter移动应用"
-                  },
-                  {
-                    "label": "电商平台",
-                    "href": "/projects#ecommerce",
-                    "description": "电商相关项目经验"
-                  }
-                ]
+                "description": "参与的商业项目案例"
               },
               {
                 "label": "学习项目",
                 "href": "/projects#learning",
-                "description": "技术学习和实验项目",
+                "description": "技术学习和实验项目"
+              },
+              {
+                "label": "前端项目",
+                "href": "/projects#frontend",
+                "description": "React, Vue, Next.js等前端项目",
                 "items": [
                   {
-                    "label": "算法实现",
-                    "href": "/projects#algorithms",
-                    "description": "数据结构和算法实现"
+                    "label": "React应用",
+                    "href": "/projects#react",
+                    "description": "React生态系统项目"
                   },
                   {
-                    "label": "技术实验",
-                    "href": "/projects#experiments",
-                    "description": "新技术探索和实验"
+                    "label": "Vue应用",
+                    "href": "/projects#vue",
+                    "description": "Vue.js项目经验"
+                  },
+                  {
+                    "label": "Next.js应用",
+                    "href": "/projects#nextjs",
+                    "description": "全栈Next.js应用"
+                  },
+                  {
+                    "label": "移动端",
+                    "href": "/projects#mobile-web",
+                    "description": "响应式移动端应用"
+                  }
+                ]
+              },
+              {
+                "label": "全栈项目",
+                "href": "/projects#fullstack",
+                "description": "完整的前后端项目",
+                "items": [
+                  {
+                    "label": "Web应用",
+                    "href": "/projects#web-app",
+                    "description": "完整的Web应用"
+                  },
+                  {
+                    "label": "API服务",
+                    "href": "/projects#api-service",
+                    "description": "RESTful API服务"
+                  },
+                  {
+                    "label": "数据库设计",
+                    "href": "/projects#database",
+                    "description": "数据库架构设计"
+                  },
+                  {
+                    "label": "部署运维",
+                    "href": "/projects#deployment",
+                    "description": "CI/CD和部署"
+                  }
+                ]
+              },
+              {
+                "label": "工具库",
+                "href": "/projects#tools",
+                "description": "实用的开发工具和库",
+                "items": [
+                  {
+                    "label": "UI组件库",
+                    "href": "/projects#ui-components",
+                    "description": "可复用UI组件"
+                  },
+                  {
+                    "label": "工具函数",
+                    "href": "/projects#utils",
+                    "description": "JavaScript工具函数"
+                  },
+                  {
+                    "label": "开发工具",
+                    "href": "/projects#dev-tools",
+                    "description": "提高效率的工具"
+                  },
+                  {
+                    "label": "CLI工具",
+                    "href": "/projects#cli",
+                    "description": "命令行工具"
+                  }
+                ]
+              },
+              {
+                "label": "企业级应用",
+                "href": "/projects#enterprise",
+                "description": "大型企业级应用开发",
+                "items": [
+                  {
+                    "label": "管理系统",
+                    "href": "/projects#management",
+                    "description": "企业管理后台"
+                  },
+                  {
+                    "label": "数据可视化",
+                    "href": "/projects#data-viz",
+                    "description": "数据图表展示"
+                  },
+                  {
+                    "label": "权限系统",
+                    "href": "/projects#auth",
+                    "description": "用户权限管理"
+                  },
+                  {
+                    "label": "工作流",
+                    "href": "/projects#workflow",
+                    "description": "业务流程管理"
+                  }
+                ]
+              },
+              {
+                "label": "移动应用",
+                "href": "/projects#mobile",
+                "description": "React Native, Flutter移动应用",
+                "items": [
+                  {
+                    "label": "React Native",
+                    "href": "/projects#react-native",
+                    "description": "跨平台移动应用"
+                  },
+                  {
+                    "label": "Flutter",
+                    "href": "/projects#flutter",
+                    "description": "Flutter应用开发"
+                  },
+                  {
+                    "label": "PWA",
+                    "href": "/projects#pwa",
+                    "description": "渐进式Web应用"
+                  },
+                  {
+                    "label": "混合开发",
+                    "href": "/projects#hybrid",
+                    "description": "混合应用开发"
+                  }
+                ]
+              },
+              {
+                "label": "电商平台",
+                "href": "/projects#ecommerce",
+                "description": "电商相关项目经验",
+                "items": [
+                  {
+                    "label": "商城系统",
+                    "href": "/projects#shop",
+                    "description": "在线商城开发"
+                  },
+                  {
+                    "label": "支付集成",
+                    "href": "/projects#payment",
+                    "description": "支付系统集成"
+                  },
+                  {
+                    "label": "订单管理",
+                    "href": "/projects#orders",
+                    "description": "订单处理系统"
+                  },
+                  {
+                    "label": "库存管理",
+                    "href": "/projects#inventory",
+                    "description": "库存管理系统"
                   }
                 ]
               }

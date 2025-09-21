@@ -205,26 +205,28 @@ export default function FullscreenDropdown({
               {/* 标题区域 - 仅在非语言模式下显示 */}
               {!isLanguageMode && (
                 <motion.div 
-                  className="text-center mb-8" 
+                  className="text-left mb-8" 
                   variants={itemVariants}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-                  <motion.h2 
-                    className="text-2xl font-bold text-gray-900 mb-3"
-                    variants={itemVariants}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                  >
-                    {title || currentNavigationItem.label}
-                  </motion.h2>
-                  {description && (
-                    <motion.p 
-                      className="text-base text-gray-600"
+                  <div className="flex items-baseline gap-4">
+                    <motion.h2 
+                      className="text-2xl font-bold text-gray-900"
                       variants={itemVariants}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                      {description}
-                    </motion.p>
-                  )}
+                      {title || currentNavigationItem.label}
+                    </motion.h2>
+                    {description && (
+                      <motion.p 
+                        className="text-base text-gray-600"
+                        variants={itemVariants}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                      >
+                        {description}
+                      </motion.p>
+                    )}
+                  </div>
                 </motion.div>
               )}
 
@@ -318,7 +320,7 @@ export default function FullscreenDropdown({
                   </div>
                 </motion.div>
               ) : (
-                // 普通导航模式的内容 - 统一使用嵌套菜单布局
+                // 普通导航模式的内容 - 使用苹果风格的菜单布局
                 <motion.div 
                   className="mb-8" 
                   variants={itemVariants}

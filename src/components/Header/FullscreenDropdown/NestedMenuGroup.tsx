@@ -29,86 +29,106 @@ const containerVariants = {
 
 export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true }: NestedMenuGroupProps) {
   if (level === 0) {
-    // 顶级菜单项，使用网格布局 - 减小字体和间距
+    // 顶级菜单项，使用苹果风格的三列布局
+    // 将items分成三列
+    const columns = [
+      items.filter((_, index) => index % 3 === 0), // 第一列
+      items.filter((_, index) => index % 3 === 1), // 第二列
+      items.filter((_, index) => index % 3 === 2)  // 第三列
+    ]
+
     return (
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
         variants={containerVariants}
         initial="hidden"
         animate={isAnimating ? "visible" : "hidden"}
       >
-        {items.map((item, index) => (
+        {columns.map((columnItems, columnIndex) => (
           <motion.div 
-            key={index} 
-            className="group"
+            key={columnIndex}
+            className="space-y-6"
             variants={itemVariants}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            {/* 主菜单项 */}
-            <Link
-              href={item.href}
-              className="block p-4 rounded-lg hover:bg-gray-50 transition-all duration-300 border border-transparent hover:border-gray-200 hover:shadow-lg"
-              onClick={onClose}
+            {/* 列标题 */}
+            <motion.div 
+              className="mb-6"
+              variants={itemVariants}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              <div className="mb-3">
-                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors mb-2">
-                  {item.label}
-                </h3>
-                {item.description && (
-                  <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">
-                    {item.description}
-                  </p>
-                )}
-              </div>
-              
-              <div className="flex items-center text-blue-600 group-hover:text-blue-700 transition-colors">
-                <span className="text-sm font-medium">
-                  {item.items && item.items.length > 0 ? '查看详情' : '了解更多'}
-                </span>
-                <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
+              <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {columnIndex === 0 ? '主要分类' : columnIndex === 1 ? '快速链接' : '特殊分类'}
+              </h3>
+            </motion.div>
 
-            {/* 子菜单项 */}
-            {item.items && item.items.length > 0 && (
-              <motion.div 
-                className="mt-3 pl-2 border-l-2 border-gray-200"
-                variants={itemVariants}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
-              >
-                <h4 className="text-xs font-medium text-gray-700 mb-2">
-                  {item.label} - 子分类
-                </h4>
-                <div className="space-y-1">
-                  {item.items.map((subItem, subIndex) => (
-                    <Link
-                      key={subIndex}
-                      href={subItem.href}
-                      className="block p-2 rounded-md hover:bg-gray-100 transition-colors"
-                      onClick={onClose}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h5 className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
-                            {subItem.label}
-                          </h5>
-                          {subItem.description && (
-                            <p className="text-xs text-gray-600 mt-1">
-                              {subItem.description}
-                            </p>
-                          )}
-                        </div>
-                        <svg className="ml-2 h-3 w-3 text-gray-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {/* 列内容 */}
+            <motion.div 
+              className="space-y-3"
+              variants={containerVariants}
+              transition={{ staggerChildren: 0.05 }}
+            >
+              {columnItems.map((item, itemIndex) => (
+                <motion.div
+                  key={itemIndex}
+                  variants={itemVariants}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <Link
+                    href={item.href}
+                    className="block group"
+                    onClick={onClose}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h4 className={`font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 ${
+                          columnIndex === 0 ? 'text-lg font-bold' : 'text-base font-normal'
+                        }`}>
+                          {item.label}
+                        </h4>
+                        {item.description && (
+                          <p className={`text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200 ${
+                            columnIndex === 0 ? 'text-sm' : 'text-sm'
+                          }`}>
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+                      {columnIndex === 0 && (
+                        <svg className="ml-3 h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </motion.div>
-            )}
+                      )}
+                    </div>
+                  </Link>
+
+                  {/* 子菜单项 */}
+                  {item.items && item.items.length > 0 && (
+                    <motion.div 
+                      className="mt-4 space-y-2"
+                      variants={itemVariants}
+                      transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+                    >
+                      {item.items.slice(0, 6).map((subItem, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subItem.href}
+                          className="block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 leading-relaxed"
+                          onClick={onClose}
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                      {item.items.length > 6 && (
+                        <div className="text-xs text-gray-500 mt-2">
+                          还有 {item.items.length - 6} 个...
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </motion.div>
+              ))}
+            </motion.div>
           </motion.div>
         ))}
       </motion.div>
