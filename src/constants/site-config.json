@@ -1,6 +1,6 @@
 {
   "site": {
-    "title": "Apodidae的博客",
+    "title": "Apodidae",
     "description": "分享技术见解、开发经验和生活感悟",
     "author": "Apodidae",
     "url": "https://gemini2035.github.io",
@@ -62,9 +62,56 @@
           "label": "博客",
           "href": "/posts",
           "submenu": {
-            "title": "最新文章",
-            "description": "探索我们的最新技术见解和开发经验",
-            "items": []
+            "title": "我的文章",
+            "description": "探索我的最新技术见解和开发经验",
+            "items": [
+              {
+                "label": "置顶文章",
+                "href": "/posts#featured",
+                "description": "精选推荐文章"
+              },
+              {
+                "label": "最新文章",
+                "href": "/posts#recent",
+                "description": "最近一周更新的文章"
+              },
+              {
+                "label": "技术分类",
+                "href": "/posts#categories",
+                "items": [
+                  {
+                    "label": "TypeScript",
+                    "href": "/posts#typescript",
+                    "description": "TypeScript 相关文章"
+                  },
+                  {
+                    "label": "Javascript",
+                    "href": "/posts#javascript",
+                    "description": "JavaScript 相关文章"
+                  },
+                  {
+                    "label": "NodeJs",
+                    "href": "/posts#nodejs",
+                    "description": "Node.js 相关文章"
+                  },
+                  {
+                    "label": "ReactJs",
+                    "href": "/posts#reactjs",
+                    "description": "React 相关文章"
+                  },
+                  {
+                    "label": "VueJS",
+                    "href": "/posts#vuejs",
+                    "description": "Vue.js 相关文章"
+                  },
+                  {
+                    "label": "其它",
+                    "href": "/posts#others",
+                    "description": "其他技术文章"
+                  }
+                ]
+              }
+            ]
           }
         },
         {

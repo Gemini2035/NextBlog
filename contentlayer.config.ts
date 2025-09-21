@@ -32,6 +32,17 @@ export const Post = defineDocumentType(() => ({
       required: false,
       default: true,
     },
+    featured: {
+      type: 'boolean',
+      description: 'Whether the post is featured (pinned)',
+      required: false,
+      default: false,
+    },
+    updatedAt: {
+      type: 'date',
+      description: 'The last update date of the post',
+      required: false,
+    },
   },
   computedFields: {
     url: {

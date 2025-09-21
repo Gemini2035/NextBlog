@@ -1,7 +1,7 @@
 // 应用常量 - 从JSON配置文件加载
 
 import siteConfigData from './site-config.json'
-import { getAllPosts } from '@/lib/posts'
+import { getFeaturedPost, getRecentPosts, getPostsByCategory, getCategories } from '@/lib/posts'
 
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
@@ -31,26 +31,74 @@ export const NAVIGATION_ITEMS: NavigationItem[] = siteConfigData.app.header.navi
 
 // 生成带有动态子菜单的导航项
 export function getNavigationItemsWithSubmenus(): NavigationItem[] {
-  // 获取所有文章用于子菜单
-  const allPosts = getAllPosts()
-  
-  // 为有submenu的导航项动态填充内容
-  return NAVIGATION_ITEMS.map(item => {
-    if (item.type === '__blog' && item.submenu) {
-      return {
-        ...item,
-        submenu: {
-          ...item.submenu,
-          items: allPosts.slice(0, 5).map(post => ({
-            label: post.title,
-            href: `/posts/${post.slug}`,
-            description: post.description
-          }))
+  try {
+    // 获取文章分类数据
+    const featuredPost = getFeaturedPost()
+    const recentPosts = getRecentPosts()
+    const categories = getCategories()
+    
+    // 为有submenu的导航项动态填充内容
+    return NAVIGATION_ITEMS.map(item => {
+      if (item.type === '__blog' && item.submenu) {
+        const submenuItems: SubmenuItem[] = []
+        
+        // 添加置顶文章
+        if (featuredPost) {
+          submenuItems.push({
+            label: '置顶文章',
+            href: '/posts#featured',
+            items: [{
+              label: featuredPost.title,
+              href: `/posts/${featuredPost.slug}`,
+            }]
+          })
+        }
+        
+        // 添加最新文章
+          submenuItems.push({
+            label: '最新文章',
+            href: '/posts#recent',
+            items: recentPosts.slice(0, 10).map(post => ({
+              label: post.title,
+              href: `/posts/${post.slug}`,
+            }))
+          })
+        
+        // 添加技术分类
+        const categoryItems: SubmenuItem[] = []
+        categories.forEach(category => {
+          const categoryPosts = getPostsByCategory(category)
+          if (categoryPosts.length > 0) {
+            categoryItems.push({
+              label: `${category}`,
+              href: `/posts#${category.toLowerCase()}`,
+            })
+          }
+        })
+        
+        if (categoryItems.length > 0) {
+          submenuItems.push({
+            label: '技术分类',
+            href: '/posts#categories',
+            items: categoryItems
+          })
+        }
+        
+        return {
+          ...item,
+          submenu: {
+            ...item.submenu,
+            items: submenuItems
+          }
         }
       }
-    }
-    return item
-  })
+      return item
+    })
+  } catch (error) {
+    // 如果出错，返回静态配置
+    console.warn('Failed to generate dynamic navigation items:', error)
+    return NAVIGATION_ITEMS
+  }
 }
 
 export const POSTS_PER_PAGE = siteConfigData.app.postsPerPage

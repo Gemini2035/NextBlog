@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
 import { SearchIcon, CloseIcon } from '@/assets/icons'
@@ -10,7 +10,7 @@ import NestedMenuGroup from './NestedMenuGroup'
 // 搜索模式组件
 interface SearchModeProps {
   searchDisplayText: { title: string; description: string }
-  itemVariants: any
+  itemVariants: Variants
 }
 
 function SearchMode({ searchDisplayText, itemVariants }: SearchModeProps) {
@@ -35,7 +35,7 @@ function SearchMode({ searchDisplayText, itemVariants }: SearchModeProps) {
 interface LanguageModeProps {
   currentLang: string
   onLanguageChange: (langCode: string) => void
-  itemVariants: any
+  itemVariants: Variants
 }
 
 function LanguageMode({ currentLang, onLanguageChange, itemVariants }: LanguageModeProps) {
@@ -76,7 +76,7 @@ function LanguageMode({ currentLang, onLanguageChange, itemVariants }: LanguageM
 interface NavigationModeProps {
   navigationItem: NavigationItem
   onClose: () => void
-  itemVariants: any
+  itemVariants: Variants
 }
 
 function NavigationMode({ navigationItem, onClose, itemVariants }: NavigationModeProps) {
@@ -190,14 +190,6 @@ export default function FullscreenDropdown({
     changeLanguage(langCode)
     onClose()
   }, [changeLanguage, onClose])
-
-  // 关闭时清空搜索状态
-  const handleClose = useCallback(() => {
-    if (isSearchMode) {
-      setQuery('')
-    }
-    onClose()
-  }, [isSearchMode, onClose])
 
   // 当组件关闭时清空搜索状态
   useEffect(() => {
