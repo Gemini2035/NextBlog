@@ -3,10 +3,8 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG } from '@/constants'
-import { getAllPosts } from '@/lib/posts'
 import FullscreenDropdown from './FullscreenDropdown'
 import SearchBar from './SearchBar'
-import ThemeToggle from './ThemeToggle'
 import LanguageToggle from './LanguageToggle'
 
 export default function Header() {
@@ -131,7 +129,7 @@ export default function Header() {
   return (
     <header 
       ref={navRef}
-      className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm border-b border-gray-200 dark:border-gray-700"
+      className="sticky top-0 z-50 bg-white/95  backdrop-blur-sm shadow-sm border-b border-gray-200 "
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 主要内容区域 */}
@@ -140,7 +138,7 @@ export default function Header() {
           <div className="flex items-center">
             <Link 
               href="/" 
-              className="text-xl font-bold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+              className="text-xl font-bold text-gray-900  hover:text-blue-600  transition-colors"
             >
               {SITE_CONFIG.title}
             </Link>
@@ -159,7 +157,7 @@ export default function Header() {
                     >
                       <Link 
                         href={item.href} 
-                        className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center"
+                        className="text-gray-700  hover:text-blue-600  transition-colors flex items-center"
                       >
                         {item.label}
                         <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,7 +168,7 @@ export default function Header() {
                   ) : (
                     <Link 
                       href={item.href} 
-                      className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                      className="text-gray-700  hover:text-blue-600  transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -189,12 +187,9 @@ export default function Header() {
               {/* 语言切换 */}
               <LanguageToggle onLanguageClick={handleLanguageClick} />
 
-              {/* 主题切换 */}
-              <ThemeToggle onCloseSubmenu={handleSubmenuClose} />
-
               {/* 移动端菜单按钮 */}
               <div className="lg:hidden">
-                <button className="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white transition-all duration-200">
+                <button className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200">
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>

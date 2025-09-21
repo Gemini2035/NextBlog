@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { SubmenuItem, NavigationItem, LANGUAGES } from '@/constants'
+import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
 import NestedMenuGroup from './NestedMenuGroup'
 
@@ -162,7 +162,7 @@ export default function FullscreenDropdown({
           
           {/* 全屏下拉菜单 */}
           <motion.div 
-            className="absolute w-full top-full bg-white dark:bg-gray-900 shadow-2xl z-50 border-gray-200 dark:border-gray-700 max-h-[80vh] overflow-y-auto"
+            className="absolute w-full top-full bg-white shadow-2xl z-50 border-gray-200 max-h-[80vh] overflow-y-auto"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -210,7 +210,7 @@ export default function FullscreenDropdown({
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
                   <motion.h2 
-                    className="text-2xl font-bold text-gray-900 dark:text-white mb-3"
+                    className="text-2xl font-bold text-gray-900 mb-3"
                     variants={itemVariants}
                     transition={{ duration: 0.6, ease: "easeOut" }}
                   >
@@ -218,7 +218,7 @@ export default function FullscreenDropdown({
                   </motion.h2>
                   {description && (
                     <motion.p 
-                      className="text-base text-gray-600 dark:text-gray-400"
+                      className="text-base text-gray-600"
                       variants={itemVariants}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
@@ -235,9 +235,9 @@ export default function FullscreenDropdown({
                   variants={itemVariants}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-              <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-full px-6 py-4">
+              <div className="flex items-center bg-gray-100 rounded-full px-6 py-4">
                 <svg 
-                  className="h-5 w-5 text-gray-500 dark:text-gray-400 mr-4 flex-shrink-0" 
+                  className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" 
                   fill="none" 
                   viewBox="0 0 24 24" 
                   stroke="currentColor"
@@ -255,16 +255,16 @@ export default function FullscreenDropdown({
                   placeholder="搜索文章..."
                   value={query}
                   onChange={handleInputChange}
-                  className="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none text-lg"
+                  className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
                   autoFocus
                 />
                 {query && (
                   <button
                     onClick={clearSearch}
-                    className="ml-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
                     aria-label="清空搜索"
                   >
-                    <svg className="h-5 w-5 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
@@ -281,13 +281,13 @@ export default function FullscreenDropdown({
                   variants={itemVariants}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-              <svg className="h-16 w-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {searchDisplayText.title}
               </h3>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-500">
                     {searchDisplayText.description}
                   </p>
                 </motion.div>
@@ -303,7 +303,7 @@ export default function FullscreenDropdown({
                       <motion.button
                         key={lang.code}
                         onClick={() => handleLanguageChange(lang.code)}
-                        className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
+                        className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 text-gray-900"
                         variants={itemVariants}
                         transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.03 }}
                       >
@@ -335,7 +335,7 @@ export default function FullscreenDropdown({
               {/* 底部操作区域 - 仅在非语言模式下显示 */}
               {!isLanguageMode && (
                 <motion.div 
-                  className="text-center border-t border-gray-200 dark:border-gray-700 pt-6" 
+                  className="text-center border-t border-gray-200 pt-6" 
                   variants={itemVariants}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
