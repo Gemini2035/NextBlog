@@ -125,7 +125,6 @@
               {
                 "label": "项目类型",
                 "href": "/projects#types",
-                "description": "按项目性质分类",
                 "items": [
                   {
                     "label": "开源项目",
@@ -138,21 +137,10 @@
                   {
                     "label": "学习项目",
                     "href": "/projects#learning"
-                  }
-                ]
-              },
-              {
-                "label": "技术分类",
-                "href": "/projects#tech",
-                "description": "按技术栈和类型分类",
-                "items": [
-                  {
-                    "label": "按技术分类",
-                    "href": "/projects#by-tech"
                   },
                   {
-                    "label": "按类型分类",
-                    "href": "/projects#by-type"
+                    "label": "自研项目",
+                    "href": "/projects#self-developed"
                   }
                 ]
               }
