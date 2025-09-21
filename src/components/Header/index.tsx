@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG } from '@/constants'
+import { ChevronDownIcon, MenuIcon } from '@/assets/icons'
 import FullscreenDropdown from './FullscreenDropdown'
 import SearchBar from './SearchBar'
 import LanguageToggle from './LanguageToggle'
@@ -48,9 +49,26 @@ export default function Header() {
 
   // 处理鼠标移动事件
   const handleMouseMove = useCallback((event: MouseEvent) => {
-    if (!activeSubmenu) return
-
     const target = event.target as HTMLElement
+    
+    // 检查鼠标是否在搜索按钮上
+    const isOnSearchButton = target.closest('button[aria-label="搜索"]')
+    // 检查鼠标是否在语言切换按钮上
+    const isOnLanguageButton = target.closest('button[aria-label="切换语言"]')
+    
+    // 如果鼠标在搜索按钮上，且当前submenu不是搜索类型
+    if (isOnSearchButton && activeSubmenu && activeSubmenu !== '__search') {
+      setActiveSubmenu(null)
+      return
+    }
+    
+    // 如果鼠标在语言切换按钮上，且当前submenu不是语言类型
+    if (isOnLanguageButton && activeSubmenu && activeSubmenu !== '__language') {
+      setActiveSubmenu(null)
+      return
+    }
+    
+    if (!activeSubmenu) return
     
     // 检查鼠标是否在子菜单区域
     const isInSubmenu = target.closest('[data-submenu]')
@@ -58,9 +76,31 @@ export default function Header() {
     // 检查鼠标是否在header区域
     const isInHeader = navRef.current?.contains(target)
     
-    // 只有当鼠标完全离开header和submenu区域时才关闭submenu
-    if (!isInHeader && !isInSubmenu) {
-      setActiveSubmenu(null)
+    // 检查鼠标是否在触发按钮上（搜索按钮或语言切换按钮）
+    const isOnTriggerButton = target.closest('button[aria-label="搜索"], button[aria-label="切换语言"]')
+    
+    // 只有当鼠标完全离开header、submenu区域和触发按钮时才关闭submenu
+    if (!isInHeader && !isInSubmenu && !isOnTriggerButton) {
+      // 添加小延迟，避免快速鼠标移动导致的意外关闭
+      setTimeout(() => {
+        // 再次检查鼠标位置，确保真的离开了所有相关区域
+        // 使用try-catch包装，避免在组件卸载后访问DOM元素
+        try {
+          const currentElement = document.elementFromPoint(event.clientX, event.clientY)
+          if (!currentElement) return // 如果元素不存在，直接返回
+          
+          const stillInSubmenu = currentElement?.closest('[data-submenu]')
+          const stillInHeader = currentElement?.closest('header')
+          const stillOnTriggerButton = currentElement?.closest('button[aria-label="搜索"], button[aria-label="切换语言"]')
+          
+          if (!stillInSubmenu && !stillInHeader && !stillOnTriggerButton) {
+            setActiveSubmenu(null)
+          }
+        } catch (error) {
+          // 静默处理错误，避免在组件卸载时抛出异常
+          console.warn('Mouse tracking error:', error)
+        }
+      }, 150) // 150ms延迟，给用户足够时间移动到submenu
     }
   }, [activeSubmenu])
 
@@ -138,7 +178,7 @@ export default function Header() {
           <div className="flex items-center">
             <Link 
               href="/" 
-              className="text-xl font-bold text-gray-900  hover:text-blue-600  transition-colors"
+              className="text-xl font-bold text-gray-900  hover:text-gray-800  transition-colors"
             >
               {SITE_CONFIG.title}
             </Link>
@@ -157,18 +197,16 @@ export default function Header() {
                     >
                       <Link 
                         href={item.href} 
-                        className="text-gray-700  hover:text-blue-600  transition-colors flex items-center"
+                        className="text-gray-700  hover:text-gray-800  transition-colors flex items-center"
                       >
                         {item.label}
-                        <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
+                        <ChevronDownIcon className="ml-1 h-4 w-4" />
                       </Link>
                     </div>
                   ) : (
                     <Link 
                       href={item.href} 
-                      className="text-gray-700  hover:text-blue-600  transition-colors"
+                      className="text-gray-700  hover:text-gray-800  transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -190,9 +228,7 @@ export default function Header() {
               {/* 移动端菜单按钮 */}
               <div className="lg:hidden">
                 <button className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200">
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  </svg>
+                  <MenuIcon className="h-6 w-6" />
                 </button>
               </div>
             </div>

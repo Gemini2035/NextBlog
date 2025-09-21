@@ -5,6 +5,7 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
+import { SearchIcon, CloseIcon } from '@/assets/icons'
 import NestedMenuGroup from './NestedMenuGroup'
 
 interface FullscreenDropdownProps {
@@ -16,7 +17,7 @@ interface FullscreenDropdownProps {
 // 动画变体定义
 const backdropVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 0.3 }
+  visible: { opacity: 1 }
 }
 
 // 容器动画：从上方向下移动
@@ -69,6 +70,9 @@ export default function FullscreenDropdown({
 
   // 导航切换状态
   const [currentNavigationItem, setCurrentNavigationItem] = useState(navigationItem)
+  
+  // 使用ref来引用submenu元素，避免在异步回调中查询DOM
+  const submenuRef = useRef<HTMLDivElement>(null)
 
   // 判断是否为搜索模式
   const isSearchMode = currentNavigationItem.type === '__search'
@@ -140,10 +144,6 @@ export default function FullscreenDropdown({
     }
   }, [query])
 
-  // 底部按钮文本 - 使用useMemo避免重复计算
-  const bottomButtonText = useMemo(() => {
-    return currentNavigationItem.type === '__blog' ? '查看所有文章' : `查看${currentNavigationItem.label}`
-  }, [currentNavigationItem.type, currentNavigationItem.label])
 
   return (
     <AnimatePresence>
@@ -151,17 +151,19 @@ export default function FullscreenDropdown({
         <>
           {/* 背景遮罩 */}
           <motion.div 
-            className="absolute left-0 top-full w-full h-screen inset-0 bg-black z-40"
+            className="absolute left-0 top-full w-full h-screen inset-0 bg-white/90 backdrop-blur-xl z-40"
             variants={backdropVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
             transition={{ duration: 0.3 }}
             onClick={handleBackgroundClick}
+            onMouseEnter={handleBackgroundClick}
           />
           
           {/* 全屏下拉菜单 */}
           <motion.div 
+            ref={submenuRef}
             className="absolute w-full top-full bg-white shadow-2xl z-50 border-gray-200 max-h-[80vh] overflow-y-auto"
             variants={containerVariants}
             initial="hidden"
@@ -177,15 +179,36 @@ export default function FullscreenDropdown({
               e.stopPropagation()
             }}
             onMouseLeave={(e) => {
-              // 只有当鼠标真正离开submenu区域时才关闭
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX
-              const y = e.clientY
-              
-              // 检查鼠标是否真的在submenu区域外
-              if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-                onClose()
-              }
+              // 使用延迟检查，避免快速鼠标移动导致的意外关闭
+              setTimeout(() => {
+                // 使用ref来获取元素，避免DOM查询
+                if (!submenuRef.current) return
+                
+                const rect = submenuRef.current.getBoundingClientRect()
+                const x = e.clientX
+                const y = e.clientY
+                
+                // 检查鼠标是否真的在submenu区域外，并增加一些容错范围
+                const tolerance = 10 // 增加10px的容错范围
+                if (x < rect.left - tolerance || x > rect.right + tolerance || 
+                    y < rect.top - tolerance || y > rect.bottom + tolerance) {
+                  // 再次检查鼠标是否在submenu或其父元素内
+                  try {
+                    const elementUnderMouse = document.elementFromPoint(x, y)
+                    if (!elementUnderMouse) return
+                    
+                    const isInSubmenu = elementUnderMouse.closest('[data-submenu]')
+                    const isInHeader = elementUnderMouse.closest('header')
+                    
+                    if (!isInSubmenu && !isInHeader) {
+                      onClose()
+                    }
+                  } catch (error) {
+                    // 静默处理错误，避免在组件卸载时抛出异常
+                    console.warn('Submenu mouse tracking error:', error)
+                  }
+                }
+              }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
             }}
           >
             <motion.div 
@@ -238,19 +261,7 @@ export default function FullscreenDropdown({
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
               <div className="flex items-center bg-gray-100 rounded-full px-6 py-4">
-                <svg 
-                  className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
-                  stroke="currentColor"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
-                  />
-                </svg>
+                <SearchIcon className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -266,9 +277,7 @@ export default function FullscreenDropdown({
                     className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
                     aria-label="清空搜索"
                   >
-                    <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <CloseIcon className="h-5 w-5 text-gray-500" />
                   </button>
                 )}
                 </div>
@@ -283,9 +292,7 @@ export default function FullscreenDropdown({
                   variants={itemVariants}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                 >
-              <svg className="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <SearchIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" strokeWidth={1} />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 {searchDisplayText.title}
               </h3>
@@ -334,37 +341,6 @@ export default function FullscreenDropdown({
                 </motion.div>
               )}
 
-              {/* 底部操作区域 - 仅在非语言模式下显示 */}
-              {!isLanguageMode && (
-                <motion.div 
-                  className="text-center border-t border-gray-200 pt-6" 
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-              {isSearchMode ? (
-                <button
-                  onClick={handleClose}
-                  className="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
-                >
-                  关闭搜索
-                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              ) : (
-                <Link
-                  href={currentNavigationItem.href}
-                  className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl text-sm"
-                  onClick={onClose}
-                >
-                  {bottomButtonText}
-                  <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                  </Link>
-                )}
-                </motion.div>
-              )}
             </motion.div>
           </motion.div>
         </>

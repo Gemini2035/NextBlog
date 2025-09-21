@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { SubmenuItem } from '@/constants'
+import { ChevronRightIcon } from '@/assets/icons'
 
 interface NestedMenuGroupProps {
   items: SubmenuItem[]
@@ -78,10 +79,14 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                     href={item.href}
                     className="block group"
                     onClick={onClose}
+                    onMouseEnter={(e) => {
+                      // 阻止事件冒泡，确保submenu保持打开
+                      e.stopPropagation()
+                    }}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className={`font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 ${
+                        <h4 className={`font-semibold text-gray-900 group-hover:text-gray-800 transition-colors duration-200 ${
                           columnIndex === 0 ? 'text-lg font-bold' : 'text-base font-normal'
                         }`}>
                           {item.label}
@@ -95,9 +100,7 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                         )}
                       </div>
                       {columnIndex === 0 && (
-                        <svg className="ml-3 h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors duration-200 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
+                        <ChevronRightIcon className="ml-3 h-4 w-4 text-gray-400 group-hover:text-gray-800 transition-colors duration-200 flex-shrink-0 mt-0.5" />
                       )}
                     </div>
                   </Link>
@@ -113,8 +116,12 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                         <Link
                           key={subIndex}
                           href={subItem.href}
-                          className="block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-200 leading-relaxed"
+                          className="block text-sm text-gray-700 hover:text-gray-800 transition-colors duration-200 leading-relaxed"
                           onClick={onClose}
+                          onMouseEnter={(e) => {
+                            // 阻止事件冒泡，确保submenu保持打开
+                            e.stopPropagation()
+                          }}
                         >
                           {subItem.label}
                         </Link>
@@ -154,8 +161,12 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
             href={item.href}
             className="block p-2 rounded-md hover:bg-gray-100 transition-colors"
             onClick={onClose}
+            onMouseEnter={(e) => {
+              // 阻止事件冒泡，确保submenu保持打开
+              e.stopPropagation()
+            }}
           >
-            <h4 className="text-sm font-medium text-gray-900 hover:text-blue-600 transition-colors">
+            <h4 className="text-sm font-medium text-gray-900 hover:text-gray-800 transition-colors">
               {item.label}
             </h4>
             {item.description && (
