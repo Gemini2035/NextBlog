@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
-import { SearchIcon } from '@/assets/icons'
 import NestedMenuGroup from './NestedMenuGroup'
 import SearchDropdown from './SearchDropdown'
 
@@ -289,6 +288,7 @@ export default function FullscreenDropdown({
                 <SearchDropdown 
                   itemVariants={itemVariants}
                   isOpen={isOpen}
+                  onClose={onClose}
                 />
               )}
               

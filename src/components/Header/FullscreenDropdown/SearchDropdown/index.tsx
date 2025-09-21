@@ -1,37 +1,51 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { useRef, useEffect, useCallback } from 'react'
 import { motion, Variants } from 'framer-motion'
 import { SITE_CONFIG } from '@/constants'
 import { SearchIcon, CloseIcon } from '@/assets/icons'
+import { useSearch } from '@/hooks/useSearch'
+import SearchResults from './SearchResults'
 
 interface SearchDropdownProps {
   itemVariants: Variants
   isOpen: boolean
+  onClose: () => void
 }
 
-export default function SearchDropdown({ itemVariants, isOpen }: SearchDropdownProps) {
-  // 搜索状态管理
-  const [query, setQuery] = useState('')
+export default function SearchDropdown({ itemVariants, isOpen, onClose }: SearchDropdownProps) {
   const inputRef = useRef<HTMLInputElement>(null)
+  
+  // 使用搜索Hook
+  const {
+    query,
+    setQuery,
+    searchResults,
+    recommendedContent,
+    isShowingRecommendations,
+    isSearching,
+    clearSearch
+  } = useSearch()
 
   // 处理输入变化
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
-  }, [])
+  }, [setQuery])
 
-  // 清空搜索
-  const clearSearch = useCallback(() => {
-    setQuery('')
-    inputRef.current?.focus()
-  }, [])
+  // 处理搜索结果项点击
+  const handleItemClick = useCallback((href: string) => {
+    // 关闭搜索下拉框
+    onClose()
+    // 导航到目标页面
+    window.location.href = href
+  }, [onClose])
 
   // 当组件关闭时清空搜索状态
   useEffect(() => {
     if (!isOpen) {
-      setQuery('')
+      clearSearch()
     }
-  }, [isOpen])
+  }, [isOpen, clearSearch])
 
   // 搜索模式打开时自动聚焦输入框
   useEffect(() => {
@@ -44,15 +58,6 @@ export default function SearchDropdown({ itemVariants, isOpen }: SearchDropdownP
       return () => clearTimeout(timer)
     }
   }, [isOpen])
-
-  // 搜索模式下的显示文本 - 使用useMemo避免重复计算
-  const searchDisplayText = useMemo(() => {
-    const trimmedQuery = query.trim()
-    return {
-      title: trimmedQuery ? '搜索功能开发中' : '开始搜索',
-      description: trimmedQuery ? '搜索功能即将上线，敬请期待' : '输入关键词搜索相关文章'
-    }
-  }, [query])
 
   return (
     <>
@@ -85,20 +90,15 @@ export default function SearchDropdown({ itemVariants, isOpen }: SearchDropdownP
         </div>
       </motion.div>
 
-      {/* 搜索结果显示区域 */}
-      <motion.div 
-        className="text-center py-12" 
-        variants={itemVariants}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-      >
-        <SearchIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" strokeWidth={1} />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          {searchDisplayText.title}
-        </h3>
-        <p className="text-sm text-gray-500">
-          {searchDisplayText.description}
-        </p>
-      </motion.div>
+      {/* 搜索结果区域 */}
+      <SearchResults
+        searchResults={searchResults}
+        recommendedContent={recommendedContent}
+        isShowingRecommendations={isShowingRecommendations}
+        isSearching={isSearching}
+        onItemClick={handleItemClick}
+        itemVariants={itemVariants}
+      />
     </>
   )
 }
