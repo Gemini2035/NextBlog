@@ -8,13 +8,7 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // 禁用实验性功能，避免静态导出问题
-  experimental: {
-    // 禁用可能导致静态导出问题的功能
-    serverComponentsExternalPackages: [],
-  },
-  // 确保所有页面都是静态生成的
-  generateStaticParams: true,
+  serverExternalPackages: ['contentlayer2'],
   // 移除 basePath 和 assetPrefix，让 GitHub Pages 使用根路径
   // basePath: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io' : '',
   // assetPrefix: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io/' : '',

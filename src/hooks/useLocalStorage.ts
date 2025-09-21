@@ -20,9 +20,11 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
       const valueToStore = value instanceof Function ? value(storedValue) : value
+      console.log(`Setting localStorage key "${key}":`, { from: storedValue, to: valueToStore })
       setStoredValue(valueToStore)
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore))
+        console.log(`localStorage set for key "${key}":`, valueToStore)
       }
     } catch (error) {
       console.error(`Error setting localStorage key "${key}":`, error)

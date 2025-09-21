@@ -1,21 +1,49 @@
 'use client'
 
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 import { SubmenuItem } from '@/constants'
 
 interface NestedMenuGroupProps {
   items: SubmenuItem[]
   onClose: () => void
   level?: number
+  isAnimating?: boolean
 }
 
-export default function NestedMenuGroup({ items, onClose, level = 0 }: NestedMenuGroupProps) {
+// 动画变体 - 纯淡入淡出效果
+const itemVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 }
+}
+
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.04, // 进一步减少延迟时间
+      delayChildren: 0.05 // 减少初始延迟
+    }
+  }
+}
+
+export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true }: NestedMenuGroupProps) {
   if (level === 0) {
     // 顶级菜单项，使用网格布局 - 减小字体和间距
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate={isAnimating ? "visible" : "hidden"}
+      >
         {items.map((item, index) => (
-          <div key={index} className="group">
+          <motion.div 
+            key={index} 
+            className="group"
+            variants={itemVariants}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
             {/* 主菜单项 */}
             <Link
               href={item.href}
@@ -45,7 +73,11 @@ export default function NestedMenuGroup({ items, onClose, level = 0 }: NestedMen
 
             {/* 子菜单项 */}
             {item.items && item.items.length > 0 && (
-              <div className="mt-3 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
+              <motion.div 
+                className="mt-3 pl-2 border-l-2 border-gray-200 dark:border-gray-700"
+                variants={itemVariants}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+              >
                 <h4 className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {item.label} - 子分类
                 </h4>
@@ -75,19 +107,29 @@ export default function NestedMenuGroup({ items, onClose, level = 0 }: NestedMen
                     </Link>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     )
   }
 
   // 嵌套级别使用不同的布局 - 减小字体和间距
   return (
-    <div className="space-y-3">
+    <motion.div 
+      className="space-y-3"
+      variants={containerVariants}
+      initial="hidden"
+      animate={isAnimating ? "visible" : "hidden"}
+    >
       {items.map((item, index) => (
-        <div key={index} className="border-l-2 border-gray-200 dark:border-gray-700 pl-3">
+        <motion.div 
+          key={index} 
+          className="border-l-2 border-gray-200 dark:border-gray-700 pl-3"
+          variants={itemVariants}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <Link
             href={item.href}
             className="block p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -113,8 +155,8 @@ export default function NestedMenuGroup({ items, onClose, level = 0 }: NestedMen
               />
             </div>
           )}
-        </div>
+        </motion.div>
       ))}
-    </div>
+    </motion.div>
   )
 }

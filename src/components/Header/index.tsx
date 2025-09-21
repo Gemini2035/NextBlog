@@ -190,7 +190,7 @@ export default function Header() {
               <LanguageToggle onLanguageClick={handleLanguageClick} />
 
               {/* 主题切换 */}
-              <ThemeToggle />
+              <ThemeToggle onCloseSubmenu={handleSubmenuClose} />
 
               {/* 移动端菜单按钮 */}
               <div className="lg:hidden">
