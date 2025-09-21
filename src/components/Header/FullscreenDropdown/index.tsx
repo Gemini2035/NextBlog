@@ -1,35 +1,13 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
-import { SearchIcon, CloseIcon } from '@/assets/icons'
+import { SearchIcon } from '@/assets/icons'
 import NestedMenuGroup from './NestedMenuGroup'
+import SearchDropdown from './SearchDropdown'
 
-// 搜索模式组件
-interface SearchModeProps {
-  searchDisplayText: { title: string; description: string }
-  itemVariants: Variants
-}
-
-function SearchMode({ searchDisplayText, itemVariants }: SearchModeProps) {
-  return (
-    <motion.div 
-      className="text-center py-12" 
-      variants={itemVariants}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
-      <SearchIcon className="h-16 w-16 text-gray-300 mx-auto mb-4" strokeWidth={1} />
-      <h3 className="text-lg font-medium text-gray-900 mb-2">
-        {searchDisplayText.title}
-      </h3>
-      <p className="text-sm text-gray-500">
-        {searchDisplayText.description}
-      </p>
-    </motion.div>
-  )
-}
 
 // 语言选择模式组件
 interface LanguageModeProps {
@@ -170,33 +148,12 @@ export default function FullscreenDropdown({
   // 语言选择的状态
   const { currentLang, changeLanguage } = useLanguage()
 
-  // 搜索模式的状态 - 仅用于UI显示
-  const [query, setQuery] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  // 处理输入变化 - 仅更新UI状态
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
-  }, [])
-
-  // 清空搜索 - 仅清空UI状态
-  const clearSearch = useCallback(() => {
-    setQuery('')
-    inputRef.current?.focus()
-  }, [])
-
   // 处理语言选择
   const handleLanguageChange = useCallback((langCode: string) => {
     changeLanguage(langCode)
     onClose()
   }, [changeLanguage, onClose])
 
-  // 当组件关闭时清空搜索状态
-  useEffect(() => {
-    if (!isOpen && isSearchMode) {
-      setQuery('')
-    }
-  }, [isOpen, isSearchMode])
 
   // 处理导航项切换
   useEffect(() => {
@@ -244,18 +201,9 @@ export default function FullscreenDropdown({
     }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
   }, [onClose])
 
-  // 搜索模式下的标题和描述
-  const title = isSearchMode ? '搜索文章' : currentNavigationItem.submenu?.title || currentNavigationItem.label
-  const description = isSearchMode ? '输入关键词搜索相关文章' : currentNavigationItem.submenu?.description
-
-  // 搜索模式下的显示文本 - 使用useMemo避免重复计算
-  const searchDisplayText = useMemo(() => {
-    const trimmedQuery = query.trim()
-    return {
-      title: trimmedQuery ? '搜索功能开发中' : '开始搜索',
-      description: trimmedQuery ? '搜索功能即将上线，敬请期待' : '输入关键词搜索相关文章'
-    }
-  }, [query])
+  // 标题和描述
+  const title = currentNavigationItem.submenu?.title || currentNavigationItem.label
+  const description = currentNavigationItem.submenu?.description
 
 
   return (
@@ -307,8 +255,8 @@ export default function FullscreenDropdown({
               }}
               key={currentNavigationItem.type}
             >
-              {/* 标题区域 - 仅在非语言模式下显示 */}
-              {!isLanguageMode && (
+              {/* 标题区域 - 仅在非语言模式和非搜索模式下显示 */}
+              {!isLanguageMode && !isSearchMode && (
                 <motion.div 
                   className="text-left mb-8" 
                   variants={itemVariants}
@@ -335,42 +283,12 @@ export default function FullscreenDropdown({
                 </motion.div>
               )}
 
-              {/* 搜索框区域 - 仅在搜索模式下显示 */}
-              {isSearchMode && (
-                <motion.div 
-                  className="max-w-2xl mx-auto mb-8" 
-                  variants={itemVariants}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                >
-              <div className="flex items-center bg-gray-100 rounded-full px-6 py-4">
-                <SearchIcon className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="搜索文章..."
-                  value={query}
-                  onChange={handleInputChange}
-                  className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
-                  autoFocus
-                />
-                {query && (
-                  <button
-                    onClick={clearSearch}
-                    className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
-                    aria-label="清空搜索"
-                  >
-                    <CloseIcon className="h-5 w-5 text-gray-500" />
-                  </button>
-                )}
-                </div>
-                </motion.div>
-              )}
 
               {/* 内容区域 */}
               {isSearchMode && (
-                <SearchMode 
-                  searchDisplayText={searchDisplayText}
+                <SearchDropdown 
                   itemVariants={itemVariants}
+                  isOpen={isOpen}
                 />
               )}
               

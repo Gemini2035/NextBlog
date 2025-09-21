@@ -7,7 +7,6 @@ interface SearchBarProps {
 }
 
 export default function SearchBar({ onSearchClick }: SearchBarProps) {
-  // TODO: 接入搜索逻辑
   return (
     <button
       onClick={onSearchClick}
