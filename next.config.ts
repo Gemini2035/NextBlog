@@ -2,8 +2,6 @@ import type { NextConfig } from "next";
 import { withContentlayer } from 'next-contentlayer2';
 
 const nextConfig: NextConfig = {
-  // 强制使用静态导出模式，避免SSR相关问题
-  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true,
