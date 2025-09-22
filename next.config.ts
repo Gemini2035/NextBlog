@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 import { withContentlayer } from 'next-contentlayer2';
+import createNextIntlPlugin from 'next-intl/plugin';
 
+const withNextIntl = createNextIntlPlugin();
 const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
@@ -12,4 +14,4 @@ const nextConfig: NextConfig = {
   // assetPrefix: process.env.NODE_ENV === 'production' ? '/Gemini2035.github.io/' : '',
 };
 
-export default withContentlayer(nextConfig);
+export default withContentlayer(withNextIntl(nextConfig));
