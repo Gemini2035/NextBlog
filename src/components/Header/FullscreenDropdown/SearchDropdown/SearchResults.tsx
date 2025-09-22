@@ -8,6 +8,7 @@ import {
   SearchResult,
 } from "./searchService";
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
+import { useTranslations } from "next-intl";
 
 interface SearchResultsProps {
   searchResults: SearchResultsGroup[];
@@ -26,6 +27,7 @@ export default function SearchResults({
   onItemClick,
   itemVariants,
 }: SearchResultsProps) {
+  const t = useTranslations('Search')
 
   // 渲染搜索结果组
   const renderSearchResultsGroup = (group: SearchResultsGroup) => (
@@ -125,7 +127,7 @@ export default function SearchResults({
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-sm text-gray-500">搜索中...</p>
+        <p className="text-sm text-gray-500">{t('searching')}</p>
       </motion.div>
     );
   }
@@ -146,17 +148,17 @@ export default function SearchResults({
     const groups = [];
     if (recommendedContent.featuredPosts.length > 0) {
       groups.push(
-        renderRecommendedGroup("推荐博客", recommendedContent.featuredPosts)
+        renderRecommendedGroup(t('recommendedBlog'), recommendedContent.featuredPosts)
       );
     }
     if (recommendedContent.recentPosts.length > 0) {
       groups.push(
-        renderRecommendedGroup("最新文章", recommendedContent.recentPosts)
+        renderRecommendedGroup(t('latestPosts'), recommendedContent.recentPosts)
       );
     }
     if (recommendedContent.navigationLinks.length > 0) {
       groups.push(
-        renderRecommendedGroup("推荐链接", recommendedContent.navigationLinks)
+        renderRecommendedGroup(t('recommendedLinks'), recommendedContent.navigationLinks)
       );
     }
 
@@ -178,8 +180,8 @@ export default function SearchResults({
         className="h-16 w-16 text-gray-300 mx-auto mb-4"
         strokeWidth={1}
       />
-      <h3 className="text-lg font-medium text-gray-900 mb-2">未找到结果</h3>
-      <p className="text-sm text-gray-500">尝试使用其他关键词搜索</p>
+      <h3 className="text-lg font-medium text-gray-900 mb-2">{t('noResults')}</h3>
+      <p className="text-sm text-gray-500">{t('noResultsDescription')}</p>
     </motion.div>
   );
 }

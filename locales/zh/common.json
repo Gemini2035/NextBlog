@@ -8,12 +8,175 @@
         "exploreMore": "探索更多技术文章和开发经验分享",
         "browseAllPosts": "浏览所有文章"
     },
-    "Navigation": {
-        "blog": "博客",
-        "about": "关于",
-        "projects": "项目",
-        "resources": "资源",
+    "AboutPage": {
+        "title": "关于我",
+        "welcome": "欢迎来到 {siteTitle}！这里是我分享技术见解、开发经验和生活感悟的地方。",
+        "techStack": "技术栈",
+        "techStackDescription": "这个博客使用以下现代技术栈构建：",
+        "features": "特色功能",
+        "contact": "联系方式",
+        "nextjs": "Next.js 15 - React 全栈框架",
+        "contentlayer": "Contentlayer - 内容管理系统",
+        "mdx": "MDX - Markdown + JSX 支持",
+        "tailwind": "Tailwind CSS - 实用优先的 CSS 框架",
+        "typescript": "TypeScript - 类型安全的 JavaScript",
+        "githubPages": "GitHub Pages - 静态网站托管",
+        "feature1": "📝 支持 MDX 格式的博客文章",
+        "feature2": "🎨 响应式设计，支持深色模式",
+        "feature3": "🔍 标签分类和文章搜索",
+        "feature4": "📱 移动端友好",
+        "feature5": "⚡ 快速加载和 SEO 优化",
+        "feature6": "🚀 自动化部署到 GitHub Pages"
+    },
+    "Search": {
+        "searching": "搜索中...",
+        "noResults": "未找到结果",
+        "noResultsDescription": "尝试使用其他关键词搜索",
+        "recommendedBlog": "推荐博客",
+        "latestPosts": "最新文章",
+        "recommendedLinks": "推荐链接",
+        "clearSearch": "清空搜索",
+        "searchPlaceholder": "搜索文章、标签..."
+    },
+    "Footer": {
+        "copyright": "© 2024 {siteTitle}. 使用 Next.js + Contentlayer + MDX + Tailwind 构建."
+    },
+    "Site": {
+        "title": "Apodidae",
+        "description": "分享技术见解、开发经验和生活感悟"
+    },
+    "Header": {
+        "mainNavigation": "主导航",
+        "actionToolbar": "操作工具栏",
+        "openMobileMenu": "打开移动端菜单",
         "search": "搜索",
-        "language": "语言"
+        "toggleLanguage": "切换语言"
+    },
+    "Navigation": {
+        "search": "搜索",
+        "language": "语言",
+        "blog": {
+            "label": "博客",
+            "submenu": {
+                "title": "我的文章",
+                "description": "探索我的最新技术见解和开发经验",
+                "featured": {
+                    "label": "置顶文章",
+                    "description": "精选推荐文章"
+                },
+                "recent": {
+                    "label": "最新文章",
+                    "description": "最近一周更新的文章"
+                },
+                "categories": {
+                    "label": "技术分类",
+                    "typescript": {
+                        "label": "TypeScript",
+                        "description": "TypeScript 相关文章"
+                    },
+                    "javascript": {
+                        "label": "Javascript",
+                        "description": "JavaScript 相关文章"
+                    },
+                    "nodejs": {
+                        "label": "NodeJs",
+                        "description": "Node.js 相关文章"
+                    },
+                    "reactjs": {
+                        "label": "ReactJs",
+                        "description": "React 相关文章"
+                    },
+                    "vuejs": {
+                        "label": "VueJS",
+                        "description": "Vue.js 相关文章"
+                    },
+                    "others": {
+                        "label": "其它",
+                        "description": "其他技术文章"
+                    }
+                }
+            }
+        },
+        "about": {
+            "label": "关于",
+            "submenu": {
+                "title": "关于我",
+                "description": "了解我的背景、技能、经历和联系方式",
+                "basic": {
+                    "label": "基础信息",
+                    "profile": {
+                        "label": "个人简介"
+                    },
+                    "contact": {
+                        "label": "联系方式"
+                    }
+                },
+                "professional": {
+                    "label": "专业信息",
+                    "skills": {
+                        "label": "技能专长"
+                    },
+                    "work": {
+                        "label": "工作经历"
+                    },
+                    "education": {
+                        "label": "教育背景"
+                    },
+                    "achievements": {
+                        "label": "个人成就"
+                    }
+                }
+            }
+        },
+        "projects": {
+            "label": "项目",
+            "submenu": {
+                "title": "我的项目",
+                "description": "展示我的技术项目和作品集",
+                "types": {
+                    "label": "项目类型",
+                    "openSource": {
+                        "label": "开源项目"
+                    },
+                    "commercial": {
+                        "label": "商业项目"
+                    },
+                    "learning": {
+                        "label": "学习项目"
+                    },
+                    "selfDeveloped": {
+                        "label": "自研项目"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "label": "资源",
+            "submenu": {
+                "title": "技术资源",
+                "description": "分享有用的技术资源和工具",
+                "learning": {
+                    "label": "学习资源",
+                    "books": {
+                        "label": "技术书籍"
+                    },
+                    "docs": {
+                        "label": "开发文档"
+                    }
+                },
+                "toolsServices": {
+                    "label": "工具服务",
+                    "tools": {
+                        "label": "开发工具"
+                    },
+                    "design": {
+                        "label": "设计资源"
+                    },
+                    "services": {
+                        "label": "在线服务"
+                    }
+                }
+            }
+        }
     }
 }

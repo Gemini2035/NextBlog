@@ -6,6 +6,7 @@ import { SITE_CONFIG } from '@/constants'
 import { SearchIcon, CloseIcon } from '@/assets/icons'
 import { useSearch } from '@/hooks/useSearch'
 import SearchResults from './SearchResults'
+import { useTranslations } from 'next-intl'
 
 interface SearchDropdownProps {
   itemVariants: Variants
@@ -15,6 +16,7 @@ interface SearchDropdownProps {
 
 export default function SearchDropdown({ itemVariants, isOpen, onClose }: SearchDropdownProps) {
   const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations('Search')
   
   // 使用搜索Hook
   const {
@@ -36,8 +38,10 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
   const handleItemClick = useCallback((href: string) => {
     // 关闭搜索下拉框
     onClose()
-    // 导航到目标页面
-    window.location.href = href
+    // 使用Next.js路由导航
+    if (typeof window !== 'undefined') {
+      window.location.href = href
+    }
   }, [onClose])
 
   // 当组件关闭时清空搜索状态
@@ -72,7 +76,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
           <input
             ref={inputRef}
             type="text"
-            placeholder={`搜索${SITE_CONFIG.title}`}
+            placeholder={t('searchPlaceholder')}
             value={query}
             onChange={handleInputChange}
             className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
@@ -82,7 +86,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
             <button
               onClick={clearSearch}
               className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
-              aria-label="清空搜索"
+              aria-label={t('clearSearch')}
             >
               <CloseIcon className="h-5 w-5 text-gray-500" />
             </button>

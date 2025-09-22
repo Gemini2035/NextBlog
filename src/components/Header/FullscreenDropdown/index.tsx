@@ -6,6 +6,7 @@ import { NavigationItem, LANGUAGES } from '@/constants'
 import { useLanguage } from '@/hooks'
 import NestedMenuGroup from './NestedMenuGroup'
 import SearchDropdown from './SearchDropdown'
+import { useTranslations } from 'next-intl'
 
 
 // 语言选择模式组件
@@ -131,6 +132,7 @@ export default function FullscreenDropdown({
   onClose, 
   navigationItem
 }: FullscreenDropdownProps) {
+  const t = useTranslations('Navigation')
 
   // 导航切换状态
   const [currentNavigationItem, setCurrentNavigationItem] = useState(navigationItem)
@@ -194,15 +196,49 @@ export default function FullscreenDropdown({
           }
         } catch (error) {
           // 静默处理错误，避免在组件卸载时抛出异常
-          console.warn('Submenu mouse tracking error:', error)
         }
       }
     }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
   }, [onClose])
 
+  // 获取翻译后的标题和描述
+  const getTranslatedTitle = () => {
+    if (currentNavigationItem.submenu?.title) {
+      // 根据navigationItem类型获取翻译键
+      const translationKey = getTranslationKey(currentNavigationItem.type)
+      return translationKey ? t(`${translationKey}.submenu.title`) : currentNavigationItem.submenu.title
+    }
+    return currentNavigationItem.label
+  }
+
+  const getTranslatedDescription = () => {
+    if (currentNavigationItem.submenu?.description) {
+      // 根据navigationItem类型获取翻译键
+      const translationKey = getTranslationKey(currentNavigationItem.type)
+      return translationKey ? t(`${translationKey}.submenu.description`) : currentNavigationItem.submenu.description
+    }
+    return null
+  }
+
+  // 根据navigationItem类型获取翻译键的函数
+  const getTranslationKey = (type: string) => {
+    switch (type) {
+      case '__blog':
+        return 'blog'
+      case '__about':
+        return 'about'
+      case '__projects':
+        return 'projects'
+      case '__resources':
+        return 'resources'
+      default:
+        return null
+    }
+  }
+
   // 标题和描述
-  const title = currentNavigationItem.submenu?.title || currentNavigationItem.label
-  const description = currentNavigationItem.submenu?.description
+  const title = getTranslatedTitle()
+  const description = getTranslatedDescription()
 
 
   return (

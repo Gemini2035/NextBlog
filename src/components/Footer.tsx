@@ -1,12 +1,15 @@
 import { SITE_CONFIG } from '@/constants'
+import { useTranslations } from 'next-intl'
 
 export default function Footer() {
+  const t = useTranslations('Footer')
+  
   return (
     <footer className="bg-gray-50  border-t border-gray-200 ">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
           <p className="text-gray-600  text-sm">
-            © 2024 {SITE_CONFIG.title}. 使用 Next.js + Contentlayer + MDX + Tailwind 构建.
+            {t('copyright', { siteTitle: SITE_CONFIG.title })}
           </p>
           <div className="mt-4 flex justify-center space-x-6">
             <a 

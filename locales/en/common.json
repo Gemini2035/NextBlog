@@ -15,5 +15,176 @@
         "resources": "Resources",
         "search": "Search",
         "language": "Language"
+    },
+    "AboutPage": {
+        "title": "About Me",
+        "welcome": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
+        "techStack": "Tech Stack",
+        "techStackDescription": "This blog is built with the following modern tech stack:",
+        "features": "Features",
+        "contact": "Contact",
+        "nextjs": "Next.js 15 - React full-stack framework",
+        "contentlayer": "Contentlayer - Content management system",
+        "mdx": "MDX - Markdown + JSX support",
+        "tailwind": "Tailwind CSS - Utility-first CSS framework",
+        "typescript": "TypeScript - Type-safe JavaScript",
+        "githubPages": "GitHub Pages - Static site hosting",
+        "feature1": "📝 MDX format blog posts support",
+        "feature2": "🎨 Responsive design with dark mode support",
+        "feature3": "🔍 Tag categorization and article search",
+        "feature4": "📱 Mobile-friendly",
+        "feature5": "⚡ Fast loading and SEO optimized",
+        "feature6": "🚀 Automated deployment to GitHub Pages"
+    },
+    "Search": {
+        "searching": "Searching...",
+        "noResults": "No results found",
+        "noResultsDescription": "Try searching with different keywords",
+        "recommendedBlog": "Recommended Blog",
+        "latestPosts": "Latest Posts",
+        "recommendedLinks": "Recommended Links",
+        "clearSearch": "Clear search",
+        "searchPlaceholder": "Search articles, tags..."
+    },
+    "Footer": {
+        "copyright": "© 2024 {siteTitle}. Built with Next.js + Contentlayer + MDX + Tailwind."
+    },
+    "Site": {
+        "title": "Apodidae",
+        "description": "Sharing technical insights, development experiences, and life reflections"
+    },
+    "Header": {
+        "mainNavigation": "Main navigation",
+        "actionToolbar": "Action toolbar",
+        "openMobileMenu": "Open mobile menu",
+        "search": "Search",
+        "toggleLanguage": "Toggle language"
+    },
+    "Navigation": {
+        "search": "Search",
+        "language": "Language",
+        "blog": {
+            "label": "Blog",
+            "submenu": {
+                "title": "My Articles",
+                "description": "Explore my latest technical insights and development experiences",
+                "featured": {
+                    "label": "Featured Posts",
+                    "description": "Curated recommended articles"
+                },
+                "recent": {
+                    "label": "Latest Posts",
+                    "description": "Articles updated in the past week"
+                },
+                "categories": {
+                    "label": "Tech Categories",
+                    "typescript": {
+                        "label": "TypeScript",
+                        "description": "TypeScript related articles"
+                    },
+                    "javascript": {
+                        "label": "Javascript",
+                        "description": "JavaScript related articles"
+                    },
+                    "nodejs": {
+                        "label": "NodeJs",
+                        "description": "Node.js related articles"
+                    },
+                    "reactjs": {
+                        "label": "ReactJs",
+                        "description": "React related articles"
+                    },
+                    "vuejs": {
+                        "label": "VueJS",
+                        "description": "Vue.js related articles"
+                    },
+                    "others": {
+                        "label": "Others",
+                        "description": "Other technical articles"
+                    }
+                }
+            }
+        },
+        "about": {
+            "label": "About",
+            "submenu": {
+                "title": "About Me",
+                "description": "Learn about my background, skills, experience and contact information",
+                "basic": {
+                    "label": "Basic Info",
+                    "profile": {
+                        "label": "Personal Profile"
+                    },
+                    "contact": {
+                        "label": "Contact"
+                    }
+                },
+                "professional": {
+                    "label": "Professional Info",
+                    "skills": {
+                        "label": "Skills & Expertise"
+                    },
+                    "work": {
+                        "label": "Work Experience"
+                    },
+                    "education": {
+                        "label": "Education"
+                    },
+                    "achievements": {
+                        "label": "Achievements"
+                    }
+                }
+            }
+        },
+        "projects": {
+            "label": "Projects",
+            "submenu": {
+                "title": "My Projects",
+                "description": "Showcase my technical projects and portfolio",
+                "types": {
+                    "label": "Project Types",
+                    "openSource": {
+                        "label": "Open Source"
+                    },
+                    "commercial": {
+                        "label": "Commercial"
+                    },
+                    "learning": {
+                        "label": "Learning"
+                    },
+                    "selfDeveloped": {
+                        "label": "Self-Developed"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "label": "Resources",
+            "submenu": {
+                "title": "Tech Resources",
+                "description": "Share useful technical resources and tools",
+                "learning": {
+                    "label": "Learning Resources",
+                    "books": {
+                        "label": "Tech Books"
+                    },
+                    "docs": {
+                        "label": "Documentation"
+                    }
+                },
+                "toolsServices": {
+                    "label": "Tools & Services",
+                    "tools": {
+                        "label": "Development Tools"
+                    },
+                    "design": {
+                        "label": "Design Resources"
+                    },
+                    "services": {
+                        "label": "Online Services"
+                    }
+                }
+            }
+        }
     }
 }

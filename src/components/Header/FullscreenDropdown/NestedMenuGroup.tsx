@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
 import { SubmenuItem } from '@/constants'
+import { useTranslations } from 'next-intl'
 
 // 辅助函数 - 减少三目运算符的使用
 function getFlexClasses(columnCount: number): string {
@@ -44,6 +45,49 @@ const containerVariants = {
 }
 
 export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true }: NestedMenuGroupProps) {
+  const t = useTranslations('Navigation')
+  
+  // 根据href路径获取翻译键的函数
+  const getTranslationKey = (href: string) => {
+    if (href.includes('/posts')) {
+      if (href.includes('#featured')) return 'blog.submenu.featured'
+      if (href.includes('#recent')) return 'blog.submenu.recent'
+      if (href.includes('#categories')) return 'blog.submenu.categories'
+      if (href.includes('#typescript')) return 'blog.submenu.categories.typescript'
+      if (href.includes('#javascript')) return 'blog.submenu.categories.javascript'
+      if (href.includes('#nodejs')) return 'blog.submenu.categories.nodejs'
+      if (href.includes('#reactjs')) return 'blog.submenu.categories.reactjs'
+      if (href.includes('#vuejs')) return 'blog.submenu.categories.vuejs'
+      if (href.includes('#others')) return 'blog.submenu.categories.others'
+    }
+    if (href.includes('/about')) {
+      if (href.includes('#basic')) return 'about.submenu.basic'
+      if (href.includes('#professional')) return 'about.submenu.professional'
+      if (href.includes('#contact')) return 'about.submenu.basic.contact'
+      if (href.includes('#skills')) return 'about.submenu.professional.skills'
+      if (href.includes('#work')) return 'about.submenu.professional.work'
+      if (href.includes('#education')) return 'about.submenu.professional.education'
+      if (href.includes('#achievements')) return 'about.submenu.professional.achievements'
+    }
+    if (href.includes('/projects')) {
+      if (href.includes('#types')) return 'projects.submenu.types'
+      if (href.includes('#open-source')) return 'projects.submenu.types.openSource'
+      if (href.includes('#commercial')) return 'projects.submenu.types.commercial'
+      if (href.includes('#learning')) return 'projects.submenu.types.learning'
+      if (href.includes('#self-developed')) return 'projects.submenu.types.selfDeveloped'
+    }
+    if (href.includes('/resources')) {
+      if (href.includes('#learning')) return 'resources.submenu.learning'
+      if (href.includes('#tools-services')) return 'resources.submenu.toolsServices'
+      if (href.includes('#books')) return 'resources.submenu.learning.books'
+      if (href.includes('#docs')) return 'resources.submenu.learning.docs'
+      if (href.includes('#tools')) return 'resources.submenu.toolsServices.tools'
+      if (href.includes('#design')) return 'resources.submenu.toolsServices.design'
+      if (href.includes('#services')) return 'resources.submenu.toolsServices.services'
+    }
+    return null
+  }
+  
   if (level === 0) {
     // 顶级菜单项，使用基于JSON分类的布局
     // 每个分类作为一列，左对齐分布
@@ -72,11 +116,17 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
               <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                {item.label}
+                {(() => {
+                  const translationKey = getTranslationKey(item.href)
+                  return translationKey ? t(`${translationKey}.label`) : item.label
+                })()}
               </h3>
               {item.description && (
                 <p className="text-xs text-gray-600">
-                  {item.description}
+                  {(() => {
+                    const translationKey = getTranslationKey(item.href)
+                    return translationKey ? t(`${translationKey}.description`) : item.description
+                  })()}
                 </p>
               )}
             </motion.div>
@@ -105,11 +155,17 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                          {subItem.label}
+                          {(() => {
+                            const translationKey = getTranslationKey(subItem.href)
+                            return translationKey ? t(`${translationKey}.label`) : subItem.label
+                          })()}
                         </h4>
                         {subItem.description && (
                           <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
-                            {subItem.description}
+                            {(() => {
+                              const translationKey = getTranslationKey(subItem.href)
+                              return translationKey ? t(`${translationKey}.description`) : subItem.description
+                            })()}
                           </p>
                         )}
                       </div>
@@ -134,13 +190,16 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                               e.stopPropagation()
                             }}
                           >
-                            {subSubItem.label}
+                            {(() => {
+                              const translationKey = getTranslationKey(subSubItem.href)
+                              return translationKey ? t(`${translationKey}.label`) : subSubItem.label
+                            })()}
                           </Link>
                         </li>
                       ))}
                       {subItem.items.length > 6 && (
                         <li className="text-xs text-gray-500 mt-2 pl-2">
-                          还有 {subItem.items.length - 6} 个...
+                          {`还有 ${subItem.items.length - 6} 个...`}
                         </li>
                       )}
                     </motion.ul>
@@ -181,11 +240,17 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
             }}
           >
             <h4 className="text-sm font-medium text-gray-900 hover:text-gray-800 transition-colors">
-              {item.label}
+              {(() => {
+                const translationKey = getTranslationKey(item.href)
+                return translationKey ? t(`${translationKey}.label`) : item.label
+              })()}
             </h4>
             {item.description && (
               <p className="text-xs text-gray-600 mt-1">
-                {item.description}
+                {(() => {
+                  const translationKey = getTranslationKey(item.href)
+                  return translationKey ? t(`${translationKey}.description`) : item.description
+                })()}
               </p>
             )}
           </Link>

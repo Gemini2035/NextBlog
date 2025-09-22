@@ -24,13 +24,13 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
   const getLabel = () => {
     switch (item.type) {
       case '__blog':
-        return t('blog')
+        return t('blog.label')
       case '__about':
-        return t('about')
+        return t('about.label')
       case '__projects':
-        return t('projects')
+        return t('projects.label')
       case '__resources':
-        return t('resources')
+        return t('resources.label')
       case '__search':
         return t('search')
       case '__language':
@@ -166,7 +166,7 @@ export default function Header() {
           }
         } catch (error) {
           // 静默处理错误，避免在组件卸载时抛出异常
-          console.warn('Mouse tracking error:', error)
+          // 移除console.warn，避免控制台警告
         }
       }, 150) // 150ms延迟，给用户足够时间移动到submenu
     }

@@ -96,7 +96,6 @@ export function getNavigationItemsWithSubmenus(): NavigationItem[] {
     })
   } catch (error) {
     // 如果出错，返回静态配置
-    console.warn('Failed to generate dynamic navigation items:', error)
     return NAVIGATION_ITEMS
   }
 }

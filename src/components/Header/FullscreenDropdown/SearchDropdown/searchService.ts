@@ -51,8 +51,8 @@ class SearchService {
     const items: SearchableItem[] = []
 
     // 1. 添加博客文章
-    const publishedPosts = allPosts.filter(post => post.published !== false)
-    publishedPosts.forEach(post => {
+    const publishedPosts = allPosts.filter((post: any) => post.published !== false)
+    publishedPosts.forEach((post: any) => {
       items.push({
         id: `post-${post.slug}`,
         type: 'post',

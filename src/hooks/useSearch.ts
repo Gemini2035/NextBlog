@@ -61,7 +61,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         const results = search(debouncedQuery)
         setSearchResults(results)
       } catch (error) {
-        console.error('Search error:', error)
+        // 静默处理搜索错误，避免控制台错误
         setSearchResults([])
       } finally {
         setIsSearching(false)
@@ -78,7 +78,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         const content = getRecommendedContent()
         setRecommendedContent(content)
       } catch (error) {
-        console.error('Failed to load recommended content:', error)
+        // 静默处理推荐内容加载错误
       }
     }
 

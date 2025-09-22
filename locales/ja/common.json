@@ -15,5 +15,176 @@
         "resources": "リソース",
         "search": "検索",
         "language": "言語"
+    },
+    "AboutPage": {
+        "title": "私について",
+        "welcome": "{siteTitle}へようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。",
+        "techStack": "技術スタック",
+        "techStackDescription": "このブログは以下のモダンな技術スタックで構築されています：",
+        "features": "特徴",
+        "contact": "連絡先",
+        "nextjs": "Next.js 15 - React フルスタックフレームワーク",
+        "contentlayer": "Contentlayer - コンテンツ管理システム",
+        "mdx": "MDX - Markdown + JSX サポート",
+        "tailwind": "Tailwind CSS - ユーティリティファーストのCSSフレームワーク",
+        "typescript": "TypeScript - 型安全なJavaScript",
+        "githubPages": "GitHub Pages - 静的サイトホスティング",
+        "feature1": "📝 MDX形式のブログ記事サポート",
+        "feature2": "🎨 ダークモード対応のレスポンシブデザイン",
+        "feature3": "🔍 タグ分類と記事検索",
+        "feature4": "📱 モバイルフレンドリー",
+        "feature5": "⚡ 高速読み込みとSEO最適化",
+        "feature6": "🚀 GitHub Pagesへの自動デプロイ"
+    },
+    "Search": {
+        "searching": "検索中...",
+        "noResults": "結果が見つかりません",
+        "noResultsDescription": "別のキーワードで検索してみてください",
+        "recommendedBlog": "おすすめブログ",
+        "latestPosts": "最新記事",
+        "recommendedLinks": "おすすめリンク",
+        "clearSearch": "検索をクリア",
+        "searchPlaceholder": "記事、タグを検索..."
+    },
+    "Footer": {
+        "copyright": "© 2024 {siteTitle}. Next.js + Contentlayer + MDX + Tailwind で構築。"
+    },
+    "Site": {
+        "title": "Apodidae",
+        "description": "技術的な洞察、開発経験、人生の感想を共有"
+    },
+    "Header": {
+        "mainNavigation": "メインナビゲーション",
+        "actionToolbar": "アクションツールバー",
+        "openMobileMenu": "モバイルメニューを開く",
+        "search": "検索",
+        "toggleLanguage": "言語を切り替え"
+    },
+    "Navigation": {
+        "search": "検索",
+        "language": "言語",
+        "blog": {
+            "label": "ブログ",
+            "submenu": {
+                "title": "私の記事",
+                "description": "最新の技術的洞察と開発経験を探索",
+                "featured": {
+                    "label": "おすすめ記事",
+                    "description": "厳選された推奨記事"
+                },
+                "recent": {
+                    "label": "最新記事",
+                    "description": "過去1週間に更新された記事"
+                },
+                "categories": {
+                    "label": "技術カテゴリ",
+                    "typescript": {
+                        "label": "TypeScript",
+                        "description": "TypeScript関連記事"
+                    },
+                    "javascript": {
+                        "label": "Javascript",
+                        "description": "JavaScript関連記事"
+                    },
+                    "nodejs": {
+                        "label": "NodeJs",
+                        "description": "Node.js関連記事"
+                    },
+                    "reactjs": {
+                        "label": "ReactJs",
+                        "description": "React関連記事"
+                    },
+                    "vuejs": {
+                        "label": "VueJS",
+                        "description": "Vue.js関連記事"
+                    },
+                    "others": {
+                        "label": "その他",
+                        "description": "その他の技術記事"
+                    }
+                }
+            }
+        },
+        "about": {
+            "label": "について",
+            "submenu": {
+                "title": "私について",
+                "description": "私の背景、スキル、経験、連絡先について学ぶ",
+                "basic": {
+                    "label": "基本情報",
+                    "profile": {
+                        "label": "個人プロフィール"
+                    },
+                    "contact": {
+                        "label": "連絡先"
+                    }
+                },
+                "professional": {
+                    "label": "専門情報",
+                    "skills": {
+                        "label": "スキル・専門性"
+                    },
+                    "work": {
+                        "label": "職歴"
+                    },
+                    "education": {
+                        "label": "学歴"
+                    },
+                    "achievements": {
+                        "label": "実績"
+                    }
+                }
+            }
+        },
+        "projects": {
+            "label": "プロジェクト",
+            "submenu": {
+                "title": "私のプロジェクト",
+                "description": "私の技術プロジェクトとポートフォリオを紹介",
+                "types": {
+                    "label": "プロジェクトタイプ",
+                    "openSource": {
+                        "label": "オープンソース"
+                    },
+                    "commercial": {
+                        "label": "商用"
+                    },
+                    "learning": {
+                        "label": "学習"
+                    },
+                    "selfDeveloped": {
+                        "label": "自主開発"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "label": "リソース",
+            "submenu": {
+                "title": "技術リソース",
+                "description": "有用な技術リソースとツールを共有",
+                "learning": {
+                    "label": "学習リソース",
+                    "books": {
+                        "label": "技術書籍"
+                    },
+                    "docs": {
+                        "label": "ドキュメント"
+                    }
+                },
+                "toolsServices": {
+                    "label": "ツール・サービス",
+                    "tools": {
+                        "label": "開発ツール"
+                    },
+                    "design": {
+                        "label": "デザインリソース"
+                    },
+                    "services": {
+                        "label": "オンラインサービス"
+                    }
+                }
+            }
+        }
     }
 }
