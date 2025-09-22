@@ -1,0 +1,19 @@
+{
+    "HomePage": {
+        "hello": "Hello",
+        "welcome": "Welcome to my blog",
+        "description": "Sharing technical insights, development experiences, and life reflections. Built with Next.js + Contentlayer + MDX + Tailwind.",
+        "latestPosts": "Latest Posts",
+        "viewMorePosts": "View More Posts",
+        "exploreMore": "Explore more technical articles and development experience sharing",
+        "browseAllPosts": "Browse All Posts"
+    },
+    "Navigation": {
+        "blog": "Blog",
+        "about": "About",
+        "projects": "Projects",
+        "resources": "Resources",
+        "search": "Search",
+        "language": "Language"
+    }
+}

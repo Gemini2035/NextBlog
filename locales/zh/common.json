@@ -1,6 +1,19 @@
 {
     "HomePage": {
         "hello": "你好",
-        "welcome": "欢迎来到我的博客"
+        "welcome": "欢迎来到我的博客",
+        "description": "分享技术见解、开发经验和生活感悟。使用 Next.js + Contentlayer + MDX + Tailwind 构建。",
+        "latestPosts": "最新文章",
+        "viewMorePosts": "查看更多文章",
+        "exploreMore": "探索更多技术文章和开发经验分享",
+        "browseAllPosts": "浏览所有文章"
+    },
+    "Navigation": {
+        "blog": "博客",
+        "about": "关于",
+        "projects": "项目",
+        "resources": "资源",
+        "search": "搜索",
+        "language": "语言"
     }
 }

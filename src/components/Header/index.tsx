@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG, NavigationItem, NAVIGATION_ITEMS } from '@/constants'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
+import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
 import SearchBar from './SearchBar'
 import LanguageToggle from './LanguageToggle'
@@ -13,10 +14,31 @@ interface NavItemProps {
   item: NavigationItem
   activeSubmenu: string | null
   onNavHover: (itemType: string) => void
+  t: (key: string) => string
 }
 
-function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
+function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
   const hasSubmenu = item.submenu && item.submenu.items && item.submenu.items.length > 0
+  
+  // 获取国际化标签
+  const getLabel = () => {
+    switch (item.type) {
+      case '__blog':
+        return t('blog')
+      case '__about':
+        return t('about')
+      case '__projects':
+        return t('projects')
+      case '__resources':
+        return t('resources')
+      case '__search':
+        return t('search')
+      case '__language':
+        return t('language')
+      default:
+        return item.label
+    }
+  }
   
   if (hasSubmenu) {
     return (
@@ -30,7 +52,7 @@ function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
           aria-haspopup="true"
           aria-expanded={activeSubmenu === item.type}
         >
-          {item.label}
+          {getLabel()}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
         </Link>
       </div>
@@ -42,7 +64,7 @@ function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
       href={item.href} 
       className="text-gray-700 hover:text-gray-800 transition-colors"
     >
-      {item.label}
+      {getLabel()}
     </Link>
   )
 }
@@ -52,6 +74,7 @@ export default function Header() {
   const navRef = useRef<HTMLElement>(null)
   const navItemsRef = useRef<HTMLElement>(null)
   const lastScrollYRef = useRef<number>(0)
+  const t = useTranslations('Navigation')
   
   // 获取带有动态子菜单的导航项 - 使用useMemo缓存，仅在客户端执行
   const navigationItems = useMemo(() => {
@@ -162,13 +185,13 @@ export default function Header() {
 
   // 处理搜索点击
   const handleSearchClick = useCallback(() => {
-    setActiveSubmenu('__search')
-  }, [])
+    setActiveSubmenu(activeSubmenu === '__search' ? null : '__search')
+  }, [activeSubmenu])
 
   // 处理语言切换点击
   const handleLanguageClick = useCallback(() => {
-    setActiveSubmenu('__language')
-  }, [])
+    setActiveSubmenu(activeSubmenu === '__language' ? null : '__language')
+  }, [activeSubmenu])
 
   // 处理导航项悬停
   const handleNavHover = useCallback((itemType: string) => {
@@ -241,6 +264,7 @@ export default function Header() {
                       item={item}
                       activeSubmenu={activeSubmenu}
                       onNavHover={handleNavHover}
+                      t={t}
                     />
                   </li>
                 ))}

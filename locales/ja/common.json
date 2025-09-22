@@ -1,0 +1,19 @@
+{
+    "HomePage": {
+        "hello": "こんにちは",
+        "welcome": "私のブログへようこそ",
+        "description": "技術的な洞察、開発経験、人生の感想を共有します。Next.js + Contentlayer + MDX + Tailwind で構築。",
+        "latestPosts": "最新記事",
+        "viewMorePosts": "もっと見る",
+        "exploreMore": "より多くの技術記事と開発経験の共有を探索",
+        "browseAllPosts": "すべての記事を閲覧"
+    },
+    "Navigation": {
+        "blog": "ブログ",
+        "about": "について",
+        "projects": "プロジェクト",
+        "resources": "リソース",
+        "search": "検索",
+        "language": "言語"
+    }
+}
