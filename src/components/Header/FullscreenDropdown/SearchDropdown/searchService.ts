@@ -54,7 +54,7 @@ class SearchService {
     const publishedPosts = allPosts.filter((post: Post) => post.published !== false)
     publishedPosts.forEach((post: Post) => {
       items.push({
-        id: `post-${post.slug}`,
+        id: `post-${post.slug}-${post.locale || 'default'}`,
         type: 'post',
         title: post.title,
         description: post.description,
@@ -198,7 +198,7 @@ class SearchService {
 
     // 置顶文章
     const featuredPosts: SearchableItem[] = featuredPost ? [{
-      id: `post-${featuredPost.slug}`,
+      id: `featured-post-${featuredPost.slug}-${featuredPost.locale || 'default'}`,
       type: 'post',
       title: featuredPost.title,
       description: featuredPost.description,
@@ -208,17 +208,20 @@ class SearchService {
       category: '博客文章'
     }] : []
 
-    // 最新文章
-    const recentPostsItems: SearchableItem[] = recentPosts.slice(0, 5).map(post => ({
-      id: `post-${post.slug}`,
-      type: 'post',
-      title: post.title,
-      description: post.description,
-      href: `/posts/${post.slug}`,
-      tags: post.tags,
-      priority: 7,
-      category: '博客文章'
-    }))
+    // 最新文章（排除置顶文章以避免重复）
+    const recentPostsItems: SearchableItem[] = recentPosts
+      .filter(post => !featuredPost || post.slug !== featuredPost.slug || post.locale !== featuredPost.locale)
+      .slice(0, 5)
+      .map(post => ({
+        id: `recent-post-${post.slug}-${post.locale || 'default'}`,
+        type: 'post',
+        title: post.title,
+        description: post.description,
+        href: `/posts/${post.slug}`,
+        tags: post.tags,
+        priority: 7,
+        category: '博客文章'
+      }))
 
     // 导航链接（header中的四个主要链接）
     const navigationLinks: SearchableItem[] = NAVIGATION_ITEMS
