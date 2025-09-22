@@ -1,0 +1,87 @@
+---
+title: Next.js 開発のコツ
+date: 2024-01-20T00:00:00.000Z
+description: Next.js 開発における実用的なコツを共有します和最佳实践。
+tags:
+  - Next.js
+  - ReactJs
+  - 开发技巧
+published: true
+featured: false
+updatedAt: 2025-09-20T00:00:00.000Z
+locale: ja
+originalSlug: nextjs-tips
+---
+
+# Next.js 開発のコツ
+
+## 1. 使用 App Router
+
+Next.js 13+ 引入了 App Router，提供了更好的开发体验：
+
+```tsx
+// app/page.tsx
+export default function HomePage() {
+  return (
+    <div>
+      <h1>欢迎来到首页</h1>
+    </div>
+  )
+}
+```
+
+## 2. 服务端组件 vs 客户端组件
+
+- **服务端组件**：默认在服务器端渲染，性能更好
+- **客户端组件**：需要交互时使用 `"use client"`
+
+```tsx
+"use client"
+
+import { useState } from 'react'
+
+export default function Counter() {
+  const [count, setCount] = useState(0)
+  
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      点击次数: {count}
+    </button>
+  )
+}
+```
+
+## 3. 图片优化
+
+使用 Next.js 的 Image 组件进行图片优化：
+
+```tsx
+import Image from 'next/image'
+
+export default function MyImage() {
+  return (
+    <Image
+      src="/hero.jpg"
+      alt="描述"
+      width={800}
+      height={600}
+      priority
+    />
+  )
+}
+```
+
+## 4. 元数据管理
+
+在 App Router 中，可以使用 `generateMetadata` 函数：
+
+```tsx
+export async function generateMetadata({ params }) {
+  return {
+    title: '页面标题',
+    description: '页面描述',
+  }
+}
+```
+
+这些技巧可以帮助你更好地使用 Next.js 开发应用！

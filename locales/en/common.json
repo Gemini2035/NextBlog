@@ -8,14 +8,6 @@
         "exploreMore": "Explore more technical articles and development experience sharing",
         "browseAllPosts": "Browse All Posts"
     },
-    "Navigation": {
-        "blog": "Blog",
-        "about": "About",
-        "projects": "Projects",
-        "resources": "Resources",
-        "search": "Search",
-        "language": "Language"
-    },
     "AboutPage": {
         "title": "About Me",
         "welcome": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
@@ -44,7 +36,12 @@
         "latestPosts": "Latest Posts",
         "recommendedLinks": "Recommended Links",
         "clearSearch": "Clear search",
-        "searchPlaceholder": "Search articles, tags..."
+        "searchPlaceholder": "Search articles, tags...",
+        "searchResults": {
+            "blogPosts": "Blog Posts",
+            "navigationLinks": "Navigation Links",
+            "categories": "Categories"
+        }
     },
     "Footer": {
         "copyright": "© 2024 {siteTitle}. Built with Next.js + Contentlayer + MDX + Tailwind."
@@ -52,6 +49,18 @@
     "Site": {
         "title": "Apodidae",
         "description": "Sharing technical insights, development experiences, and life reflections"
+    },
+    "posts": {
+        "allPosts": "All Posts",
+        "totalPosts": "Total {count} posts",
+        "featuredPost": "Featured Post",
+        "recentPosts": "Recent Posts",
+        "updatedThisWeek": "Updated this week ({count} posts)",
+        "techCategories": "Tech Categories",
+        "postCount": "{count} posts",
+        "morePosts": "{count} more posts...",
+        "allTags": "All Tags",
+        "noPosts": "No posts available"
     },
     "Header": {
         "mainNavigation": "Main navigation",

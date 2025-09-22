@@ -4,6 +4,7 @@ import { search, getRecommendedContent, SearchResultsGroup, RecommendedContent }
 
 interface UseSearchOptions {
   debounceMs?: number
+  getTranslation?: (key: string) => string
 }
 
 interface UseSearchReturn {
@@ -29,7 +30,7 @@ interface UseSearchReturn {
 }
 
 export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
-  const { debounceMs = 300 } = options
+  const { debounceMs = 300, getTranslation } = options
   
   // 搜索状态
   const [query, setQuery] = useState('')
@@ -58,7 +59,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       try {
         // 模拟异步搜索（实际是同步的，但保持一致性）
         await new Promise(resolve => setTimeout(resolve, 100))
-        const results = search(debouncedQuery)
+        const results = getTranslation ? search(debouncedQuery, getTranslation) : []
         setSearchResults(results)
       } catch (error) {
         // 静默处理搜索错误，避免控制台错误
@@ -69,7 +70,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     performSearch()
-  }, [debouncedQuery])
+  }, [debouncedQuery, getTranslation])
 
   // 加载推荐内容
   useEffect(() => {

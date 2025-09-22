@@ -1,12 +1,30 @@
-name: Deploy to GitHub Pages
+name: 自动翻译和部署
 
 on:
   push:
-    branches: [ production ]
+    branches: [ main, master, production ]
+    paths:
+      - 'content/zh/posts/**'
+      - 'content/en/posts/**'
+      - 'content/ja/posts/**'
+      - 'src/**'
+      - 'package.json'
+      - 'next.config.ts'
+      - 'contentlayer.config.ts'
+  pull_request:
+    branches: [ main, master, production ]
+    paths:
+      - 'content/zh/posts/**'
+      - 'content/en/posts/**'
+      - 'content/ja/posts/**'
+      - 'src/**'
+      - 'package.json'
+      - 'next.config.ts'
+      - 'contentlayer.config.ts'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -15,28 +33,127 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  auto-translate:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: 设置 Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.18.0'
+
+    - name: 设置 pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 10.17.0
+
+    - name: 获取 pnpm 存储目录
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: 设置 pnpm 缓存
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: 安装依赖
+      run: pnpm install --frozen-lockfile
+
+    - name: 检测新增或修改的文章
+      id: detect-changes
+      run: |
+        # 获取变更的文件列表
+        if [ "${{ github.event_name }}" = "push" ]; then
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+        else
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        fi
+        
+        # 检测中文文章变更
+        ZH_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/zh/posts/" || true)
+        EN_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/en/posts/" || true)
+        JA_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/ja/posts/" || true)
+        
+        echo "zh_changes=$ZH_CHANGES" >> $GITHUB_OUTPUT
+        echo "en_changes=$EN_CHANGES" >> $GITHUB_OUTPUT
+        echo "ja_changes=$JA_CHANGES" >> $GITHUB_OUTPUT
+        
+        # 确定需要翻译的方向
+        if [ -n "$ZH_CHANGES" ]; then
+          echo "translate_from=zh" >> $GITHUB_OUTPUT
+          echo "translate_to=en,ja" >> $GITHUB_OUTPUT
+        elif [ -n "$EN_CHANGES" ]; then
+          echo "translate_from=en" >> $GITHUB_OUTPUT
+          echo "translate_to=zh,ja" >> $GITHUB_OUTPUT
+        elif [ -n "$JA_CHANGES" ]; then
+          echo "translate_from=ja" >> $GITHUB_OUTPUT
+          echo "translate_to=zh,en" >> $GITHUB_OUTPUT
+        fi
+
+    - name: 运行自动翻译
+      if: steps.detect-changes.outputs.translate_from != ''
+      run: |
+        echo "检测到 ${{ steps.detect-changes.outputs.translate_from }} 语言的文章变更"
+        echo "将翻译到: ${{ steps.detect-changes.outputs.translate_to }}"
+        pnpm run translate
+
+    - name: 配置 Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: 检查是否有翻译文件需要提交
+      id: check-changes
+      run: |
+        if git diff --quiet; then
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+        else
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: 提交翻译文件
+      if: steps.check-changes.outputs.has_changes == 'true'
+      run: |
+        git add content/en/posts/ content/ja/posts/
+        git commit -m "🤖 自动翻译: 从 ${{ steps.detect-changes.outputs.translate_from }} 翻译到 ${{ steps.detect-changes.outputs.translate_to }}"
+        git push
+
   build:
     runs-on: ubuntu-latest
+    needs: auto-translate
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production'
+    
     steps:
-      - name: Checkout
+      - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.18.0'
 
-      - name: Setup pnpm
+      - name: 设置 pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.17.0
 
-      - name: Get pnpm store directory
+      - name: 获取 pnpm 存储目录
         shell: bash
         run: |
           echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-      - name: Setup pnpm cache
+      - name: 设置 pnpm 缓存
         uses: actions/cache@v4
         with:
           path: ${{ env.STORE_PATH }}
@@ -44,18 +161,24 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
 
-      - name: Install dependencies
+      - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm build
+      - name: 构建 Contentlayer
+        run: pnpm run contentlayer
+
+      - name: 构建项目
+        run: pnpm run build
         env:
           NODE_ENV: production
 
-      - name: Setup Pages
+      - name: 导出静态文件
+        run: pnpm run export
+
+      - name: 设置 Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: 上传构建产物
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
@@ -67,6 +190,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Deploy to GitHub Pages
+      - name: 部署到 GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

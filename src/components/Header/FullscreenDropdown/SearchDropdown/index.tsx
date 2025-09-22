@@ -27,7 +27,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
     isShowingRecommendations,
     isSearching,
     clearSearch
-  } = useSearch()
+  } = useSearch({ getTranslation: t })
 
   // 处理输入变化
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,5 +1,5 @@
 import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
-import { allPosts } from '../../../../../.contentlayer/generated'
+import { allPosts, Post } from '../../../../../.contentlayer/generated'
 import { NAVIGATION_ITEMS } from '@/constants'
 import { getRecentPosts, getFeaturedPost } from '@/lib/posts'
 
@@ -51,8 +51,8 @@ class SearchService {
     const items: SearchableItem[] = []
 
     // 1. 添加博客文章
-    const publishedPosts = allPosts.filter((post: any) => post.published !== false)
-    publishedPosts.forEach((post: any) => {
+    const publishedPosts = allPosts.filter((post: Post) => post.published !== false)
+    publishedPosts.forEach((post: Post) => {
       items.push({
         id: `post-${post.slug}`,
         type: 'post',
@@ -131,7 +131,7 @@ class SearchService {
   }
 
   // 执行搜索
-  search(query: string): SearchResultsGroup[] {
+  search(query: string, getTranslation: (key: string) => string): SearchResultsGroup[] {
     if (!query.trim()) {
       return []
     }
@@ -166,7 +166,7 @@ class SearchService {
 
     if (groupedResults.posts.length > 0) {
       searchGroups.push({
-        title: '博客文章',
+        title: getTranslation('searchResults.blogPosts'),
         items: groupedResults.posts.slice(0, 5), // 限制显示数量
         type: 'posts'
       })
@@ -174,7 +174,7 @@ class SearchService {
 
     if (groupedResults.links.length > 0) {
       searchGroups.push({
-        title: '导航链接',
+        title: getTranslation('searchResults.navigationLinks'),
         items: groupedResults.links.slice(0, 5),
         type: 'links'
       })
@@ -182,7 +182,7 @@ class SearchService {
 
     if (groupedResults.categories.length > 0) {
       searchGroups.push({
-        title: '分类',
+        title: getTranslation('searchResults.categories'),
         items: groupedResults.categories.slice(0, 5),
         type: 'categories'
       })
@@ -251,5 +251,5 @@ class SearchService {
 export const searchService = new SearchService()
 
 // 导出便捷方法
-export const search = (query: string) => searchService.search(query)
+export const search = (query: string, getTranslation: (key: string) => string) => searchService.search(query, getTranslation)
 export const getRecommendedContent = () => searchService.getRecommendedContent()

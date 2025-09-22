@@ -2,13 +2,23 @@ import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts, getPostsByCat
 import PostCard from '@/components/PostCard'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { getTranslations } from 'next-intl/server'
 
-export default function PostsPage() {
-  const posts = getAllPosts()
-  const tags = getAllTags()
-  const featuredPost = getFeaturedPost()
-  const recentPosts = getRecentPosts()
+interface PostsPageProps {
+  params: Promise<{
+    locale: string
+  }>
+}
+
+export default async function PostsPage({ params }: PostsPageProps) {
+  const { locale } = await params
+  const posts = getAllPosts(locale)
+  const tags = getAllTags(locale)
+  const featuredPost = getFeaturedPost(locale)
+  const recentPosts = getRecentPosts(locale)
   const categories = getCategories()
+  
+  const t = await getTranslations('posts')
 
   return (
     <div className="min-h-screen bg-gray-50 ">
@@ -17,10 +27,10 @@ export default function PostsPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900  mb-4">
-            所有文章
+            {t('allPosts')}
           </h1>
           <p className="text-gray-600 ">
-            共 {posts.length} 篇文章
+            {t('totalPosts', { count: posts.length })}
           </p>
         </div>
 
@@ -28,7 +38,7 @@ export default function PostsPage() {
         {featuredPost && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              置顶文章
+              {t('featuredPost')}
             </h2>
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
               <PostCard post={featuredPost} featured={true} />
@@ -40,9 +50,9 @@ export default function PostsPage() {
         {recentPosts.length > 0 && (
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              最新文章
+              {t('recentPosts')}
               <span className="ml-2 text-sm font-normal text-gray-500">
-                (最近一周更新，共 {recentPosts.length} 篇)
+                ({t('updatedThisWeek', { count: recentPosts.length })})
               </span>
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -56,11 +66,11 @@ export default function PostsPage() {
         {/* 技术分类 */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            技术分类
+            {t('techCategories')}
           </h2>
           <div className="space-y-8">
             {categories.map((category) => {
-              const categoryPosts = getPostsByCategory(category)
+              const categoryPosts = getPostsByCategory(category, locale)
               if (categoryPosts.length === 0) return null
               
               return (
@@ -76,7 +86,7 @@ export default function PostsPage() {
                     </span>
                     {category}
                     <span className="ml-2 text-sm font-normal text-gray-500">
-                      ({categoryPosts.length} 篇)
+                      ({t('postCount', { count: categoryPosts.length })})
                     </span>
                   </h3>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -87,7 +97,7 @@ export default function PostsPage() {
                   {categoryPosts.length > 3 && (
                     <div className="mt-4 text-center">
                       <span className="text-sm text-gray-500">
-                        还有 {categoryPosts.length - 3} 篇文章...
+                        {t('morePosts', { count: categoryPosts.length - 3 })}
                       </span>
                     </div>
                   )}
@@ -101,7 +111,7 @@ export default function PostsPage() {
         {tags.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900  mb-4">
-              所有标签
+              {t('allTags')}
             </h2>
             <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
@@ -120,7 +130,7 @@ export default function PostsPage() {
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
             <span className="mr-2">📖</span>
-            所有文章
+            {t('allPosts')}
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
@@ -132,7 +142,7 @@ export default function PostsPage() {
         {posts.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500  text-lg">
-              暂无文章
+              {t('noPosts')}
             </p>
           </div>
         )}
