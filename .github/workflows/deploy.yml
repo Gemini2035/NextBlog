@@ -201,9 +201,11 @@ jobs:
           github-comment: true
           github-deployment: false
           vercel-args: |
-            --yes 
             ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
           working-directory: ./
+        env:
+          PNPM_HOME: ${{ env.PNPM_HOME }}
+          STORE_PATH: ${{ env.STORE_PATH }}
 
   deploy-to-vercel:
     runs-on: ubuntu-latest
@@ -265,6 +267,8 @@ jobs:
           github-comment: true
           github-deployment: false
           vercel-args: |
-            --yes 
             ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
           working-directory: ./
+        env:
+          PNPM_HOME: ${{ env.PNPM_HOME }}
+          STORE_PATH: ${{ env.STORE_PATH }}
