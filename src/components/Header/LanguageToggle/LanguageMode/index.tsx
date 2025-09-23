@@ -24,7 +24,7 @@ export default function LanguageMode({ currentLang, onLanguageChange, itemVarian
             >
               <button
                 onClick={() => onLanguageChange(lang.code)}
-                className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 text-gray-900"
+                className="w-full flex items-center px-4 py-3 text-left rounded-lg hover:bg-gray-50 text-gray-900 cursor-pointer"
                 role="option"
                 aria-selected={currentLang === lang.code}
               >
