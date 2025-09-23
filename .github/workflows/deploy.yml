@@ -181,9 +181,7 @@ jobs:
         run: pnpm run build
         env:
           NODE_ENV: production
-
-      - name: 导出静态文件
-        run: pnpm run export
+          GITHUB_PAGES: true
 
       - name: 设置 Pages
         uses: actions/configure-pages@v4
