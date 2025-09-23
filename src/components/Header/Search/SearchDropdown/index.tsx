@@ -1,0 +1,108 @@
+'use client'
+
+import { useRef, useEffect, useCallback } from 'react'
+import { motion, Variants } from 'framer-motion'
+import { SITE_CONFIG } from '@/constants'
+import { SearchIcon, CloseIcon } from '@/assets/icons'
+import { useSearch } from '@/hooks/useSearch'
+import SearchResults from './SearchResults'
+import { useTranslations } from 'next-intl'
+
+interface SearchDropdownProps {
+  itemVariants: Variants
+  isOpen: boolean
+  onClose: () => void
+}
+
+export default function SearchDropdown({ itemVariants, isOpen, onClose }: SearchDropdownProps) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations('Search')
+  
+  // 使用搜索Hook
+  const {
+    query,
+    setQuery,
+    searchResults,
+    recommendedContent,
+    isShowingRecommendations,
+    isSearching,
+    clearSearch
+  } = useSearch()
+
+  // 处理输入变化
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(e.target.value)
+  }, [setQuery])
+
+  // 处理搜索结果项点击
+  const handleItemClick = useCallback((href: string) => {
+    // 关闭搜索下拉框
+    onClose()
+    // 使用Next.js路由导航
+    if (typeof window !== 'undefined') {
+      window.location.href = href
+    }
+  }, [onClose])
+
+  // 当组件关闭时清空搜索状态
+  useEffect(() => {
+    if (!isOpen) {
+      clearSearch()
+    }
+  }, [isOpen, clearSearch])
+
+  // 搜索模式打开时自动聚焦输入框
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      // 延迟聚焦，确保动画完成后再聚焦
+      const timer = setTimeout(() => {
+        inputRef.current?.focus()
+      }, 300) // 延迟300ms，等待动画完成
+      
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
+
+  return (
+    <>
+      {/* 搜索框区域 */}
+      <motion.div 
+        className="w-full mb-8" 
+        variants={itemVariants}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <div className="flex items-center bg-transparent px-6 py-4 w-full">
+          <SearchIcon className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
+          <input
+            ref={inputRef}
+            type="text"
+            placeholder={t('searchPlaceholder')}
+            value={query}
+            onChange={handleInputChange}
+            className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
+            autoFocus
+          />
+          {query && (
+            <button
+              onClick={clearSearch}
+              className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
+              aria-label={t('clearSearch')}
+            >
+              <CloseIcon className="h-5 w-5 text-gray-500" />
+            </button>
+          )}
+        </div>
+      </motion.div>
+
+      {/* 搜索结果区域 */}
+      <SearchResults
+        searchResults={searchResults}
+        recommendedContent={recommendedContent}
+        isShowingRecommendations={isShowingRecommendations}
+        isSearching={isSearching}
+        onItemClick={handleItemClick}
+        itemVariants={itemVariants}
+      />
+    </>
+  )
+}

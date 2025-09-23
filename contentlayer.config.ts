@@ -32,15 +32,50 @@ export const Post = defineDocumentType(() => ({
       required: false,
       default: true,
     },
+    featured: {
+      type: 'boolean',
+      description: 'Whether the post is featured (pinned)',
+      required: false,
+      default: false,
+    },
+    updatedAt: {
+      type: 'date',
+      description: 'The last update date of the post',
+      required: false,
+    },
+    locale: {
+      type: 'string',
+      description: 'The locale of the post',
+      required: false,
+      default: 'zh',
+    },
+    originalSlug: {
+      type: 'string',
+      description: 'The original slug for cross-language linking',
+      required: false,
+    },
   },
   computedFields: {
     url: {
       type: 'string',
-      resolve: (post) => `/${post._raw.flattenedPath}`,
+      resolve: (post) => {
+        const locale = post.locale || 'zh'
+        return `/${locale}/posts/${post.slug}`
+      },
     },
     slug: {
       type: 'string',
-      resolve: (post) => post._raw.flattenedPath.replace('posts/', ''),
+      resolve: (post) => {
+        const pathParts = post._raw.flattenedPath.split('/')
+        return pathParts[pathParts.length - 1].replace('.mdx', '')
+      },
+    },
+    locale: {
+      type: 'string',
+      resolve: (post) => {
+        const pathParts = post._raw.flattenedPath.split('/')
+        return pathParts[0] || 'zh'
+      },
     },
   },
 }))

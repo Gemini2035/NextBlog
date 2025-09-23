@@ -1,17 +1,20 @@
 import { SITE_CONFIG } from '@/constants'
+import { useTranslations } from 'next-intl'
 
 export default function Footer() {
+  const t = useTranslations('Footer')
+  
   return (
-    <footer className="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+    <footer className="bg-gray-50  border-t border-gray-200 ">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            © 2024 {SITE_CONFIG.title}. 使用 Next.js + Contentlayer + MDX + Tailwind 构建.
+          <p className="text-gray-600  text-sm">
+            {t('copyright', { siteTitle: SITE_CONFIG.title })}
           </p>
           <div className="mt-4 flex justify-center space-x-6">
             <a 
               href="https://github.com" 
-              className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="text-gray-400 hover:text-gray-600  transition-colors"
               target="_blank"
               rel="noopener noreferrer"
             >

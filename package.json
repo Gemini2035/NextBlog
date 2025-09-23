@@ -7,19 +7,28 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "export": "next build && next export",
-    "contentlayer": "contentlayer build"
+    "export": "next build",
+    "contentlayer": "contentlayer build",
+    "translate": "tsx scripts/translate-posts.ts",
+    "translate:openai": "tsx scripts/translate-with-openai.ts",
+    "translate:auto": "tsx scripts/auto-translate.ts"
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^15.5.3",
     "@types/mdx": "^2.0.13",
+    "clsx": "^2.1.1",
     "contentlayer2": "^0.5.8",
+    "framer-motion": "^12.23.16",
+    "fuse.js": "^7.1.0",
     "next": "15.5.3",
     "next-contentlayer2": "^0.5.8",
+    "next-intl": "^4.3.9",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "use-debounce": "^10.0.6"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -30,6 +39,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
     "tailwindcss": "^4",
+    "tailwindcss-animate": "^1.0.7",
+    "tsx": "^4.20.5",
     "typescript": "^5"
   }
 }

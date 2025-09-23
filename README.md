@@ -1,6 +1,6 @@
-# 个人博客
+# 国际化个人博客
 
-一个使用 Next.js + Contentlayer + MDX + Tailwind CSS 构建的现代化个人博客，支持 GitHub Pages 部署。
+一个使用 Next.js + Contentlayer + MDX + Tailwind CSS 构建的现代化多语言个人博客，支持自动翻译和 GitHub Pages 部署。
 
 ## ✨ 特性
 
@@ -11,6 +11,8 @@
 - ⚡ **静态站点生成** - 快速加载和 SEO 友好
 - 🔧 **TypeScript** - 类型安全开发
 - 📦 **路径别名** - 清晰的模块导入
+- 🌍 **多语言支持** - 支持中文、英文、日文
+- 🤖 **自动翻译** - 智能检测变更并自动翻译文章
 - 🚀 **GitHub Pages** - 自动部署
 
 ## 🔧 环境要求
@@ -111,27 +113,49 @@ pnpm export
 ## 📁 项目结构
 
 ```
-├── .github/workflows/     # GitHub Actions 工作流
-├── content/posts/         # MDX 博客内容
+├── .github/
+│   ├── workflows/        # GitHub Actions 工作流
+│   │   └── deploy.yml    # 自动翻译和部署工作流
+│   └── AUTO_TRANSLATE_SETUP.md # 自动翻译设置指南
+├── content/              # 多语言内容目录
+│   ├── zh/posts/         # 中文文章（源语言）
+│   ├── en/posts/         # 英文文章（自动生成）
+│   └── ja/posts/         # 日文文章（自动生成）
+├── locales/              # 国际化文本
+│   ├── zh/common.json    # 中文翻译
+│   ├── en/common.json    # 英文翻译
+│   └── ja/common.json    # 日文翻译
+├── scripts/              # TypeScript 脚本
+│   ├── translate-posts.ts        # 基础翻译脚本
+│   ├── auto-translate.ts         # 智能自动翻译脚本
+│   ├── translate-with-openai.ts  # OpenAI 翻译脚本
+│   ├── test-translation.ts       # 测试翻译脚本
+│   └── README.md         # 脚本使用说明
 ├── public/               # 静态资源
 ├── src/
 │   ├── app/              # Next.js App Router 页面
-│   │   ├── about/        # 关于页面
-│   │   ├── posts/        # 博客页面
-│   │   │   └── [slug]/   # 动态博客文章页面
+│   │   ├── [locale]/     # 多语言路由
+│   │   │   ├── about/    # 关于页面
+│   │   │   ├── posts/    # 博客页面
+│   │   │   │   └── [slug]/ # 动态博客文章页面
+│   │   │   ├── layout.tsx # 多语言布局
+│   │   │   └── page.tsx  # 首页
 │   │   ├── globals.css   # 全局样式
 │   │   ├── layout.tsx    # 根布局
 │   │   └── page.tsx      # 首页
 │   ├── assets/           # 静态资源（图标等）
 │   ├── components/       # React 组件
-│   │   ├── Header.tsx    # 头部组件
+│   │   ├── Header/       # 头部组件（包含搜索、语言切换等）
 │   │   ├── Footer.tsx    # 页脚组件
 │   │   └── PostCard.tsx  # 博客卡片组件
 │   ├── constants/        # 常量定义
 │   ├── hooks/           # 自定义 React Hooks
+│   ├── i18n/            # 国际化配置
+│   │   ├── navigation.ts # 导航配置
+│   │   ├── request.ts    # 请求配置
+│   │   └── routing.ts    # 路由配置
 │   ├── lib/             # 工具库
 │   │   └── posts.ts     # 博客数据处理
-│   ├── styles/          # 样式文件
 │   ├── types/           # TypeScript 类型定义
 │   └── utils/           # 工具函数
 ├── .contentlayer/        # Contentlayer 生成的文件
@@ -214,7 +238,9 @@ import { GitHubIcon, TwitterIcon } from '../assets/icons'
 
 ## 📝 添加新文章
 
-1. 在 `content/posts/` 目录下创建新的 `.mdx` 文件
+### 方法一：创建中文文章（推荐）
+
+1. 在 `content/zh/posts/` 目录下创建新的 `.mdx` 文件
 2. 添加 frontmatter 元数据：
    ```yaml
    ---
@@ -223,31 +249,85 @@ import { GitHubIcon, TwitterIcon } from '../assets/icons'
    description: "文章描述"
    tags: ["标签1", "标签2"]
    published: true
+   featured: false
+   updatedAt: "2024-01-20"
+   locale: "zh"
    ---
    ```
 3. 编写文章内容
 4. 提交到 Git 仓库
+5. **自动翻译**：GitHub Actions 会自动翻译为英文和日文
+
+### 方法二：手动创建多语言文章
+
+在对应的语言目录下创建文章文件：
+```
+content/zh/posts/my-article.mdx
+content/en/posts/my-article.mdx
+content/ja/posts/my-article.mdx
+```
+
+### 文章 frontmatter 字段说明
+
+| 字段 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `title` | string | ✅ | 文章标题 |
+| `date` | string | ✅ | 发布日期 |
+| `description` | string | ❌ | 文章描述 |
+| `tags` | string[] | ❌ | 标签数组 |
+| `published` | boolean | ❌ | 是否发布（默认 true） |
+| `featured` | boolean | ❌ | 是否置顶（默认 false） |
+| `updatedAt` | string | ❌ | 更新时间 |
+| `locale` | string | ✅ | 文章语言（zh/en/ja） |
+| `originalSlug` | string | ❌ | 原始 slug（用于跨语言链接） |
 
 ## 🚀 部署到 GitHub Pages
 
-项目已配置 GitHub Actions 自动部署：
+项目已配置 GitHub Actions 自动翻译和部署：
 
-1. 将代码推送到 GitHub 仓库
-2. 在仓库设置中启用 GitHub Pages
-3. 每次推送代码到 `main` 分支时自动构建和部署
+### 自动部署流程
+
+1. **推送代码**：将代码推送到 GitHub 仓库
+2. **启用 GitHub Pages**：在仓库设置中启用 GitHub Pages
+3. **自动翻译**：每次推送文章到任何语言目录时自动翻译
+4. **自动部署**：构建并部署到 GitHub Pages
+
+### 部署触发条件
+
+- 推送到 `main`、`master` 或 `production` 分支
+- 修改了 `content/zh/posts/`、`content/en/posts/` 或 `content/ja/posts/` 目录下的文件
+- 修改了源代码文件（`src/`、`package.json`、配置文件等）
 
 ### 本地预览部署版本
 
 ```bash
-pnpm build
-pnpm export
+# 构建项目
+pnpm run contentlayer
+pnpm run build
+
+# 导出静态文件
+pnpm run export
+
+# 本地预览（需要安装 serve）
+npx serve out
 ```
 
 ## 🛠️ 自定义配置
 
+### 基础配置
 - **站点配置**: 修改 `src/constants/index.ts` 中的 `SITE_CONFIG`
 - **导航菜单**: 更新 `src/constants/index.ts` 中的 `NAVIGATION_ITEMS`
 - **主题配置**: 调整 `tailwind.config.ts` 中的配置
+
+### 国际化配置
+- **支持语言**: 修改 `src/i18n/routing.ts` 中的语言配置
+- **翻译文本**: 更新 `locales/` 目录下的翻译文件
+- **翻译脚本**: 自定义 `scripts/` 目录下的翻译逻辑
+
+### 翻译配置
+- **关键词映射**: 修改 `scripts/auto-translate.ts` 中的翻译映射
+- **OpenAI 配置**: 设置 `OPENAI_API_KEY` 环境变量
+- **翻译质量**: 调整翻译脚本中的参数和规则
 
 ## 🔧 故障排除
 
@@ -265,6 +345,7 @@ Contentlayer (Warning): Importing from `contentlayer/generated` might not work.
 如果文章页面返回 404 错误，检查：
 - Contentlayer 是否正确生成了数据
 - 文章 slug 是否与 URL 路径匹配
+- 语言路径是否正确（如 `/zh/posts/article`）
 
 #### 3. 500 错误
 如果出现 500 错误，尝试：
@@ -284,12 +365,227 @@ pnpm dev
 - 开发时使用 `pnpm dev`
 - 生产构建使用 `pnpm build`
 
+#### 5. 翻译问题
+如果翻译功能不工作，检查：
+- 文章是否在正确的语言目录下
+- 文章格式是否正确（需要 frontmatter）
+- GitHub Actions 权限是否正确配置
+- 翻译脚本是否正确安装依赖
+
+#### 6. 国际化问题
+如果多语言功能不工作，检查：
+- `locales/` 目录下是否有对应的翻译文件
+- `src/i18n/` 配置是否正确
+- 文章是否包含正确的 `locale` 字段
+
 ## 📚 学习资源
 
 - [Next.js 文档](https://nextjs.org/docs) - 了解 Next.js 特性和 API
 - [Contentlayer 文档](https://contentlayer.dev) - 内容管理系统
 - [Tailwind CSS 文档](https://tailwindcss.com/docs) - CSS 框架
 - [MDX 文档](https://mdxjs.com) - Markdown + JSX
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request 来改进这个项目！
+
+## 🌍 国际化功能
+
+### 多语言支持
+
+本项目支持以下语言：
+- 🇨🇳 **中文** (zh) - 默认语言
+- 🇺🇸 **英文** (en) - 自动翻译
+- 🇯🇵 **日文** (ja) - 自动翻译
+
+### 路由结构
+
+- `/zh/posts/welcome` - 中文文章
+- `/en/posts/welcome` - 英文文章  
+- `/ja/posts/welcome` - 日文文章
+
+### 文章目录结构
+
+```
+content/
+├── zh/posts/          # 中文文章（源语言）
+├── en/posts/          # 英文文章（自动生成）
+└── ja/posts/          # 日文文章（自动生成）
+```
+
+### 文章 frontmatter 格式
+
+```yaml
+---
+title: "文章标题"
+date: 2024-01-15
+description: "文章描述"
+tags: ["标签1", "标签2"]
+published: true
+featured: false
+updatedAt: 2024-01-20
+locale: "zh"                    # 文章语言
+originalSlug: "article-slug"    # 原始 slug（用于跨语言链接）
+---
+```
+
+## 🤖 自动翻译系统
+
+### 智能翻译功能
+
+项目集成了智能自动翻译系统，支持：
+
+1. **自动检测变更** - 当您推送文章到任何语言目录时，自动检测变更
+2. **智能翻译** - 自动将文章翻译到其他支持的语言
+3. **自动提交** - 将翻译后的文章自动提交到仓库
+4. **自动部署** - 构建并部署到 GitHub Pages
+
+### 翻译逻辑
+
+- **中文文章变更** → 自动翻译为英文和日文
+- **英文文章变更** → 自动翻译为中文和日文  
+- **日文文章变更** → 自动翻译为中文和英文
+
+### 使用方法
+
+1. **创建中文文章**：
+   ```bash
+   # 在 content/zh/posts/ 目录下创建文章
+   echo "---" > content/zh/posts/my-article.mdx
+   echo "title: 我的文章" >> content/zh/posts/my-article.mdx
+   echo "date: 2024-01-15" >> content/zh/posts/my-article.mdx
+   echo "---" >> content/zh/posts/my-article.mdx
+   echo "" >> content/zh/posts/my-article.mdx
+   echo "这是文章内容..." >> content/zh/posts/my-article.mdx
+   ```
+
+2. **提交并推送**：
+   ```bash
+   git add content/zh/posts/my-article.mdx
+   git commit -m "添加新文章"
+   git push origin main
+   ```
+
+3. **自动翻译和部署**：
+   - GitHub Actions 会自动检测到中文文章变更
+   - 自动翻译为英文和日文
+   - 自动提交翻译文件
+   - 自动构建并部署到 GitHub Pages
+
+## 📝 翻译脚本
+
+### 可用的翻译脚本
+
+#### 基础翻译
+```bash
+pnpm run translate
+```
+使用简单的关键词映射进行文章翻译。
+
+#### 自动翻译
+```bash
+pnpm run translate:auto
+```
+智能检测 Git 变更并只翻译新增或修改的文章。
+
+#### OpenAI 翻译
+```bash
+# 首先设置环境变量
+export OPENAI_API_KEY="your-api-key-here"
+
+# 然后运行脚本
+pnpm run translate:openai
+```
+使用 OpenAI GPT-3.5-turbo 模型进行高质量翻译。
+
+### 脚本功能
+
+- **translate-posts.ts** - 基础翻译脚本，使用关键词映射
+- **auto-translate.ts** - 智能自动翻译脚本，检测 Git 变更
+- **translate-with-openai.ts** - OpenAI 翻译脚本，高质量翻译
+- **test-translation.ts** - 测试翻译功能的脚本
+
+## 🚀 GitHub Actions 集成
+
+### 自动翻译工作流
+
+项目已配置 GitHub Actions 自动翻译和部署工作流：
+
+- **触发条件**：推送文章到任何语言目录时自动触发
+- **翻译逻辑**：智能检测变更语言，自动翻译到其他支持的语言
+- **自动提交**：翻译完成后自动提交到仓库
+- **自动部署**：构建并部署到 GitHub Pages
+
+### 工作流文件
+
+- `.github/workflows/deploy.yml` - 主要的翻译和部署工作流
+- `.github/AUTO_TRANSLATE_SETUP.md` - 详细的设置指南
+
+### 设置步骤
+
+1. **启用 GitHub Pages**：
+   - 进入仓库的 **Settings** 页面
+   - 找到 **Pages** 部分
+   - 在 **Source** 下选择 **GitHub Actions**
+
+2. **配置权限**（已自动配置）：
+   - `contents: write` - 用于提交翻译文件
+   - `pages: write` - 用于部署到 GitHub Pages
+   - `id-token: write` - 用于 GitHub Pages 部署
+
+3. **设置环境变量**（可选）：
+   - 进入 **Settings** → **Secrets and variables** → **Actions**
+   - 添加 `OPENAI_API_KEY` 用于高质量翻译
+
+## 🔧 自定义配置
+
+### 添加新语言
+
+1. 在 `scripts/auto-translate.ts` 中添加新语言到 `TARGET_LOCALES`
+2. 在翻译配置中添加新语言的映射
+3. 创建对应的内容目录
+4. 更新工作流文件以包含新语言
+
+### 修改翻译逻辑
+
+您可以修改翻译脚本来：
+- 添加更多翻译映射
+- 集成其他翻译服务
+- 自定义翻译规则
+
+## ⚠️ 注意事项
+
+1. **翻译质量**：自动翻译可能不够完美，建议人工校对重要内容
+2. **API 限制**：使用 OpenAI 时注意 API 使用限制
+3. **文件覆盖**：翻译会覆盖目标语言目录中的同名文件
+4. **提交历史**：翻译文件会自动提交，保持仓库历史清晰
+5. **权限配置**：确保 GitHub Actions 有适当的权限
+
+## 🔧 故障排除
+
+### 常见问题
+
+1. **翻译文件没有生成**：
+   - 检查文章是否在正确的目录下
+   - 检查文章格式是否正确（需要 frontmatter）
+
+2. **部署失败**：
+   - 检查 GitHub Pages 设置
+   - 检查权限配置
+   - 查看构建日志
+
+3. **翻译质量不佳**：
+   - 考虑使用 OpenAI 翻译
+   - 手动编辑翻译文件
+   - 更新翻译配置
+
+## 📚 学习资源
+
+- [Next.js 文档](https://nextjs.org/docs) - 了解 Next.js 特性和 API
+- [Contentlayer 文档](https://contentlayer.dev) - 内容管理系统
+- [Tailwind CSS 文档](https://tailwindcss.com/docs) - CSS 框架
+- [MDX 文档](https://mdxjs.com) - Markdown + JSX
+- [next-intl 文档](https://next-intl-docs.vercel.app) - 国际化解决方案
 
 ## 🤝 贡献
 
