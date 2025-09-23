@@ -5,7 +5,9 @@ export interface SearchableItem {
   id: string
   type: 'post' | 'link' | 'category'
   title: string
+  originalTitle?: string // 原始标签，用于检索
   description?: string
+  originalDescription?: string // 原始描述，用于检索
   href: string
   tags?: string[]
   content?: string

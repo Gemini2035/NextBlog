@@ -73,14 +73,16 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       })
     })
 
-    // 2. 添加导航链接（不翻译，保持原始标签）
+    // 2. 添加导航链接（同时保存原始标签和翻译标签）
     NAVIGATION_ITEMS.forEach(navItem => {
       if (navItem.type !== '__search' && navItem.type !== '__language') {
         items.push({
           id: `nav-${navItem.type}`,
           type: 'link',
-          title: navItem.label, // 保持原始标签
-          description: navItem.submenu?.description || undefined,
+          title: t(navItem.label), // 翻译后的标签用于显示
+          originalTitle: navItem.label, // 原始标签用于检索
+          description: navItem.submenu?.description ? t(navItem.submenu.description) : undefined,
+          originalDescription: navItem.submenu?.description || undefined,
           href: navItem.href,
           priority: 8,
           category: '导航链接'
@@ -91,8 +93,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
           items.push({
             id: `nav-${navItem.type}-${subItem.label}`,
             type: 'link',
-            title: subItem.label, // 保持原始标签
-            description: subItem.description || undefined,
+            title: t(subItem.label), // 翻译后的标签用于显示
+            originalTitle: subItem.label, // 原始标签用于检索
+            description: subItem.description ? t(subItem.description) : undefined,
+            originalDescription: subItem.description || undefined,
             href: subItem.href,
             priority: 6,
             category: '导航链接'
@@ -103,8 +107,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
             items.push({
               id: `nav-${navItem.type}-${subItem.label}-${thirdItem.label}`,
               type: 'link',
-              title: thirdItem.label, // 保持原始标签
-              description: thirdItem.description || undefined,
+              title: t(thirdItem.label), // 翻译后的标签用于显示
+              originalTitle: thirdItem.label, // 原始标签用于检索
+              description: thirdItem.description ? t(thirdItem.description) : undefined,
+              originalDescription: thirdItem.description || undefined,
               href: thirdItem.href,
               priority: 4,
               category: '导航链接'
@@ -121,9 +127,11 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const fuse = useMemo(() => {
     const options: IFuseOptions<SearchableItem> = {
       keys: [
-        { name: 'title', weight: 0.4 },
-        { name: 'description', weight: 0.3 },
-        { name: 'tags', weight: 0.2 },
+        { name: 'title', weight: 0.3 }, // 翻译后的标题
+        { name: 'originalTitle', weight: 0.3 }, // 原始标题，用于英文检索
+        { name: 'description', weight: 0.2 },
+        { name: 'originalDescription', weight: 0.2 }, // 原始描述，用于英文检索
+        { name: 'tags', weight: 0.1 },
         { name: 'content', weight: 0.1 }
       ],
       threshold: 0.3,
@@ -152,17 +160,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     results.forEach(result => {
-      // 对于导航链接，在显示时进行翻译
-      const displayItem = { ...result.item }
-      if (result.item.type === 'link') {
-        displayItem.title = t(result.item.title) // 翻译标题
-        if (displayItem.description) {
-          displayItem.description = t(displayItem.description) // 翻译描述
-        }
-      }
-
+      // 直接使用搜索结果，因为数据已经包含翻译后的内容
       const searchResult: SearchResult = {
-        item: displayItem,
+        item: result.item,
         score: result.score,
         matches: result.matches as FuseResultMatch[]
       }
