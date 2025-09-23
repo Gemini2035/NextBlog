@@ -1,0 +1,16 @@
+{
+  "buildCommand": "pnpm run contentlayer && pnpm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/((?!api|_next|_static|favicon.ico).*)",
+      "destination": "/"
+    }
+  ]
+}

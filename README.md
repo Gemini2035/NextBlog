@@ -19,15 +19,16 @@
 
 本项目需要以下环境支持：
 
-| 工具 | 版本 | 说明 |
-|------|------|------|
-| **Node.js** | `v20.18.0+` | JavaScript 运行时环境 |
-| **npm** | `v10.2.4+` | Node.js 包管理器 |
-| **pnpm** | `v10.17.0+` | 快速、节省磁盘空间的包管理器 |
+| 工具        | 版本        | 说明                         |
+| ----------- | ----------- | ---------------------------- |
+| **Node.js** | `v20.18.0+` | JavaScript 运行时环境        |
+| **npm**     | `v10.2.4+`  | Node.js 包管理器             |
+| **pnpm**    | `v10.17.0+` | 快速、节省磁盘空间的包管理器 |
 
 ### 推荐使用 pnpm
 
 本项目推荐使用 `pnpm` 作为包管理器，因为它：
+
 - 🚀 安装速度更快
 - 💾 节省磁盘空间
 - 🔒 更严格的依赖管理
@@ -78,6 +79,7 @@ Generated 2 documents in .contentlayer
 ```
 
 访问以下链接验证功能：
+
 - 首页：http://localhost:3000
 - 文章列表：http://localhost:3000/posts
 - 具体文章：http://localhost:3000/posts/welcome
@@ -172,60 +174,64 @@ pnpm export
 
 ### 配置的别名
 
-| 别名 | 路径 | 说明 |
-|------|------|------|
-| `@/*` | `./src/*` | 通用的 src 目录别名 |
-| `@/components/*` | `./src/components/*` | 组件文件 |
-| `@/lib/*` | `./src/lib/*` | 库文件和工具函数 |
-| `@/app/*` | `./src/app/*` | Next.js App Router 页面 |
-| `@/content/*` | `./content/*` | MDX 内容文件 |
-| `@/types/*` | `./src/types/*` | TypeScript 类型定义 |
-| `@/utils/*` | `./src/utils/*` | 工具函数 |
-| `@/styles/*` | `./src/styles/*` | 样式文件 |
-| `@/assets/*` | `./src/assets/*` | 静态资源 |
-| `@/hooks/*` | `./src/hooks/*` | React 自定义 Hooks |
-| `@/constants/*` | `./src/constants/*` | 常量定义 |
+| 别名             | 路径                 | 说明                    |
+| ---------------- | -------------------- | ----------------------- |
+| `@/*`            | `./src/*`            | 通用的 src 目录别名     |
+| `@/components/*` | `./src/components/*` | 组件文件                |
+| `@/lib/*`        | `./src/lib/*`        | 库文件和工具函数        |
+| `@/app/*`        | `./src/app/*`        | Next.js App Router 页面 |
+| `@/content/*`    | `./content/*`        | MDX 内容文件            |
+| `@/types/*`      | `./src/types/*`      | TypeScript 类型定义     |
+| `@/utils/*`      | `./src/utils/*`      | 工具函数                |
+| `@/styles/*`     | `./src/styles/*`     | 样式文件                |
+| `@/assets/*`     | `./src/assets/*`     | 静态资源                |
+| `@/hooks/*`      | `./src/hooks/*`      | React 自定义 Hooks      |
+| `@/constants/*`  | `./src/constants/*`  | 常量定义                |
 
 ### 使用示例
 
 #### 导入组件
+
 ```typescript
 // 使用别名
-import Header from '@/components/Header'
-import PostCard from '@/components/PostCard'
+import Header from "@/components/Header";
+import PostCard from "@/components/PostCard";
 
 // 不使用别名（相对路径）
-import Header from '../components/Header'
-import PostCard from '../components/PostCard'
+import Header from "../components/Header";
+import PostCard from "../components/PostCard";
 ```
 
 #### 导入工具函数
+
 ```typescript
 // 使用别名
-import { formatDate, truncateText } from '@/utils'
-import { SITE_CONFIG } from '@/constants'
+import { formatDate, truncateText } from "@/utils";
+import { SITE_CONFIG } from "@/constants";
 
 // 不使用别名
-import { formatDate, truncateText } from '../utils'
-import { SITE_CONFIG } from '../constants'
+import { formatDate, truncateText } from "../utils";
+import { SITE_CONFIG } from "../constants";
 ```
 
 #### 导入类型定义
+
 ```typescript
 // 使用别名
-import type { BlogPost, Tag } from '@/types'
+import type { BlogPost, Tag } from "@/types";
 
 // 不使用别名
-import type { BlogPost, Tag } from '../types'
+import type { BlogPost, Tag } from "../types";
 ```
 
 #### 导入资源文件
+
 ```typescript
 // 使用别名
-import { GitHubIcon, TwitterIcon } from '@/assets/icons'
+import { GitHubIcon, TwitterIcon } from "@/assets/icons";
 
 // 不使用别名
-import { GitHubIcon, TwitterIcon } from '../assets/icons'
+import { GitHubIcon, TwitterIcon } from "../assets/icons";
 ```
 
 ### 路径别名的优势
@@ -261,6 +267,7 @@ import { GitHubIcon, TwitterIcon } from '../assets/icons'
 ### 方法二：手动创建多语言文章
 
 在对应的语言目录下创建文章文件：
+
 ```
 content/zh/posts/my-article.mdx
 content/en/posts/my-article.mdx
@@ -269,34 +276,98 @@ content/ja/posts/my-article.mdx
 
 ### 文章 frontmatter 字段说明
 
-| 字段 | 类型 | 必需 | 说明 |
-|------|------|------|------|
-| `title` | string | ✅ | 文章标题 |
-| `date` | string | ✅ | 发布日期 |
-| `description` | string | ❌ | 文章描述 |
-| `tags` | string[] | ❌ | 标签数组 |
-| `published` | boolean | ❌ | 是否发布（默认 true） |
-| `featured` | boolean | ❌ | 是否置顶（默认 false） |
-| `updatedAt` | string | ❌ | 更新时间 |
-| `locale` | string | ✅ | 文章语言（zh/en/ja） |
-| `originalSlug` | string | ❌ | 原始 slug（用于跨语言链接） |
+| 字段           | 类型     | 必需 | 说明                        |
+| -------------- | -------- | ---- | --------------------------- |
+| `title`        | string   | ✅   | 文章标题                    |
+| `date`         | string   | ✅   | 发布日期                    |
+| `description`  | string   | ❌   | 文章描述                    |
+| `tags`         | string[] | ❌   | 标签数组                    |
+| `published`    | boolean  | ❌   | 是否发布（默认 true）       |
+| `featured`     | boolean  | ❌   | 是否置顶（默认 false）      |
+| `updatedAt`    | string   | ❌   | 更新时间                    |
+| `locale`       | string   | ✅   | 文章语言（zh/en/ja）        |
+| `originalSlug` | string   | ❌   | 原始 slug（用于跨语言链接） |
 
-## 🚀 部署到 GitHub Pages
+## 🚀 部署到 Vercel
 
-项目已配置 GitHub Actions 自动翻译和部署：
+项目已配置 GitHub Actions 自动翻译和 Vercel 部署：
 
 ### 自动部署流程
 
 1. **推送代码**：将代码推送到 GitHub 仓库
-2. **启用 GitHub Pages**：在仓库设置中启用 GitHub Pages
-3. **自动翻译**：每次推送文章到任何语言目录时自动翻译
-4. **自动部署**：构建并部署到 GitHub Pages
+2. **自动翻译**：每次推送文章到任何语言目录时自动翻译
+3. **自动部署**：构建并部署到 Vercel
 
 ### 部署触发条件
 
 - 推送到 `main`、`master` 或 `production` 分支
 - 修改了 `content/zh/posts/`、`content/en/posts/` 或 `content/ja/posts/` 目录下的文件
 - 修改了源代码文件（`src/`、`package.json`、配置文件等）
+
+### Vercel 部署配置
+
+#### 1. 在 Vercel 中创建项目
+
+1. 访问 [Vercel Dashboard](https://vercel.com/dashboard)
+2. 点击 "New Project"
+3. 选择你的 GitHub 仓库
+4. 配置项目设置：
+   - **Framework Preset**: Next.js
+   - **Root Directory**: `./` (根目录)
+   - **Build Command**: `pnpm run contentlayer && pnpm run build`
+   - **Output Directory**: `.next`
+
+#### 2. 获取必要的 Secrets
+
+在 Vercel 项目设置中获取以下信息，然后在 GitHub 仓库的 Settings > Secrets and variables > Actions 中添加：
+
+**必需的 Secrets:**
+
+- `VERCEL_TOKEN`: 在 Vercel 账户设置中生成
+- `ORG_ID`: 在 Vercel 项目设置中找到
+- `PROJECT_ID`: 在 Vercel 项目设置中找到
+- `VERCEL_SCOPE`: 通常是你的用户名或组织名
+
+#### 3. 配置步骤
+
+**获取 VERCEL_TOKEN:**
+
+1. 访问 [Vercel Tokens](https://vercel.com/account/tokens)
+2. 点击 "Create Token"
+3. 输入名称并选择适当的权限
+4. 复制生成的 token
+
+**获取 ORG_ID 和 PROJECT_ID:**
+
+1. 在 Vercel 项目设置中
+2. 查看 "General" 标签页
+3. 找到 "Project ID" 和 "Team ID" (ORG_ID)
+
+**获取 VERCEL_SCOPE:**
+
+1. 在 Vercel 账户设置中
+2. 查看你的用户名或组织名
+
+#### 4. 添加 GitHub Secrets
+
+在 GitHub 仓库中：
+
+1. 进入 Settings > Secrets and variables > Actions
+2. 点击 "New repository secret"
+3. 添加以下 secrets:
+   - `VERCEL_TOKEN`
+   - `ORG_ID`
+   - `PROJECT_ID`
+   - `VERCEL_SCOPE`
+
+### Vercel 部署优势
+
+- ✅ 支持 Next.js middleware
+- ✅ 支持国际化路由
+- ✅ 自动部署
+- ✅ 全球 CDN
+- ✅ 自动 HTTPS
+- ✅ 预览部署
 
 ### 本地预览部署版本
 
@@ -305,26 +376,26 @@ content/ja/posts/my-article.mdx
 pnpm run contentlayer
 pnpm run build
 
-# 导出静态文件
-pnpm run export
-
-# 本地预览（需要安装 serve）
-npx serve out
+# 启动生产服务器
+pnpm start
 ```
 
 ## 🛠️ 自定义配置
 
 ### 基础配置
+
 - **站点配置**: 修改 `src/constants/index.ts` 中的 `SITE_CONFIG`
 - **导航菜单**: 更新 `src/constants/index.ts` 中的 `NAVIGATION_ITEMS`
 - **主题配置**: 调整 `tailwind.config.ts` 中的配置
 
 ### 国际化配置
+
 - **支持语言**: 修改 `src/i18n/routing.ts` 中的语言配置
 - **翻译文本**: 更新 `locales/` 目录下的翻译文件
 - **翻译脚本**: 自定义 `scripts/` 目录下的翻译逻辑
 
 ### 翻译配置
+
 - **关键词映射**: 修改 `scripts/auto-translate.ts` 中的翻译映射
 - **OpenAI 配置**: 设置 `OPENAI_API_KEY` 环境变量
 - **翻译质量**: 调整翻译脚本中的参数和规则
@@ -334,7 +405,9 @@ npx serve out
 ### 常见问题
 
 #### 1. Contentlayer 警告
+
 如果看到以下警告：
+
 ```
 Contentlayer (Warning): Importing from `contentlayer/generated` might not work.
 ```
@@ -342,13 +415,17 @@ Contentlayer (Warning): Importing from `contentlayer/generated` might not work.
 **解决方案**: 已在 `tsconfig.json` 中配置了路径别名，警告应该自动消失。
 
 #### 2. 404 错误
+
 如果文章页面返回 404 错误，检查：
+
 - Contentlayer 是否正确生成了数据
 - 文章 slug 是否与 URL 路径匹配
 - 语言路径是否正确（如 `/zh/posts/article`）
 
 #### 3. 500 错误
+
 如果出现 500 错误，尝试：
+
 ```bash
 # 清理缓存
 rm -rf .next .contentlayer
@@ -361,19 +438,25 @@ pnpm dev
 ```
 
 #### 4. 静态导出问题
+
 项目配置为开发模式使用普通 Next.js 服务器，生产模式使用静态导出。如果遇到静态导出相关错误，确保：
+
 - 开发时使用 `pnpm dev`
 - 生产构建使用 `pnpm build`
 
 #### 5. 翻译问题
+
 如果翻译功能不工作，检查：
+
 - 文章是否在正确的语言目录下
 - 文章格式是否正确（需要 frontmatter）
 - GitHub Actions 权限是否正确配置
 - 翻译脚本是否正确安装依赖
 
 #### 6. 国际化问题
+
 如果多语言功能不工作，检查：
+
 - `locales/` 目录下是否有对应的翻译文件
 - `src/i18n/` 配置是否正确
 - 文章是否包含正确的 `locale` 字段
@@ -394,6 +477,7 @@ pnpm dev
 ### 多语言支持
 
 本项目支持以下语言：
+
 - 🇨🇳 **中文** (zh) - 默认语言
 - 🇺🇸 **英文** (en) - 自动翻译
 - 🇯🇵 **日文** (ja) - 自动翻译
@@ -401,7 +485,7 @@ pnpm dev
 ### 路由结构
 
 - `/zh/posts/welcome` - 中文文章
-- `/en/posts/welcome` - 英文文章  
+- `/en/posts/welcome` - 英文文章
 - `/ja/posts/welcome` - 日文文章
 
 ### 文章目录结构
@@ -424,8 +508,8 @@ tags: ["标签1", "标签2"]
 published: true
 featured: false
 updatedAt: 2024-01-20
-locale: "zh"                    # 文章语言
-originalSlug: "article-slug"    # 原始 slug（用于跨语言链接）
+locale: "zh" # 文章语言
+originalSlug: "article-slug" # 原始 slug（用于跨语言链接）
 ---
 ```
 
@@ -443,12 +527,13 @@ originalSlug: "article-slug"    # 原始 slug（用于跨语言链接）
 ### 翻译逻辑
 
 - **中文文章变更** → 自动翻译为英文和日文
-- **英文文章变更** → 自动翻译为中文和日文  
+- **英文文章变更** → 自动翻译为中文和日文
 - **日文文章变更** → 自动翻译为中文和英文
 
 ### 使用方法
 
 1. **创建中文文章**：
+
    ```bash
    # 在 content/zh/posts/ 目录下创建文章
    echo "---" > content/zh/posts/my-article.mdx
@@ -460,6 +545,7 @@ originalSlug: "article-slug"    # 原始 slug（用于跨语言链接）
    ```
 
 2. **提交并推送**：
+
    ```bash
    git add content/zh/posts/my-article.mdx
    git commit -m "添加新文章"
@@ -477,18 +563,23 @@ originalSlug: "article-slug"    # 原始 slug（用于跨语言链接）
 ### 可用的翻译脚本
 
 #### 基础翻译
+
 ```bash
 pnpm run translate
 ```
+
 使用简单的关键词映射进行文章翻译。
 
 #### 自动翻译
+
 ```bash
 pnpm run translate:auto
 ```
+
 智能检测 Git 变更并只翻译新增或修改的文章。
 
 #### OpenAI 翻译
+
 ```bash
 # 首先设置环境变量
 export OPENAI_API_KEY="your-api-key-here"
@@ -496,6 +587,7 @@ export OPENAI_API_KEY="your-api-key-here"
 # 然后运行脚本
 pnpm run translate:openai
 ```
+
 使用 OpenAI GPT-3.5-turbo 模型进行高质量翻译。
 
 ### 脚本功能
@@ -549,6 +641,7 @@ pnpm run translate:openai
 ### 修改翻译逻辑
 
 您可以修改翻译脚本来：
+
 - 添加更多翻译映射
 - 集成其他翻译服务
 - 自定义翻译规则
