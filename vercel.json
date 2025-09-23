@@ -1,7 +1,8 @@
 {
-  "buildCommand": "pnpm run contentlayer && pnpm run build",
+  "buildCommand": "pnpm install && pnpm run contentlayer && pnpm run build",
   "outputDirectory": ".next",
   "framework": "nextjs",
+  "installCommand": "pnpm install",
   "functions": {
     "src/app/api/**/*.ts": {
       "runtime": "nodejs18.x"
