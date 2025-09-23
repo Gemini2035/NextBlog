@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
-import { search, getRecommendedContent, SearchResultsGroup, RecommendedContent } from '@/components/Header/FullscreenDropdown/SearchDropdown/searchService'
+import { search, getRecommendedContent, SearchResultsGroup, RecommendedContent } from '@/components/Header/Search/SearchDropdown/searchService'
 
 interface UseSearchOptions {
   debounceMs?: number

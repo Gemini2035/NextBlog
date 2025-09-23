@@ -72,128 +72,54 @@
     "Navigation": {
         "search": "Search",
         "language": "Language",
-        "blog": {
-            "label": "Blog",
-            "submenu": {
-                "title": "My Articles",
-                "description": "Explore my latest technical insights and development experiences",
-                "featured": {
-                    "label": "Featured Posts",
-                    "description": "Curated recommended articles"
-                },
-                "recent": {
-                    "label": "Latest Posts",
-                    "description": "Articles updated in the past week"
-                },
-                "categories": {
-                    "label": "Tech Categories",
-                    "typescript": {
-                        "label": "TypeScript",
-                        "description": "TypeScript related articles"
-                    },
-                    "javascript": {
-                        "label": "Javascript",
-                        "description": "JavaScript related articles"
-                    },
-                    "nodejs": {
-                        "label": "NodeJs",
-                        "description": "Node.js related articles"
-                    },
-                    "reactjs": {
-                        "label": "ReactJs",
-                        "description": "React related articles"
-                    },
-                    "vuejs": {
-                        "label": "VueJS",
-                        "description": "Vue.js related articles"
-                    },
-                    "others": {
-                        "label": "Others",
-                        "description": "Other technical articles"
-                    }
-                }
-            }
-        },
-        "about": {
-            "label": "About",
-            "submenu": {
-                "title": "About Me",
-                "description": "Learn about my background, skills, experience and contact information",
-                "basic": {
-                    "label": "Basic Info",
-                    "profile": {
-                        "label": "Personal Profile"
-                    },
-                    "contact": {
-                        "label": "Contact"
-                    }
-                },
-                "professional": {
-                    "label": "Professional Info",
-                    "skills": {
-                        "label": "Skills & Expertise"
-                    },
-                    "work": {
-                        "label": "Work Experience"
-                    },
-                    "education": {
-                        "label": "Education"
-                    },
-                    "achievements": {
-                        "label": "Achievements"
-                    }
-                }
-            }
-        },
-        "projects": {
-            "label": "Projects",
-            "submenu": {
-                "title": "My Projects",
-                "description": "Showcase my technical projects and portfolio",
-                "types": {
-                    "label": "Project Types",
-                    "openSource": {
-                        "label": "Open Source"
-                    },
-                    "commercial": {
-                        "label": "Commercial"
-                    },
-                    "learning": {
-                        "label": "Learning"
-                    },
-                    "selfDeveloped": {
-                        "label": "Self-Developed"
-                    }
-                }
-            }
-        },
-        "resources": {
-            "label": "Resources",
-            "submenu": {
-                "title": "Tech Resources",
-                "description": "Share useful technical resources and tools",
-                "learning": {
-                    "label": "Learning Resources",
-                    "books": {
-                        "label": "Tech Books"
-                    },
-                    "docs": {
-                        "label": "Documentation"
-                    }
-                },
-                "toolsServices": {
-                    "label": "Tools & Services",
-                    "tools": {
-                        "label": "Development Tools"
-                    },
-                    "design": {
-                        "label": "Design Resources"
-                    },
-                    "services": {
-                        "label": "Online Services"
-                    }
-                }
-            }
-        }
+        "Blog": "Blog",
+        "About": "About",
+        "Projects": "Projects",
+        "Resources": "Resources",
+        "My Articles": "My Articles",
+        "Explore my latest technical insights and development experience": "Explore my latest technical insights and development experience",
+        "Featured Articles": "Featured Articles",
+        "Featured recommended articles": "Featured recommended articles",
+        "Latest Articles": "Latest Articles",
+        "Articles updated in the last week": "Articles updated in the last week",
+        "Tech Categories": "Tech Categories",
+        "TypeScript": "TypeScript",
+        "TypeScript related articles": "TypeScript related articles",
+        "Javascript": "Javascript",
+        "JavaScript related articles": "JavaScript related articles",
+        "NodeJs": "NodeJs",
+        "NodeJs related articles": "Node.js related articles",
+        "ReactJs": "ReactJs",
+        "React related articles": "React related articles",
+        "VueJS": "VueJS",
+        "VueJS related articles": "Vue.js related articles",
+        "Others": "Others",
+        "Other technical articles": "Other technical articles",
+        "About Me": "About Me",
+        "Learn about my background, skills, experience and contact information": "Learn about my background, skills, experience and contact information",
+        "Basic Information": "Basic Information",
+        "Personal Profile": "Personal Profile",
+        "Contact Information": "Contact Information",
+        "Professional Information": "Professional Information",
+        "Skills & Expertise": "Skills & Expertise",
+        "Work Experience": "Work Experience",
+        "Education Background": "Education Background",
+        "Personal Achievements": "Personal Achievements",
+        "My Projects": "My Projects",
+        "Showcase my technical projects and portfolio": "Showcase my technical projects and portfolio",
+        "Project Types": "Project Types",
+        "Open Source Projects": "Open Source Projects",
+        "Commercial Projects": "Commercial Projects",
+        "Learning Projects": "Learning Projects",
+        "Self-Developed Projects": "Self-Developed Projects",
+        "Technical Resources": "Technical Resources",
+        "Share useful technical resources and tools": "Share useful technical resources and tools",
+        "Learning Resources": "Learning Resources",
+        "Technical Books": "Technical Books",
+        "Development Documentation": "Development Documentation",
+        "Tools & Services": "Tools & Services",
+        "Development Tools": "Development Tools",
+        "Design Resources": "Design Resources",
+        "Online Services": "Online Services"
     }
 }

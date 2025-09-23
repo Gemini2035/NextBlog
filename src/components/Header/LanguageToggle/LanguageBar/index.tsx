@@ -4,11 +4,11 @@ import { GlobeIcon } from '@/assets/icons'
 import { useLocale } from 'next-intl'
 import { LANGUAGES } from '@/constants'
 
-interface LanguageToggleProps {
+interface LanguageBarProps {
   onLanguageClick: () => void
 }
 
-export default function LanguageToggle({ onLanguageClick }: LanguageToggleProps) {
+export default function LanguageBar({ onLanguageClick }: LanguageBarProps) {
   const locale = useLocale()
   const currentLanguage = LANGUAGES.find(lang => lang.code === locale)
   

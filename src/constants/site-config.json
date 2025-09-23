@@ -1,7 +1,7 @@
 {
   "site": {
     "title": "Apodidae",
-    "description": "分享技术见解、开发经验和生活感悟",
+    "description": "Sharing technical insights, development experience and life insights",
     "author": "Apodidae",
     "url": "https://gemini2035.github.io",
     "social": {
@@ -25,7 +25,7 @@
     "languages": [
       {
         "code": "zh",
-        "name": "中文",
+        "name": "Chinese",
         "nativeName": "中文",
         "translations": {
           "zh": "中文",
@@ -45,7 +45,7 @@
       },
       {
         "code": "ja",
-        "name": "日本語",
+        "name": "Japanese",
         "nativeName": "日本語",
         "translations": {
           "zh": "日语",
@@ -59,55 +59,55 @@
       "navigation": [
         {
           "type": "__blog",
-          "label": "博客",
+          "label": "Blog",
           "href": "/posts",
           "submenu": {
-            "title": "我的文章",
-            "description": "探索我的最新技术见解和开发经验",
+            "title": "My Articles",
+            "description": "Explore my latest technical insights and development experience",
             "items": [
               {
-                "label": "置顶文章",
+                "label": "Featured Articles",
                 "href": "/posts#featured",
-                "description": "精选推荐文章"
+                "description": "Featured recommended articles"
               },
               {
-                "label": "最新文章",
+                "label": "Latest Articles",
                 "href": "/posts#recent",
-                "description": "最近一周更新的文章"
+                "description": "Articles updated in the last week"
               },
               {
-                "label": "技术分类",
+                "label": "Tech Categories",
                 "href": "/posts#categories",
                 "items": [
                   {
                     "label": "TypeScript",
                     "href": "/posts#typescript",
-                    "description": "TypeScript 相关文章"
+                    "description": "TypeScript related articles"
                   },
                   {
                     "label": "Javascript",
                     "href": "/posts#javascript",
-                    "description": "JavaScript 相关文章"
+                    "description": "JavaScript related articles"
                   },
                   {
                     "label": "NodeJs",
                     "href": "/posts#nodejs",
-                    "description": "Node.js 相关文章"
+                    "description": "NodeJs related articles"
                   },
                   {
                     "label": "ReactJs",
                     "href": "/posts#reactjs",
-                    "description": "React 相关文章"
+                    "description": "React related articles"
                   },
                   {
                     "label": "VueJS",
                     "href": "/posts#vuejs",
-                    "description": "Vue.js 相关文章"
+                    "description": "VueJS related articles"
                   },
                   {
-                    "label": "其它",
+                    "label": "Others",
                     "href": "/posts#others",
-                    "description": "其他技术文章"
+                    "description": "Other technical articles"
                   }
                 ]
               }
@@ -116,44 +116,44 @@
         },
         {
           "type": "__about",
-          "label": "关于",
+          "label": "About",
           "href": "/about",
           "submenu": {
-            "title": "关于我",
-            "description": "了解我的背景、技能、经历和联系方式",
+            "title": "About Me",
+            "description": "Learn about my background, skills, experience and contact information",
             "items": [
               {
-                "label": "基础信息",
+                "label": "Basic Information",
                 "href": "/about#basic",
                 "items": [
                   {
-                    "label": "个人简介",
+                    "label": "Personal Profile",
                     "href": "/about"
                   },
                   {
-                    "label": "联系方式",
+                    "label": "Contact Information",
                     "href": "/about#contact"
                   }
                 ]
               },
               {
-                "label": "专业信息",
+                "label": "Professional Information",
                 "href": "/about#professional",
                 "items": [
                   {
-                    "label": "技能专长",
+                    "label": "Skills & Expertise",
                     "href": "/about#skills"
                   },
                   {
-                    "label": "工作经历",
+                    "label": "Work Experience",
                     "href": "/about#work"
                   },
                   {
-                    "label": "教育背景",
+                    "label": "Education Background",
                     "href": "/about#education"
                   },
                   {
-                    "label": "个人成就",
+                    "label": "Personal Achievements",
                     "href": "/about#achievements"
                   }
                 ]
@@ -163,30 +163,30 @@
         },
         {
           "type": "__projects",
-          "label": "项目",
+          "label": "Projects",
           "href": "/projects",
           "submenu": {
-            "title": "我的项目",
-            "description": "展示我的技术项目和作品集",
+            "title": "My Projects",
+            "description": "Showcase my technical projects and portfolio",
             "items": [
               {
-                "label": "项目类型",
+                "label": "Project Types",
                 "href": "/projects#types",
                 "items": [
                   {
-                    "label": "开源项目",
+                    "label": "Open Source Projects",
                     "href": "/projects#open-source"
                   },
                   {
-                    "label": "商业项目",
+                    "label": "Commercial Projects",
                     "href": "/projects#commercial"
                   },
                   {
-                    "label": "学习项目",
+                    "label": "Learning Projects",
                     "href": "/projects#learning"
                   },
                   {
-                    "label": "自研项目",
+                    "label": "Self-Developed Projects",
                     "href": "/projects#self-developed"
                   }
                 ]
@@ -196,40 +196,40 @@
         },
         {
           "type": "__resources",
-          "label": "资源",
+          "label": "Resources",
           "href": "/resources",
           "submenu": {
-            "title": "技术资源",
-            "description": "分享有用的技术资源和工具",
+            "title": "Technical Resources",
+            "description": "Share useful technical resources and tools",
             "items": [
               {
-                "label": "学习资源",
+                "label": "Learning Resources",
                 "href": "/resources#learning",
                 "items": [
                   {
-                    "label": "技术书籍",
+                    "label": "Technical Books",
                     "href": "/resources#books"
                   },
                   {
-                    "label": "开发文档",
+                    "label": "Development Documentation",
                     "href": "/resources#docs"
                   }
                 ]
               },
               {
-                "label": "工具服务",
+                "label": "Tools & Services",
                 "href": "/resources#tools-services",
                 "items": [
                   {
-                    "label": "开发工具",
+                    "label": "Development Tools",
                     "href": "/resources#tools"
                   },
                   {
-                    "label": "设计资源",
+                    "label": "Design Resources",
                     "href": "/resources#design"
                   },
                   {
-                    "label": "在线服务",
+                    "label": "Online Services",
                     "href": "/resources#services"
                   }
                 ]

@@ -11,129 +11,55 @@
     "Navigation": {
         "search": "検索",
         "language": "言語",
-        "blog": {
-            "label": "ブログ",
-            "submenu": {
-                "title": "私の記事",
-                "description": "最新の技術的洞察と開発経験を探索",
-                "featured": {
-                    "label": "おすすめ記事",
-                    "description": "厳選された推奨記事"
-                },
-                "recent": {
-                    "label": "最新記事",
-                    "description": "過去1週間に更新された記事"
-                },
-                "categories": {
-                    "label": "技術カテゴリ",
-                    "typescript": {
-                        "label": "TypeScript",
-                        "description": "TypeScript関連記事"
-                    },
-                    "javascript": {
-                        "label": "Javascript",
-                        "description": "JavaScript関連記事"
-                    },
-                    "nodejs": {
-                        "label": "NodeJs",
-                        "description": "Node.js関連記事"
-                    },
-                    "reactjs": {
-                        "label": "ReactJs",
-                        "description": "React関連記事"
-                    },
-                    "vuejs": {
-                        "label": "VueJS",
-                        "description": "Vue.js関連記事"
-                    },
-                    "others": {
-                        "label": "その他",
-                        "description": "その他の技術記事"
-                    }
-                }
-            }
-        },
-        "about": {
-            "label": "について",
-            "submenu": {
-                "title": "私について",
-                "description": "私の背景、スキル、経験、連絡先について学ぶ",
-                "basic": {
-                    "label": "基本情報",
-                    "profile": {
-                        "label": "個人プロフィール"
-                    },
-                    "contact": {
-                        "label": "連絡先"
-                    }
-                },
-                "professional": {
-                    "label": "専門情報",
-                    "skills": {
-                        "label": "スキル・専門性"
-                    },
-                    "work": {
-                        "label": "職歴"
-                    },
-                    "education": {
-                        "label": "学歴"
-                    },
-                    "achievements": {
-                        "label": "実績"
-                    }
-                }
-            }
-        },
-        "projects": {
-            "label": "プロジェクト",
-            "submenu": {
-                "title": "私のプロジェクト",
-                "description": "私の技術プロジェクトとポートフォリオを紹介",
-                "types": {
-                    "label": "プロジェクトタイプ",
-                    "openSource": {
-                        "label": "オープンソース"
-                    },
-                    "commercial": {
-                        "label": "商用"
-                    },
-                    "learning": {
-                        "label": "学習"
-                    },
-                    "selfDeveloped": {
-                        "label": "自主開発"
-                    }
-                }
-            }
-        },
-        "resources": {
-            "label": "リソース",
-            "submenu": {
-                "title": "技術リソース",
-                "description": "有用な技術リソースとツールを共有",
-                "learning": {
-                    "label": "学習リソース",
-                    "books": {
-                        "label": "技術書籍"
-                    },
-                    "docs": {
-                        "label": "ドキュメント"
-                    }
-                },
-                "toolsServices": {
-                    "label": "ツール・サービス",
-                    "tools": {
-                        "label": "開発ツール"
-                    },
-                    "design": {
-                        "label": "デザインリソース"
-                    },
-                    "services": {
-                        "label": "オンラインサービス"
-                    }
-                }
-            }
-        }
+        "Blog": "ブログ",
+        "About": "について",
+        "Projects": "プロジェクト",
+        "Resources": "リソース",
+        "My Articles": "私の記事",
+        "Explore my latest technical insights and development experience": "最新の技術的洞察と開発経験を探索",
+        "Featured Articles": "おすすめ記事",
+        "Featured recommended articles": "厳選された推奨記事",
+        "Latest Articles": "最新記事",
+        "Articles updated in the last week": "過去1週間に更新された記事",
+        "Tech Categories": "技術カテゴリ",
+        "TypeScript": "TypeScript",
+        "TypeScript related articles": "TypeScript関連記事",
+        "Javascript": "Javascript",
+        "JavaScript related articles": "JavaScript関連記事",
+        "NodeJs": "NodeJs",
+        "NodeJs related articles": "Node.js関連記事",
+        "ReactJs": "ReactJs",
+        "React related articles": "React関連記事",
+        "VueJS": "VueJS",
+        "VueJS related articles": "Vue.js関連記事",
+        "Others": "その他",
+        "Other technical articles": "その他の技術記事",
+        "About Me": "私について",
+        "Learn about my background, skills, experience and contact information": "私の背景、スキル、経験、連絡先について学ぶ",
+        "Basic Information": "基本情報",
+        "Personal Profile": "個人プロフィール",
+        "Contact Information": "連絡先",
+        "Professional Information": "専門情報",
+        "Skills & Expertise": "スキル・専門性",
+        "Work Experience": "職歴",
+        "Education Background": "学歴",
+        "Personal Achievements": "実績",
+        "My Projects": "私のプロジェクト",
+        "Showcase my technical projects and portfolio": "私の技術プロジェクトとポートフォリオを紹介",
+        "Project Types": "プロジェクトタイプ",
+        "Open Source Projects": "オープンソース",
+        "Commercial Projects": "商用",
+        "Learning Projects": "学習",
+        "Self-Developed Projects": "自主開発",
+        "Technical Resources": "技術リソース",
+        "Share useful technical resources and tools": "有用な技術リソースとツールを共有",
+        "Learning Resources": "学習リソース",
+        "Technical Books": "技術書籍",
+        "Development Documentation": "ドキュメント",
+        "Tools & Services": "ツール・サービス",
+        "Development Tools": "開発ツール",
+        "Design Resources": "デザインリソース",
+        "Online Services": "オンラインサービス"
     },
     "AboutPage": {
         "title": "私について",

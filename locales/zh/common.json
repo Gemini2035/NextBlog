@@ -72,128 +72,54 @@
     "Navigation": {
         "search": "搜索",
         "language": "语言",
-        "blog": {
-            "label": "博客",
-            "submenu": {
-                "title": "我的文章",
-                "description": "探索我的最新技术见解和开发经验",
-                "featured": {
-                    "label": "置顶文章",
-                    "description": "精选推荐文章"
-                },
-                "recent": {
-                    "label": "最新文章",
-                    "description": "最近一周更新的文章"
-                },
-                "categories": {
-                    "label": "技术分类",
-                    "typescript": {
-                        "label": "TypeScript",
-                        "description": "TypeScript 相关文章"
-                    },
-                    "javascript": {
-                        "label": "Javascript",
-                        "description": "JavaScript 相关文章"
-                    },
-                    "nodejs": {
-                        "label": "NodeJs",
-                        "description": "Node.js 相关文章"
-                    },
-                    "reactjs": {
-                        "label": "ReactJs",
-                        "description": "React 相关文章"
-                    },
-                    "vuejs": {
-                        "label": "VueJS",
-                        "description": "Vue.js 相关文章"
-                    },
-                    "others": {
-                        "label": "其它",
-                        "description": "其他技术文章"
-                    }
-                }
-            }
-        },
-        "about": {
-            "label": "关于",
-            "submenu": {
-                "title": "关于我",
-                "description": "了解我的背景、技能、经历和联系方式",
-                "basic": {
-                    "label": "基础信息",
-                    "profile": {
-                        "label": "个人简介"
-                    },
-                    "contact": {
-                        "label": "联系方式"
-                    }
-                },
-                "professional": {
-                    "label": "专业信息",
-                    "skills": {
-                        "label": "技能专长"
-                    },
-                    "work": {
-                        "label": "工作经历"
-                    },
-                    "education": {
-                        "label": "教育背景"
-                    },
-                    "achievements": {
-                        "label": "个人成就"
-                    }
-                }
-            }
-        },
-        "projects": {
-            "label": "项目",
-            "submenu": {
-                "title": "我的项目",
-                "description": "展示我的技术项目和作品集",
-                "types": {
-                    "label": "项目类型",
-                    "openSource": {
-                        "label": "开源项目"
-                    },
-                    "commercial": {
-                        "label": "商业项目"
-                    },
-                    "learning": {
-                        "label": "学习项目"
-                    },
-                    "selfDeveloped": {
-                        "label": "自研项目"
-                    }
-                }
-            }
-        },
-        "resources": {
-            "label": "资源",
-            "submenu": {
-                "title": "技术资源",
-                "description": "分享有用的技术资源和工具",
-                "learning": {
-                    "label": "学习资源",
-                    "books": {
-                        "label": "技术书籍"
-                    },
-                    "docs": {
-                        "label": "开发文档"
-                    }
-                },
-                "toolsServices": {
-                    "label": "工具服务",
-                    "tools": {
-                        "label": "开发工具"
-                    },
-                    "design": {
-                        "label": "设计资源"
-                    },
-                    "services": {
-                        "label": "在线服务"
-                    }
-                }
-            }
-        }
+        "Blog": "博客",
+        "About": "关于",
+        "Projects": "项目",
+        "Resources": "资源",
+        "My Articles": "我的文章",
+        "Explore my latest technical insights and development experience": "探索我的最新技术见解和开发经验",
+        "Featured Articles": "置顶文章",
+        "Featured recommended articles": "精选推荐文章",
+        "Latest Articles": "最新文章",
+        "Articles updated in the last week": "最近一周更新的文章",
+        "Tech Categories": "技术分类",
+        "TypeScript": "TypeScript",
+        "TypeScript related articles": "TypeScript 相关文章",
+        "Javascript": "Javascript",
+        "JavaScript related articles": "JavaScript 相关文章",
+        "NodeJs": "NodeJs",
+        "NodeJs related articles": "Node.js 相关文章",
+        "ReactJs": "ReactJs",
+        "React related articles": "React 相关文章",
+        "VueJS": "VueJS",
+        "VueJS related articles": "Vue.js 相关文章",
+        "Others": "其它",
+        "Other technical articles": "其他技术文章",
+        "About Me": "关于我",
+        "Learn about my background, skills, experience and contact information": "了解我的背景、技能、经历和联系方式",
+        "Basic Information": "基础信息",
+        "Personal Profile": "个人简介",
+        "Contact Information": "联系方式",
+        "Professional Information": "专业信息",
+        "Skills & Expertise": "技能专长",
+        "Work Experience": "工作经历",
+        "Education Background": "教育背景",
+        "Personal Achievements": "个人成就",
+        "My Projects": "我的项目",
+        "Showcase my technical projects and portfolio": "展示我的技术项目和作品集",
+        "Project Types": "项目类型",
+        "Open Source Projects": "开源项目",
+        "Commercial Projects": "商业项目",
+        "Learning Projects": "学习项目",
+        "Self-Developed Projects": "自研项目",
+        "Technical Resources": "技术资源",
+        "Share useful technical resources and tools": "分享有用的技术资源和工具",
+        "Learning Resources": "学习资源",
+        "Technical Books": "技术书籍",
+        "Development Documentation": "开发文档",
+        "Tools & Services": "工具服务",
+        "Development Tools": "开发工具",
+        "Design Resources": "设计资源",
+        "Online Services": "在线服务"
     }
 }

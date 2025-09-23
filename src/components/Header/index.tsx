@@ -6,8 +6,9 @@ import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG, NavigationI
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
-import SearchBar from './SearchBar'
-import LanguageToggle from './LanguageToggle'
+import {SearchBar} from './Search'
+import { LanguageBar } from './LanguageToggle'
+
 
 // 导航项组件 - 减少三目选择器的使用
 interface NavItemProps {
@@ -19,26 +20,6 @@ interface NavItemProps {
 
 function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
   const hasSubmenu = item.submenu && item.submenu.items && item.submenu.items.length > 0
-  
-  // 获取国际化标签
-  const getLabel = () => {
-    switch (item.type) {
-      case '__blog':
-        return t('blog.label')
-      case '__about':
-        return t('about.label')
-      case '__projects':
-        return t('projects.label')
-      case '__resources':
-        return t('resources.label')
-      case '__search':
-        return t('search')
-      case '__language':
-        return t('language')
-      default:
-        return item.label
-    }
-  }
   
   if (hasSubmenu) {
     return (
@@ -52,7 +33,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
           aria-haspopup="true"
           aria-expanded={activeSubmenu === item.type}
         >
-          {getLabel()}
+          {t(item.label)}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
         </Link>
       </div>
@@ -64,7 +45,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
       href={item.href} 
       className="text-gray-700 hover:text-gray-800 transition-colors"
     >
-      {getLabel()}
+      {t(item.label)}
     </Link>
   )
 }
@@ -280,7 +261,7 @@ export default function Header() {
 
               {/* 语言切换 */}
               <li>
-                <LanguageToggle onLanguageClick={handleLanguageClick} />
+                <LanguageBar onLanguageClick={handleLanguageClick} />
               </li>
 
               {/* 移动端菜单按钮 */}
