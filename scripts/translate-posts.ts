@@ -113,6 +113,15 @@ function translateFrontmatter(frontmatter: Frontmatter, fromLocale: string, toLo
 }
 
 /**
+ * 检查目标文件是否已存在
+ */
+function checkTargetFileExists(filePath: string, toLocale: string): boolean {
+  const targetDir = path.join(CONTENT_DIR, toLocale, 'posts')
+  const targetPath = path.join(targetDir, path.basename(filePath))
+  return fs.existsSync(targetPath)
+}
+
+/**
  * 处理单个文章文件
  */
 function processPostFile(filePath: string, fromLocale: string): void {
@@ -124,6 +133,14 @@ function processPostFile(filePath: string, fromLocale: string): void {
   // 为每个目标语言创建翻译版本
   TARGET_LOCALES.forEach(toLocale => {
     if (toLocale === fromLocale) return
+    
+    // 检查目标文件是否已存在
+    if (checkTargetFileExists(filePath, toLocale)) {
+      console.log(`⏭️  跳过 ${toLocale} - 文件已存在`)
+      return
+    }
+    
+    console.log(`翻译到 ${toLocale}...`)
     
     const translatedFrontmatter = translateFrontmatter(frontmatter, fromLocale, toLocale)
     const translatedBody = translatePostContent(body, fromLocale, toLocale)
@@ -173,5 +190,6 @@ export {
   translateText,
   translatePostContent,
   translateFrontmatter,
-  processPostFile
+  processPostFile,
+  checkTargetFileExists
 }
