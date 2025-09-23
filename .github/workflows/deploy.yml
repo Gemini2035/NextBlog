@@ -74,7 +74,7 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: 安装依赖
-      run: pnpm install --no-frozen-lockfile
+      run: pnpm install --frozen-lockfile
 
     - name: 检测新增或修改的文章
       id: detect-changes
@@ -168,7 +168,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 安装依赖
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: 构建 Contentlayer
         run: pnpm run contentlayer
