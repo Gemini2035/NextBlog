@@ -187,6 +187,14 @@ jobs:
       - name: Build Contentlayer
         run: pnpm run contentlayer
 
+      - name: Pre-build verification
+        run: |
+          echo "Verifying build environment..."
+          pnpm --version
+          node --version
+          echo "Checking if contentlayer build was successful..."
+          ls -la .contentlayer/
+
       - name: Set pnpm as default package manager
         run: |
           echo "VERCEL_PNPM=1" >> $GITHUB_ENV
@@ -211,6 +219,8 @@ jobs:
           PNPM_HOME: ${{ env.PNPM_HOME }}
           STORE_PATH: ${{ env.STORE_PATH }}
           VERCEL_PNPM: 1
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
 
   deploy-to-vercel:
     runs-on: ubuntu-latest
@@ -254,6 +264,14 @@ jobs:
       - name: Build Contentlayer
         run: pnpm run contentlayer
 
+      - name: Pre-build verification
+        run: |
+          echo "Verifying build environment..."
+          pnpm --version
+          node --version
+          echo "Checking if contentlayer build was successful..."
+          ls -la .contentlayer/
+
       - name: Set pnpm as default package manager
         run: |
           echo "VERCEL_PNPM=1" >> $GITHUB_ENV
@@ -282,3 +300,5 @@ jobs:
           PNPM_HOME: ${{ env.PNPM_HOME }}
           STORE_PATH: ${{ env.STORE_PATH }}
           VERCEL_PNPM: 1
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
