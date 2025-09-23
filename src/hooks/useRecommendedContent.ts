@@ -1,6 +1,20 @@
 import { useMemo } from 'react'
-import { SearchableItem } from './useSearchData'
+import { useTranslations } from 'next-intl'
 import { usePosts } from './usePosts'
+import { NAVIGATION_ITEMS } from '@/constants'
+
+// 搜索项类型定义
+interface SearchableItem {
+  id: string
+  type: 'post' | 'link' | 'category'
+  title: string
+  description?: string
+  href: string
+  tags?: string[]
+  content?: string
+  priority: number
+  category?: string
+}
 
 // 推荐内容类型
 export interface RecommendedContent {
@@ -11,6 +25,7 @@ export interface RecommendedContent {
 
 export function useRecommendedContent() {
   const posts = usePosts()
+  const t = useTranslations('Navigation')
   
   const recommendedContent = useMemo((): RecommendedContent => {
     const featuredPost = posts.getFeaturedPost()
@@ -43,34 +58,26 @@ export function useRecommendedContent() {
         category: '博客文章'
       }))
 
-    // 导航链接（简化版，只包含主要导航）
-    const navigationLinks: SearchableItem[] = [
-      {
-        id: 'nav-blog',
+    // 导航链接（从 NAVIGATION_ITEMS 生成，并进行翻译）
+    const navigationLinks: SearchableItem[] = NAVIGATION_ITEMS
+      .filter(navItem => navItem.type !== '__search' && navItem.type !== '__language')
+      .slice(0, 5)
+      .map(navItem => ({
+        id: `nav-${navItem.type}`,
         type: 'link',
-        title: 'Blog',
-        description: '查看所有博客文章',
-        href: '/posts',
+        title: t(navItem.label), // 翻译标题
+        description: navItem.submenu?.description ? t(navItem.submenu.description) : undefined, // 翻译描述
+        href: navItem.href,
         priority: 8,
         category: '导航链接'
-      },
-      {
-        id: 'nav-about',
-        type: 'link',
-        title: 'About',
-        description: '了解关于我的信息',
-        href: '/about',
-        priority: 8,
-        category: '导航链接'
-      }
-    ]
+      }))
 
     return {
       featuredPosts,
       recentPosts: recentPostsItems,
       navigationLinks
     }
-  }, [posts])
+  }, [posts, t])
 
   return {
     recommendedContent

@@ -72,6 +72,8 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   // 基础数据
   const locale = useLocale()
   const posts = usePosts()
+  const t = useTranslations('Navigation')
+  const tSearch = useTranslations('Search')
   
   // 推荐内容
   const { recommendedContent } = useRecommendedContent()
@@ -178,8 +180,17 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     results.forEach(result => {
+      // 对于导航链接，在显示时进行翻译
+      let displayItem = { ...result.item }
+      if (result.item.type === 'link') {
+        displayItem.title = t(result.item.title) // 翻译标题
+        if (displayItem.description) {
+          displayItem.description = t(displayItem.description) // 翻译描述
+        }
+      }
+
       const searchResult: SearchResult = {
-        item: result.item,
+        item: displayItem,
         score: result.score,
         matches: result.matches as FuseResultMatch[]
       }
@@ -193,12 +204,12 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       }
     })
 
-    // 转换为分组格式，使用硬编码的标题
+    // 转换为分组格式，使用翻译的标题
     const searchGroups: SearchResultsGroup[] = []
 
     if (groupedResults.posts.length > 0) {
       searchGroups.push({
-        title: '博客文章',
+        title: tSearch('searchResults.blogPosts'),
         items: groupedResults.posts.slice(0, 5),
         type: 'posts'
       })
@@ -206,7 +217,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
 
     if (groupedResults.links.length > 0) {
       searchGroups.push({
-        title: '导航链接',
+        title: tSearch('searchResults.navigationLinks'),
         items: groupedResults.links.slice(0, 5),
         type: 'links'
       })
@@ -214,14 +225,14 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
 
     if (groupedResults.categories.length > 0) {
       searchGroups.push({
-        title: '分类',
+        title: tSearch('searchResults.categories'),
         items: groupedResults.categories.slice(0, 5),
         type: 'categories'
       })
     }
 
     return searchGroups
-  }, [fuse])
+  }, [fuse, t, tSearch])
 
   // 执行搜索
   useEffect(() => {
