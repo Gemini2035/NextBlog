@@ -189,8 +189,7 @@ jobs:
 
       - name: Set pnpm as default package manager
         run: |
-          echo "NPM_CONFIG_PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
-          echo "VERCEL_PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
+          echo "VERCEL_PNPM=1" >> $GITHUB_ENV
 
       - name: Set deployment environment
         id: set-env
@@ -206,14 +205,12 @@ jobs:
           github-comment: true
           github-deployment: false
           vercel-args: |
-            --yes
             ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
           working-directory: ./
         env:
           PNPM_HOME: ${{ env.PNPM_HOME }}
           STORE_PATH: ${{ env.STORE_PATH }}
-          NPM_CONFIG_PACKAGE_MANAGER: pnpm
-          VERCEL_PACKAGE_MANAGER: pnpm
+          VERCEL_PNPM: 1
 
   deploy-to-vercel:
     runs-on: ubuntu-latest
@@ -259,8 +256,7 @@ jobs:
 
       - name: Set pnpm as default package manager
         run: |
-          echo "NPM_CONFIG_PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
-          echo "VERCEL_PACKAGE_MANAGER=pnpm" >> $GITHUB_ENV
+          echo "VERCEL_PNPM=1" >> $GITHUB_ENV
 
       - name: Set deployment environment
         id: set-env
@@ -280,11 +276,9 @@ jobs:
           github-comment: true
           github-deployment: false
           vercel-args: |
-            --yes
             ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
           working-directory: ./
         env:
           PNPM_HOME: ${{ env.PNPM_HOME }}
           STORE_PATH: ${{ env.STORE_PATH }}
-          NPM_CONFIG_PACKAGE_MANAGER: pnpm
-          VERCEL_PACKAGE_MANAGER: pnpm
+          VERCEL_PNPM: 1
