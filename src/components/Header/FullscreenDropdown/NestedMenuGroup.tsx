@@ -17,7 +17,8 @@ function getFlexClasses(columnCount: number): string {
   return 'flex-col md:flex-row lg:flex-row'
 }
 
-function getAnimationState(isAnimating: boolean): "visible" | "hidden" {
+function getAnimationState(isAnimating: boolean, isExiting: boolean = false): "visible" | "hidden" | "exit" {
+  if (isExiting) return "exit"
   return isAnimating ? "visible" : "hidden"
 }
 
@@ -26,12 +27,17 @@ interface NestedMenuGroupProps {
   onClose: () => void
   level?: number
   isAnimating?: boolean
+  isExiting?: boolean
 }
 
-// 动画变体 - 纯淡入淡出效果
+// 动画变体 - 淡入淡出效果，包含收起动画
 const itemVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1 }
+  visible: { opacity: 1 },
+  exit: { 
+    opacity: 0,
+    y: -10
+  }
 }
 
 const containerVariants = {
@@ -41,10 +47,16 @@ const containerVariants = {
       staggerChildren: 0.04, // 进一步减少延迟时间
       delayChildren: 0.05 // 减少初始延迟
     }
+  },
+  exit: {
+    transition: {
+      staggerChildren: 0.02, // 收起时更快的交错动画
+      staggerDirection: -1 // 反向交错，从后往前收起
+    }
   }
 }
 
-export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true }: NestedMenuGroupProps) {
+export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true, isExiting = false }: NestedMenuGroupProps) {
   const t = useTranslations('Navigation')
   
   
@@ -53,7 +65,7 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
     // 每个分类作为一列，左对齐分布
     const columnCount = Math.min(items.length, 3) // 最多3列
     const flexClasses = getFlexClasses(columnCount)
-    const animationState = getAnimationState(isAnimating)
+    const animationState = getAnimationState(isAnimating, isExiting)
 
     return (
       <motion.div 
@@ -159,7 +171,7 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
   }
 
   // 嵌套级别使用不同的布局 - 减小字体和间距
-  const animationState = getAnimationState(isAnimating)
+  const animationState = getAnimationState(isAnimating, isExiting)
   
   return (
     <motion.ul 
@@ -200,7 +212,9 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
               <NestedMenuGroup 
                 items={item.items} 
                 onClose={onClose} 
-                level={level + 1} 
+                level={level + 1}
+                isAnimating={isAnimating}
+                isExiting={isExiting}
               />
             </div>
           )}
