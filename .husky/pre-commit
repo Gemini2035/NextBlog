@@ -2,13 +2,14 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # 运行 lint-staged 检查
-echo "🔍 运行代码质量检查..."
+echo "Running code quality checks..."
 npx lint-staged
 
 # 如果检查失败，阻止提交
 if [ $? -ne 0 ]; then
-  echo "❌ 代码质量检查失败，请修复错误后再提交"
+  echo "Code quality checks failed. Please fix the errors before committing."
+  echo "Run 'pnpm run lint' to see detailed error messages."
   exit 1
 fi
 
-echo "✅ 代码质量检查通过，允许提交"
+echo "Code quality checks passed. Proceeding with commit."
