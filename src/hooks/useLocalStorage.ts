@@ -11,7 +11,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     try {
       const item = window.localStorage.getItem(key)
       return item ? JSON.parse(item) : initialValue
-    } catch (error) {
+    } catch {
       // 静默处理localStorage读取错误
       return initialValue
     }
@@ -24,7 +24,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(key, JSON.stringify(valueToStore))
       }
-    } catch (error) {
+    } catch {
       // 静默处理localStorage设置错误
     }
   }, [key, storedValue])
