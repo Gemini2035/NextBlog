@@ -2,11 +2,24 @@
 
 import { motion, Variants } from "framer-motion";
 import Link from "next/link";
-import {
-  SearchResultsGroup,
-  RecommendedContent,
-  SearchResult,
-} from "./searchService";
+// 临时类型定义，直到我们重构 SearchResults 组件
+interface SearchResult {
+  item: any
+  score?: number
+  matches?: any[]
+}
+
+interface SearchResultsGroup {
+  title: string
+  items: SearchResult[]
+  type: 'posts' | 'links' | 'categories'
+}
+
+interface RecommendedContent {
+  featuredPosts: any[]
+  recentPosts: any[]
+  navigationLinks: any[]
+}
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 

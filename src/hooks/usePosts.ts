@@ -165,7 +165,7 @@ export function usePosts(): UsePostsReturn {
     })
   }, [getPostsByCategory])
   
-  return {
+  return useMemo(() => ({
     // 基础文章操作
     getAllPosts: getAllPosts,
     getPostBySlug,
@@ -186,5 +186,17 @@ export function usePosts(): UsePostsReturn {
     
     // 当前语言环境
     currentLocale: locale
-  }
+  }), [
+    getAllPosts,
+    getPostBySlug,
+    getPostBySlugAndLocale,
+    getRelatedPosts,
+    getPostsByTag,
+    getAllTags,
+    getFeaturedPost,
+    getRecentPosts,
+    getPostsByCategory,
+    getCategories,
+    locale
+  ])
 }

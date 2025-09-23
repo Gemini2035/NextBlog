@@ -1,12 +1,41 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useDebounce } from 'use-debounce'
-import { createSearchService, SearchResultsGroup, RecommendedContent } from '@/components/Header/Search/SearchDropdown/searchService'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
+import { allPosts, Post } from '../../.contentlayer/generated'
+import { NAVIGATION_ITEMS } from '@/constants'
 import { usePosts } from './usePosts'
+import { useRecommendedContent, RecommendedContent } from './useRecommendedContent'
+import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
+
+// 搜索项类型定义
+interface SearchableItem {
+  id: string
+  type: 'post' | 'link' | 'category'
+  title: string
+  description?: string
+  href: string
+  tags?: string[]
+  content?: string
+  priority: number
+  category?: string
+}
+
+// 搜索结果类型
+interface SearchResult {
+  item: SearchableItem
+  score?: number
+  matches?: FuseResultMatch[]
+}
+
+// 搜索结果分组
+interface SearchResultsGroup {
+  title: string
+  items: SearchResult[]
+  type: 'posts' | 'links' | 'categories'
+}
 
 interface UseSearchOptions {
   debounceMs?: number
-  getTranslation?: (key: string) => string
 }
 
 interface UseSearchReturn {
@@ -32,26 +61,171 @@ interface UseSearchReturn {
 }
 
 export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
-  const { debounceMs = 300, getTranslation } = options
-  const locale = useLocale()
-  const posts = usePosts()
+  const { debounceMs = 300 } = options
   
   // 搜索状态
   const [query, setQuery] = useState('')
   const [debouncedQuery] = useDebounce(query, debounceMs)
   const [isSearching, setIsSearching] = useState(false)
-  
-  // 搜索结果和推荐内容
   const [searchResults, setSearchResults] = useState<SearchResultsGroup[]>([])
-  const [recommendedContent, setRecommendedContent] = useState<RecommendedContent>({
-    featuredPosts: [],
-    recentPosts: [],
-    navigationLinks: []
-  })
+  
+  // 基础数据
+  const locale = useLocale()
+  const posts = usePosts()
+  
+  // 推荐内容
+  const { recommendedContent } = useRecommendedContent()
+  
+  // 搜索数据 - 使用 useMemo 缓存，不依赖翻译函数
+  const searchableItems = useMemo((): SearchableItem[] => {
+    const items: SearchableItem[] = []
+
+    // 1. 添加博客文章
+    const publishedPosts = allPosts.filter((post: Post) => 
+      post.published !== false && post.locale === locale
+    )
+    
+    publishedPosts.forEach((post: Post) => {
+      items.push({
+        id: `post-${post.slug}-${post.locale || 'default'}`,
+        type: 'post',
+        title: post.title,
+        description: post.description,
+        href: `/posts/${post.slug}`,
+        tags: post.tags,
+        content: post.body?.raw || '',
+        priority: post.featured ? 10 : 5,
+        category: '博客文章'
+      })
+    })
+
+    // 2. 添加导航链接（不翻译，保持原始标签）
+    NAVIGATION_ITEMS.forEach(navItem => {
+      if (navItem.type !== '__search' && navItem.type !== '__language') {
+        items.push({
+          id: `nav-${navItem.type}`,
+          type: 'link',
+          title: navItem.label, // 保持原始标签
+          description: navItem.submenu?.description || undefined,
+          href: navItem.href,
+          priority: 8,
+          category: '导航链接'
+        })
+
+        // 添加子菜单项
+        navItem.submenu?.items.forEach(subItem => {
+          items.push({
+            id: `nav-${navItem.type}-${subItem.label}`,
+            type: 'link',
+            title: subItem.label, // 保持原始标签
+            description: subItem.description || undefined,
+            href: subItem.href,
+            priority: 6,
+            category: '导航链接'
+          })
+
+          // 添加三级菜单项
+          subItem.items?.forEach(thirdItem => {
+            items.push({
+              id: `nav-${navItem.type}-${subItem.label}-${thirdItem.label}`,
+              type: 'link',
+              title: thirdItem.label, // 保持原始标签
+              description: thirdItem.description || undefined,
+              href: thirdItem.href,
+              priority: 4,
+              category: '导航链接'
+            })
+          })
+        })
+      }
+    })
+
+    return items
+  }, [locale, posts]) // 移除 t 依赖
+
+  // 搜索引擎 - 使用 useMemo 缓存
+  const fuse = useMemo(() => {
+    const options: IFuseOptions<SearchableItem> = {
+      keys: [
+        { name: 'title', weight: 0.4 },
+        { name: 'description', weight: 0.3 },
+        { name: 'tags', weight: 0.2 },
+        { name: 'content', weight: 0.1 }
+      ],
+      threshold: 0.3,
+      includeScore: true,
+      includeMatches: true,
+      minMatchCharLength: 2,
+      ignoreLocation: true,
+      findAllMatches: true
+    }
+    return new Fuse(searchableItems, options)
+  }, [searchableItems])
+
+  // 搜索函数 - 使用 useCallback 稳定引用
+  const performSearch = useCallback((query: string): SearchResultsGroup[] => {
+    if (!query.trim()) {
+      return []
+    }
+
+    const results = fuse.search(query)
+    
+    // 按类型分组
+    const groupedResults: { [key: string]: SearchResult[] } = {
+      posts: [],
+      links: [],
+      categories: []
+    }
+
+    results.forEach(result => {
+      const searchResult: SearchResult = {
+        item: result.item,
+        score: result.score,
+        matches: result.matches as FuseResultMatch[]
+      }
+
+      if (result.item.type === 'post') {
+        groupedResults.posts.push(searchResult)
+      } else if (result.item.type === 'link') {
+        groupedResults.links.push(searchResult)
+      } else if (result.item.type === 'category') {
+        groupedResults.categories.push(searchResult)
+      }
+    })
+
+    // 转换为分组格式，使用硬编码的标题
+    const searchGroups: SearchResultsGroup[] = []
+
+    if (groupedResults.posts.length > 0) {
+      searchGroups.push({
+        title: '博客文章',
+        items: groupedResults.posts.slice(0, 5),
+        type: 'posts'
+      })
+    }
+
+    if (groupedResults.links.length > 0) {
+      searchGroups.push({
+        title: '导航链接',
+        items: groupedResults.links.slice(0, 5),
+        type: 'links'
+      })
+    }
+
+    if (groupedResults.categories.length > 0) {
+      searchGroups.push({
+        title: '分类',
+        items: groupedResults.categories.slice(0, 5),
+        type: 'categories'
+      })
+    }
+
+    return searchGroups
+  }, [fuse])
 
   // 执行搜索
   useEffect(() => {
-    const performSearch = async () => {
+    const executeSearch = async () => {
       if (!debouncedQuery.trim()) {
         setSearchResults([])
         setIsSearching(false)
@@ -61,40 +235,20 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       setIsSearching(true)
       
       try {
-        // 创建语言特定的搜索服务
-        const searchService = createSearchService(locale)
-        // 模拟异步搜索（实际是同步的，但保持一致性）
+        // 模拟异步搜索
         await new Promise(resolve => setTimeout(resolve, 100))
-        const results = getTranslation ? searchService.search(debouncedQuery, getTranslation) : []
+        const results = performSearch(debouncedQuery)
         setSearchResults(results)
       } catch (error) {
-        // 静默处理搜索错误，避免控制台错误
         setSearchResults([])
       } finally {
         setIsSearching(false)
       }
     }
 
-    performSearch()
-  }, [debouncedQuery, getTranslation, locale])
+    executeSearch()
+  }, [debouncedQuery, performSearch])
 
-  // 加载推荐内容
-  useEffect(() => {
-    const loadRecommendedContent = () => {
-      try {
-        // 创建语言特定的搜索服务
-        const searchService = createSearchService(locale)
-        const featuredPost = posts.getFeaturedPost()
-        const recentPosts = posts.getRecentPosts()
-        const content = searchService.getRecommendedContent(featuredPost, recentPosts)
-        setRecommendedContent(content)
-      } catch (error) {
-        // 静默处理推荐内容加载错误
-      }
-    }
-
-    loadRecommendedContent()
-  }, [locale, posts])
 
   // 计算当前显示的内容
   const currentContent = useMemo(() => {
