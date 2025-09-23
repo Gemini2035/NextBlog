@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react'
 
+// 故意添加 ESLint 错误来测试 pre-commit 钩子
+const unusedVariable = 'test'
+
 /**
  * 使用本地存储的 Hook
  */
