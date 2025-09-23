@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { getPostBySlugAndLocale, getAllPosts } from '@/lib/posts'
+import { getPostBySlugAndLocale, getAllPosts } from '@/lib/posts-adapter'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import { getMDXComponent } from 'next-contentlayer2/hooks'

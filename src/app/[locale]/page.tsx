@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getAllPosts } from '@/lib/posts'
+import { getAllPosts } from '@/lib/posts-adapter'
 import PostCard from '@/components/PostCard'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'

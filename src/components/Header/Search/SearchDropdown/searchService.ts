@@ -1,7 +1,6 @@
 import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
 import { allPosts, Post } from '../../../../../.contentlayer/generated'
 import { NAVIGATION_ITEMS } from '@/constants'
-import { getRecentPosts, getFeaturedPost } from '@/lib/posts'
 
 // 搜索项类型定义
 export interface SearchableItem {
@@ -40,8 +39,10 @@ export interface RecommendedContent {
 class SearchService {
   private fuse!: Fuse<SearchableItem>
   private searchableItems: SearchableItem[] = []
+  private currentLocale?: string
 
-  constructor() {
+  constructor(locale?: string) {
+    this.currentLocale = locale
     this.initializeSearchData()
     this.setupFuse()
   }
@@ -51,7 +52,12 @@ class SearchService {
     const items: SearchableItem[] = []
 
     // 1. 添加博客文章
-    const publishedPosts = allPosts.filter((post: Post) => post.published !== false)
+    let publishedPosts = allPosts.filter((post: Post) => post.published !== false)
+    
+    // 如果指定了语言，只加载该语言的文章
+    if (this.currentLocale) {
+      publishedPosts = publishedPosts.filter((post: Post) => post.locale === this.currentLocale)
+    }
     publishedPosts.forEach((post: Post) => {
       items.push({
         id: `post-${post.slug}-${post.locale || 'default'}`,
@@ -192,9 +198,7 @@ class SearchService {
   }
 
   // 获取推荐内容
-  getRecommendedContent(): RecommendedContent {
-    const featuredPost = getFeaturedPost()
-    const recentPosts = getRecentPosts()
+  getRecommendedContent(featuredPost?: Post, recentPosts: Post[] = []): RecommendedContent {
 
     // 置顶文章
     const featuredPosts: SearchableItem[] = featuredPost ? [{
@@ -250,9 +254,22 @@ class SearchService {
   }
 }
 
-// 创建单例实例
-export const searchService = new SearchService()
+// 创建搜索服务实例的工厂函数
+let searchService: SearchService
+
+export function createSearchService(locale?: string): SearchService {
+  searchService = new SearchService(locale)
+  return searchService
+}
+
+// 获取当前搜索服务实例
+export function getSearchService(): SearchService {
+  if (!searchService) {
+    searchService = new SearchService()
+  }
+  return searchService
+}
 
 // 导出便捷方法
-export const search = (query: string, getTranslation: (key: string) => string) => searchService.search(query, getTranslation)
-export const getRecommendedContent = () => searchService.getRecommendedContent()
+export const search = (query: string, getTranslation: (key: string) => string) => getSearchService().search(query, getTranslation)
+export const getRecommendedContent = () => getSearchService().getRecommendedContent()

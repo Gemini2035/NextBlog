@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
-import { search, getRecommendedContent, SearchResultsGroup, RecommendedContent } from '@/components/Header/Search/SearchDropdown/searchService'
+import { createSearchService, SearchResultsGroup, RecommendedContent } from '@/components/Header/Search/SearchDropdown/searchService'
+import { useLocale } from 'next-intl'
+import { usePosts } from './usePosts'
 
 interface UseSearchOptions {
   debounceMs?: number
@@ -31,6 +33,8 @@ interface UseSearchReturn {
 
 export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const { debounceMs = 300, getTranslation } = options
+  const locale = useLocale()
+  const posts = usePosts()
   
   // 搜索状态
   const [query, setQuery] = useState('')
@@ -57,9 +61,11 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       setIsSearching(true)
       
       try {
+        // 创建语言特定的搜索服务
+        const searchService = createSearchService(locale)
         // 模拟异步搜索（实际是同步的，但保持一致性）
         await new Promise(resolve => setTimeout(resolve, 100))
-        const results = getTranslation ? search(debouncedQuery, getTranslation) : []
+        const results = getTranslation ? searchService.search(debouncedQuery, getTranslation) : []
         setSearchResults(results)
       } catch (error) {
         // 静默处理搜索错误，避免控制台错误
@@ -70,13 +76,17 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     performSearch()
-  }, [debouncedQuery, getTranslation])
+  }, [debouncedQuery, getTranslation, locale])
 
   // 加载推荐内容
   useEffect(() => {
     const loadRecommendedContent = () => {
       try {
-        const content = getRecommendedContent()
+        // 创建语言特定的搜索服务
+        const searchService = createSearchService(locale)
+        const featuredPost = posts.getFeaturedPost()
+        const recentPosts = posts.getRecentPosts()
+        const content = searchService.getRecommendedContent(featuredPost, recentPosts)
         setRecommendedContent(content)
       } catch (error) {
         // 静默处理推荐内容加载错误
@@ -84,7 +94,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     loadRecommendedContent()
-  }, [])
+  }, [locale, posts])
 
   // 计算当前显示的内容
   const currentContent = useMemo(() => {

@@ -3,3 +3,6 @@
 export { useLocalStorage } from './useLocalStorage'
 export { useWindowSize } from './useWindowSize'
 export { useLanguage } from './useLanguage'
+export { usePosts } from './usePosts'
+export { useSearch } from './useSearch'
+export { useNavigation } from './useNavigation'

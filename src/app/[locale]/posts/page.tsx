@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts, getPostsByCategory, getCategories } from '@/lib/posts'
+import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts, getPostsByCategory, getCategories } from '@/lib/posts-adapter'
 import PostCard from '@/components/PostCard'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'

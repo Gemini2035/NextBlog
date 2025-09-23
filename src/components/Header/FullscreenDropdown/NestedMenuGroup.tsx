@@ -109,11 +109,11 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                          {t(subItem.label)}
+                          {subItem.label}
                         </h4>
                         {subItem.description && (
                           <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
-                            {t(subItem.description)}
+                            {subItem.description}
                           </p>
                         )}
                       </div>

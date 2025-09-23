@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { SITE_CONFIG, getNavigationItemsWithSubmenus, HEADER_CONFIG, NavigationItem, NAVIGATION_ITEMS } from '@/constants'
+import { SITE_CONFIG, HEADER_CONFIG, NavigationItem, NAVIGATION_ITEMS } from '@/constants'
+import { useNavigation } from '@/hooks'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
@@ -57,14 +58,8 @@ export default function Header() {
   const lastScrollYRef = useRef<number>(0)
   const t = useTranslations('Navigation')
   
-  // 获取带有动态子菜单的导航项 - 使用useMemo缓存，仅在客户端执行
-  const navigationItems = useMemo(() => {
-    if (typeof window === 'undefined') {
-      // 服务器端渲染时返回静态配置
-      return NAVIGATION_ITEMS
-    }
-    return getNavigationItemsWithSubmenus()
-  }, [])
+  // 获取带有动态子菜单的导航项
+  const { navigationItems } = useNavigation()
 
   // 处理滚动事件
   const handleScroll = useCallback(() => {

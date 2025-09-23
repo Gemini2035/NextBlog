@@ -161,46 +161,6 @@ export default function FullscreenDropdown({
     }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
   }, [onClose])
 
-  // 获取翻译后的标题和描述
-  const getTranslatedTitle = () => {
-    if (currentNavigationItem.submenu?.title) {
-      // 根据navigationItem类型获取翻译键
-      const translationKey = getTranslationKey(currentNavigationItem.type)
-      return translationKey ? t(`${translationKey}.submenu.title`) : currentNavigationItem.submenu.title
-    }
-    return currentNavigationItem.label
-  }
-
-  const getTranslatedDescription = () => {
-    if (currentNavigationItem.submenu?.description) {
-      // 根据navigationItem类型获取翻译键
-      const translationKey = getTranslationKey(currentNavigationItem.type)
-      return translationKey ? t(`${translationKey}.submenu.description`) : currentNavigationItem.submenu.description
-    }
-    return null
-  }
-
-  // 根据navigationItem类型获取翻译键的函数
-  const getTranslationKey = (type: string) => {
-    switch (type) {
-      case '__blog':
-        return 'blog'
-      case '__about':
-        return 'about'
-      case '__projects':
-        return 'projects'
-      case '__resources':
-        return 'resources'
-      default:
-        return null
-    }
-  }
-
-  // 标题和描述
-  const title = getTranslatedTitle()
-  const description = getTranslatedDescription()
-
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -263,15 +223,15 @@ export default function FullscreenDropdown({
                       variants={itemVariants}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                      {title || currentNavigationItem.label}
+                      {t(currentNavigationItem.label)}
                     </motion.h2>
-                    {description && (
+                    {currentNavigationItem.submenu?.description && (
                       <motion.p 
                         className="text-base text-gray-600"
                         variants={itemVariants}
                         transition={{ duration: 0.6, ease: "easeOut" }}
                       >
-                        {description}
+                        {t(currentNavigationItem.submenu?.description)}
                       </motion.p>
                     )}
                   </div>
