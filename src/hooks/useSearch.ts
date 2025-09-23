@@ -143,7 +143,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     })
 
     return items
-  }, [locale, posts]) // 移除 t 依赖
+  }, [locale]) // 移除 posts 依赖，因为 posts 在 useMemo 内部没有直接使用
 
   // 搜索引擎 - 使用 useMemo 缓存
   const fuse = useMemo(() => {
@@ -181,7 +181,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
 
     results.forEach(result => {
       // 对于导航链接，在显示时进行翻译
-      let displayItem = { ...result.item }
+      const displayItem = { ...result.item }
       if (result.item.type === 'link') {
         displayItem.title = t(result.item.title) // 翻译标题
         if (displayItem.description) {
@@ -250,7 +250,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         await new Promise(resolve => setTimeout(resolve, 100))
         const results = performSearch(debouncedQuery)
         setSearchResults(results)
-      } catch (error) {
+      } catch {
         setSearchResults([])
       } finally {
         setIsSearching(false)

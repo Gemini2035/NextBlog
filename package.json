@@ -7,11 +7,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "export": "next build",
     "contentlayer": "contentlayer2 build",
     "translate": "tsx scripts/translate-posts.ts",
     "translate:openai": "tsx scripts/translate-with-openai.ts",
-    "translate:auto": "tsx scripts/auto-translate.ts"
+    "translate:auto": "tsx scripts/auto-translate.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "^1.4.0",
@@ -44,5 +46,15 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.5",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

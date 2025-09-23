@@ -70,7 +70,7 @@ export function useNavigation() {
         }
         return item
       })
-    } catch (error) {
+    } catch {
       // 如果出错，返回静态配置
       return NAVIGATION_ITEMS
     }
