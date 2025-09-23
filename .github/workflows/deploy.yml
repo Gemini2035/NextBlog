@@ -94,14 +94,12 @@ jobs:
     - name: Detect new or modified articles
       id: detect-changes
       run: |
-        # Get list of changed files
         if [ "${{ github.event_name }}" = "push" ]; then
           CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
         else
           CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
         fi
         
-        # Detect Chinese article changes
         ZH_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/zh/posts/" || true)
         EN_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/en/posts/" || true)
         JA_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/ja/posts/" || true)
@@ -110,7 +108,6 @@ jobs:
         echo "en_changes=$EN_CHANGES" >> $GITHUB_OUTPUT
         echo "ja_changes=$JA_CHANGES" >> $GITHUB_OUTPUT
         
-        # Determine translation direction
         if [ -n "$ZH_CHANGES" ]; then
           echo "translate_from=zh" >> $GITHUB_OUTPUT
           echo "translate_to=en,ja" >> $GITHUB_OUTPUT
@@ -168,36 +165,11 @@ jobs:
         with:
           version: 10.17.0
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build Contentlayer
         run: pnpm run contentlayer
-
-      - name: Pre-build verification
-        run: |
-          echo "Verifying build environment..."
-          pnpm --version
-          node --version
-          echo "Checking if contentlayer build was successful..."
-          ls -la .contentlayer/
-
-      - name: Set pnpm as default package manager
-        run: |
-          echo "VERCEL_PNPM=1" >> $GITHUB_ENV
 
       - name: Set deployment environment
         id: set-env
@@ -210,17 +182,9 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          github-comment: true
-          github-deployment: false
-          vercel-args: |
-            ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
+          vercel-args: >-
+            ${{ steps.set-env.outputs.environment == 'production' && '--prod --confirm' || '--prebuilt --confirm' }}
           working-directory: ./
-        env:
-          PNPM_HOME: ${{ env.PNPM_HOME }}
-          STORE_PATH: ${{ env.STORE_PATH }}
-          VERCEL_PNPM: 1
-          NODE_ENV: production
-          NEXT_TELEMETRY_DISABLED: 1
 
   deploy-to-vercel:
     runs-on: ubuntu-latest
@@ -245,36 +209,11 @@ jobs:
         with:
           version: 10.17.0
 
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build Contentlayer
         run: pnpm run contentlayer
-
-      - name: Pre-build verification
-        run: |
-          echo "Verifying build environment..."
-          pnpm --version
-          node --version
-          echo "Checking if contentlayer build was successful..."
-          ls -la .contentlayer/
-
-      - name: Set pnpm as default package manager
-        run: |
-          echo "VERCEL_PNPM=1" >> $GITHUB_ENV
 
       - name: Set deployment environment
         id: set-env
@@ -291,14 +230,6 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          github-comment: true
-          github-deployment: false
-          vercel-args: |
-            ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
+          vercel-args: >-
+            ${{ steps.set-env.outputs.environment == 'production' && '--prod --confirm' || '--prebuilt --confirm' }}
           working-directory: ./
-        env:
-          PNPM_HOME: ${{ env.PNPM_HOME }}
-          STORE_PATH: ${{ env.STORE_PATH }}
-          VERCEL_PNPM: 1
-          NODE_ENV: production
-          NEXT_TELEMETRY_DISABLED: 1
