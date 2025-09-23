@@ -112,6 +112,15 @@ async function translateFrontmatter(frontmatter: Frontmatter, fromLocale: string
 }
 
 /**
+ * 检查目标文件是否已存在
+ */
+function checkTargetFileExists(filePath: string, toLocale: string): boolean {
+  const targetDir = path.join(CONTENT_DIR, toLocale, 'posts')
+  const targetPath = path.join(targetDir, path.basename(filePath))
+  return fs.existsSync(targetPath)
+}
+
+/**
  * 处理单个文章文件
  */
 async function processPostFile(filePath: string, fromLocale: string): Promise<void> {
@@ -123,6 +132,12 @@ async function processPostFile(filePath: string, fromLocale: string): Promise<vo
   // 为每个目标语言创建翻译版本
   for (const toLocale of TARGET_LOCALES) {
     if (toLocale === fromLocale) continue
+    
+    // 检查目标文件是否已存在
+    if (checkTargetFileExists(filePath, toLocale)) {
+      console.log(`  ⏭️  跳过 ${toLocale} - 文件已存在`)
+      continue
+    }
     
     console.log(`  翻译到 ${toLocale}...`)
     
@@ -186,5 +201,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 export {
   translateWithOpenAI,
   translateFrontmatter,
-  processPostFile
+  processPostFile,
+  checkTargetFileExists
 }
