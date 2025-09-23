@@ -22,6 +22,12 @@ on:
       - 'next.config.ts'
       - 'contentlayer.config.ts'
   workflow_dispatch:
+    inputs:
+      force_build:
+        description: '强制构建（忽略文件变更检测）'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -68,7 +74,7 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: 安装依赖
-      run: pnpm install --frozen-lockfile
+      run: pnpm install --no-frozen-lockfile
 
     - name: 检测新增或修改的文章
       id: detect-changes
@@ -162,7 +168,7 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: 安装依赖
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: 构建 Contentlayer
         run: pnpm run contentlayer
