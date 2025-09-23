@@ -57,7 +57,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
             </h2>
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {recentPosts.map((post) => (
-                <PostCard key={post.slug} post={post} />
+                <PostCard key={post._id} post={post} />
               ))}
             </div>
           </div>
@@ -91,7 +91,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
                   </h3>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {categoryPosts.slice(0, 3).map((post) => (
-                      <PostCard key={post.slug} post={post} />
+                      <PostCard key={post._id} post={post} />
                     ))}
                   </div>
                   {categoryPosts.length > 3 && (
@@ -134,7 +134,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
           </h2>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
-              <PostCard key={post.slug} post={post} />
+              <PostCard key={post._id} post={post} />
             ))}
           </div>
         </div>
