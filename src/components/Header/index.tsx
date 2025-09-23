@@ -10,8 +10,6 @@ import FullscreenDropdown from './FullscreenDropdown'
 import {SearchBar} from './Search'
 import { LanguageBar } from './LanguageToggle'
 
-
-// 导航项组件 - 减少三目选择器的使用
 interface NavItemProps {
   item: NavigationItem
   activeSubmenu: string | null
@@ -53,6 +51,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
 
 export default function Header() {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
+  const [isExiting, setIsExiting] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const navItemsRef = useRef<HTMLElement>(null)
   const lastScrollYRef = useRef<number>(0)
@@ -100,15 +99,22 @@ export default function Header() {
     // 检查鼠标是否在语言切换按钮上
     const isOnLanguageButton = target.closest('button[aria-label="切换语言"]')
     
-    // 如果鼠标在搜索按钮上，且当前submenu不是搜索类型
-    if (isOnSearchButton && activeSubmenu && activeSubmenu !== '__search') {
-      setActiveSubmenu(null)
-      return
-    }
-    
-    // 如果鼠标在语言切换按钮上，且当前submenu不是语言类型
-    if (isOnLanguageButton && activeSubmenu && activeSubmenu !== '__language') {
-      setActiveSubmenu(null)
+    // 如果鼠标在搜索按钮或语言切换按钮上
+    if (isOnSearchButton || isOnLanguageButton) {
+      // 如果当前有 submenu 打开，但不是对应的类型，播放关闭动画
+      if (activeSubmenu) {
+        const shouldClose = (isOnSearchButton && activeSubmenu !== '__search') || 
+                           (isOnLanguageButton && activeSubmenu !== '__language')
+        
+        if (shouldClose) {
+          setIsExiting(true)
+          setTimeout(() => {
+            setActiveSubmenu(null)
+            setIsExiting(false)
+          }, 250)
+        }
+        // 如果是对应的类型，保持打开状态（什么都不做）
+      }
       return
     }
     
@@ -120,11 +126,22 @@ export default function Header() {
     // 检查鼠标是否在header区域
     const isInHeader = navRef.current?.contains(target)
     
-    // 检查鼠标是否在触发按钮上（搜索按钮或语言切换按钮）
-    const isOnTriggerButton = target.closest('button[aria-label="搜索"], button[aria-label="切换语言"]')
+    // 检查鼠标是否在蒙层上
+    const isOnBackdrop = target.closest('.backdrop-blur-xl')
     
-    // 只有当鼠标完全离开header、submenu区域和触发按钮时才关闭submenu
-    if (!isInHeader && !isInSubmenu && !isOnTriggerButton) {
+    // 如果鼠标在蒙层上，播放消失动画
+    if (isOnBackdrop) {
+      setIsExiting(true)
+      setTimeout(() => {
+        setActiveSubmenu(null)
+        setIsExiting(false)
+      }, 250)
+      return
+    }
+    
+    // 只有当鼠标完全离开header、submenu区域时才关闭submenu
+    // 注意：搜索和语言切换按钮不参与关闭逻辑，因为它们只响应点击
+    if (!isInHeader && !isInSubmenu) {
       // 添加小延迟，避免快速鼠标移动导致的意外关闭
       setTimeout(() => {
         // 再次检查鼠标位置，确保真的离开了所有相关区域
@@ -135,9 +152,9 @@ export default function Header() {
           
           const stillInSubmenu = currentElement?.closest('[data-submenu]')
           const stillInHeader = currentElement?.closest('header')
-          const stillOnTriggerButton = currentElement?.closest('button[aria-label="搜索"], button[aria-label="切换语言"]')
+          const stillOnBackdrop = currentElement?.closest('.backdrop-blur-xl')
           
-          if (!stillInSubmenu && !stillInHeader && !stillOnTriggerButton) {
+          if (!stillInSubmenu && !stillInHeader && !stillOnBackdrop) {
             setActiveSubmenu(null)
           }
         } catch {
@@ -159,24 +176,52 @@ export default function Header() {
     }
   }, [handleMouseMove])
 
+  // 切换到新的导航项（不带动画）
+  const switchToNavigationItem = useCallback((newNavigationItem: NavigationItem) => {
+    // 直接切换，不播放容器动画
+    setActiveSubmenu(newNavigationItem.type)
+    setIsExiting(false)
+  }, [])
+
   // 处理搜索点击
   const handleSearchClick = useCallback(() => {
-    setActiveSubmenu(activeSubmenu === '__search' ? null : '__search')
+    if (activeSubmenu === '__search') {
+      setActiveSubmenu(null)
+      setIsExiting(false)
+    } else {
+      setActiveSubmenu('__search')
+      setIsExiting(false)
+    }
   }, [activeSubmenu])
 
   // 处理语言切换点击
   const handleLanguageClick = useCallback(() => {
-    setActiveSubmenu(activeSubmenu === '__language' ? null : '__language')
+    if (activeSubmenu === '__language') {
+      setActiveSubmenu(null)
+      setIsExiting(false)
+    } else {
+      setActiveSubmenu('__language')
+      setIsExiting(false)
+    }
   }, [activeSubmenu])
 
   // 处理导航项悬停
   const handleNavHover = useCallback((itemType: string) => {
-    setActiveSubmenu(itemType)
-  }, [])
+    const targetItem = navigationItems.find(item => item.type === itemType)
+    if (targetItem) {
+      switchToNavigationItem(targetItem)
+    }
+  }, [navigationItems, switchToNavigationItem])
 
   // 处理submenu关闭
   const handleSubmenuClose = useCallback(() => {
     setActiveSubmenu(null)
+    setIsExiting(false)
+  }, [])
+
+  // 处理动画完成
+  const handleAnimationComplete = useCallback(() => {
+    setIsExiting(false)
   }, [])
 
   // 搜索导航项的子菜单配置 - 使用useMemo避免在渲染中创建新对象
@@ -291,6 +336,8 @@ export default function Header() {
               ? languageNavigationItem
               : navigationItems.find(item => item.type === activeSubmenu) || searchNavigationItem
           }
+          isExiting={isExiting}
+          onAnimationComplete={handleAnimationComplete}
         />
       )}
     </header>

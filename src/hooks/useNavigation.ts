@@ -75,8 +75,6 @@ export function useNavigation() {
       return NAVIGATION_ITEMS
     }
   }, [posts])
-
-  console.log('navigationItems', navigationItems)
   
   return {
     navigationItems,

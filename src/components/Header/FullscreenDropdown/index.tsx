@@ -15,9 +15,10 @@ interface NavigationModeProps {
   navigationItem: NavigationItem
   onClose: () => void
   itemVariants: Variants
+  isExiting?: boolean
 }
 
-function NavigationMode({ navigationItem, onClose, itemVariants }: NavigationModeProps) {
+function NavigationMode({ navigationItem, onClose, itemVariants, isExiting = false }: NavigationModeProps) {
   return (
     <motion.div 
       className="mb-8" 
@@ -28,6 +29,7 @@ function NavigationMode({ navigationItem, onClose, itemVariants }: NavigationMod
         items={navigationItem.submenu?.items || []} 
         onClose={onClose}
         isAnimating={true}
+        isExiting={isExiting}
       />
     </motion.div>
   )
@@ -37,6 +39,8 @@ interface FullscreenDropdownProps {
   isOpen: boolean
   onClose: () => void
   navigationItem: NavigationItem
+  isExiting?: boolean
+  onAnimationComplete?: () => void
 }
 
 // 动画变体定义
@@ -90,7 +94,9 @@ const itemVariants = {
 export default function FullscreenDropdown({ 
   isOpen, 
   onClose, 
-  navigationItem
+  navigationItem,
+  isExiting = false,
+  onAnimationComplete
 }: FullscreenDropdownProps) {
   const t = useTranslations('Navigation')
 
@@ -123,8 +129,24 @@ export default function FullscreenDropdown({
     }
   }, [navigationItem, isOpen])
 
+  // 处理退出动画完成
+  useEffect(() => {
+    if (isExiting && onAnimationComplete) {
+      const timer = setTimeout(() => {
+        onAnimationComplete()
+      }, 250) // 与退出动画持续时间匹配
+      
+      return () => clearTimeout(timer)
+    }
+  }, [isExiting, onAnimationComplete])
+
   // 处理背景遮罩点击
   const handleBackgroundClick = useCallback(() => {
+    handleClose()
+  }, [])
+
+  // 处理关闭
+  const handleClose = useCallback(() => {
     onClose()
   }, [onClose])
 
@@ -152,7 +174,7 @@ export default function FullscreenDropdown({
           const isInHeader = elementUnderMouse.closest('header')
           
           if (!isInSubmenu && !isInHeader) {
-            onClose()
+            handleClose()
           }
         } catch {
           // 静默处理错误，避免在组件卸载时抛出异常
@@ -173,8 +195,6 @@ export default function FullscreenDropdown({
             animate="visible"
             exit="hidden"
             transition={{ duration: 0.3 }}
-            onClick={handleBackgroundClick}
-            onMouseEnter={handleBackgroundClick}
           />
           
           {/* 全屏下拉菜单 */}
@@ -183,11 +203,10 @@ export default function FullscreenDropdown({
             className="absolute w-full top-full bg-white shadow-2xl z-50 border-gray-200 max-h-[80vh] overflow-y-auto"
             variants={containerVariants}
             initial="hidden"
-            animate="visible"
-            exit="exit"
+            animate={isExiting ? "exit" : "visible"}
             transition={{ 
-              duration: 0.4, 
-              ease: [0.25, 0.46, 0.45, 0.94] // 自定义缓动曲线，更自然的移动
+              duration: isExiting ? 0.2 : 0.4, 
+              ease: isExiting ? "easeIn" : [0.25, 0.46, 0.45, 0.94] // 退出时使用更快的动画
             }}
             data-submenu
             onMouseEnter={(e) => {
@@ -200,13 +219,12 @@ export default function FullscreenDropdown({
               className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6"
               variants={contentVariants}
               initial="hidden"
-              animate="visible"
-              exit="exit"
+              animate={isExiting ? "exit" : "visible"}
               transition={{ 
-                duration: 0.5, 
-                ease: "easeOut", 
-                staggerChildren: 0.08,
-                delayChildren: 0.1 // 减少延迟，让内容更快开始淡入
+                duration: isExiting ? 0.2 : 0.5, 
+                ease: isExiting ? "easeIn" : "easeOut", 
+                staggerChildren: isExiting ? 0.02 : 0.08,
+                delayChildren: isExiting ? 0 : 0.1 // 退出时立即开始动画
               }}
               key={currentNavigationItem.type}
             >
@@ -259,8 +277,9 @@ export default function FullscreenDropdown({
               {!isSearchMode && !isLanguageMode && (
                 <NavigationMode 
                   navigationItem={currentNavigationItem}
-                  onClose={onClose}
+                  onClose={handleClose}
                   itemVariants={itemVariants}
+                  isExiting={isExiting}
                 />
               )}
 
