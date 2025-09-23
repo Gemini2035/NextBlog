@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { motion, Variants } from 'framer-motion'
-import { SITE_CONFIG } from '@/constants'
+// 移除未使用的导入
 import { SearchIcon, CloseIcon } from '@/assets/icons'
 import { useSearch } from '@/hooks/useSearch'
 import SearchResults from './SearchResults'

@@ -131,7 +131,7 @@ interface Frontmatter {
   locale?: string
   originalSlug?: string
   _path?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**
@@ -141,7 +141,7 @@ function getChangedFiles(): string[] {
   try {
     const output = execSync('git diff --name-only HEAD~1 HEAD', { encoding: 'utf8' })
     return output.trim().split('\n').filter(file => file.length > 0)
-  } catch (error) {
+  } catch {
     console.log('无法获取 Git 变更，将处理所有文件')
     return []
   }

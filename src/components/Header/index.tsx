@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { SITE_CONFIG, HEADER_CONFIG, NavigationItem, NAVIGATION_ITEMS } from '@/constants'
+import { SITE_CONFIG, HEADER_CONFIG, NavigationItem } from '@/constants'
 import { useNavigation } from '@/hooks'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
@@ -140,7 +140,7 @@ export default function Header() {
           if (!stillInSubmenu && !stillInHeader && !stillOnTriggerButton) {
             setActiveSubmenu(null)
           }
-        } catch (error) {
+        } catch {
           // 静默处理错误，避免在组件卸载时抛出异常
           // 移除console.warn，避免控制台警告
         }

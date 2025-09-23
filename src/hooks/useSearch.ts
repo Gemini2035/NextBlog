@@ -3,36 +3,9 @@ import { useDebounce } from 'use-debounce'
 import { useLocale, useTranslations } from 'next-intl'
 import { allPosts, Post } from '../../.contentlayer/generated'
 import { NAVIGATION_ITEMS } from '@/constants'
-import { usePosts } from './usePosts'
 import { useRecommendedContent, RecommendedContent } from './useRecommendedContent'
 import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
-
-// 搜索项类型定义
-interface SearchableItem {
-  id: string
-  type: 'post' | 'link' | 'category'
-  title: string
-  description?: string
-  href: string
-  tags?: string[]
-  content?: string
-  priority: number
-  category?: string
-}
-
-// 搜索结果类型
-interface SearchResult {
-  item: SearchableItem
-  score?: number
-  matches?: FuseResultMatch[]
-}
-
-// 搜索结果分组
-interface SearchResultsGroup {
-  title: string
-  items: SearchResult[]
-  type: 'posts' | 'links' | 'categories'
-}
+import { SearchableItem, SearchResult, SearchResultsGroup } from '@/types/search'
 
 interface UseSearchOptions {
   debounceMs?: number
@@ -71,7 +44,6 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   
   // 基础数据
   const locale = useLocale()
-  const posts = usePosts()
   const t = useTranslations('Navigation')
   const tSearch = useTranslations('Search')
   

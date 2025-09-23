@@ -2,24 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import Link from "next/link";
-// 临时类型定义，直到我们重构 SearchResults 组件
-interface SearchResult {
-  item: any
-  score?: number
-  matches?: any[]
-}
-
-interface SearchResultsGroup {
-  title: string
-  items: SearchResult[]
-  type: 'posts' | 'links' | 'categories'
-}
-
-interface RecommendedContent {
-  featuredPosts: any[]
-  recentPosts: any[]
-  navigationLinks: any[]
-}
+import { SearchResultsGroup, RecommendedContent } from '@/types/search';
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 
@@ -54,7 +37,7 @@ export default function SearchResults({
 
       {/* 分类内容 */}
       <ul className="space-y-3">
-        {group.items.map((result, index) => (
+        {group.items.map((result) => (
           <li key={result.item.id}>
             <Link
               href={result.item.href}

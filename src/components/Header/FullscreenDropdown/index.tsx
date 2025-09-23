@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { NavigationItem, LANGUAGES } from '@/constants'
+import { NavigationItem } from '@/constants'
 import { useLanguage } from '@/hooks'
 import NestedMenuGroup from './NestedMenuGroup'
 import SearchDropdown from '../Search/SearchDropdown'
@@ -154,7 +154,7 @@ export default function FullscreenDropdown({
           if (!isInSubmenu && !isInHeader) {
             onClose()
           }
-        } catch (error) {
+        } catch {
           // 静默处理错误，避免在组件卸载时抛出异常
         }
       }
