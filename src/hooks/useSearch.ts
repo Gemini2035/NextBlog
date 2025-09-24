@@ -121,7 +121,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     })
 
     return items
-  }, [locale]) // 移除 posts 依赖，因为 posts 在 useMemo 内部没有直接使用
+  }, [locale, t]) // 添加 t 依赖
 
   // 搜索引擎 - 使用 useMemo 缓存
   const fuse = useMemo(() => {
@@ -204,7 +204,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     }
 
     return searchGroups
-  }, [fuse, t, tSearch])
+  }, [fuse, tSearch])
 
   // 执行搜索
   useEffect(() => {
