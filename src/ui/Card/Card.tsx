@@ -23,6 +23,9 @@ import { cn } from '@/utils'
  * 
  * // 组合使用
  * <Card shadow="lg" border="sm" rounded>圆角阴影边框卡片</Card>
+ * 
+ * // 禁用hover效果
+ * <Card disabledHover>禁用hover效果的卡片</Card>
  * ```
  */
 export const Card = forwardRef<CardRef, CardProps>(
@@ -31,6 +34,7 @@ export const Card = forwardRef<CardRef, CardProps>(
       shadow = 'md',
       border = 'sm',
       rounded = false,
+      disabledHover = false,
       className,
       children,
       ...props
@@ -38,7 +42,7 @@ export const Card = forwardRef<CardRef, CardProps>(
     ref
   ) => {
     // 获取样式类名
-    const cardStyles = getCardStyles(shadow, border, rounded, className)
+    const cardStyles = getCardStyles(shadow, border, rounded, disabledHover, className)
 
     return (
       <div

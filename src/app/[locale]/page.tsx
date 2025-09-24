@@ -1,6 +1,6 @@
 import { Link } from '@/ui'
 import { getAllPosts } from '@/lib/posts-adapter'
-import PostCard from '@/components/PostCard'
+import { PostCard } from '@/components/Post'
 import { useTranslations } from 'next-intl'
 
 export default function Home() {

@@ -40,8 +40,8 @@ export const getRoundedStyles = (rounded: boolean): string => {
 /**
  * 获取卡片hover效果样式
  */
-export const getHoverStyles = (): string => {
-  return 'hover:shadow-xl hover:scale-101 hover:-translate-y-1 hover:translate-x-1 origin-bottom-left'
+export const getHoverStyles = (disabledHover: boolean = false): string => {
+  return disabledHover ? '' : 'hover:shadow-xl hover:scale-101 hover:-translate-y-1 hover:translate-x-1 origin-bottom-left'
 }
 
 /**
@@ -51,16 +51,22 @@ export const getCardStyles = (
   shadow: CardShadow = 'none',
   border: CardBorder = 'none',
   rounded: boolean = false,
+  disabledHover: boolean = false,
   customClassName?: string
 ): string => {
-  const baseStyles = 'block w-full p-4 bg-white transition-all duration-300 ease-in-out cursor-pointer'
+  const baseStyles = 'block p-4 bg-white transition-all duration-300 ease-in-out cursor-pointer'
   const shadowStyles = getShadowStyles(shadow)
   const borderStyles = getBorderStyles(border)
   const roundedStyles = getRoundedStyles(rounded)
-  const hoverStyles = getHoverStyles()
+  const hoverStyles = getHoverStyles(disabledHover)
+  
+  // 检查是否已经设置了宽度，如果没有则添加默认宽度
+  const hasWidthClass = customClassName && /\bw-\w+/.test(customClassName)
+  const defaultWidth = hasWidthClass ? '' : 'w-full'
   
   return [
     baseStyles,
+    defaultWidth,
     shadowStyles,
     borderStyles,
     roundedStyles,

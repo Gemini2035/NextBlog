@@ -20,6 +20,8 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   shadow?: CardShadow
   /** 卡片边框粗细，默认为none（无边框） */
   border?: CardBorder
+  /** 是否禁用hover特效，默认为false（启用hover） */
+  disabledHover?: boolean
   /** 自定义CSS类名 */
   className?: string
   /** 卡片内容 */
