@@ -44,7 +44,10 @@
     }
   },
   "Footer": {
-    "license": "本站内容采用 CC BY-NC-SA 4.0 协议许可"
+    "license": "本站内容采用 CC BY-NC-SA 4.0 协议许可",
+    "terms": "服务条款",
+    "privacy": "隐私政策",
+    "security": "安全政策"
   },
   "Site": {
     "title": "Apodidae",

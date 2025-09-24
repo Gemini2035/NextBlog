@@ -97,7 +97,10 @@
     }
   },
   "Footer": {
-    "license": "このサイトのコンテンツは CC BY-NC-SA 4.0 ライセンスの下で提供されています"
+    "license": "このサイトのコンテンツは CC BY-NC-SA 4.0 ライセンスの下で提供されています",
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "security": "セキュリティポリシー"
   },
   "Site": {
     "title": "Apodidae",
