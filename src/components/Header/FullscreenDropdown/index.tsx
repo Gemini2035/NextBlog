@@ -140,11 +140,6 @@ export default function FullscreenDropdown({
     }
   }, [isExiting, onAnimationComplete])
 
-  // 处理背景遮罩点击
-  const handleBackgroundClick = useCallback(() => {
-    handleClose()
-  }, [])
-
   // 处理关闭
   const handleClose = useCallback(() => {
     onClose()
@@ -181,7 +176,7 @@ export default function FullscreenDropdown({
         }
       }
     }, 100) // 100ms延迟，给鼠标足够时间移动到submenu内
-  }, [onClose])
+  }, [handleClose])
 
   return (
     <AnimatePresence>

@@ -54,7 +54,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const MDXContent = getMDXComponent(post.body.code)
 
   return (
-    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
           {/* 文章头部 */}
           <header className="mb-8">
@@ -107,6 +107,6 @@ export default async function PostPage({ params }: PostPageProps) {
             <MDXContent />
           </div>
         </article>
-    </main>
+    </div>
   )
 }
