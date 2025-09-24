@@ -5,23 +5,6 @@ export { Button, default } from './Button'
 export type {
   ButtonProps,
   ButtonRef,
-  ButtonVariant,
+  ButtonType,
   ButtonSize,
-  ButtonShape,
-  ButtonState,
-  ButtonBaseProps,
-  ButtonTheme,
 } from './types'
-
-// 导出样式工具
-export {
-  buttonTheme,
-  getVariantStyles,
-  getSizeStyles,
-  getShapeStyles,
-  getStateStyles,
-  getButtonStyles,
-} from './styles'
-
-// 导出Button组件的所有内容
-export * from './Button'

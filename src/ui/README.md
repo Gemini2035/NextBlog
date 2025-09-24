@@ -11,8 +11,6 @@ src/ui/
 │   ├── types.ts      # 类型定义
 │   ├── styles.ts     # 样式配置
 │   ├── index.ts      # 导出文件
-│   ├── Button.stories.tsx  # Storybook故事
-│   ├── Button.example.tsx  # 使用示例
 │   └── README.md     # 组件文档
 ├── index.ts          # UI库入口文件
 └── README.md         # 本文件
