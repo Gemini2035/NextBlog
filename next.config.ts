@@ -3,12 +3,19 @@ import { withContentlayer } from 'next-contentlayer2';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
+
+// 检测是否为Windows平台
+const isWindows = process.platform === 'win32';
+
 const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
   },
-  serverExternalPackages: ['contentlayer2'],
+  serverExternalPackages: isWindows ? [] : ['contentlayer2'],
 };
 
-export default withContentlayer(withNextIntl(nextConfig));
+// 在Windows平台上跳过contentlayer
+export default isWindows 
+  ? withNextIntl(nextConfig)
+  : withContentlayer(withNextIntl(nextConfig));
