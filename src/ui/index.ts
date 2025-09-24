@@ -8,3 +8,10 @@ export type {
   ButtonSize,
   ButtonRef
 } from './Button'
+export { Divider } from './Divider'
+export type { 
+  DividerProps, 
+  DividerRef,
+  DividerOrientation,
+  DividerThickness
+} from './Divider'
