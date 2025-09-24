@@ -1,4 +1,4 @@
-import { Link } from '@/ui'
+import { Link, Card } from '@/ui'
 import type { Post } from '../../.contentlayer/generated'
 import { formatDate, truncateText } from '@/utils'
 
@@ -9,7 +9,11 @@ interface PostCardProps {
 
 export default function PostCard({ post, featured = false }: PostCardProps) {
   return (
-    <article className={`bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-6 ${featured ? 'ring-2 ring-blue-200' : ''}`}>
+    <Card 
+      shadow="md" 
+      rounded 
+      className={`${featured ? 'ring-2 ring-blue-200' : ''}`}
+    >
       <div className="flex flex-col h-full">
         <div className="flex-1">
           <h2 className={`text-xl font-bold text-gray-900 mb-2 ${featured ? 'text-2xl' : ''}`}>
@@ -53,6 +57,6 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
           </div>
         )}
       </div>
-    </article>
+    </Card>
   )
 }

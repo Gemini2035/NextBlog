@@ -38,6 +38,13 @@ export const getRoundedStyles = (rounded: boolean): string => {
 }
 
 /**
+ * 获取卡片hover效果样式
+ */
+export const getHoverStyles = (): string => {
+  return 'hover:shadow-xl hover:scale-101 hover:-translate-y-1 hover:translate-x-1 origin-bottom-left'
+}
+
+/**
  * 组合所有样式类名
  */
 export const getCardStyles = (
@@ -46,16 +53,18 @@ export const getCardStyles = (
   rounded: boolean = false,
   customClassName?: string
 ): string => {
-  const baseStyles = 'block w-full p-4 bg-white transition-all duration-200 ease-in-out'
+  const baseStyles = 'block w-full p-4 bg-white transition-all duration-300 ease-in-out cursor-pointer'
   const shadowStyles = getShadowStyles(shadow)
   const borderStyles = getBorderStyles(border)
   const roundedStyles = getRoundedStyles(rounded)
+  const hoverStyles = getHoverStyles()
   
   return [
     baseStyles,
     shadowStyles,
     borderStyles,
     roundedStyles,
+    hoverStyles,
     customClassName,
   ]
     .filter(Boolean)
