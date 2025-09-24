@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # 运行 lint-staged 检查
 echo "Running code quality checks..."
 npx lint-staged
