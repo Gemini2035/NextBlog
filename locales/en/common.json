@@ -72,6 +72,19 @@
     "search": "Search",
     "toggleLanguage": "Toggle language"
   },
+  "NotFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "Ops, looks like you've wandered into unknown territory",
+    "backToHome": "Back to Home",
+    "goBack": "← Go Back",
+    "orGoHome": "or Go Home",
+    "languageSwitcher": {
+      "chinese": "中文",
+      "english": "English",
+      "japanese": "日本語"
+    }
+  },
   "Navigation": {
     "search": "Search",
     "language": "Language",

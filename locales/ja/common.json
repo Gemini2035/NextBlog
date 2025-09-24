@@ -124,5 +124,18 @@
     "openMobileMenu": "モバイルメニューを開く",
     "search": "検索",
     "toggleLanguage": "言語を切り替え"
+  },
+  "NotFound": {
+    "title": "404",
+    "heading": "ページが見つかりません",
+    "description": "Ops、未知の領域に迷い込んでしまったようです",
+    "backToHome": "ホームに戻る",
+    "goBack": "← 戻る",
+    "orGoHome": "またはホームに戻る",
+    "languageSwitcher": {
+      "chinese": "中文",
+      "english": "English",
+      "japanese": "日本語"
+    }
   }
 }
