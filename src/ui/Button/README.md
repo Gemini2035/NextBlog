@@ -26,7 +26,7 @@ yarn add @your-org/button-component
 ## 基础用法
 
 ```tsx
-import { Button } from '@/components/Button'
+import { Button } from '@/ui/Button'
 
 // 基础按钮
 <Button>点击我</Button>
