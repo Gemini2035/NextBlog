@@ -1,5 +1,3 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { SITE_CONFIG } from '@/constants'
 import { GitHubIcon, TwitterIcon, LinkedInIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
@@ -8,10 +6,7 @@ export default function AboutPage() {
   const t = useTranslations('AboutPage')
   
   return (
-    <div className="min-h-screen bg-gray-50 ">
-      <Header />
-      
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white  rounded-lg shadow-md overflow-hidden">
           <div className="px-8 py-12">
             <h1 className="text-3xl font-bold text-gray-900  mb-8">
@@ -91,9 +86,6 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+    </main>
   )
 }

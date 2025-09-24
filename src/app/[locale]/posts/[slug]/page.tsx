@@ -1,7 +1,5 @@
 import { notFound } from 'next/navigation'
 import { getPostBySlugAndLocale, getAllPosts } from '@/lib/posts-adapter'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { getMDXComponent } from 'next-contentlayer2/hooks'
 
 interface PostPageProps {
@@ -56,10 +54,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const MDXContent = getMDXComponent(post.body.code)
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
           {/* 文章头部 */}
           <header className="mb-8">
@@ -112,9 +107,6 @@ export default async function PostPage({ params }: PostPageProps) {
             <MDXContent />
           </div>
         </article>
-      </main>
-      
-      <Footer />
-    </div>
+    </main>
   )
 }
