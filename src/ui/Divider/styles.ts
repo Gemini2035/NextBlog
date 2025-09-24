@@ -70,7 +70,19 @@ export const getDividerStyles = (
   length?: number,
   customClassName?: string
 ): string => {
-  const baseStyles = 'border-0'
+  // 如果提供了自定义类名，只使用基础样式和自定义类名
+  if (customClassName) {
+    return [
+      'block', // 确保元素显示
+      customClassName
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .trim()
+  }
+  
+  // 默认样式逻辑
+  const baseStyles = orientation === 'vertical' ? 'bg-gray-200' : 'border-0'
   const orientationStyles = getOrientationStyles(orientation)
   const thicknessStyles = getThicknessStyles(thickness, orientation)
   const roundedStyles = getRoundedStyles(rounded)
@@ -86,7 +98,6 @@ export const getDividerStyles = (
     colorStyles,
     dashedStyles,
     lengthStyles,
-    customClassName,
   ]
     .filter(Boolean)
     .join(' ')

@@ -75,7 +75,7 @@ export const Divider = forwardRef<DividerRef, DividerProps>(
     return (
       <div
         ref={ref}
-        className={cn(dividerStyles)}
+        className={cn(dividerStyles, className)}
         {...props}
       />
     )

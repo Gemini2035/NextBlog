@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Link, Button } from '@/ui'
+import { Link, Button, Divider } from '@/ui'
 import { useRouter } from '@/i18n/navigation'
 
 export default function NotFound() {
@@ -28,14 +28,14 @@ export default function NotFound() {
         
         <div className="flex items-center justify-center gap-4">
           <Button 
-            type="link"
+            type="text"
             onClick={handleGoBack}
             className="text-lg"
           >
             {t('goBack')}
           </Button>
-          <span className="text-gray-400">|</span>
-          <Link href="/" className="text-sm text-gray-500 hover:text-blue-600 transition-colors">
+          <Divider orientation="vertical" className="h-4 w-px bg-gray-300" />
+          <Link href="/" className="text-sm text-gray-500 transition-colors">
             {t('orGoHome')}
           </Link>
         </div>
