@@ -4,6 +4,8 @@ import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 interface LocaleLayoutProps {
     children: ReactNode;
@@ -21,7 +23,11 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
 
     return (
         <NextIntlClientProvider messages={messages}>
-            {children}
+            <div className="min-h-screen bg-gray-50">
+                <Header />
+                {children}
+                <Footer />
+            </div>
         </NextIntlClientProvider>
     );
 }

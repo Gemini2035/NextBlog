@@ -1,17 +1,13 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { SITE_CONFIG } from '@/constants'
 import { GitHubIcon, TwitterIcon, LinkedInIcon } from '@/assets/icons'
+import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 export default function AboutPage() {
   const t = useTranslations('AboutPage')
   
   return (
-    <div className="min-h-screen bg-gray-50 ">
-      <Header />
-      
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white  rounded-lg shadow-md overflow-hidden">
           <div className="px-8 py-12">
             <h1 className="text-3xl font-bold text-gray-900  mb-8">
@@ -55,45 +51,45 @@ export default function AboutPage() {
               </h2>
               <div className="flex space-x-4">
                 {SITE_CONFIG.social.github && (
-                  <a
+                  <Link
                     href={SITE_CONFIG.social.github}
+                    external
                     className="text-gray-400 hover:text-gray-600  transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="GitHub"
                   >
                     <GitHubIcon className="w-6 h-6" />
-                  </a>
+                  </Link>
                 )}
                 {SITE_CONFIG.social.twitter && (
-                  <a
+                  <Link
                     href={SITE_CONFIG.social.twitter}
+                    external
                     className="text-gray-400 hover:text-gray-600  transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Twitter"
                   >
                     <TwitterIcon className="w-6 h-6" />
-                  </a>
+                  </Link>
                 )}
                 {SITE_CONFIG.social.linkedin && (
-                  <a
+                  <Link
                     href={SITE_CONFIG.social.linkedin}
+                    external
                     className="text-gray-400 hover:text-gray-600  transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn"
                   >
                     <LinkedInIcon className="w-6 h-6" />
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>
           </div>
         </div>
-      </main>
-
-      <Footer />
-    </div>
+    </main>
   )
 }

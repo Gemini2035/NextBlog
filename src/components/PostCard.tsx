@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/ui'
 import type { Post } from '../../.contentlayer/generated'
 import { formatDate, truncateText } from '@/utils'
 

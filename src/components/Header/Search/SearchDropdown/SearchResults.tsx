@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/ui";
 import { SearchResultsGroup, RecommendedContent } from '@/types/search';
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
