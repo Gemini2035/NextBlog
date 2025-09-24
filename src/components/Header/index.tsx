@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SITE_CONFIG, HEADER_CONFIG, NavigationItem } from '@/constants'
 import { useNavigation } from '@/hooks'

@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { Link } from '@/ui'
 import { motion } from 'framer-motion'
 import clsx from 'clsx'
 import { SubmenuItem } from '@/constants'
