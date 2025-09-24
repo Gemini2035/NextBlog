@@ -15,3 +15,10 @@ export type {
   DividerOrientation,
   DividerThickness
 } from './Divider'
+export { Card } from './Card'
+export type { 
+  CardProps, 
+  CardRef,
+  CardShadow,
+  CardBorder
+} from './Card'
