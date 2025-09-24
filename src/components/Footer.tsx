@@ -3,7 +3,7 @@
 import { SITE_CONFIG } from '@/constants'
 import { useTranslations } from 'next-intl'
 import LogoIcon from '@/assets/icons/LogoIcon'
-import { Link } from '@/ui'
+import { Link, Divider } from '@/ui'
 
 export default function Footer() {
   const t = useTranslations('Footer')
@@ -44,7 +44,7 @@ export default function Footer() {
             </div>
 
             {/* 分隔线 */}
-            <div className="h-4 w-px bg-gray-300"></div>
+            <Divider orientation="vertical" thickness="thin" className="h-4 bg-gray-300" />
 
             {/* 政策链接 */}
             <div className="flex items-center gap-4 text-sm whitespace-nowrap">

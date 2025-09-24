@@ -8,7 +8,7 @@ export type ButtonType =
   | 'secondary'   // 次要按钮
   | 'outline'     // 轮廓按钮
   | 'ghost'       // 幽灵按钮
-  | 'link'        // 链接按钮
+  | 'text'        // 文本按钮
   | 'danger'      // 危险按钮
 
 /**

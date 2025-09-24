@@ -43,7 +43,7 @@ const LoadingIcon = () => (
  * <Button type="secondary">次要按钮</Button>
  * <Button type="outline">轮廓按钮</Button>
  * <Button type="ghost">幽灵按钮</Button>
- * <Button type="link">链接按钮</Button>
+ * <Button type="text">文本按钮</Button>
  * <Button type="danger">危险按钮</Button>
  * 
  * // 不同尺寸

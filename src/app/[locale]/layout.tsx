@@ -23,9 +23,11 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
 
     return (
         <NextIntlClientProvider messages={messages}>
-            <div className="min-h-screen bg-gray-50">
+            <div className="min-h-screen bg-gray-50 flex flex-col">
                 <Header />
-                {children}
+                <main className="flex-1">
+                    {children}
+                </main>
                 <Footer />
             </div>
         </NextIntlClientProvider>

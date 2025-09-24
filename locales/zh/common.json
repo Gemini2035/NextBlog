@@ -72,6 +72,19 @@
     "search": "搜索",
     "toggleLanguage": "切换语言"
   },
+  "NotFound": {
+    "title": "404",
+    "heading": "页面未找到",
+    "description": "Ops，看起来你走到了未知领域",
+    "backToHome": "返回首页",
+    "goBack": "← 返回上一步",
+    "orGoHome": "或者返回首页",
+    "languageSwitcher": {
+      "chinese": "中文",
+      "english": "English",
+      "japanese": "日本語"
+    }
+  },
   "Navigation": {
     "search": "搜索",
     "language": "语言",

@@ -9,7 +9,7 @@ export const getVariantStyles = (variant: ButtonType): string => {
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500 border border-gray-300',
     outline: 'bg-transparent text-blue-600 hover:bg-blue-50 focus:ring-blue-500 border border-blue-600',
     ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
-    link: 'bg-transparent text-blue-600 hover:text-blue-700 focus:ring-blue-500 underline-offset-4 hover:underline',
+    text: 'bg-transparent text-gray-700 focus:ring-gray-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
   }
   return variants[variant] || variants.primary
@@ -47,7 +47,7 @@ export const getButtonStyles = (
   loading: boolean = false,
   customClassName?: string
 ): string => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium text-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed'
+  const baseStyles = 'inline-flex items-center justify-center font-medium text-center transition-all duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
   const variantStyles = getVariantStyles(variant)
   const sizeStyles = getSizeStyles(size)
   const roundedStyles = getRoundedStyles(rounded)
