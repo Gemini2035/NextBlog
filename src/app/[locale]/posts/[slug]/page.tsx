@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getPostBySlugAndLocale, getAllPosts } from '@/lib/posts-adapter'
 import { getMDXComponent } from 'next-contentlayer2/hooks'
-import { PostInfoCard } from '@/components/Post'
+import { PostInfoCard, RelatedPosts } from '@/components/Post'
 
 interface PostPageProps {
   params: Promise<{
@@ -65,6 +65,9 @@ export default async function PostPage({ params }: PostPageProps) {
           <MDXContent />
         </div>
       </article>
+      
+      {/* 相关文章 */}
+      <RelatedPosts post={post} limit={3} />
     </div>
   )
 }
