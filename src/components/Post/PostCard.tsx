@@ -1,4 +1,4 @@
-import { Link, Card } from '@/ui'
+import { Link, Card, Tag } from '@/ui'
 import type { Post } from '../../../.contentlayer/generated'
 import { formatDate, truncateText, cn } from '@/utils'
 
@@ -46,12 +46,9 @@ export default function PostCard({ post, featured = false }: PostCardProps) {
           {post.tags && post.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-4">
               {post.tags.map((tag: string) => (
-                <span
-                  key={tag}
-                  className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
-                >
+                <Tag key={tag} size="sm">
                   {tag}
-                </span>
+                </Tag>
               ))}
             </div>
           )}

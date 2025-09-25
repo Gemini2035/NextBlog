@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, Button } from "@/ui";
+import { Card, Button, Tag } from "@/ui";
 import { formatDate, cn } from "@/utils";
 import type { Post } from "../../../.contentlayer/generated";
 import { useLayoutHeights } from "@/hooks";
@@ -168,15 +168,12 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag: string) => (
-                      <span
+                      <Tag
                         key={tag}
-                        className={cn(
-                          "px-3 py-1 bg-blue-100 text-blue-800 rounded-full",
-                          isSticky ? "text-xs" : "text-sm"
-                        )}
+                        size={isSticky ? "sm" : "md"}
                       >
                         {tag}
-                      </span>
+                      </Tag>
                     ))}
                   </div>
                 </div>

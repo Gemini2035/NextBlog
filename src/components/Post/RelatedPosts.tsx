@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Post } from "../../../.contentlayer/generated";
 import { getEnhancedRelatedPosts } from "@/lib/posts";
+import { Tag } from "@/ui";
 
 interface RelatedPostsProps {
   post: Post;
@@ -48,12 +49,9 @@ export function RelatedPosts({ post, limit = 3 }: RelatedPostsProps) {
                 {relatedPost.tags && relatedPost.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1">
                     {relatedPost.tags.slice(0, 2).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full"
-                      >
+                      <Tag key={tag} size="sm">
                         {tag}
-                      </span>
+                      </Tag>
                     ))}
                   </div>
                 )}
