@@ -1,3 +1,5 @@
+"use client"
+
 import { forwardRef, useImperativeHandle, useRef, useState, useEffect, useCallback } from 'react'
 import { SliderProps, SliderRef } from './types'
 import { 
@@ -90,12 +92,16 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       items,
       itemsPerPage,
       slidePerPage,
+      draggable = false,
       paddingLeft = 0,
+      gap = 0,
       showNavigation = true,
+      leftArrowClassName,
+      rightArrowClassName,
       showIndicators = false,
       autoPlay = false,
       autoPlayInterval = 3000,
-      loop = true,
+      loop = false,
       className,
       style,
       onSlideChange,
@@ -105,19 +111,34 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
   ) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const [isTransitioning, setIsTransitioning] = useState(false)
+    const [isDragging, setIsDragging] = useState(false)
+    const [dragStartX, setDragStartX] = useState(0)
+    const [dragCurrentX, setDragCurrentX] = useState(0)
+    const [dragOffset, setDragOffset] = useState(0)
+    const [hasDragged, setHasDragged] = useState(false)
+    
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
     const containerRef = useRef<HTMLDivElement>(null)
+    const trackRef = useRef<HTMLDivElement>(null)
+
+    // 设置默认值：当itemsPerPage为undefined时，默认一页展示4个
+    const actualItemsPerPage = itemsPerPage ?? 4
+    // 设置默认值：当slidePerPage为undefined时，默认一次移动1个
+    const actualSlidePerPage = slidePerPage ?? 1
 
     // 计算总页数
-    const totalPages = Math.ceil(items.length / slidePerPage)
+    const totalPages = Math.ceil(items.length / actualSlidePerPage)
     const maxIndex = Math.max(0, totalPages - 1)
+
+    // 当itemsPerPage大于等于items.length时隐藏箭头
+    const shouldHideArrows = actualItemsPerPage >= items.length
 
     // 计算当前应该显示的items
     const getVisibleItems = useCallback(() => {
-      const startIndex = currentIndex * slidePerPage
-      const endIndex = Math.min(startIndex + itemsPerPage, items.length)
+      const startIndex = currentIndex * actualSlidePerPage
+      const endIndex = Math.min(startIndex + actualItemsPerPage, items.length)
       return items.slice(startIndex, endIndex)
-    }, [currentIndex, slidePerPage, itemsPerPage, items])
+    }, [currentIndex, actualSlidePerPage, actualItemsPerPage, items])
 
     // 滑动到指定索引
     const slideTo = useCallback((index: number) => {
@@ -185,21 +206,35 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
 
     // 计算滑动容器的transform
     const getTransform = () => {
-      const itemWidth = 100 / itemsPerPage // 每个item占的百分比宽度
-      const translateX = -(currentIndex * slidePerPage * itemWidth)
+      // 使用calc()来考虑gap的影响
+      const itemWidth = `calc((100% - ${gap * (actualItemsPerPage - 1)}px) / ${actualItemsPerPage})`
+      const translateX = -(currentIndex * actualSlidePerPage * (100 / actualItemsPerPage))
       return `translateX(${translateX}%)`
     }
 
     // 计算滑动容器的样式
     const trackStyle: React.CSSProperties = {
-      transform: getTransform(),
+      transform: isDragging 
+        ? `translateX(${getTransform().match(/translateX\(([^)]+)\)/)?.[1] || '0%'}) translateX(${dragOffset}px)`
+        : getTransform(),
       paddingLeft: `${paddingLeft}px`,
+      gap: `${gap}px`,
+      cursor: draggable ? (isDragging ? 'grabbing' : 'grab') : 'default',
+      userSelect: draggable ? 'none' : 'auto',
       ...style
     }
 
     // 计算每个item的宽度
+    const getItemWidth = () => {
+      if (gap === 0) {
+        return `${100 / actualItemsPerPage}%`
+      }
+      // 使用calc()来精确计算考虑gap的宽度
+      return `calc((100% - ${gap * (actualItemsPerPage - 1)}px) / ${actualItemsPerPage})`
+    }
+
     const itemStyle: React.CSSProperties = {
-      width: `${100 / itemsPerPage}%`,
+      width: getItemWidth(),
       flexShrink: 0
     }
 
@@ -217,6 +252,122 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       slideTo(index)
     }
 
+    // 拖动事件处理
+    const handleMouseDown = (e: React.MouseEvent) => {
+      if (!draggable) return
+      e.preventDefault()
+      setIsDragging(true)
+      setHasDragged(false)
+      setDragStartX(e.clientX)
+      setDragCurrentX(e.clientX)
+      setDragOffset(0)
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging || !draggable) return
+      e.preventDefault()
+      const deltaX = e.clientX - dragStartX
+      setDragCurrentX(e.clientX)
+      setDragOffset(deltaX)
+      
+      // 如果移动距离超过阈值，标记为已拖动
+      if (Math.abs(deltaX) > 5) {
+        setHasDragged(true)
+      }
+    }
+
+    const handleMouseUp = () => {
+      if (!isDragging || !draggable) return
+      setIsDragging(false)
+      
+      const threshold = 50 // 拖动阈值
+      if (Math.abs(dragOffset) > threshold) {
+        if (dragOffset > 0) {
+          slidePrev()
+        } else {
+          slideNext()
+        }
+      }
+      
+      setDragOffset(0)
+      
+      // 延迟重置拖动状态，防止点击事件触发
+      setTimeout(() => {
+        setHasDragged(false)
+      }, 100)
+    }
+
+    // 触摸事件处理
+    const handleTouchStart = (e: React.TouchEvent) => {
+      if (!draggable) return
+      const touch = e.touches[0]
+      setIsDragging(true)
+      setHasDragged(false)
+      setDragStartX(touch.clientX)
+      setDragCurrentX(touch.clientX)
+      setDragOffset(0)
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDragging || !draggable) return
+      e.preventDefault()
+      const touch = e.touches[0]
+      const deltaX = touch.clientX - dragStartX
+      setDragCurrentX(touch.clientX)
+      setDragOffset(deltaX)
+      
+      // 如果移动距离超过阈值，标记为已拖动
+      if (Math.abs(deltaX) > 5) {
+        setHasDragged(true)
+      }
+    }
+
+    const handleTouchEnd = () => {
+      if (!isDragging || !draggable) return
+      setIsDragging(false)
+      
+      const threshold = 50 // 拖动阈值
+      if (Math.abs(dragOffset) > threshold) {
+        if (dragOffset > 0) {
+          slidePrev()
+        } else {
+          slideNext()
+        }
+      }
+      
+      setDragOffset(0)
+      
+      // 延迟重置拖动状态，防止点击事件触发
+      setTimeout(() => {
+        setHasDragged(false)
+      }, 100)
+    }
+
+    // 添加全局事件监听器
+    useEffect(() => {
+      if (isDragging) {
+        document.addEventListener('mousemove', handleMouseMove)
+        document.addEventListener('mouseup', handleMouseUp)
+        document.addEventListener('touchmove', handleTouchMove, { passive: false })
+        document.addEventListener('touchend', handleTouchEnd)
+      }
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mouseup', handleMouseUp)
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchend', handleTouchEnd)
+      }
+    }, [isDragging, dragStartX, dragOffset])
+
+    // 处理点击事件，在拖动时屏蔽
+    const handleClick = (e: React.MouseEvent) => {
+      if (hasDragged) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+    }
+
     // 检查是否可以滑动
     const canSlidePrev = loop || currentIndex > 0
     const canSlideNext = loop || currentIndex < maxIndex
@@ -229,14 +380,19 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       >
         {/* 滑动容器 */}
         <div
-          className={getSliderTrackStyles(paddingLeft)}
+          ref={trackRef}
+          className={getSliderTrackStyles(paddingLeft, gap)}
           style={trackStyle}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          onClick={handleClick}
         >
           {items.map((item, index) => (
             <div
               key={index}
-              className={getSliderItemStyles(itemsPerPage)}
+              className={getSliderItemStyles(actualItemsPerPage)}
               style={itemStyle}
+              onClick={handleClick}
             >
               {item}
             </div>
@@ -244,11 +400,14 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
         </div>
 
         {/* 导航按钮 */}
-        {showNavigation && totalPages > 1 && (
+        {showNavigation && totalPages > 1 && !shouldHideArrows && (
           <>
             <button
               type="button"
-              className={getNavigationButtonStyles('left', 'default', !canSlidePrev)}
+              className={cn(
+                getNavigationButtonStyles('left', 'default', !canSlidePrev),
+                leftArrowClassName
+              )}
               onClick={() => handleNavigationClick('left')}
               disabled={!canSlidePrev}
               aria-label="上一页"
@@ -257,7 +416,10 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
             </button>
             <button
               type="button"
-              className={getNavigationButtonStyles('right', 'default', !canSlideNext)}
+              className={cn(
+                getNavigationButtonStyles('right', 'default', !canSlideNext),
+                rightArrowClassName
+              )}
               onClick={() => handleNavigationClick('right')}
               disabled={!canSlideNext}
               aria-label="下一页"

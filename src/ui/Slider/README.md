@@ -112,20 +112,24 @@ function MyComponent() {
 
 ### SliderProps
 
-| 属性               | 类型                             | 默认值  | 描述                            |
-| ------------------ | -------------------------------- | ------- | ------------------------------- |
-| `items`            | `ReactNode[]`                    | -       | **必需** 传入的节点列表         |
-| `itemsPerPage`     | `number`                         | -       | **必需** 每页显示的item个数     |
-| `slidePerPage`     | `number`                         | -       | **必需** 每次滑动移动的item个数 |
-| `paddingLeft`      | `number`                         | `0`     | 第一个元素距离视窗最左边的距离  |
-| `showNavigation`   | `boolean`                        | `true`  | 是否显示导航按钮                |
-| `showIndicators`   | `boolean`                        | `false` | 是否显示指示器                  |
-| `autoPlay`         | `boolean`                        | `false` | 是否自动播放                    |
-| `autoPlayInterval` | `number`                         | `3000`  | 自动播放间隔时间（毫秒）        |
-| `loop`             | `boolean`                        | `true`  | 是否循环播放                    |
-| `className`        | `string`                         | -       | 自定义类名                      |
-| `style`            | `React.CSSProperties`            | -       | 自定义样式                      |
-| `onSlideChange`    | `(currentIndex: number) => void` | -       | 导航按钮点击事件                |
+| 属性                  | 类型                             | 默认值  | 描述                              |
+| --------------------- | -------------------------------- | ------- | --------------------------------- |
+| `items`               | `ReactNode[]`                    | -       | **必需** 传入的节点列表           |
+| `itemsPerPage`        | `number`                         | `4`     | 每页显示的item个数（默认4个）     |
+| `slidePerPage`        | `number`                         | `1`     | 每次滑动移动的item个数（默认1个） |
+| `draggable`           | `boolean`                        | `false` | 是否允许鼠标拖动                  |
+| `paddingLeft`         | `number`                         | `0`     | 第一个元素距离视窗最左边的距离    |
+| `gap`                 | `number`                         | `0`     | 元素之间的间距                    |
+| `showNavigation`      | `boolean`                        | `true`  | 是否显示导航按钮                  |
+| `leftArrowClassName`  | `string`                         | -       | 左箭头自定义样式类名              |
+| `rightArrowClassName` | `string`                         | -       | 右箭头自定义样式类名              |
+| `showIndicators`      | `boolean`                        | `false` | 是否显示指示器                    |
+| `autoPlay`            | `boolean`                        | `false` | 是否自动播放                      |
+| `autoPlayInterval`    | `number`                         | `3000`  | 自动播放间隔时间（毫秒）          |
+| `loop`                | `boolean`                        | `true`  | 是否循环播放                      |
+| `className`           | `string`                         | -       | 自定义类名                        |
+| `style`               | `React.CSSProperties`            | -       | 自定义样式                        |
+| `onSlideChange`       | `(currentIndex: number) => void` | -       | 导航按钮点击事件                  |
 
 ### SliderRef
 

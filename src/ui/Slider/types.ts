@@ -7,13 +7,21 @@ export interface SliderProps {
   /** 传入的节点列表 */
   items: ReactNode[]
   /** 每页显示的item个数 */
-  itemsPerPage: number
+  itemsPerPage?: number
   /** 每次滑动移动的item个数 */
-  slidePerPage: number
+  slidePerPage?: number
+  /** 是否允许鼠标拖动 */
+  draggable?: boolean
   /** 第一个元素距离视窗最左边的距离 */
   paddingLeft?: number
+  /** 元素之间的间距 */
+  gap?: number
   /** 是否显示导航按钮 */
   showNavigation?: boolean
+  /** 左箭头自定义样式类名 */
+  leftArrowClassName?: string
+  /** 右箭头自定义样式类名 */
+  rightArrowClassName?: string
   /** 是否显示指示器 */
   showIndicators?: boolean
   /** 是否自动播放 */

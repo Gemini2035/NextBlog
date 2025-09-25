@@ -17,6 +17,7 @@ export const getSliderStyles = (
  */
 export const getSliderTrackStyles = (
   paddingLeft: number,
+  gap: number = 0,
   className?: string
 ) => {
   return cn(
