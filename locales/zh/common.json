@@ -53,7 +53,7 @@
     "title": "Apodidae",
     "description": "分享技术见解、开发经验和生活感悟"
   },
-  "posts": {
+  "Posts": {
     "allPosts": "所有文章",
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
@@ -63,7 +63,10 @@
     "postCount": "{count} 篇",
     "morePosts": "还有 {count} 篇文章...",
     "allTags": "所有标签",
-    "noPosts": "暂无文章"
+    "noPosts": "暂无文章",
+    "relatedPosts": "推荐文章",
+    "refresh": "换一批",
+    "refreshing": "更换中..."
   },
   "Header": {
     "mainNavigation": "主导航",
@@ -137,5 +140,12 @@
     "Development Tools": "开发工具",
     "Design Resources": "设计资源",
     "Online Services": "在线服务"
+  },
+  "Contact": {
+    "contactButton": "联系我",
+    "title": "文章有问题？",
+    "description": "立即联系我！",
+    "contactMe": "联系我",
+    "close": "关闭"
   }
 }

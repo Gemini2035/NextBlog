@@ -106,7 +106,7 @@
     "title": "Apodidae",
     "description": "技術的な洞察、開発経験、人生の感想を共有"
   },
-  "posts": {
+  "Posts": {
     "allPosts": "すべての記事",
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
@@ -116,7 +116,10 @@
     "postCount": "{count} 記事",
     "morePosts": "あと {count} 記事...",
     "allTags": "すべてのタグ",
-    "noPosts": "記事がありません"
+    "noPosts": "記事がありません",
+    "relatedPosts": "関連記事",
+    "refresh": "更新",
+    "refreshing": "更新中..."
   },
   "Header": {
     "mainNavigation": "メインナビゲーション",
@@ -137,5 +140,17 @@
       "english": "English",
       "japanese": "日本語"
     }
+  },
+  "RelatedPosts": {
+    "title": "関連記事",
+    "refresh": "更新",
+    "refreshing": "更新中..."
+  },
+  "Contact": {
+    "contactButton": "お問い合わせ",
+    "title": "記事に問題がありますか？",
+    "description": "すぐに連絡してください！",
+    "contactMe": "お問い合わせ",
+    "close": "閉じる"
   }
 }

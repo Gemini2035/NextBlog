@@ -15,3 +15,20 @@ export type {
   DividerOrientation,
   DividerThickness
 } from './Divider'
+export { Card } from './Card'
+export type { 
+  CardProps, 
+  CardRef,
+  CardShadow,
+  CardBorder
+} from './Card'
+export { Tag } from './Tag'
+export type { TagProps } from './Tag'
+export { Slider } from './Slider'
+export type { 
+  SliderProps, 
+  SliderRef,
+  NavigationDirection,
+  NavigationVariant,
+  IndicatorVariant
+} from './Slider'

@@ -56,13 +56,6 @@ export const Post = defineDocumentType(() => ({
     },
   },
   computedFields: {
-    url: {
-      type: 'string',
-      resolve: (post) => {
-        const locale = post.locale || 'zh'
-        return `/${locale}/posts/${post.slug}`
-      },
-    },
     slug: {
       type: 'string',
       resolve: (post) => {
@@ -75,6 +68,14 @@ export const Post = defineDocumentType(() => ({
       resolve: (post) => {
         const pathParts = post._raw.flattenedPath.split('/')
         return pathParts[0] || 'zh'
+      },
+    },
+    url: {
+      type: 'string',
+      resolve: (post) => {
+        const pathParts = post._raw.flattenedPath.split('/')
+        const slug = pathParts[pathParts.length - 1].replace('.mdx', '')
+        return `/posts/${slug}`
       },
     },
   },

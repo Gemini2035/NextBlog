@@ -2,7 +2,7 @@
 
 import { SITE_CONFIG } from '@/constants'
 import { useTranslations } from 'next-intl'
-import LogoIcon from '@/assets/icons/LogoIcon'
+import { LogoIcon } from '@/assets/icons'
 import { Link, Divider } from '@/ui'
 
 export default function Footer() {

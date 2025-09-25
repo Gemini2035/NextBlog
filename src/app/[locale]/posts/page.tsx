@@ -1,5 +1,5 @@
 import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts, getPostsByCategory, getCategories } from '@/lib/posts-adapter'
-import PostCard from '@/components/PostCard'
+import { PostCard } from '@/components/Post'
 import { getTranslations } from 'next-intl/server'
 
 interface PostsPageProps {

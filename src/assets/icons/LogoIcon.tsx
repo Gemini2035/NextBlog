@@ -6,7 +6,7 @@ interface LogoIconProps {
   height?: number
 }
 
-export default function LogoIcon({ className = '', width = 24, height = 24 }: LogoIconProps) {
+export function LogoIcon({ className = '', width = 24, height = 24 }: LogoIconProps) {
   return (
     <svg 
       width={width} 
