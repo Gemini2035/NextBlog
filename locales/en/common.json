@@ -53,7 +53,7 @@
     "title": "Apodidae",
     "description": "Sharing technical insights, development experiences, and life reflections"
   },
-  "posts": {
+  "Posts": {
     "allPosts": "All Posts",
     "totalPosts": "Total {count} posts",
     "featuredPost": "Featured Post",
@@ -63,7 +63,10 @@
     "postCount": "{count} posts",
     "morePosts": "{count} more posts...",
     "allTags": "All Tags",
-    "noPosts": "No posts available"
+    "noPosts": "No posts available",
+    "relatedPosts": "Related Posts",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing..."
   },
   "Header": {
     "mainNavigation": "Main navigation",
