@@ -81,7 +81,7 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
       clearTimeout(timer);
       observer.disconnect();
     };
-  }, [headerHeight]);
+  }, [headerHeight, isSticky]);
 
   useEffect(() => {
     if (!isSticky) {

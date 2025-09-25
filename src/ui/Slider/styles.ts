@@ -17,9 +17,11 @@ export const getSliderStyles = (
  */
 export const getSliderTrackStyles = (
   paddingLeft: number,
-  gap: number = 0,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _gap: number = 0,
   className?: string
 ) => {
+  // 暂时不使用 gap 参数，但保留接口兼容性
   return cn(
     'flex transition-transform duration-300 ease-in-out',
     className

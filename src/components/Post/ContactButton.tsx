@@ -35,7 +35,7 @@ export function ContactButton() {
             onClick={() => setIsVisible(false)}
           />
           {/* 弹出卡片 */}
-          <div className="fixed bottom-32 right-20 z-50 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-xs animate-in slide-in-from-bottom-2 duration-200 pt-10">
+          <div className="fixed bottom-32 right-20 z-101 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-xs animate-in slide-in-from-bottom-2 duration-200 pt-10">
             <Link href="/about" className="text-center hover:underline">
               <p className="text-sm">
                 {t('title')}
