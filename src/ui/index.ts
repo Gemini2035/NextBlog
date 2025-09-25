@@ -22,3 +22,5 @@ export type {
   CardShadow,
   CardBorder
 } from './Card'
+export { Tag } from './Tag'
+export type { TagProps } from './Tag'
