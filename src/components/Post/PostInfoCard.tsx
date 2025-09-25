@@ -77,11 +77,11 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
           rounded
           disabledHover
           className={cn(
-            "liquid-transform transition-all duration-500 ease-in-out overflow-x-auto",
+            "liquid-transform transition-all duration-500 ease-in-out overflow-visible",
             isSticky
-              ? "fixed top-50 right-4 min-w-80 w-30vw z-50 max-h-[calc(100vh-2rem)] overflow-y-auto shadow-2xl transform -translate-y-1/2"
-              : "w-full mb-8",
-            isSticky ? "animate-slide-in-right" : "animate-slide-in-top"
+              ? "animate-slide-in-right fixed top-50 right-0 min-w-80 w-30vw z-50 max-h-[calc(100vh-2rem)] overflow-y-auto shadow-2xl transform -translate-y-1/2"
+              : "w-full mb-8 animate-slide-in-top",
+            isCollapsed && "transform translate-x-full"
           )}
         >
           <div className="p-6">
@@ -145,35 +145,33 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
               </div>
             )}
           </div>
-           {isSticky && (
-             <Button
-               onClick={() => setIsCollapsed(!isCollapsed)}
-               type="ghost"
-               size="sm"
-               className={cn(
-                 "fixed right-4 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-gray-100 transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm",
-                 isCollapsed ? "translate-x-0" : "-translate-x-16"
-               )}
-               aria-label={isCollapsed ? "展开信息" : "收起信息"}
-             >
-               <svg
-                 className={cn(
-                   "w-4 h-4 text-gray-600 transition-transform duration-200",
-                   isCollapsed ? "rotate-180" : ""
-                 )}
-                 fill="none"
-                 stroke="currentColor"
-                 viewBox="0 0 24 24"
-               >
-                 <path
-                   strokeLinecap="round"
-                   strokeLinejoin="round"
-                   strokeWidth={2}
-                   d="M19 9l-7 7-7-7"
-                 />
-               </svg>
-             </Button>
-           )}
+          {isSticky && (
+            <Button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              type="ghost"
+              size="sm"
+              className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm"
+
+              aria-label={isCollapsed ? "展开信息" : "收起信息"}
+            >
+              <svg
+                className={cn(
+                  "w-4 h-4 text-gray-600 transition-transform duration-200",
+                  isCollapsed ? "rotate-90" : "rotate-270"
+                )}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </Button>
+          )}
         </Card>
       </div>
     </>
