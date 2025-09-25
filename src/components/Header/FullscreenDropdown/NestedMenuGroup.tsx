@@ -2,7 +2,7 @@
 
 import { Link } from '@/ui'
 import { motion } from 'framer-motion'
-import clsx from 'clsx'
+import { cn } from '@/utils'
 import { SubmenuItem } from '@/constants'
 import { useTranslations } from 'next-intl'
 
@@ -69,7 +69,7 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
 
     return (
       <motion.div 
-        className={clsx('flex gap-24 max-w-6xl', flexClasses)}
+        className={cn("flex gap-24 max-w-6xl", flexClasses)}
         variants={containerVariants}
         initial="hidden"
         animate={animationState}
