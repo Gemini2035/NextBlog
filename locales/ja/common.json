@@ -145,5 +145,12 @@
     "title": "関連記事",
     "refresh": "更新",
     "refreshing": "更新中..."
+  },
+  "Contact": {
+    "contactButton": "お問い合わせ",
+    "title": "記事に問題がありますか？",
+    "description": "すぐに連絡してください！",
+    "contactMe": "お問い合わせ",
+    "close": "閉じる"
   }
 }

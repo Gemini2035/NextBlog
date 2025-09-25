@@ -140,5 +140,12 @@
     "Development Tools": "Development Tools",
     "Design Resources": "Design Resources",
     "Online Services": "Online Services"
+  },
+  "Contact": {
+    "contactButton": "Contact Me",
+    "title": "Article Issues?",
+    "description": "Contact me immediately!",
+    "contactMe": "Contact Me",
+    "close": "Close"
   }
 }

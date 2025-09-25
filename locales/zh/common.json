@@ -140,5 +140,12 @@
     "Development Tools": "开发工具",
     "Design Resources": "设计资源",
     "Online Services": "在线服务"
+  },
+  "Contact": {
+    "contactButton": "联系我",
+    "title": "文章有问题？",
+    "description": "立即联系我！",
+    "contactMe": "联系我",
+    "close": "关闭"
   }
 }
