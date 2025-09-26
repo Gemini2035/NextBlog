@@ -1,5 +1,15 @@
 import { defineDocumentType, makeSource } from 'contentlayer2/source-files'
 
+// 类型定义
+interface TagStat {
+  name: string
+  count: number
+}
+
+interface TagListData {
+  tagStats: string[]
+}
+
 export const Post = defineDocumentType(() => ({
   name: 'Post',
   filePathPattern: `**/*.mdx`,
@@ -81,8 +91,69 @@ export const Post = defineDocumentType(() => ({
   },
 }))
 
+// 全局标签列表文档类型
+export const TagList = defineDocumentType(() => ({
+  name: 'TagList',
+  filePathPattern: 'taglist.json',
+  contentType: 'data',
+  fields: {
+    tags: {
+      type: 'list',
+      of: { type: 'string' },
+      description: 'All unique tags from all posts',
+      required: true,
+    },
+    tagStats: {
+      type: 'list',
+      of: { type: 'string' },
+      description: 'Tag usage statistics as JSON string',
+      required: true,
+    },
+    totalTags: {
+      type: 'number',
+      description: 'Total number of unique tags',
+      required: true,
+    },
+    totalPosts: {
+      type: 'number',
+      description: 'Total number of posts',
+      required: true,
+    },
+    generatedAt: {
+      type: 'string',
+      description: 'Generation timestamp',
+      required: true,
+    },
+  },
+  computedFields: {
+    // 按使用次数排序的标签
+    sortedByUsage: {
+      type: 'list',
+      of: { type: 'string' },
+      resolve: (tagList: TagListData) => {
+        const stats: TagStat[] = JSON.parse(tagList.tagStats.join(''))
+        return stats
+          .sort((a: TagStat, b: TagStat) => b.count - a.count)
+          .map((stat: TagStat) => stat.name)
+      },
+    },
+    // 最常用的标签
+    mostUsed: {
+      type: 'list',
+      of: { type: 'string' },
+      resolve: (tagList: TagListData) => {
+        const stats: TagStat[] = JSON.parse(tagList.tagStats.join(''))
+        return stats
+          .sort((a: TagStat, b: TagStat) => b.count - a.count)
+          .slice(0, 10)
+          .map((stat: TagStat) => stat.name)
+      },
+    },
+  },
+}))
+
 export default makeSource({
   contentDirPath: './content',
-  documentTypes: [Post],
+  documentTypes: [Post, TagList],
   disableImportAliasWarning: true,
 })

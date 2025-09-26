@@ -87,13 +87,36 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
               variants={itemVariants}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                {t(item.label)}
-              </h3>
-              {item.description && (
-                <p className="text-xs text-gray-600">
-                  {t(item.description)}
-                </p>
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  className="block group"
+                  onClick={onClose}
+                  onMouseEnter={(e) => {
+                    // 阻止事件冒泡，确保submenu保持打开
+                    e.stopPropagation()
+                  }}
+                >
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-gray-800 transition-colors duration-200">
+                    {t(item.label)}
+                  </h3>
+                  {item.description && (
+                    <p className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors duration-200">
+                      {t(item.description)}
+                    </p>
+                  )}
+                </Link>
+              ) : (
+                <>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1">
+                    {t(item.label)}
+                  </h3>
+                  {item.description && (
+                    <p className="text-xs text-gray-600">
+                      {t(item.description)}
+                    </p>
+                  )}
+                </>
               )}
             </motion.div>
 

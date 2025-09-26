@@ -75,6 +75,11 @@
                 "label": "Latest Articles",
                 "href": "/posts#recent",
                 "description": "Articles updated in the last week"
+              },
+              {
+                "label": "Other Articles",
+                "href": "/posts#tag?tag=Others",
+                "description": "Other recommended articles"
               }
             ]
           }

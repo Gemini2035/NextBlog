@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts, getPostsByCategory, getCategories } from '@/lib/posts-adapter'
+import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts } from '@/lib/posts-adapter'
 import { PostCard } from '@/components/Post'
 import { getTranslations } from 'next-intl/server'
 
@@ -14,7 +14,6 @@ export default async function PostsPage({ params }: PostsPageProps) {
   const tags = getAllTags(locale)
   const featuredPost = getFeaturedPost(locale)
   const recentPosts = getRecentPosts(locale)
-  const categories = getCategories()
   
   const t = await getTranslations('Posts')
 
@@ -58,49 +57,6 @@ export default async function PostsPage({ params }: PostsPageProps) {
           </div>
         )}
 
-        {/* 技术分类 */}
-        <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-            {t('techCategories')}
-          </h2>
-          <div className="space-y-8">
-            {categories.map((category) => {
-              const categoryPosts = getPostsByCategory(category, locale)
-              if (categoryPosts.length === 0) return null
-              
-              return (
-                <div key={category} className="border border-gray-200 rounded-lg p-6 bg-white">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
-                    <span className="mr-2">
-                      {category === 'TypeScript' && '🔷'}
-                      {category === 'Javascript' && '🟨'}
-                      {category === 'NodeJs' && '🟢'}
-                      {category === 'ReactJs' && '🔵'}
-                      {category === 'VueJS' && '🟩'}
-                      {category === '其它' && '📚'}
-                    </span>
-                    {category}
-                    <span className="ml-2 text-sm font-normal text-gray-500">
-                      ({t('postCount', { count: categoryPosts.length })})
-                    </span>
-                  </h3>
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {categoryPosts.slice(0, 3).map((post) => (
-                      <PostCard key={post._id} post={post} />
-                    ))}
-                  </div>
-                  {categoryPosts.length > 3 && (
-                    <div className="mt-4 text-center">
-                      <span className="text-sm text-gray-500">
-                        {t('morePosts', { count: categoryPosts.length - 3 })}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
 
         {/* 所有标签 */}
         {tags.length > 0 && (
