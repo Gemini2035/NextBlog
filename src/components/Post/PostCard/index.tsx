@@ -1,5 +1,5 @@
 import { Link, Card, Tag } from '@/ui'
-import type { Post } from '../../../.contentlayer/generated'
+import type { Post } from '../../../../.contentlayer/generated'
 import { formatDate, truncateText, cn } from '@/utils'
 
 interface PostCardProps {
@@ -7,7 +7,7 @@ interface PostCardProps {
   featured?: boolean
 }
 
-export default function PostCard({ post, featured = false }: PostCardProps) {
+export  function PostCard({ post, featured = false }: PostCardProps) {
   return (
     <Card 
       shadow="md" 

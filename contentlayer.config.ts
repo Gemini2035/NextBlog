@@ -40,6 +40,25 @@ export const Post = defineDocumentType(() => ({
         return `/posts/${slug}`
       },
     },
+    formattedTags: {
+      type: 'list',
+      of: { type: 'string' },
+      resolve: (post) => {
+        if (!post.tags) return []
+        
+        // 处理 PlainArr 对象，转换为普通数组
+        const tagsArray = Array.isArray(post.tags) ? post.tags : Array.from(post.tags) as string[]
+        
+        const formatTag = (tag: string): string => {
+          return tag
+            .split('.')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join('')
+        }
+        
+        return tagsArray.map(formatTag)
+      },
+    },
   },
 }))
 
@@ -54,7 +73,7 @@ export default makeSource({
     const tags = new Set<string>()
 
     // 收集所有标签
-    allPosts.flatMap((post) => post.tags || []).forEach((t) => tags.add(t))
+    allPosts.flatMap((post) => post.formattedTags || []).forEach((t) => tags.add(t))
 
     const tagArray = Array.from(tags).filter(tag => !!tag).sort()
 

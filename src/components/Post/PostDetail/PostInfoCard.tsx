@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import { Card, Button, Tag } from "@/ui";
 import { formatDate, cn } from "@/utils";
-import type { Post } from "../../../.contentlayer/generated";
+import type { Post } from "../../../../.contentlayer/generated";
 import { useLayoutHeights } from "@/hooks";
 
 interface PostInfoCardProps {
   post: Post;
 }
 
-export default function PostInfoCard({ post }: PostInfoCardProps) {
+export function PostInfoCard({ post }: PostInfoCardProps) {
   const [isSticky, setIsSticky] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);

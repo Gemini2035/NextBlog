@@ -1,5 +1,5 @@
 import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts } from '@/lib/posts-adapter'
-import { PostCard } from '@/components/Post'
+import { PostCard, FeaturedPostSection } from '@/components/Post'
 import { getTranslations } from 'next-intl/server'
 
 interface PostsPageProps {
@@ -29,16 +29,10 @@ export default async function PostsPage({ params }: PostsPageProps) {
         </div>
 
         {/* 置顶文章 */}
-        {featuredPost && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              {t('featuredPost')}
-            </h2>
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-              <PostCard post={featuredPost} featured={true} />
-            </div>
-          </div>
-        )}
+        <FeaturedPostSection 
+          featuredPost={featuredPost || null} 
+          title={t('featuredPost')} 
+        />
 
         {/* 最新文章 */}
         {recentPosts.length > 0 && (

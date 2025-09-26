@@ -1,4 +1,3 @@
-export { default as PostCard } from './PostCard'
-export { default as PostInfoCard } from './PostInfoCard'
-export { RelatedPosts } from './RelatedPosts'
-export { ContactButton } from './ContactButton'
+export { PostCard } from './PostCard'
+export { ContactButton, PostInfoCard, RelatedPosts } from './PostDetail'
+export { FeaturedPostSection } from './FeaturedPostSection'
