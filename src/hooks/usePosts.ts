@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useLocale } from 'next-intl'
 import { allPosts, Post } from '../../.contentlayer/generated'
+import { tagList } from '../../.contentlayer/generated/tagList.mjs'
 
 
 export interface UsePostsReturn {
@@ -82,9 +83,9 @@ export function usePosts(): UsePostsReturn {
   
   // 获取所有标签
   const getAllTags = useMemo(() => () => {
-    const tags = currentLocalePosts.flatMap((post) => post.tags || [])
-    return Array.from(new Set(tags)).sort()
-  }, [currentLocalePosts])
+    // 使用 Contentlayer 生成的 tagList
+    return tagList
+  }, [])
   
   // 获取置顶文章
   const getFeaturedPost = useMemo(() => () => {

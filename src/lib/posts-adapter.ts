@@ -1,5 +1,6 @@
 // Posts 适配器 - 为服务器组件提供 posts 功能
 import { allPosts, Post } from '../../.contentlayer/generated'
+import { tagList } from '../../.contentlayer/generated/tagList.mjs'
 
 
 export function getAllPosts(locale?: string): Post[] {
@@ -59,14 +60,8 @@ export function getPostsByTag(tag: string, locale?: string): Post[] {
 }
 
 export function getAllTags(locale?: string): string[] {
-  let posts = allPosts.filter((post) => post.published !== false)
-  
-  if (locale) {
-    posts = posts.filter((post) => post.locale === locale)
-  }
-  
-  const tags = posts.flatMap((post) => post.tags || [])
-  return Array.from(new Set(tags)).sort()
+  // 使用 Contentlayer 生成的 tagList
+  return tagList
 }
 
 // 获取置顶文章
