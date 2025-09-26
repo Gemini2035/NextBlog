@@ -16,7 +16,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
   const recentPosts = getRecentPosts(locale)
   const categories = getCategories()
   
-  const t = await getTranslations('posts')
+  const t = await getTranslations('Posts')
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
