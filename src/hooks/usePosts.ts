@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 import { useLocale } from 'next-intl'
 import { allPosts, Post } from '../../.contentlayer/generated'
-import { tagList } from '../../.contentlayer/generated/tagList.mjs'
-
+import { tagList } from '../../.contentlayer/generated'
 
 export interface UsePostsReturn {
   // 基础文章操作

@@ -1,7 +1,6 @@
 // Posts 适配器 - 为服务器组件提供 posts 功能
 import { allPosts, Post } from '../../.contentlayer/generated'
-import { tagList } from '../../.contentlayer/generated/tagList.mjs'
-
+import { tagList } from '../../.contentlayer/generated'
 
 export function getAllPosts(locale?: string): Post[] {
   let posts = allPosts.filter((post) => post.published !== false)
