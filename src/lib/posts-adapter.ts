@@ -1,6 +1,5 @@
 // Posts 适配器 - 为服务器组件提供 posts 功能
 import { allPosts, Post } from '../../.contentlayer/generated'
-// import { allTagLists, TagList } from '../../.contentlayer/generated' // 暂时注释，等待 contentlayer 生成
 
 
 export function getAllPosts(locale?: string): Post[] {
@@ -109,36 +108,3 @@ export function getRecentPosts(locale?: string): Post[] {
 
 
 
-// 暂时注释，等待 contentlayer 生成 TagList 类型
-// 以下函数将在 TagList 类型可用时启用
-
-// export function getTagStats(): TagList | null {
-//   return allTagLists[0] || null
-// }
-
-// export function getMostUsedTags(limit: number = 10): string[] {
-//   const tagList = getTagStats()
-//   if (!tagList) return []
-//   
-//   return tagList.mostUsed?.slice(0, limit) || []
-// }
-
-// export function getSortedTagsByUsage(): string[] {
-//   const tagList = getTagStats()
-//   if (!tagList) return []
-//   
-//   return tagList.sortedByUsage || []
-// }
-
-// export function getTagUsageStats() {
-//   const tagList = getTagStats()
-//   if (!tagList) return null
-//   
-//   return {
-//     totalTags: tagList.totalTags,
-//     totalPosts: tagList.totalPosts,
-//     generatedAt: tagList.generatedAt,
-//     mostUsedTag: tagList.mostUsedTag,
-//     leastUsedTag: tagList.leastUsedTag,
-//   }
-// }
