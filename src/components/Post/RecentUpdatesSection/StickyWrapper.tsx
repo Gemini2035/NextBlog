@@ -10,20 +10,17 @@ import { CollapseIcon } from '@/assets/icons'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
-  featuredPosts: Post[]
+  recentPosts: Post[]
   title: string
 }
 
-export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
+export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
   const [isSticky, setIsSticky] = useState(false)
   const [sectionHeight, setSectionHeight] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
   const originalTopRef = useRef<number | null>(null)
-  const lastScrollY = useRef(0)
-  const scrollDirection = useRef<'up' | 'down' | null>(null)
-  const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
   const { headerHeight } = useLayoutHeights()
 
   // 稳定的滚动处理函数
@@ -32,11 +29,6 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
 
     const scrollY = window.scrollY
     const threshold = originalTopRef.current - headerHeight
-    
-    // 检测滚动方向
-    const currentScrollDirection = scrollY > lastScrollY.current ? 'down' : 'up'
-    scrollDirection.current = currentScrollDirection
-    lastScrollY.current = scrollY
     
     // 特殊情况：当滚动到接近顶部时，强制取消sticky状态
     const isNearTop = scrollY <= headerHeight + 10 // 10px的缓冲区域
@@ -53,24 +45,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
         setIsTransitioning(false)
       }, 300)
     }
-    
-    // 向上滚动时自动打开折叠状态
-    // 当向上滚动且距离原始位置较近时（100px范围内），自动展开
-    if (isSticky && isCollapsed && currentScrollDirection === 'up' && scrollY < threshold + 100) {
-      // 清除之前的定时器
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current)
-      }
-      
-      // 添加防抖，避免过于频繁的状态变化
-      scrollTimeout.current = setTimeout(() => {
-        setIsCollapsed(false)
-      }, 100)
-    }
-    
-    // 向下滚动时，如果滚动距离足够远，可以考虑自动折叠（可选功能）
-    // 这里暂时不实现自动折叠，让用户手动控制
-  }, [isSticky, isCollapsed, headerHeight])
+  }, [isSticky, headerHeight])
 
   useEffect(() => {
     // 初始化：记录原始位置和高度
@@ -95,10 +70,6 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
     return () => {
       window.removeEventListener('load', initPosition)
       window.removeEventListener('scroll', handleScroll)
-      // 清理定时器
-      if (scrollTimeout.current) {
-        clearTimeout(scrollTimeout.current)
-      }
     }
   }, [handleScroll, headerHeight])
 
@@ -150,13 +121,13 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
               {/* 右侧Slider */}
               <div className="flex-1 min-w-0">
                 <Slider
-                  items={featuredPosts.map((post) => (
-                    <CompactPostCard key={post._id} post={post} featured={true} />
+                  items={recentPosts.map((post) => (
+                    <CompactPostCard key={post._id} post={post} featured={false} />
                   ))}
                   itemsPerPage={3.2}
                   slidePerPage={1}
                   gap={12}
-                  showNavigation={featuredPosts.length > 3}
+                  showNavigation={recentPosts.length > 3}
                   showIndicators={false}
                   className="h-auto"
                   itemContainerClassName="py-1"
@@ -169,12 +140,12 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
               <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
                 {title}
               </h2>
-              {featuredPosts.length === 1 ? (
-                <PostCard post={featuredPosts[0]} featured={true} />
+              {recentPosts.length === 1 ? (
+                <PostCard post={recentPosts[0]} featured={false} />
               ) : (
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {featuredPosts.map((post) => (
-                    <PostCard key={post._id} post={post} featured={true} />
+                  {recentPosts.map((post) => (
+                    <PostCard key={post._id} post={post} featured={false} />
                   ))}
                 </div>
               )}
@@ -190,7 +161,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
             type="ghost"
             size="sm"
             className="absolute left-0 top-full px-3 py-2 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm hover:shadow-md"
-            aria-label={isCollapsed ? "展开置顶文章" : "收起置顶文章"}
+            aria-label={isCollapsed ? "展开最近更新" : "收起最近更新"}
           >
             <CollapseIcon 
               className={cn(

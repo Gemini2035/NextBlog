@@ -1,5 +1,5 @@
 import { getAllPosts, getAllTags, getFeaturedPosts, getRecentPosts } from '@/lib/posts-adapter'
-import { PostCard, FeaturedPostSection } from '@/components/Post'
+import { PostCard, FeaturedPostSection, RecentUpdatesSection } from '@/components/Post'
 import { getTranslations } from 'next-intl/server'
 
 interface PostsPageProps {
@@ -36,22 +36,11 @@ export default async function PostsPage({ params }: PostsPageProps) {
           title={t('featuredPost')} 
         />
 
-        {/* 最新文章 */}
-        {recentPosts.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              {t('recentPosts')}
-              <span className="ml-2 text-sm font-normal text-gray-500">
-                ({t('updatedThisWeek', { count: recentPosts.length })})
-              </span>
-            </h2>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {recentPosts.map((post) => (
-                <PostCard key={post._id} post={post} />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* 最近更新文章 */}
+        <RecentUpdatesSection 
+          recentPosts={recentPosts.length > 0 ? recentPosts : null} 
+          title={`${t('recentPosts')} (${t('updatedThisWeek', { count: recentPosts.length })})`} 
+        />
 
 
         {/* 所有标签 */}
