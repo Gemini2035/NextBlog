@@ -110,6 +110,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       autoPlayInterval = 3000,
       loop = false,
       className,
+      itemContainerClassName,
       style,
       onSlideChange,
       ...props
@@ -414,7 +415,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
           {items.map((item, index) => (
             <div
               key={index}
-              className={getSliderItemStyles(actualItemsPerPage)}
+              className={cn(getSliderItemStyles(actualItemsPerPage), itemContainerClassName)}
               style={itemStyle}
               onClick={handleClick}
             >

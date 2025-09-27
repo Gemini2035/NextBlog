@@ -31,14 +31,16 @@ export  function PostCard({ post, featured = false }: PostCardProps) {
               </p>
             )}
             
-            <div className="flex items-center text-sm text-gray-500 mb-4">
-              <time dateTime={post.date}>
-                {formatDate(post.date)}
-              </time>
+            <div className="text-sm text-gray-500 mb-4">
+              <div className="flex items-center">
+                <time dateTime={post.date}>
+                  {formatDate(post.date)}
+                </time>
+              </div>
               {post.updatedAt && post.updatedAt !== post.date && (
-                <span className="ml-2 text-xs text-gray-400">
-                  (更新于 {formatDate(post.updatedAt)})
-                </span>
+                <div className="text-xs text-gray-400 mt-1">
+                  更新于 {formatDate(post.updatedAt)}
+                </div>
               )}
             </div>
           </div>

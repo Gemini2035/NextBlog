@@ -3,12 +3,17 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/utils'
 import { useLayoutHeights } from '@/hooks'
+import { PostCard } from '../PostCard'
+import CompactPostCard from './CompactPostCard'
+import { Slider } from '@/ui'
+import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
-  children: React.ReactNode
+  featuredPosts: Post[]
+  title: string
 }
 
-export function StickyWrapper({ children }: StickyWrapperProps) {
+export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
   const [isSticky, setIsSticky] = useState(false)
   const [sectionHeight, setSectionHeight] = useState<number | null>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -65,9 +70,51 @@ export function StickyWrapper({ children }: StickyWrapperProps) {
         style={{ top: headerHeight }}
       >
         <div className={cn(
-          isSticky && "max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+          isSticky && "mx-auto px-4 sm:px-6 lg:px-8 py-4"
         )}>
-          {children}
+          {isSticky ? (
+            // Sticky状态下的左右布局
+            <div className="flex items-center gap-16 px-16">
+              {/* 左侧标题 */}
+              <div className="flex-shrink-0">
+                <h2 className="text-xl font-bold text-gray-900 whitespace-nowrap">
+                  {title}
+                </h2>
+              </div>
+              
+              {/* 右侧Slider */}
+              <div className="flex-1 min-w-0">
+                <Slider
+                  items={featuredPosts.map((post) => (
+                    <CompactPostCard key={post._id} post={post} featured={true} />
+                  ))}
+                  itemsPerPage={3.2}
+                  slidePerPage={1}
+                  gap={12}
+                  showNavigation={featuredPosts.length > 3}
+                  showIndicators={false}
+                  className="h-auto"
+                  itemContainerClassName="py-1"
+                />
+              </div>
+            </div>
+          ) : (
+            // 正常状态下的布局
+            <>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                {title}
+              </h2>
+              {featuredPosts.length === 1 ? (
+                <PostCard post={featuredPosts[0]} featured={true} />
+              ) : (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {featuredPosts.map((post) => (
+                    <PostCard key={post._id} post={post} featured={true} />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </div>
     </>

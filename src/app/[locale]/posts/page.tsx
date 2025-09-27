@@ -1,4 +1,4 @@
-import { getAllPosts, getAllTags, getFeaturedPost, getRecentPosts } from '@/lib/posts-adapter'
+import { getAllPosts, getAllTags, getFeaturedPosts, getRecentPosts } from '@/lib/posts-adapter'
 import { PostCard, FeaturedPostSection } from '@/components/Post'
 import { getTranslations } from 'next-intl/server'
 
@@ -12,7 +12,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
   const { locale } = await params
   const posts = getAllPosts(locale)
   const tags = getAllTags(locale)
-  const featuredPost = getFeaturedPost(locale)
+  const featuredPosts = getFeaturedPosts(locale)
   const recentPosts = getRecentPosts(locale)
   
   const t = await getTranslations('Posts')
@@ -30,7 +30,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
 
         {/* 置顶文章 */}
         <FeaturedPostSection 
-          featuredPost={featuredPost || null} 
+          featuredPosts={featuredPosts.length > 0 ? featuredPosts : null} 
           title={t('featuredPost')} 
         />
 

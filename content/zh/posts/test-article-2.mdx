@@ -1,0 +1,302 @@
+---
+title: "测试文章2 - TypeScript进阶技巧"
+description: "深入探讨TypeScript的高级特性和实用技巧，提升代码质量和开发效率。"
+date: "2024-01-10"
+updatedAt: "2024-01-18"
+tags: ["TypeScript", "JavaScript", "类型系统", "编程技巧"]
+featured: true
+locale: "zh"
+published: true
+---
+
+# TypeScript进阶技巧
+
+TypeScript作为JavaScript的超集，为JavaScript添加了静态类型系统，大大提高了代码的可维护性和开发效率。本文将介绍一些TypeScript的高级技巧和最佳实践。
+
+## 高级类型系统
+
+### 联合类型和交叉类型
+```typescript
+// 联合类型
+type StringOrNumber = string | number;
+
+// 交叉类型
+interface Person {
+  name: string;
+  age: number;
+}
+
+interface Employee {
+  id: string;
+  department: string;
+}
+
+type PersonEmployee = Person & Employee;
+```
+
+### 条件类型
+```typescript
+type NonNullable<T> = T extends null | undefined ? never : T;
+
+type ApiResponse<T> = T extends string 
+  ? { message: T } 
+  : { data: T };
+```
+
+### 映射类型
+```typescript
+type Partial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+type Required<T> = {
+  [P in keyof T]-?: T[P];
+};
+```
+
+## 泛型的高级用法
+
+### 泛型约束
+```typescript
+interface Lengthwise {
+  length: number;
+}
+
+function logLength<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+```
+
+### 泛型工具类型
+```typescript
+// Pick - 选择特定属性
+type UserInfo = Pick<User, 'name' | 'email'>;
+
+// Omit - 排除特定属性
+type UserWithoutId = Omit<User, 'id'>;
+
+// Record - 创建键值对类型
+type UserRoles = Record<string, string[]>;
+```
+
+## 实用工具类型
+
+### 深度只读
+```typescript
+type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object 
+    ? DeepReadonly<T[P]> 
+    : T[P];
+};
+```
+
+### 深度可选
+```typescript
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object 
+    ? DeepPartial<T[P]> 
+    : T[P];
+};
+```
+
+## 装饰器和元编程
+
+### 类装饰器
+```typescript
+function sealed(constructor: Function) {
+  Object.seal(constructor);
+  Object.seal(constructor.prototype);
+}
+
+@sealed
+class BugReport {
+  type = "report";
+  title: string;
+  
+  constructor(t: string) {
+    this.title = t;
+  }
+}
+```
+
+### 方法装饰器
+```typescript
+function enumerable(value: boolean) {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    descriptor.enumerable = value;
+  };
+}
+
+class Greeter {
+  greeting: string;
+  constructor(message: string) {
+    this.greeting = message;
+  }
+
+  @enumerable(false)
+  greet() {
+    return "Hello, " + this.greeting;
+  }
+}
+```
+
+## 模块和命名空间
+
+### 模块声明
+```typescript
+// 声明外部模块
+declare module "*.vue" {
+  import { DefineComponent } from "vue";
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+```
+
+### 命名空间合并
+```typescript
+namespace Animals {
+  export class Zebra { }
+}
+
+namespace Animals {
+  export interface Legs { number: number; }
+  export class Dog { }
+}
+
+// 等价于
+namespace Animals {
+  export interface Legs { number: number; }
+  export class Zebra { }
+  export class Dog { }
+}
+```
+
+## 异步编程
+
+### Promise类型
+```typescript
+interface Promise<T> {
+  then<TResult1 = T, TResult2 = never>(
+    onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+  ): Promise<TResult1 | TResult2>;
+}
+```
+
+### async/await类型推断
+```typescript
+async function fetchData(): Promise<string> {
+  const response = await fetch('/api/data');
+  return response.text();
+}
+
+// TypeScript会自动推断返回类型
+const result = await fetchData(); // result: string
+```
+
+## 错误处理
+
+### 自定义错误类型
+```typescript
+class CustomError extends Error {
+  constructor(
+    message: string,
+    public code: string,
+    public statusCode: number = 500
+  ) {
+    super(message);
+    this.name = 'CustomError';
+  }
+}
+
+function handleError(error: unknown): never {
+  if (error instanceof CustomError) {
+    console.error(`Error ${error.code}: ${error.message}`);
+  } else {
+    console.error('Unknown error:', error);
+  }
+  throw error;
+}
+```
+
+## 性能优化技巧
+
+### 类型缓存
+```typescript
+// 使用类型缓存避免重复计算
+type CachedType<T> = T extends infer U ? U : never;
+
+// 避免深层嵌套的类型检查
+type Flatten<T> = T extends (infer U)[] ? U : T;
+```
+
+### 编译优化
+```typescript
+// 使用const assertions
+const colors = ['red', 'green', 'blue'] as const;
+type Color = typeof colors[number]; // 'red' | 'green' | 'blue'
+
+// 使用satisfies操作符（TypeScript 4.9+）
+const config = {
+  api: 'https://api.example.com',
+  timeout: 5000,
+  retries: 3
+} satisfies Record<string, string | number>;
+```
+
+## 最佳实践
+
+### 1. 使用严格的类型检查
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true
+  }
+}
+```
+
+### 2. 合理使用any类型
+```typescript
+// 避免过度使用any
+function processData(data: any): any { // 不好
+  return data.process();
+}
+
+// 使用泛型或具体类型
+function processData<T>(data: T): T { // 更好
+  return data;
+}
+```
+
+### 3. 类型文档化
+```typescript
+/**
+ * 用户信息接口
+ * @interface User
+ */
+interface User {
+  /** 用户ID */
+  id: string;
+  /** 用户名称 */
+  name: string;
+  /** 用户邮箱 */
+  email: string;
+  /** 创建时间 */
+  createdAt: Date;
+}
+```
+
+## 总结
+
+TypeScript的高级特性为开发者提供了强大的工具来构建类型安全、可维护的应用程序。通过合理使用这些特性，我们可以：
+
+- 提高代码质量
+- 减少运行时错误
+- 改善开发体验
+- 增强代码可读性
+
+持续学习和实践这些技巧，将帮助你成为更优秀的TypeScript开发者。

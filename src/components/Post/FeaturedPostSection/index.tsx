@@ -1,25 +1,22 @@
-import { PostCard } from '../PostCard'
+
+
 import { StickyWrapper } from './StickyWrapper'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface FeaturedPostSectionProps {
-  featuredPost: Post | null | undefined
+  featuredPosts: Post[] | null | undefined
   title: string
 }
 
-export function FeaturedPostSection({ featuredPost, title }: FeaturedPostSectionProps) {
-  if (!featuredPost) {
+export function FeaturedPostSection({ featuredPosts, title }: FeaturedPostSectionProps) {
+  if (!featuredPosts || featuredPosts.length === 0) {
     return null
   }
 
   return (
-    <StickyWrapper>
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-        {title}
-      </h2>
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-        <PostCard post={featuredPost} featured={true} />
-      </div>
-    </StickyWrapper>
+    <StickyWrapper 
+      featuredPosts={featuredPosts}
+      title={title}
+    />
   )
 }

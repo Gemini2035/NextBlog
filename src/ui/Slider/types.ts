@@ -32,6 +32,8 @@ export interface SliderProps {
   loop?: boolean
   /** 自定义类名 */
   className?: string
+  /** 每个item最外层容器的自定义类名 */
+  itemContainerClassName?: string
   /** 自定义样式 */
   style?: React.CSSProperties
   /** 导航按钮点击事件 */

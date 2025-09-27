@@ -63,15 +63,20 @@ export function getAllTags(locale?: string): string[] {
   return tagList
 }
 
-// 获取置顶文章
+// 获取置顶文章（单篇，向后兼容）
 export function getFeaturedPost(locale?: string): Post | undefined {
+  return getFeaturedPosts(locale)[0]
+}
+
+// 获取所有置顶文章
+export function getFeaturedPosts(locale?: string): Post[] {
   let posts = allPosts.filter((post) => post.published !== false && post.featured === true)
   
   if (locale) {
     posts = posts.filter((post) => post.locale === locale)
   }
   
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 // 获取最近一周更新的文章（最多10篇）
