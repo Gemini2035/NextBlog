@@ -124,6 +124,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const [, setDragCurrentX] = useState(0);
     const [dragOffset, setDragOffset] = useState(0);
     const [hasDragged, setHasDragged] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -218,6 +219,61 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
         };
       }
     }, [autoPlay, autoPlayInterval, slideNext, totalPages]);
+
+    // 鼠标滚动事件处理
+    const handleWheel = useCallback((e: WheelEvent) => {
+      if (!isHovered) return;
+      
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const deltaY = e.deltaY;
+      const deltaX = e.deltaX;
+      const threshold = 50; // 滚动阈值
+      
+      // 处理垂直滚动
+      if (Math.abs(deltaY) > threshold) {
+        if (deltaY > 0) {
+          // 向下滚动，显示下一页
+          slideNext();
+        } else {
+          // 向上滚动，显示上一页
+          slidePrev();
+        }
+      }
+      
+      // 处理横向滚动
+      if (Math.abs(deltaX) > threshold) {
+        if (deltaX > 0) {
+          // 向右滚动，显示下一页
+          slideNext();
+        } else {
+          // 向左滚动，显示上一页
+          slidePrev();
+        }
+      }
+    }, [isHovered, slideNext, slidePrev]);
+
+    // 鼠标悬停状态管理
+    const handleMouseEnter = useCallback(() => {
+      setIsHovered(true);
+    }, []);
+
+    const handleMouseLeave = useCallback(() => {
+      setIsHovered(false);
+    }, []);
+
+    // 添加滚动事件监听器
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      container.addEventListener('wheel', handleWheel, { passive: false });
+      
+      return () => {
+        container.removeEventListener('wheel', handleWheel);
+      };
+    }, [handleWheel]);
 
     // 计算滑动容器的transform
     const getTransform = () => {
@@ -402,7 +458,13 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const canSlideNext = loop || currentIndex < maxIndex;
 
     return (
-      <div ref={containerRef} className={getSliderStyles(className)} {...props}>
+      <div 
+        ref={containerRef} 
+        className={getSliderStyles(className)} 
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+      >
         {/* 滑动容器 */}
         <div
           ref={trackRef}
