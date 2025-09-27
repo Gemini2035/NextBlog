@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Post } from "../../../.contentlayer/generated";
+import { Post } from "../../../../.contentlayer/generated";
 import { getEnhancedRelatedPosts } from "@/lib/posts";
 import { Tag, Button, Link } from "@/ui";
 
