@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { cn } from '@/utils'
 import { useLayoutHeights } from '@/hooks'
 import { PostCard } from '../PostCard'
-import CompactPostCard from './CompactPostCard'
 import { Slider, Button } from '@/ui'
 import { CollapseIcon } from '@/assets/icons'
 import type { Post } from '../../../../.contentlayer/generated'
@@ -151,7 +150,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
               <div className="flex-1 min-w-0">
                 <Slider
                   items={featuredPosts.map((post) => (
-                    <CompactPostCard key={post._id} post={post} featured={true} />
+                    <PostCard key={post._id} post={post} variant="compact" showDescription={false} />
                   ))}
                   itemsPerPage={3.2}
                   slidePerPage={1}
