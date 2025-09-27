@@ -121,10 +121,8 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
-    const [, setDragCurrentX] = useState(0);
-    const [dragOffset, setDragOffset] = useState(0);
+    const [dragEndX, setDragEndX] = useState(0);
     const [hasDragged, setHasDragged] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
 
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -220,60 +218,8 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       }
     }, [autoPlay, autoPlayInterval, slideNext, totalPages]);
 
-    // 鼠标滚动事件处理
-    const handleWheel = useCallback((e: WheelEvent) => {
-      if (!isHovered) return;
-      
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const deltaY = e.deltaY;
-      const deltaX = e.deltaX;
-      const threshold = 50; // 滚动阈值
-      
-      // 处理垂直滚动
-      if (Math.abs(deltaY) > threshold) {
-        if (deltaY > 0) {
-          // 向下滚动，显示下一页
-          slideNext();
-        } else {
-          // 向上滚动，显示上一页
-          slidePrev();
-        }
-      }
-      
-      // 处理横向滚动
-      if (Math.abs(deltaX) > threshold) {
-        if (deltaX > 0) {
-          // 向右滚动，显示下一页
-          slideNext();
-        } else {
-          // 向左滚动，显示上一页
-          slidePrev();
-        }
-      }
-    }, [isHovered, slideNext, slidePrev]);
 
-    // 鼠标悬停状态管理
-    const handleMouseEnter = useCallback(() => {
-      setIsHovered(true);
-    }, []);
 
-    const handleMouseLeave = useCallback(() => {
-      setIsHovered(false);
-    }, []);
-
-    // 添加滚动事件监听器
-    useEffect(() => {
-      const container = containerRef.current;
-      if (!container) return;
-
-      container.addEventListener('wheel', handleWheel, { passive: false });
-      
-      return () => {
-        container.removeEventListener('wheel', handleWheel);
-      };
-    }, [handleWheel]);
 
     // 计算滑动容器的transform
     const getTransform = () => {
@@ -289,9 +235,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
 
     // 计算滑动容器的样式
     const trackStyle: React.CSSProperties = {
-      transform: isDragging
-        ? `translateX(${getTransform().match(/translateX\(([^)]+)\)/)?.[1] || "0%"}) translateX(${dragOffset}px)`
-        : getTransform(),
+      transform: getTransform(),
       paddingLeft: `${paddingLeft}px`,
       gap: `${gap}px`,
       cursor: draggable ? (isDragging ? "grabbing" : "grab") : "default",
@@ -334,43 +278,31 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       setIsDragging(true);
       setHasDragged(false);
       setDragStartX(e.clientX);
-      setDragCurrentX(e.clientX);
-      setDragOffset(0);
     };
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
-      if (!isDragging || !draggable) return;
-      e.preventDefault();
-      const deltaX = e.clientX - dragStartX;
-      setDragCurrentX(e.clientX);
-      setDragOffset(deltaX);
 
-      // 如果移动距离超过阈值，标记为已拖动
-      if (Math.abs(deltaX) > 5) {
-        setHasDragged(true);
-      }
-    }, [isDragging, draggable, dragStartX]);
-
-    const handleMouseUp = useCallback(() => {
+    const handleMouseUp = useCallback((e: MouseEvent) => {
       if (!isDragging || !draggable) return;
       setIsDragging(false);
 
+      // 计算拖动距离
+      const dragDistance = e.clientX - dragStartX;
       const threshold = 50; // 拖动阈值
-      if (Math.abs(dragOffset) > threshold) {
-        if (dragOffset > 0) {
+      
+      if (Math.abs(dragDistance) > threshold) {
+        if (dragDistance > 0) {
           slidePrev();
         } else {
           slideNext();
         }
+        setHasDragged(true);
       }
-
-      setDragOffset(0);
 
       // 延迟重置拖动状态，防止点击事件触发
       setTimeout(() => {
         setHasDragged(false);
       }, 100);
-    }, [isDragging, draggable, dragOffset, slidePrev, slideNext]);
+    }, [isDragging, draggable, dragStartX, slidePrev, slideNext]);
 
     // 触摸事件处理
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -379,69 +311,47 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       setIsDragging(true);
       setHasDragged(false);
       setDragStartX(touch.clientX);
-      setDragCurrentX(touch.clientX);
-      setDragOffset(0);
     };
 
-    const handleTouchMove = useCallback((e: TouchEvent) => {
-      if (!isDragging || !draggable) return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - dragStartX;
-      setDragCurrentX(touch.clientX);
-      setDragOffset(deltaX);
 
-      // 如果移动距离超过阈值，标记为已拖动
-      if (Math.abs(deltaX) > 5) {
-        setHasDragged(true);
-      }
-    }, [isDragging, draggable, dragStartX]);
-
-    const handleTouchEnd = useCallback(() => {
+    const handleTouchEnd = useCallback((e: TouchEvent) => {
       if (!isDragging || !draggable) return;
       setIsDragging(false);
 
+      // 计算拖动距离
+      const touch = e.changedTouches[0];
+      const dragDistance = touch.clientX - dragStartX;
       const threshold = 50; // 拖动阈值
-      if (Math.abs(dragOffset) > threshold) {
-        if (dragOffset > 0) {
+      
+      if (Math.abs(dragDistance) > threshold) {
+        if (dragDistance > 0) {
           slidePrev();
         } else {
           slideNext();
         }
+        setHasDragged(true);
       }
-
-      setDragOffset(0);
 
       // 延迟重置拖动状态，防止点击事件触发
       setTimeout(() => {
         setHasDragged(false);
       }, 100);
-    }, [isDragging, draggable, dragOffset, slidePrev, slideNext]);
+    }, [isDragging, draggable, dragStartX, slidePrev, slideNext]);
 
     // 添加全局事件监听器
     useEffect(() => {
       if (isDragging) {
-        document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
-        document.addEventListener("touchmove", handleTouchMove, {
-          passive: false,
-        });
         document.addEventListener("touchend", handleTouchEnd);
       }
 
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
-        document.removeEventListener("touchmove", handleTouchMove);
         document.removeEventListener("touchend", handleTouchEnd);
       };
     }, [
       isDragging,
-      dragStartX,
-      dragOffset,
-      handleMouseMove,
       handleMouseUp,
-      handleTouchMove,
       handleTouchEnd,
     ]);
 
@@ -461,8 +371,6 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       <div 
         ref={containerRef} 
         className={getSliderStyles(className)} 
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         {...props}
       >
         {/* 滑动容器 */}
@@ -473,6 +381,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
+          draggable={false}
         >
           {items.map((item, index) => (
             <div
@@ -480,6 +389,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               className={cn(getSliderItemStyles(actualItemsPerPage), itemContainerClassName)}
               style={itemStyle}
               onClick={handleClick}
+              draggable={false}
             >
               {item}
             </div>

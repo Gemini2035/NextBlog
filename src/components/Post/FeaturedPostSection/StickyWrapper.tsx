@@ -170,12 +170,21 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                 {title}
               </h2>
               {featuredPosts.length === 1 ? (
-                <PostCard post={featuredPosts[0]} featured={true} />
+                <PostCard post={featuredPosts[0]} />
               ) : (
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {featuredPosts.map((post) => (
-                    <PostCard key={post._id} post={post} featured={true} />
-                  ))}
+                <div className="relative">
+                  <Slider
+                    items={featuredPosts.map((post) => (
+                      <PostCard key={post._id} post={post} />
+                    ))}
+                    itemsPerPage={3}
+                    slidePerPage={1}
+                    gap={24}
+                    showNavigation={featuredPosts.length > 3}
+                    showIndicators={false}
+                    className="h-auto"
+                    itemContainerClassName="py-1"
+                  />
                 </div>
               )}
             </>
