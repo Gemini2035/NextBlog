@@ -20,12 +20,14 @@ export default async function PostsPage({ params }: PostsPageProps) {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900  mb-4">
-            {t('allPosts')}
-          </h1>
-          <p className="text-gray-600 ">
-            {t('totalPosts', { count: posts.length })}
-          </p>
+          <div className="flex items-baseline gap-3 mb-4">
+            <h1 className="text-3xl font-bold text-gray-900">
+              {t('allPosts')}
+            </h1>
+            <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              共 {posts.length} 篇文章
+            </span>
+          </div>
         </div>
 
         {/* 置顶文章 */}

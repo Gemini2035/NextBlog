@@ -54,7 +54,7 @@
     "description": "Sharing technical insights, development experiences, and life reflections"
   },
   "Posts": {
-    "allPosts": "All Posts",
+    "allPosts": "My Blog",
     "totalPosts": "Total {count} posts",
     "featuredPost": "Featured Post",
     "recentPosts": "Recent Posts",

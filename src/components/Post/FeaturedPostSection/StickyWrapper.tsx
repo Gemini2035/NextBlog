@@ -5,7 +5,8 @@ import { cn } from '@/utils'
 import { useLayoutHeights } from '@/hooks'
 import { PostCard } from '../PostCard'
 import CompactPostCard from './CompactPostCard'
-import { Slider } from '@/ui'
+import { Slider, Button } from '@/ui'
+import { CollapseIcon } from '@/assets/icons'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
@@ -16,39 +17,68 @@ interface StickyWrapperProps {
 export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
   const [isSticky, setIsSticky] = useState(false)
   const [sectionHeight, setSectionHeight] = useState<number | null>(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
   const originalTopRef = useRef<number | null>(null)
   const { headerHeight } = useLayoutHeights()
 
   // 稳定的滚动处理函数
   const handleScroll = useCallback(() => {
-    if (!sectionRef.current || !originalTopRef.current) return
+    if (!sectionRef.current || originalTopRef.current === null) return
 
     const scrollY = window.scrollY
+    const threshold = originalTopRef.current - headerHeight
+    
+    // 特殊情况：当滚动到接近顶部时，强制取消sticky状态
+    const isNearTop = scrollY <= headerHeight + 10 // 10px的缓冲区域
     
     // 使用原始位置和当前滚动位置来判断
-    const shouldBeSticky = scrollY > originalTopRef.current - headerHeight
+    const shouldBeSticky = !isNearTop && scrollY >= threshold
     
     if (shouldBeSticky !== isSticky) {
+      setIsTransitioning(true)
       setIsSticky(shouldBeSticky)
+      
+      // 动画完成后重置过渡状态
+      setTimeout(() => {
+        setIsTransitioning(false)
+      }, 300)
     }
-  }, [isSticky])
+  }, [isSticky, headerHeight])
 
   useEffect(() => {
     // 初始化：记录原始位置和高度
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect()
-      originalTopRef.current = rect.top + window.scrollY - headerHeight
-      setSectionHeight(rect.height)
+    const initPosition = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect()
+        originalTopRef.current = rect.top + window.scrollY - headerHeight
+        setSectionHeight(rect.height)
+      }
+    }
+
+    // 页面加载完成后初始化
+    if (document.readyState === 'complete') {
+      initPosition()
+    } else {
+      window.addEventListener('load', initPosition)
     }
 
     // 添加滚动监听
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
+      window.removeEventListener('load', initPosition)
       window.removeEventListener('scroll', handleScroll)
     }
-  }, [handleScroll])
+  }, [handleScroll, headerHeight])
+
+  // 当不再sticky时重置收起状态
+  useEffect(() => {
+    if (!isSticky) {
+      setIsCollapsed(false)
+    }
+  }, [isSticky])
 
   return (
     <>
@@ -65,14 +95,20 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
         ref={sectionRef}
         className={cn(
           "mb-12 transition-all duration-300 ease-in-out",
-          isSticky && "fixed left-0 right-0 z-49 bg-white shadow-lg border-b border-gray-200"
+          isSticky && "fixed left-0 right-0 z-49 bg-white shadow-lg border-b border-gray-200",
+          isCollapsed && isSticky && "transform -translate-y-full"
         )}
         style={{ top: headerHeight }}
       >
         <div className={cn(
           isSticky && "mx-auto px-4 sm:px-6 lg:px-8 py-4"
         )}>
-          {isSticky ? (
+          <div className={cn(
+            "transition-all duration-300 ease-in-out",
+            isTransitioning && "opacity-0",
+            !isTransitioning && "opacity-100"
+          )}>
+            {isSticky ? (
             // Sticky状态下的左右布局
             <div className="flex items-center gap-16 px-16">
               {/* 左侧标题 */}
@@ -115,7 +151,25 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
               )}
             </>
           )}
+          </div>
         </div>
+        
+        {/* 收起按钮 - 仅在sticky状态下显示 */}
+        {isSticky && (
+          <Button
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            type="ghost"
+            size="sm"
+            className="absolute left-0 top-full px-3 py-2 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm hover:shadow-md"
+            aria-label={isCollapsed ? "展开置顶文章" : "收起置顶文章"}
+          >
+            <CollapseIcon 
+              className={cn(
+                isCollapsed ? "rotate-0" : "rotate-180"
+              )}
+            />
+          </Button>
+        )}
       </div>
     </>
   )

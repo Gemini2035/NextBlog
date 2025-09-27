@@ -107,7 +107,7 @@
     "description": "技術的な洞察、開発経験、人生の感想を共有"
   },
   "Posts": {
-    "allPosts": "すべての記事",
+    "allPosts": "私のブログ",
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
     "recentPosts": "最新記事",

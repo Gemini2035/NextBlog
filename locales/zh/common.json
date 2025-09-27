@@ -54,7 +54,7 @@
     "description": "分享技术见解、开发经验和生活感悟"
   },
   "Posts": {
-    "allPosts": "所有文章",
+    "allPosts": "我的博客",
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
     "recentPosts": "最新文章",
