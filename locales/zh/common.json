@@ -147,5 +147,8 @@
     "description": "立即联系我！",
     "contactMe": "联系我",
     "close": "关闭"
+  },
+  "PostCard": {
+    "remainingTags": "其余tag"
   }
 }

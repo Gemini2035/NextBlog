@@ -152,5 +152,8 @@
     "description": "すぐに連絡してください！",
     "contactMe": "お問い合わせ",
     "close": "閉じる"
+  },
+  "PostCard": {
+    "remainingTags": "その他のタグ"
   }
 }

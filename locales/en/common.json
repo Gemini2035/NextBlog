@@ -147,5 +147,8 @@
     "description": "Contact me immediately!",
     "contactMe": "Contact Me",
     "close": "Close"
+  },
+  "PostCard": {
+    "remainingTags": "Other tags"
   }
 }

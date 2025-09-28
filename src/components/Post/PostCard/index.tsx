@@ -4,6 +4,7 @@ import { Link, Card, Tag, Tooltip } from '@/ui'
 import type { Post } from '../../../../.contentlayer/generated'
 import { formatDate, cn } from '@/utils'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 interface PostCardProps {
   post: Post
@@ -43,6 +44,7 @@ function OverflowIndicator({ isVisible, direction, size = 'md', position }: Over
 
 
 export function PostCard({ post, variant = 'default', showDescription = true }: PostCardProps) {
+  const t = useTranslations('PostCard')
   const titleRef = useRef<HTMLHeadingElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
   const titleContainerRef = useRef<HTMLDivElement>(null)
@@ -283,12 +285,17 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                   <div className="flex-shrink-0 flex items-center">
                     <Tooltip 
                       title={
-                        <div className="flex flex-wrap gap-1 max-w-xs">
-                          {post.tags.slice(3).map((tag: string) => (
-                            <span key={tag} className="bg-gray-700 text-white px-2 py-1 rounded text-xs">
-                              {tag}
-                            </span>
-                          ))}
+                        <div className="space-y-2">
+                          <div className="text-xs text-gray-300 font-medium">
+                            {t('remainingTags')}
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {post.tags.slice(3).map((tag: string) => (
+                              <Tag key={tag} size="sm" variant="default">
+                                {tag}
+                              </Tag>
+                            ))}
+                          </div>
                         </div>
                       }
                       placement="top"
