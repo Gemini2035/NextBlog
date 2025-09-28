@@ -95,13 +95,38 @@ jobs:
           CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
         fi
         
-        ZH_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/zh/posts/" || true)
-        EN_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/en/posts/" || true)
-        JA_CHANGES=$(echo "$CHANGED_FILES" | grep "^content/ja/posts/" || true)
+        # 只检测实际存在的文件，忽略删除的文件
+        ZH_CHANGES=""
+        EN_CHANGES=""
+        JA_CHANGES=""
+        
+        if [ -n "$CHANGED_FILES" ]; then
+          for file in $CHANGED_FILES; do
+            if [[ "$file" =~ ^content/zh/posts/ ]] && [ -f "$file" ]; then
+              ZH_CHANGES="$ZH_CHANGES $file"
+            elif [[ "$file" =~ ^content/en/posts/ ]] && [ -f "$file" ]; then
+              EN_CHANGES="$EN_CHANGES $file"
+            elif [[ "$file" =~ ^content/ja/posts/ ]] && [ -f "$file" ]; then
+              JA_CHANGES="$JA_CHANGES $file"
+            fi
+          done
+        fi
+        
+        # 去除多余空格
+        ZH_CHANGES=$(echo "$ZH_CHANGES" | xargs)
+        EN_CHANGES=$(echo "$EN_CHANGES" | xargs)
+        JA_CHANGES=$(echo "$JA_CHANGES" | xargs)
         
         echo "zh_changes=$ZH_CHANGES" >> $GITHUB_OUTPUT
         echo "en_changes=$EN_CHANGES" >> $GITHUB_OUTPUT
         echo "ja_changes=$JA_CHANGES" >> $GITHUB_OUTPUT
+        
+        # 调试信息
+        echo "=== 文件变化检测调试信息 ==="
+        echo "所有变化的文件: $CHANGED_FILES"
+        echo "中文文章变化: $ZH_CHANGES"
+        echo "英文文章变化: $EN_CHANGES"
+        echo "日文文章变化: $JA_CHANGES"
         
         if [ -n "$ZH_CHANGES" ]; then
           echo "translate_from=zh" >> $GITHUB_OUTPUT
