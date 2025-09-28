@@ -1,4 +1,4 @@
-import type { Post } from '../../../../../.contentlayer/generated'
+import type { Post } from '../../../../.contentlayer/generated'
 
 export interface FilterState {
   keyword: string
