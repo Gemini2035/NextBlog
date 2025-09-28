@@ -54,7 +54,7 @@
     "description": "分享技术见解、开发经验和生活感悟"
   },
   "Posts": {
-    "allPosts": "我的博客",
+    "allPosts": "所有文章",
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
     "recentPosts": "最新文章",
@@ -66,7 +66,9 @@
     "noPosts": "暂无文章",
     "relatedPosts": "推荐文章",
     "refresh": "换一批",
-    "refreshing": "更换中..."
+    "refreshing": "更换中...",
+    "prevPage": "← 上一页",
+    "nextPage": "下一页 →"
   },
   "Header": {
     "mainNavigation": "主导航",

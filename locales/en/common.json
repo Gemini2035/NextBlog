@@ -54,7 +54,7 @@
     "description": "Sharing technical insights, development experiences, and life reflections"
   },
   "Posts": {
-    "allPosts": "My Blog",
+    "allPosts": "All Posts",
     "totalPosts": "Total {count} posts",
     "featuredPost": "Featured Post",
     "recentPosts": "Recent Posts",
@@ -66,7 +66,9 @@
     "noPosts": "No posts available",
     "relatedPosts": "Related Posts",
     "refresh": "Refresh",
-    "refreshing": "Refreshing..."
+    "refreshing": "Refreshing...",
+    "prevPage": "← Previous",
+    "nextPage": "Next →"
   },
   "Header": {
     "mainNavigation": "Main navigation",

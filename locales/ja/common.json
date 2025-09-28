@@ -107,7 +107,7 @@
     "description": "技術的な洞察、開発経験、人生の感想を共有"
   },
   "Posts": {
-    "allPosts": "私のブログ",
+    "allPosts": "すべての記事",
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
     "recentPosts": "最新記事",
@@ -119,7 +119,9 @@
     "noPosts": "記事がありません",
     "relatedPosts": "関連記事",
     "refresh": "更新",
-    "refreshing": "更新中..."
+    "refreshing": "更新中...",
+    "prevPage": "← 前へ",
+    "nextPage": "次へ →"
   },
   "Header": {
     "mainNavigation": "メインナビゲーション",

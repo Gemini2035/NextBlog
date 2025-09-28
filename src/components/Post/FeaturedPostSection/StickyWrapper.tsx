@@ -165,7 +165,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
           ) : (
             // 正常状态下的布局
             <>
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 {title}
               </h2>
               {featuredPosts.length === 1 ? (

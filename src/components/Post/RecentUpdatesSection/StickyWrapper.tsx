@@ -11,7 +11,7 @@ export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
 
   return (
     <div className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">
         {title}
       </h2>
       {recentPosts.length === 1 ? (
