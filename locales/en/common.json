@@ -55,6 +55,7 @@
   },
   "Posts": {
     "allPosts": "All Posts",
+    "articleList": "Article List",
     "totalPosts": "Total {count} posts",
     "featuredPost": "Featured Post",
     "recentPosts": "Recent Posts",

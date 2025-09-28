@@ -36,8 +36,21 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page)
-    // 滚动到顶部
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    // 滚动到所有文章标题处而不是直接回顶部
+    // 使用setTimeout确保DOM更新后再滚动
+    setTimeout(() => {
+      // 查找所有文章标题（使用ID选择器更精确）
+      const allPostsTitle = document.getElementById('all-posts-title')
+      if (allPostsTitle) {
+        const titleRect = allPostsTitle.getBoundingClientRect()
+        const headerHeight = 64 // 假设header高度为64px
+        const scrollTop = window.scrollY + titleRect.top - headerHeight - 20 // 额外20px的缓冲
+        window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
+      } else {
+        // 如果找不到标题，则滚动到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }, 100) // 100ms延迟确保DOM更新
   }
 
   // 当currentPage变化时，确保分页组件同步
@@ -47,7 +60,7 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
 
   return (
     <div className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 id="all-posts-title" className="text-2xl font-bold text-gray-900 mb-6">
         {title}
       </h2>
       

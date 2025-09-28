@@ -13,6 +13,7 @@ interface PostInfoCardProps {
 }
 
 export function PostInfoCard({ post }: PostInfoCardProps) {
+  // 暂时禁用sticky功能
   const [isSticky, setIsSticky] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);

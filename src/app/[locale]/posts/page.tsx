@@ -45,7 +45,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
         {/* 所有文章 */}
         <AllPostsSection 
           posts={posts.length > 0 ? posts : null} 
-          title={t('allPosts')}
+          title={t('articleList')}
           prevText={t('prevPage')}
           nextText={t('nextPage')}
         />

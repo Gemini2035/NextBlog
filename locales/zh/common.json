@@ -55,6 +55,7 @@
   },
   "Posts": {
     "allPosts": "所有文章",
+    "articleList": "文章列表",
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
     "recentPosts": "最新文章",

@@ -108,6 +108,7 @@
   },
   "Posts": {
     "allPosts": "すべての記事",
+    "articleList": "記事リスト",
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
     "recentPosts": "最新記事",

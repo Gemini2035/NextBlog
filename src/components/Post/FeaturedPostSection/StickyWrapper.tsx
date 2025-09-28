@@ -19,33 +19,39 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const cardListRef = useRef<HTMLDivElement>(null) // 新增：用于监听卡片列表底部
   const originalTopRef = useRef<number | null>(null)
   const lastScrollY = useRef(0)
   const scrollDirection = useRef<'up' | 'down' | null>(null)
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
   const { headerHeight } = useLayoutHeights()
 
-  // 稳定的滚动处理函数
+  // 优化的滚动处理函数 - 监听卡片列表底部
   const handleScroll = useCallback(() => {
-    if (!sectionRef.current || originalTopRef.current === null) return
+    if (!sectionRef.current || !cardListRef.current || originalTopRef.current === null) return
 
     const scrollY = window.scrollY
-    const threshold = originalTopRef.current - headerHeight
     
     // 检测滚动方向
     const currentScrollDirection = scrollY > lastScrollY.current ? 'down' : 'up'
     scrollDirection.current = currentScrollDirection
     lastScrollY.current = scrollY
     
+    // 获取卡片列表底部的位置
+    const cardListRect = cardListRef.current.getBoundingClientRect()
+    const cardListBottom = cardListRect.bottom + scrollY
+    
+    // 当卡片列表底部离开顶部HeaderHeight时，才进行sticky状态转换
+    const shouldBeSticky = cardListBottom > headerHeight
+    
     // 特殊情况：当滚动到接近顶部时，强制取消sticky状态
     const isNearTop = scrollY <= headerHeight + 10 // 10px的缓冲区域
     
-    // 使用原始位置和当前滚动位置来判断
-    const shouldBeSticky = !isNearTop && scrollY >= threshold
+    const finalShouldBeSticky = shouldBeSticky && !isNearTop
     
-    if (shouldBeSticky !== isSticky) {
+    if (finalShouldBeSticky !== isSticky) {
       setIsTransitioning(true)
-      setIsSticky(shouldBeSticky)
+      setIsSticky(finalShouldBeSticky)
       
       // 动画完成后重置过渡状态
       setTimeout(() => {
@@ -55,7 +61,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
     
     // 向上滚动时自动打开折叠状态
     // 当向上滚动且距离原始位置较近时（100px范围内），自动展开
-    if (isSticky && isCollapsed && currentScrollDirection === 'up' && scrollY < threshold + 100) {
+    if (isSticky && isCollapsed && currentScrollDirection === 'up' && scrollY < originalTopRef.current + 100) {
       // 清除之前的定时器
       if (scrollTimeout.current) {
         clearTimeout(scrollTimeout.current)
@@ -66,9 +72,6 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
         setIsCollapsed(false)
       }, 100)
     }
-    
-    // 向下滚动时，如果滚动距离足够远，可以考虑自动折叠（可选功能）
-    // 这里暂时不实现自动折叠，让用户手动控制
   }, [isSticky, isCollapsed, headerHeight])
 
   useEffect(() => {
@@ -148,18 +151,20 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
               
               {/* 右侧Slider */}
               <div className="flex-1 min-w-0">
-                <Slider
-                  items={featuredPosts.map((post) => (
-                    <PostCard key={post._id} post={post} variant="compact" showDescription={false} />
-                  ))}
-                  itemsPerPage={3.2}
-                  slidePerPage={1}
-                  gap={12}
-                  showNavigation={featuredPosts.length > 3}
-                  showIndicators={false}
-                  className="h-auto"
-                  itemContainerClassName="py-1"
-                />
+                <div ref={cardListRef}>
+                  <Slider
+                    items={featuredPosts.map((post) => (
+                      <PostCard key={post._id} post={post} variant="compact" showDescription={false} />
+                    ))}
+                    itemsPerPage={3.2}
+                    slidePerPage={1}
+                    gap={12}
+                    showNavigation={featuredPosts.length > 3}
+                    showIndicators={false}
+                    className="h-auto"
+                    itemContainerClassName="py-1"
+                  />
+                </div>
               </div>
             </div>
           ) : (
@@ -172,18 +177,20 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                 <PostCard post={featuredPosts[0]} />
               ) : (
                 <div className="relative">
-                  <Slider
-                    items={featuredPosts.map((post) => (
-                      <PostCard key={post._id} post={post} />
-                    ))}
-                    itemsPerPage={3}
-                    slidePerPage={1}
-                    gap={24}
-                    showNavigation={featuredPosts.length > 3}
-                    showIndicators={false}
-                    className="h-auto"
-                    itemContainerClassName="py-1"
-                  />
+                  <div ref={cardListRef}>
+                    <Slider
+                      items={featuredPosts.map((post) => (
+                        <PostCard key={post._id} post={post} />
+                      ))}
+                      itemsPerPage={3}
+                      slidePerPage={1}
+                      gap={24}
+                      showNavigation={featuredPosts.length > 3}
+                      showIndicators={false}
+                      className="h-auto"
+                      itemContainerClassName="py-1"
+                    />
+                  </div>
                 </div>
               )}
             </>
