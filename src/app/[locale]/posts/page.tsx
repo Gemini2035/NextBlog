@@ -48,6 +48,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
           title={t('articleList')}
           prevText={t('prevPage')}
           nextText={t('nextPage')}
+          locale={locale}
         />
 
         {posts.length === 0 && (

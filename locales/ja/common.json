@@ -158,5 +158,30 @@
   },
   "PostCard": {
     "remainingTags": "その他のタグ"
+  },
+  "PostFilter": {
+    "title": "記事フィルター",
+    "description": "複数の条件で記事をフィルタリング・ソート",
+    "keywordSearch": "キーワード検索",
+    "keywordPlaceholder": "記事タイトル、コンテンツ、タグを検索...",
+    "tagFilter": "タグフィルター",
+    "featuredFilter": "おすすめフィルター",
+    "allPosts": "すべての記事",
+    "featuredOnly": "おすすめ記事のみ",
+    "nonFeaturedOnly": "通常記事のみ",
+    "wordCountSort": "文字数ソート",
+    "wordCountAsc": "文字数昇順",
+    "wordCountDesc": "文字数降順",
+    "wordCountPlaceholder": "文字数ソートを選択",
+    "createTimeSort": "作成時間ソート",
+    "createTimeAsc": "作成時間昇順",
+    "createTimeDesc": "作成時間降順",
+    "createTimePlaceholder": "作成時間ソートを選択",
+    "updateTimeSort": "更新時間ソート",
+    "updateTimeAsc": "更新時間昇順",
+    "updateTimeDesc": "更新時間降順",
+    "updateTimePlaceholder": "更新時間ソートを選択",
+    "clearAll": "すべてのフィルターをクリア",
+    "filteredCount": "フィルター結果：{count} / {total} 記事"
   }
 }

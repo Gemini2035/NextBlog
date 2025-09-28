@@ -6,9 +6,10 @@ interface AllPostsSectionProps {
   title: string
   prevText?: string
   nextText?: string
+  locale?: string
 }
 
-export function AllPostsSection({ posts, title, prevText, nextText }: AllPostsSectionProps) {
+export function AllPostsSection({ posts, title, prevText, nextText, locale }: AllPostsSectionProps) {
   if (!posts || posts.length === 0) {
     return null
   }
@@ -19,6 +20,7 @@ export function AllPostsSection({ posts, title, prevText, nextText }: AllPostsSe
       title={title}
       prevText={prevText}
       nextText={nextText}
+      locale={locale}
     />
   )
 }

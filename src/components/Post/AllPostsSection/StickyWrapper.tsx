@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { PostCard } from '../PostCard'
+import { PostFilter } from '../FeaturedPostSection/PostFilter'
 import { Pagination } from '@/ui'
 import type { Post } from '../../../../.contentlayer/generated'
 
@@ -10,15 +11,22 @@ interface StickyWrapperProps {
   title: string
   prevText?: string
   nextText?: string
+  locale?: string
 }
 
 
-export function StickyWrapper({ posts, title, prevText = "上一页", nextText = "下一页" }: StickyWrapperProps) {
+export function StickyWrapper({ posts, title, prevText = "上一页", nextText = "下一页", locale }: StickyWrapperProps) {
   const [currentPage, setCurrentPage] = useState(1)
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts || [])
   const pageSize = 9 // 3x3网格，每页显示9篇文章
 
-  // 使用真实数据
-  const actualPosts = posts || []
+  // 使用useCallback包装setFilteredPosts函数
+  const handleFilteredPostsChange = useCallback((newFilteredPosts: Post[]) => {
+    setFilteredPosts(newFilteredPosts)
+  }, [])
+
+  // 使用筛选后的数据
+  const actualPosts = filteredPosts
 
   // 计算分页数据
   const paginationData = useMemo(() => {
@@ -53,6 +61,11 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
     }, 100) // 100ms延迟确保DOM更新
   }
 
+  // 当筛选结果变化时，重置到第一页
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [filteredPosts])
+
   // 当currentPage变化时，确保分页组件同步
   useEffect(() => {
     setCurrentPage(currentPage)
@@ -60,12 +73,22 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
 
   return (
     <div className="mb-12">
+      {/* 标题 */}
       <h2 id="all-posts-title" className="text-2xl font-bold text-gray-900 mb-6">
         {title}
       </h2>
       
-      {/* 3x3网格布局 */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+      {/* 筛选器 */}
+      <div className="mb-8">
+        <PostFilter
+          posts={posts}
+          onFilteredPostsChange={handleFilteredPostsChange}
+          locale={locale}
+        />
+      </div>
+      
+      {/* 文章列表 */}
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
         {paginationData.currentPosts.map((post) => (
           <PostCard key={post._id} post={post} />
         ))}

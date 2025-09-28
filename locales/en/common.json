@@ -153,5 +153,30 @@
   },
   "PostCard": {
     "remainingTags": "Other tags"
+  },
+  "PostFilter": {
+    "title": "Post Filter",
+    "description": "Filter and sort posts with multiple criteria",
+    "keywordSearch": "Keyword Search",
+    "keywordPlaceholder": "Search post titles, content, tags...",
+    "tagFilter": "Tag Filter",
+    "featuredFilter": "Featured Filter",
+    "allPosts": "All Posts",
+    "featuredOnly": "Featured Only",
+    "nonFeaturedOnly": "Non-Featured Only",
+    "wordCountSort": "Word Count Sort",
+    "wordCountAsc": "Word Count Ascending",
+    "wordCountDesc": "Word Count Descending",
+    "wordCountPlaceholder": "Select word count sort",
+    "createTimeSort": "Create Time Sort",
+    "createTimeAsc": "Create Time Ascending",
+    "createTimeDesc": "Create Time Descending",
+    "createTimePlaceholder": "Select create time sort",
+    "updateTimeSort": "Update Time Sort",
+    "updateTimeAsc": "Update Time Ascending",
+    "updateTimeDesc": "Update Time Descending",
+    "updateTimePlaceholder": "Select update time sort",
+    "clearAll": "Clear All Filters",
+    "filteredCount": "Filtered results: {count} / {total} posts"
   }
 }
