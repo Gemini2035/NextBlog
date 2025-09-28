@@ -4,7 +4,7 @@ import { Link, Card, Tooltip } from '@/ui'
 import { PostTag } from '../PostTag'
 import type { Post } from '../../../../.contentlayer/generated'
 import { formatDate, cn } from '@/utils'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface PostCardProps {
@@ -18,6 +18,165 @@ interface OverflowIndicatorProps {
   direction: 'right' | 'down'
   size?: 'sm' | 'md'
   position?: 'title' | 'description'
+}
+
+interface TagLayoutInfo {
+  visibleTags: string[]
+  hiddenCount: number
+  showOverflowIndicator: boolean
+}
+
+/**
+ * 计算标签布局信息，使用贪心算法尽可能展示更多标签
+ * 
+ * 算法策略：
+ * 1. 按宽度排序标签（短标签优先）
+ * 2. 贪心选择：逐个添加标签，直到无法容纳更多
+ * 3. 智能替换：尝试用更短的标签替换已选择的标签
+ * 4. 优化替换：检查是否可以用两个短标签替换一个长标签
+ * 
+ * 考虑+x标签的宽度，确保布局不会溢出
+ */
+function calculateTagLayout(
+  tags: string[], 
+  containerWidth: number, 
+  isCompact: boolean
+): TagLayoutInfo {
+  if (!tags || tags.length === 0) {
+    return { visibleTags: [], hiddenCount: 0, showOverflowIndicator: false }
+  }
+
+  // 估算单个标签的宽度（基于文本长度和样式）
+  const estimateTagWidth = (tag: string): number => {
+    const baseWidth = isCompact ? 16 : 20 // 基础padding
+    const charWidth = isCompact ? 6 : 7 // 每个字符的近似宽度
+    // 考虑中文字符更宽的情况
+    const hasChinese = /[\u4e00-\u9fa5]/.test(tag)
+    const adjustedCharWidth = hasChinese ? charWidth * 1.2 : charWidth
+    return baseWidth + (tag.length * adjustedCharWidth)
+  }
+
+  // 估算+x标签的宽度
+  const estimateOverflowWidth = (count: number): number => {
+    const baseWidth = isCompact ? 12 : 16
+    const charWidth = isCompact ? 5 : 6
+    const text = `+${count}`
+    return baseWidth + (text.length * charWidth)
+  }
+
+  // 标签间距
+  const gap = isCompact ? 4 : 8
+  const maxWidth = containerWidth * 0.9 // 留出10%的缓冲空间
+
+  // 贪心算法：按宽度排序标签，优先选择较短的标签
+  const tagsWithWidth = tags.map((tag, index) => ({
+    tag,
+    width: estimateTagWidth(tag),
+    originalIndex: index // 保持原始顺序信息
+  }))
+
+  // 按宽度排序（短标签优先），如果宽度相同则保持原始顺序
+  tagsWithWidth.sort((a, b) => {
+    if (a.width === b.width) {
+      return a.originalIndex - b.originalIndex
+    }
+    return a.width - b.width
+  })
+
+  // 贪心选择：尽可能多地选择标签
+  const selectedTags: string[] = []
+  let totalWidth = 0
+
+  for (const { tag, width } of tagsWithWidth) {
+    const wouldNeedOverflow = selectedTags.length < tags.length - 1
+    const remainingTags = tags.length - selectedTags.length - 1
+    const overflowWidth = wouldNeedOverflow ? estimateOverflowWidth(remainingTags) + gap : 0
+    
+    const newTotalWidth = totalWidth + width + (selectedTags.length > 0 ? gap : 0) + overflowWidth
+    
+    if (newTotalWidth <= maxWidth) {
+      selectedTags.push(tag)
+      totalWidth = newTotalWidth - overflowWidth
+    } else {
+      // 尝试是否可以用更短的标签替换最后一个已选择的标签
+      if (selectedTags.length > 0) {
+        const lastSelectedTag = selectedTags[selectedTags.length - 1]
+        const lastTagWidth = estimateTagWidth(lastSelectedTag)
+        
+        // 如果当前标签比最后一个选择的标签更短，尝试替换
+        if (width < lastTagWidth) {
+          const newTotalWidthWithReplacement = totalWidth - lastTagWidth + width
+          if (newTotalWidthWithReplacement + overflowWidth <= maxWidth) {
+            selectedTags[selectedTags.length - 1] = tag
+            totalWidth = newTotalWidthWithReplacement
+          }
+        }
+      }
+      break
+    }
+  }
+
+  // 如果贪心算法没有选择任何标签，但有空间显示+x标签，则至少显示一个最短的标签
+  if (selectedTags.length === 0 && tags.length > 0) {
+    const shortestTag = tagsWithWidth[0]
+    const overflowWidth = estimateOverflowWidth(tags.length - 1) + gap
+    const totalNeededWidth = shortestTag.width + overflowWidth
+    
+    if (totalNeededWidth <= maxWidth) {
+      selectedTags.push(shortestTag.tag)
+    }
+  }
+
+  // 尝试进一步优化：检查是否可以用两个更短的标签替换一个较长的标签
+  if (selectedTags.length > 0) {
+    const remainingTags = tagsWithWidth.filter(tagInfo => !selectedTags.includes(tagInfo.tag))
+    
+    for (let i = 0; i < selectedTags.length; i++) {
+      const currentTag = selectedTags[i]
+      const currentTagWidth = estimateTagWidth(currentTag)
+      
+      // 寻找两个更短的标签来替换当前标签
+      for (let j = 0; j < remainingTags.length - 1; j++) {
+        for (let k = j + 1; k < remainingTags.length; k++) {
+          const tag1 = remainingTags[j]
+          const tag2 = remainingTags[k]
+          const twoTagsWidth = tag1.width + tag2.width + gap
+          
+          // 如果两个标签的总宽度小于当前标签，且加上+x标签后仍然能放下
+          if (twoTagsWidth < currentTagWidth) {
+            const newTotalWidth = totalWidth - currentTagWidth + twoTagsWidth
+            const remainingCount = tags.length - selectedTags.length - 2
+            const overflowWidth = remainingCount > 0 ? estimateOverflowWidth(remainingCount) + gap : 0
+            
+            if (newTotalWidth + overflowWidth <= maxWidth) {
+              // 替换标签
+              selectedTags[i] = tag1.tag
+              selectedTags.splice(i + 1, 0, tag2.tag)
+              totalWidth = newTotalWidth
+              
+              // 更新剩余标签列表
+              remainingTags.splice(k, 1)
+              remainingTags.splice(j, 1)
+              break
+            }
+          }
+        }
+        if (remainingTags.length <= 1) break
+      }
+    }
+  }
+
+  const hiddenCount = tags.length - selectedTags.length
+  const showOverflowIndicator = hiddenCount > 0
+
+  // 保持原始标签顺序，但只返回被选中的标签
+  const visibleTags = tags.filter(tag => selectedTags.includes(tag))
+
+  return {
+    visibleTags,
+    hiddenCount,
+    showOverflowIndicator
+  }
 }
 
 function OverflowIndicator({ isVisible, direction, size = 'md', position }: OverflowIndicatorProps) {
@@ -56,10 +215,13 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const [animationKey, setAnimationKey] = useState(0)
   const [titleScrollDistance, setTitleScrollDistance] = useState(0)
   const [descriptionScrollDistance, setDescriptionScrollDistance] = useState(0)
+  const [tagContainerWidth, setTagContainerWidth] = useState(0)
+  const tagContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const titleElement = titleRef.current
     const descriptionElement = descriptionRef.current
+    const tagContainerElement = tagContainerRef.current
     if (!titleElement || !descriptionElement) return
 
     // 检查标题是否超出容器宽度
@@ -88,9 +250,18 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
       setDescriptionScrollDistance(distance)
     }
 
+    // 检查标签容器宽度
+    const checkTagContainerWidth = () => {
+      if (tagContainerElement) {
+        const width = tagContainerElement.clientWidth
+        setTagContainerWidth(width)
+      }
+    }
+
     const checkOverflow = () => {
       checkTitleOverflow()
       checkDescriptionOverflow()
+      checkTagContainerWidth()
     }
 
     // 延迟检查，确保DOM已渲染
@@ -99,7 +270,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
     // 监听窗口大小变化
     window.addEventListener('resize', checkOverflow)
     return () => window.removeEventListener('resize', checkOverflow)
-  }, [post.title, post.description])
+  }, [post.title, post.description, post.tags])
 
   const isCompact = variant === 'compact'
   const padding = isCompact ? 'p-4' : 'p-6'
@@ -112,6 +283,15 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const tagSize = isCompact ? 'text-xs px-2 py-1' : ''
 
   const TitleComponent = titleTag as 'h2' | 'h3'
+
+  // 计算标签布局信息
+  const tagLayout = useMemo(() => {
+    if (!post.tags || post.tags.length === 0 || tagContainerWidth === 0) {
+      return { visibleTags: [], hiddenCount: 0, showOverflowIndicator: false }
+    }
+    
+    return calculateTagLayout(post.tags, tagContainerWidth, isCompact)
+  }, [post.tags, tagContainerWidth, isCompact])
 
   return (
     <Card 
@@ -266,15 +446,18 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
           
           {/* 标签区域 */}
           {post.tags && post.tags.length > 0 && (
-            <div className={cn(
-              tagHeight,
-              "flex items-center overflow-hidden",
-              isCompact ? "gap-1" : "gap-2"
-            )}>
+            <div 
+              ref={tagContainerRef}
+              className={cn(
+                tagHeight,
+                "flex items-center overflow-hidden",
+                isCompact ? "gap-1" : "gap-2"
+              )}
+            >
               <div className="flex items-center overflow-hidden w-full gap-1">
                 {/* 显示的标签 */}
                 <div className="flex items-center gap-1 flex-shrink-0">
-                  {post.tags.slice(0, 3).map((tag: string) => (
+                  {tagLayout.visibleTags.map((tag: string) => (
                     <PostTag key={tag} size="small" compact className={cn("flex-shrink-0", tagSize)}>
                       {tag}
                     </PostTag>
@@ -282,7 +465,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                 </div>
                 
                 {/* 隐藏标签的提示 */}
-                {post.tags.length > 3 && (
+                {tagLayout.showOverflowIndicator && (
                   <div className="flex-shrink-0 flex items-center">
                     <Tooltip 
                       title={
@@ -291,7 +474,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                             {t('remainingTags')}
                           </div>
                           <div className="flex flex-wrap gap-1">
-                            {post.tags.slice(3).map((tag: string) => (
+                            {post.tags.slice(tagLayout.visibleTags.length).map((tag: string) => (
                               <PostTag key={tag} size="small" inTooltip>
                                 {tag}
                               </PostTag>
@@ -304,10 +487,10 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                       delay={200}
                     >
                       <span className={cn(
-                        "text-gray-500 text-xs font-medium",
+                        "text-gray-500 text-xs font-medium cursor-pointer hover:text-gray-700 transition-colors px-1 rounded",
                         isCompact ? "text-xs" : "text-xs"
                       )}>
-                        +{post.tags.length - 3}
+                        +{tagLayout.hiddenCount}
                       </span>
                     </Tooltip>
                   </div>
