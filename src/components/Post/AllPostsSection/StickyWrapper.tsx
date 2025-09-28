@@ -3,8 +3,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
 import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
-import { Pagination } from '@/ui'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { Post } from '.contentlayer/generated'
 
 interface StickyWrapperProps {
   posts: Post[]
