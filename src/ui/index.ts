@@ -32,3 +32,13 @@ export type {
   NavigationVariant,
   IndicatorVariant
 } from './Slider'
+export { Tooltip } from './Tooltip'
+export type { 
+  TooltipProps, 
+  TooltipRef,
+  TooltipTrigger,
+  TooltipPlacement,
+  TooltipTheme,
+  TooltipState,
+  TooltipAnimation
+} from './Tooltip'
