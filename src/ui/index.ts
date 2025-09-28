@@ -32,3 +32,12 @@ export type {
   NavigationVariant,
   IndicatorVariant
 } from './Slider'
+export { Collapse } from './Collapse'
+export type { 
+  CollapseProps, 
+  CollapseRef,
+  CollapsePanelProps,
+  CollapsePanelRef,
+  CollapseSize,
+  CollapseVariant
+} from './Collapse'
