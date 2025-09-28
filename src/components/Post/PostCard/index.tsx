@@ -1,6 +1,7 @@
 'use client'
 
-import { Link, Card, Tag, Tooltip } from '@/ui'
+import { Link, Card, Tooltip } from '@/ui'
+import { PostTag } from '../PostTag'
 import type { Post } from '../../../../.contentlayer/generated'
 import { formatDate, cn } from '@/utils'
 import { useEffect, useRef, useState } from 'react'
@@ -274,9 +275,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                 {/* 显示的标签 */}
                 <div className="flex items-center gap-1 flex-shrink-0">
                   {post.tags.slice(0, 3).map((tag: string) => (
-                    <Tag key={tag} size="sm" className={cn("flex-shrink-0", tagSize)}>
+                    <PostTag key={tag} size="small" compact className={cn("flex-shrink-0", tagSize)}>
                       {tag}
-                    </Tag>
+                    </PostTag>
                   ))}
                 </div>
                 
@@ -291,9 +292,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {post.tags.slice(3).map((tag: string) => (
-                              <Tag key={tag} size="sm" variant="default">
+                              <PostTag key={tag} size="small" inTooltip>
                                 {tag}
-                              </Tag>
+                              </PostTag>
                             ))}
                           </div>
                         </div>

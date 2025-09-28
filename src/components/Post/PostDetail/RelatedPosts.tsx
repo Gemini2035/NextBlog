@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Post } from "../../../../.contentlayer/generated";
 import { getEnhancedRelatedPosts } from "@/lib/posts";
-import { Tag, Button, Link } from "@/ui";
+import { Button, Link } from "@/ui";
+import { PostTag } from "../PostTag";
 
 // 循环图标组件
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
@@ -99,9 +100,9 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
                   {relatedPost.tags && relatedPost.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1">
                       {relatedPost.tags.slice(0, 2).map((tag) => (
-                        <Tag key={tag} size="sm">
+                        <PostTag key={tag} size="small" variant="secondary">
                           {tag}
-                        </Tag>
+                        </PostTag>
                       ))}
                     </div>
                   )}

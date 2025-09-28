@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, Button, Tag } from "@/ui";
+import { Card, Button } from "@/ui";
+import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
 import { CollapseIcon } from "@/assets/icons";
 import type { Post } from "../../../../.contentlayer/generated";
@@ -169,12 +170,13 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag: string) => (
-                      <Tag
+                      <PostTag
                         key={tag}
-                        size={isSticky ? "sm" : "md"}
+                        size={isSticky ? "small" : "medium"}
+                        variant="primary"
                       >
                         {tag}
-                      </Tag>
+                      </PostTag>
                     ))}
                   </div>
                 </div>
