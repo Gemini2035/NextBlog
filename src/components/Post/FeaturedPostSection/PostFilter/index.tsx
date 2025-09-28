@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import { Collapse, CollapsePanel } from '@/ui'
 import { FilterSection } from './FilterSection'
 import { KeywordSearch } from './KeywordSearch'
 import { TagFilter } from './TagFilter'
 import { SortSelect } from './SortSelect'
 import { FeaturedFilter } from './FeaturedFilter'
 import { ClearButton } from './ClearButton'
-import { MobileToggle } from './MobileToggle'
 import { applyFilters, getAllTagsWithCount } from './utils'
 import type { PostFilterProps, FilterState, SortOption } from './types'
 
@@ -24,7 +24,7 @@ export function PostFilter({ posts, onFilteredPostsChange, locale }: PostFilterP
     updateTimeSort: null
   })
 
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
 
   // 获取所有标签
   const allTags = useMemo(() => getAllTagsWithCount(posts), [posts])
@@ -74,19 +74,26 @@ export function PostFilter({ posts, onFilteredPostsChange, locale }: PostFilterP
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
-      {/* 移动端折叠按钮 */}
-      <MobileToggle
-        isOpen={isMobileOpen}
-        onToggle={() => setIsMobileOpen(!isMobileOpen)}
-        title={t('title')}
-      />
-      
-      {/* 筛选器内容 */}
-      <div className={`p-4 ${isMobileOpen ? 'block' : 'hidden lg:block'}`}>
-        <div className="mb-4">
-          <h2 className="text-base font-semibold text-gray-900 mb-1">{t('title')}</h2>
-          <p className="text-xs text-gray-600">{t('description')}</p>
-        </div>
+      <Collapse
+        activeKey={isOpen ? ['filter'] : []}
+        onChange={(keys) => {
+          const newIsOpen = Array.isArray(keys) ? keys.includes('filter') : keys === 'filter'
+          setIsOpen(newIsOpen)
+        }}
+        variant="bordered"
+        size="sm"
+      >
+        <CollapsePanel
+          key="filter"
+          header={
+            <div>
+              <h2 className="text-base font-semibold text-gray-900">{t('title')}</h2>
+              <p className="text-xs text-gray-600">{t('description')}</p>
+            </div>
+          }
+          collapsible="header"
+        >
+          <div className="p-4 pt-0">
 
         {/* 水平布局的筛选器 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -168,19 +175,21 @@ export function PostFilter({ posts, onFilteredPostsChange, locale }: PostFilterP
           </FilterSection>
         </div>
 
-        {/* 清除按钮和统计信息 */}
-        <div className="mt-4 pt-3 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="text-xs text-gray-600">
-            {t('filteredCount', { count: filteredPosts.length, total: posts.length })}
+            {/* 清除按钮和统计信息 */}
+            <div className="mt-4 pt-3 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="text-xs text-gray-600">
+                {t('filteredCount', { count: filteredPosts.length, total: posts.length })}
+              </div>
+              <div className="sm:w-auto w-full">
+                <ClearButton
+                  onClear={clearAllFilters}
+                  label={t('clearAll')}
+                />
+              </div>
+            </div>
           </div>
-          <div className="sm:w-auto w-full">
-            <ClearButton
-              onClear={clearAllFilters}
-              label={t('clearAll')}
-            />
-          </div>
-        </div>
-      </div>
+        </CollapsePanel>
+      </Collapse>
     </div>
   )
 }

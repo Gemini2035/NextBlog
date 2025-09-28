@@ -72,6 +72,12 @@ export interface CollapsePanelProps extends Omit<HTMLAttributes<HTMLDivElement>,
   contentClassName?: string
   /** 面板头部点击时的回调 */
   onHeaderClick?: (key: string) => void
+  /** 是否激活状态（内部使用） */
+  isActive?: boolean
+  /** 切换回调（内部使用） */
+  onToggle?: () => void
+  /** 是否可折叠（内部使用） */
+  collapsible?: 'header' | 'icon' | 'disabled'
 }
 
 /**

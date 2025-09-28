@@ -52,7 +52,7 @@ export type {
   PaginationSizeChangerProps,
   PaginationQuickJumperProps
 } from './Pagination'
-export { Collapse } from './Collapse'
+export { Collapse, CollapsePanel } from './Collapse'
 export type { 
   CollapseProps, 
   CollapseRef,
