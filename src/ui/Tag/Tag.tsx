@@ -1,42 +1,90 @@
-import { cn } from "@/utils";
+"use client";
 
-interface TagProps {
-  children: React.ReactNode;
-  variant?: "default" | "outline" | "secondary";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-}
+import React, { useState } from 'react';
+import { TagProps } from "./types";
+import { getTagStyles, getCloseIconStyles } from "./styles";
+import { CloseIcon } from '../icons';
 
 export function Tag({ 
   children, 
-  variant = "default", 
-  size = "md", 
-  className 
+  color = "default",
+  size = "middle",
+  closable = false,
+  closeIcon,
+  onClose,
+  className,
+  style,
+  icon,
+  bordered = true
 }: TagProps) {
-  const baseStyles = "inline-flex items-center font-medium rounded-full";
-  
-  const variants = {
-    default: "bg-blue-100 text-blue-800",
-    outline: "border border-blue-200 text-blue-700 bg-transparent",
-    secondary: "bg-gray-100 text-gray-700"
+  const [visible, setVisible] = useState(true);
+
+  const handleClose = (e: React.MouseEvent<HTMLSpanElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (onClose) {
+      onClose(e);
+    } else {
+      setVisible(false);
+    }
   };
-  
-  const sizes = {
-    sm: "px-2 py-1 text-xs",
-    md: "px-3 py-1 text-sm",
-    lg: "px-4 py-2 text-base"
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLSpanElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (onClose) {
+        // Create a minimal synthetic mouse event
+        const syntheticEvent = {
+          ...e,
+          type: 'click',
+          button: 0,
+          buttons: 1,
+          clientX: 0,
+          clientY: 0,
+          pageX: 0,
+          pageY: 0,
+          screenX: 0,
+          screenY: 0,
+          movementX: 0,
+          movementY: 0,
+          relatedTarget: null,
+        } as unknown as React.MouseEvent<HTMLSpanElement>;
+        onClose(syntheticEvent);
+      } else {
+        setVisible(false);
+      }
+    }
   };
-  
+
+  if (!visible) {
+    return null;
+  }
+
+  const defaultCloseIcon = (
+    <CloseIcon className={getCloseIconStyles()} />
+  );
+
   return (
     <span
-      className={cn(
-        baseStyles,
-        variants[variant],
-        sizes[size],
-        className
-      )}
+      className={getTagStyles(color, size, closable, bordered, className)}
+      style={style}
     >
-      {children}
+      {icon && <span className="mr-1">{icon}</span>}
+      <span>{children}</span>
+      {closable && (
+        <span
+          onClick={handleClose}
+          className="ml-1"
+          role="button"
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+        >
+          {closeIcon || defaultCloseIcon}
+        </span>
+      )}
     </span>
   );
 }

@@ -1,16 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, Button, Tag } from "@/ui";
+import { Card, Button } from "@/ui";
+import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
-import type { Post } from "../../../.contentlayer/generated";
+import { CollapseIcon } from "@/assets/icons";
+import type { Post } from "../../../../.contentlayer/generated";
 import { useLayoutHeights } from "@/hooks";
 
 interface PostInfoCardProps {
   post: Post;
 }
 
-export default function PostInfoCard({ post }: PostInfoCardProps) {
+export function PostInfoCard({ post }: PostInfoCardProps) {
+  // 暂时禁用sticky功能
   const [isSticky, setIsSticky] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -168,12 +171,13 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag: string) => (
-                      <Tag
+                      <PostTag
                         key={tag}
-                        size={isSticky ? "sm" : "md"}
+                        size={isSticky ? "small" : "medium"}
+                        variant="primary"
                       >
                         {tag}
-                      </Tag>
+                      </PostTag>
                     ))}
                   </div>
                 </div>
@@ -187,22 +191,11 @@ export default function PostInfoCard({ post }: PostInfoCardProps) {
                 className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm"
                 aria-label={isCollapsed ? "展开信息" : "收起信息"}
               >
-                <svg
+                <CollapseIcon 
                   className={cn(
-                    "w-4 h-4 text-gray-600 transition-transform duration-200",
                     isCollapsed ? "rotate-90" : "rotate-270"
                   )}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                />
               </Button>
             )}
           </Card>

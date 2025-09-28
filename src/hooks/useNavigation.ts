@@ -11,7 +11,6 @@ export function useNavigation() {
       // 获取文章分类数据
       const featuredPost = posts.getFeaturedPost()
       const recentPosts = posts.getRecentPosts()
-      const categories = posts.getCategories()
       
       // 为有submenu的导航项动态填充内容
       return NAVIGATION_ITEMS.map(item => {
@@ -39,26 +38,6 @@ export function useNavigation() {
               href: `/posts/${post.slug}`,
             }))
           })
-          
-          // 添加技术分类
-          const categoryItems: SubmenuItem[] = []
-          categories.forEach(category => {
-            const categoryPosts = posts.getPostsByCategory(category)
-            if (categoryPosts.length > 0) {
-              categoryItems.push({
-                label: `${category}`,
-                href: `/posts#${category.toLowerCase()}`,
-              })
-            }
-          })
-          
-          if (categoryItems.length > 0) {
-            submenuItems.push({
-              label: 'Tech Categories',
-              href: '/posts#categories',
-              items: categoryItems
-            })
-          }
           
           return {
             ...item,

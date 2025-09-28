@@ -6,6 +6,7 @@ import matter from 'gray-matter'
 import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
 
+
 // 获取当前文件的目录路径
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -205,9 +206,9 @@ function translateFrontmatter(frontmatter: Frontmatter, fromLocale: string, toLo
     translated.description = translateText(frontmatter.description, fromLocale, toLocale)
   }
   
-  // 翻译标签
+  // 标签不翻译，保持原样
   if (frontmatter.tags) {
-    translated.tags = frontmatter.tags.map(tag => translateText(tag, fromLocale, toLocale))
+    translated.tags = frontmatter.tags.filter(tag => tag && tag.trim().length > 0)
   }
   
   // 添加语言标识

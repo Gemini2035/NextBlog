@@ -55,6 +55,7 @@
   },
   "Posts": {
     "allPosts": "所有文章",
+    "articleList": "文章列表",
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
     "recentPosts": "最新文章",
@@ -66,7 +67,9 @@
     "noPosts": "暂无文章",
     "relatedPosts": "推荐文章",
     "refresh": "换一批",
-    "refreshing": "更换中..."
+    "refreshing": "更换中...",
+    "prevPage": "← 上一页",
+    "nextPage": "下一页 →"
   },
   "Header": {
     "mainNavigation": "主导航",
@@ -147,5 +150,33 @@
     "description": "立即联系我！",
     "contactMe": "联系我",
     "close": "关闭"
+  },
+  "PostCard": {
+    "remainingTags": "其余tag"
+  },
+  "PostFilter": {
+    "title": "文章筛选器",
+    "description": "使用多种条件筛选和排序文章",
+    "keywordSearch": "关键字搜索",
+    "keywordPlaceholder": "搜索文章标题、内容、标签...",
+    "tagFilter": "标签筛选",
+    "featuredFilter": "置顶筛选",
+    "allPosts": "所有文章",
+    "featuredOnly": "仅置顶文章",
+    "nonFeaturedOnly": "仅普通文章",
+    "wordCountSort": "字数排序",
+    "wordCountAsc": "字数升序",
+    "wordCountDesc": "字数降序",
+    "wordCountPlaceholder": "选择字数排序",
+    "createTimeSort": "创建时间排序",
+    "createTimeAsc": "创建时间升序",
+    "createTimeDesc": "创建时间降序",
+    "createTimePlaceholder": "选择创建时间排序",
+    "updateTimeSort": "更新时间排序",
+    "updateTimeAsc": "更新时间升序",
+    "updateTimeDesc": "更新时间降序",
+    "updateTimePlaceholder": "选择更新时间排序",
+    "clearAll": "清除所有筛选",
+    "filteredCount": "筛选结果：{count} / {total} 篇文章"
   }
 }

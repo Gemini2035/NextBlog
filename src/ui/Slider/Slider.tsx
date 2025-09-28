@@ -18,46 +18,7 @@ import {
   getIndicatorContainerStyles,
 } from "./styles";
 import { cn } from "@/utils";
-
-/**
- * 左箭头图标
- */
-const ChevronLeftIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 19l-7-7 7-7"
-    />
-  </svg>
-);
-
-/**
- * 右箭头图标
- */
-const ChevronRightIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 5l7 7-7 7"
-    />
-  </svg>
-);
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
 
 /**
  * Slider组件 - 轮播组件
@@ -110,6 +71,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       autoPlayInterval = 3000,
       loop = false,
       className,
+      itemContainerClassName,
       style,
       onSlideChange,
       ...props
@@ -120,8 +82,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
-    const [, setDragCurrentX] = useState(0);
-    const [dragOffset, setDragOffset] = useState(0);
+    const [dragEndX, setDragEndX] = useState(0);
     const [hasDragged, setHasDragged] = useState(false);
 
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
@@ -218,6 +179,9 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       }
     }, [autoPlay, autoPlayInterval, slideNext, totalPages]);
 
+
+
+
     // 计算滑动容器的transform
     const getTransform = () => {
       // 使用calc()来考虑gap的影响
@@ -232,9 +196,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
 
     // 计算滑动容器的样式
     const trackStyle: React.CSSProperties = {
-      transform: isDragging
-        ? `translateX(${getTransform().match(/translateX\(([^)]+)\)/)?.[1] || "0%"}) translateX(${dragOffset}px)`
-        : getTransform(),
+      transform: getTransform(),
       paddingLeft: `${paddingLeft}px`,
       gap: `${gap}px`,
       cursor: draggable ? (isDragging ? "grabbing" : "grab") : "default",
@@ -277,43 +239,31 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       setIsDragging(true);
       setHasDragged(false);
       setDragStartX(e.clientX);
-      setDragCurrentX(e.clientX);
-      setDragOffset(0);
     };
 
-    const handleMouseMove = useCallback((e: MouseEvent) => {
-      if (!isDragging || !draggable) return;
-      e.preventDefault();
-      const deltaX = e.clientX - dragStartX;
-      setDragCurrentX(e.clientX);
-      setDragOffset(deltaX);
 
-      // 如果移动距离超过阈值，标记为已拖动
-      if (Math.abs(deltaX) > 5) {
-        setHasDragged(true);
-      }
-    }, [isDragging, draggable, dragStartX]);
-
-    const handleMouseUp = useCallback(() => {
+    const handleMouseUp = useCallback((e: MouseEvent) => {
       if (!isDragging || !draggable) return;
       setIsDragging(false);
 
+      // 计算拖动距离
+      const dragDistance = e.clientX - dragStartX;
       const threshold = 50; // 拖动阈值
-      if (Math.abs(dragOffset) > threshold) {
-        if (dragOffset > 0) {
+      
+      if (Math.abs(dragDistance) > threshold) {
+        if (dragDistance > 0) {
           slidePrev();
         } else {
           slideNext();
         }
+        setHasDragged(true);
       }
-
-      setDragOffset(0);
 
       // 延迟重置拖动状态，防止点击事件触发
       setTimeout(() => {
         setHasDragged(false);
       }, 100);
-    }, [isDragging, draggable, dragOffset, slidePrev, slideNext]);
+    }, [isDragging, draggable, dragStartX, slidePrev, slideNext]);
 
     // 触摸事件处理
     const handleTouchStart = (e: React.TouchEvent) => {
@@ -322,69 +272,47 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       setIsDragging(true);
       setHasDragged(false);
       setDragStartX(touch.clientX);
-      setDragCurrentX(touch.clientX);
-      setDragOffset(0);
     };
 
-    const handleTouchMove = useCallback((e: TouchEvent) => {
-      if (!isDragging || !draggable) return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const deltaX = touch.clientX - dragStartX;
-      setDragCurrentX(touch.clientX);
-      setDragOffset(deltaX);
 
-      // 如果移动距离超过阈值，标记为已拖动
-      if (Math.abs(deltaX) > 5) {
-        setHasDragged(true);
-      }
-    }, [isDragging, draggable, dragStartX]);
-
-    const handleTouchEnd = useCallback(() => {
+    const handleTouchEnd = useCallback((e: TouchEvent) => {
       if (!isDragging || !draggable) return;
       setIsDragging(false);
 
+      // 计算拖动距离
+      const touch = e.changedTouches[0];
+      const dragDistance = touch.clientX - dragStartX;
       const threshold = 50; // 拖动阈值
-      if (Math.abs(dragOffset) > threshold) {
-        if (dragOffset > 0) {
+      
+      if (Math.abs(dragDistance) > threshold) {
+        if (dragDistance > 0) {
           slidePrev();
         } else {
           slideNext();
         }
+        setHasDragged(true);
       }
-
-      setDragOffset(0);
 
       // 延迟重置拖动状态，防止点击事件触发
       setTimeout(() => {
         setHasDragged(false);
       }, 100);
-    }, [isDragging, draggable, dragOffset, slidePrev, slideNext]);
+    }, [isDragging, draggable, dragStartX, slidePrev, slideNext]);
 
     // 添加全局事件监听器
     useEffect(() => {
       if (isDragging) {
-        document.addEventListener("mousemove", handleMouseMove);
         document.addEventListener("mouseup", handleMouseUp);
-        document.addEventListener("touchmove", handleTouchMove, {
-          passive: false,
-        });
         document.addEventListener("touchend", handleTouchEnd);
       }
 
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
-        document.removeEventListener("touchmove", handleTouchMove);
         document.removeEventListener("touchend", handleTouchEnd);
       };
     }, [
       isDragging,
-      dragStartX,
-      dragOffset,
-      handleMouseMove,
       handleMouseUp,
-      handleTouchMove,
       handleTouchEnd,
     ]);
 
@@ -401,7 +329,11 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const canSlideNext = loop || currentIndex < maxIndex;
 
     return (
-      <div ref={containerRef} className={getSliderStyles(className)} {...props}>
+      <div 
+        ref={containerRef} 
+        className={getSliderStyles(className)} 
+        {...props}
+      >
         {/* 滑动容器 */}
         <div
           ref={trackRef}
@@ -410,13 +342,15 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
           onClick={handleClick}
+          draggable={false}
         >
           {items.map((item, index) => (
             <div
               key={index}
-              className={getSliderItemStyles(actualItemsPerPage)}
+              className={cn(getSliderItemStyles(actualItemsPerPage), itemContainerClassName)}
               style={itemStyle}
               onClick={handleClick}
+              draggable={false}
             >
               {item}
             </div>
@@ -436,7 +370,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               disabled={!canSlidePrev}
               aria-label="上一页"
             >
-              <ChevronLeftIcon />
+              <ChevronLeftIcon className="w-5 h-5" />
             </button>
             <button
               type="button"
@@ -448,7 +382,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               disabled={!canSlideNext}
               aria-label="下一页"
             >
-              <ChevronRightIcon />
+              <ChevronRightIcon className="w-5 h-5" />
             </button>
           </>
         )}

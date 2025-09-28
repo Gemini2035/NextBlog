@@ -1,19 +1,7 @@
 import { useMemo } from 'react'
 import { useLocale } from 'next-intl'
 import { allPosts, Post } from '../../.contentlayer/generated'
-
-// 分类映射
-const CATEGORY_MAP: { [key: string]: string[] } = {
-  'TypeScript': ['TypeScript'],
-  'Javascript': ['Javascript', 'JavaScript'],
-  'NodeJs': ['NodeJs', 'Node.js'],
-  'ReactJs': ['ReactJs', 'React', 'React.js'],
-  'VueJS': ['VueJS', 'Vue', 'Vue.js'],
-  'Others': [] // 其他标签的文章
-}
-
-// 主要标签列表
-const MAIN_TAGS = ['TypeScript', 'Javascript', 'JavaScript', 'NodeJs', 'Node.js', 'ReactJs', 'React', 'React.js', 'VueJS', 'Vue', 'Vue.js']
+import { tagList } from '../../.contentlayer/generated'
 
 export interface UsePostsReturn {
   // 基础文章操作
@@ -30,9 +18,6 @@ export interface UsePostsReturn {
   getFeaturedPost: () => Post | undefined
   getRecentPosts: () => Post[]
   
-  // 分类相关
-  getPostsByCategory: (category: string) => Post[]
-  getCategories: () => string[]
   
   // 当前语言环境
   currentLocale: string
@@ -97,9 +82,9 @@ export function usePosts(): UsePostsReturn {
   
   // 获取所有标签
   const getAllTags = useMemo(() => () => {
-    const tags = currentLocalePosts.flatMap((post) => post.tags || [])
-    return Array.from(new Set(tags)).sort()
-  }, [currentLocalePosts])
+    // 使用 Contentlayer 生成的 tagList
+    return tagList
+  }, [])
   
   // 获取置顶文章
   const getFeaturedPost = useMemo(() => () => {
@@ -127,43 +112,6 @@ export function usePosts(): UsePostsReturn {
       .slice(0, 10)
   }, [currentLocalePosts])
   
-  // 根据分类获取文章
-  const getPostsByCategory = useMemo(() => (category: string) => {
-    const targetTags = CATEGORY_MAP[category] || []
-    
-    if (category === 'Others') {
-      // 获取不属于主要分类的文章
-      return currentLocalePosts
-        .filter((post) => {
-          if (!post.tags || post.tags.length === 0) return true
-          
-          // 检查是否包含主要标签
-          const hasMainTag = post.tags.some(tag => MAIN_TAGS.includes(tag))
-          return !hasMainTag
-        })
-        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    }
-    
-    return currentLocalePosts
-      .filter((post) => {
-        if (!post.tags || post.tags.length === 0) return false
-        
-        // 检查是否包含目标标签
-        return post.tags.some(tag => targetTags.includes(tag))
-      })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }, [currentLocalePosts])
-  
-  // 获取所有分类
-  const getCategories = useMemo(() => () => {
-    const categories = ['TypeScript', 'Javascript', 'NodeJs', 'ReactJs', 'VueJS', 'Others']
-    
-    // 只返回存在文章的分类
-    return categories.filter(category => {
-      const posts = getPostsByCategory(category)
-      return posts.length > 0
-    })
-  }, [getPostsByCategory])
   
   return useMemo(() => ({
     // 基础文章操作
@@ -180,9 +128,6 @@ export function usePosts(): UsePostsReturn {
     getFeaturedPost,
     getRecentPosts,
     
-    // 分类相关
-    getPostsByCategory,
-    getCategories,
     
     // 当前语言环境
     currentLocale: locale
@@ -195,8 +140,6 @@ export function usePosts(): UsePostsReturn {
     getAllTags,
     getFeaturedPost,
     getRecentPosts,
-    getPostsByCategory,
-    getCategories,
     locale
   ])
 }

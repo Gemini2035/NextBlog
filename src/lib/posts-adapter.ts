@@ -1,18 +1,6 @@
 // Posts 适配器 - 为服务器组件提供 posts 功能
 import { allPosts, Post } from '../../.contentlayer/generated'
-
-// 分类映射
-const CATEGORY_MAP: { [key: string]: string[] } = {
-  'TypeScript': ['TypeScript'],
-  'Javascript': ['Javascript', 'JavaScript'],
-  'NodeJs': ['NodeJs', 'Node.js'],
-  'ReactJs': ['ReactJs', 'React', 'React.js'],
-  'VueJS': ['VueJS', 'Vue', 'Vue.js'],
-  'Others': [] // 其他标签的文章
-}
-
-// 主要标签列表
-const MAIN_TAGS = ['TypeScript', 'Javascript', 'JavaScript', 'NodeJs', 'Node.js', 'ReactJs', 'React', 'React.js', 'VueJS', 'Vue', 'Vue.js']
+import { tagList } from '../../.contentlayer/generated'
 
 export function getAllPosts(locale?: string): Post[] {
   let posts = allPosts.filter((post) => post.published !== false)
@@ -71,25 +59,24 @@ export function getPostsByTag(tag: string, locale?: string): Post[] {
 }
 
 export function getAllTags(locale?: string): string[] {
-  let posts = allPosts.filter((post) => post.published !== false)
-  
-  if (locale) {
-    posts = posts.filter((post) => post.locale === locale)
-  }
-  
-  const tags = posts.flatMap((post) => post.tags || [])
-  return Array.from(new Set(tags)).sort()
+  // 使用 Contentlayer 生成的 tagList
+  return tagList
 }
 
-// 获取置顶文章
+// 获取置顶文章（单篇，向后兼容）
 export function getFeaturedPost(locale?: string): Post | undefined {
+  return getFeaturedPosts(locale)[0]
+}
+
+// 获取所有置顶文章
+export function getFeaturedPosts(locale?: string): Post[] {
   let posts = allPosts.filter((post) => post.published !== false && post.featured === true)
   
   if (locale) {
     posts = posts.filter((post) => post.locale === locale)
   }
   
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0]
+  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 // 获取最近一周更新的文章（最多10篇）
@@ -118,52 +105,5 @@ export function getRecentPosts(locale?: string): Post[] {
     .slice(0, 10)
 }
 
-// 按指定标签分类获取文章
-export function getPostsByCategory(category: string, locale?: string): Post[] {
-  const targetTags = CATEGORY_MAP[category] || []
-  let posts = allPosts.filter((post) => post.published !== false)
-  
-  if (locale) {
-    posts = posts.filter((post) => post.locale === locale)
-  }
-  
-  if (category === 'Others') {
-    // 获取不属于主要分类的文章
-    return posts
-      .filter((post) => {
-        if (!post.tags || post.tags.length === 0) return true
-        
-        // 检查是否包含主要标签
-        const hasMainTag = post.tags.some(tag => MAIN_TAGS.includes(tag))
-        return !hasMainTag
-      })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  }
-  
-  return posts
-    .filter((post) => {
-      if (!post.tags || post.tags.length === 0) return false
-      
-      // 检查是否包含目标标签
-      return post.tags.some(tag => targetTags.includes(tag))
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-}
 
-// 获取所有分类
-export function getCategories(locale?: string): string[] {
-  const categories = ['TypeScript', 'Javascript', 'NodeJs', 'ReactJs', 'VueJS', 'Others']
-  
-  // 如果指定了语言，只返回该语言下存在文章的分类
-  if (locale) {
-    return categories.filter(category => {
-      const posts = getPostsByCategory(category, locale)
-      return posts.length > 0
-    })
-  }
-  
-  return categories.filter(category => {
-    const posts = getPostsByCategory(category)
-    return posts.length > 0
-  })
-}
+

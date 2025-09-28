@@ -32,3 +32,32 @@ export type {
   NavigationVariant,
   IndicatorVariant
 } from './Slider'
+export { Tooltip } from './Tooltip'
+export type { 
+  TooltipProps, 
+  TooltipRef,
+  TooltipTrigger,
+  TooltipPlacement,
+  TooltipTheme,
+  TooltipState,
+  TooltipAnimation
+} from './Tooltip'
+export { Pagination } from './Pagination'
+export type { 
+  PaginationProps, 
+  PaginationSize, 
+  PaginationAlign,
+  PaginationItemProps,
+  PaginationJumpProps,
+  PaginationSizeChangerProps,
+  PaginationQuickJumperProps
+} from './Pagination'
+export { Collapse, CollapsePanel } from './Collapse'
+export type { 
+  CollapseProps, 
+  CollapseRef,
+  CollapsePanelProps,
+  CollapsePanelRef,
+  CollapseSize,
+  CollapseVariant
+} from './Collapse'

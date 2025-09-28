@@ -56,8 +56,8 @@ export const getNavigationButtonStyles = (
     'flex items-center justify-center',
     'transition-all duration-200',
     'focus:outline-none focus:ring-2 focus:ring-offset-2',
-    disabled && 'opacity-50 cursor-not-allowed',
-    !disabled && 'hover:scale-110 active:scale-95'
+    disabled && 'hidden', // 禁用时直接隐藏
+    !disabled && 'cursor-pointer hover:scale-110 active:scale-95' // 启用时显示pointer光标
   )
 
   const positionStyles = direction === 'left' 

@@ -6,6 +6,7 @@ import matter from 'gray-matter'
 import OpenAI from 'openai'
 import { fileURLToPath } from 'url'
 
+
 // 获取当前文件的目录路径
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -95,13 +96,9 @@ async function translateFrontmatter(frontmatter: Frontmatter, fromLocale: string
     translated.description = await translateWithOpenAI(frontmatter.description, fromLocale, toLocale)
   }
   
-  // 翻译标签
+  // 标签不翻译，保持原样
   if (frontmatter.tags && Array.isArray(frontmatter.tags)) {
-    translated.tags = await Promise.all(
-      frontmatter.tags.map(async (tag: string) => 
-        await translateWithOpenAI(tag, fromLocale, toLocale)
-      )
-    )
+    translated.tags = frontmatter.tags.filter(tag => tag && tag.trim().length > 0)
   }
   
   // 添加语言标识

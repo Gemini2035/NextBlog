@@ -77,40 +77,9 @@
                 "description": "Articles updated in the last week"
               },
               {
-                "label": "Tech Categories",
-                "href": "/posts#categories",
-                "items": [
-                  {
-                    "label": "TypeScript",
-                    "href": "/posts#typescript",
-                    "description": "TypeScript related articles"
-                  },
-                  {
-                    "label": "Javascript",
-                    "href": "/posts#javascript",
-                    "description": "JavaScript related articles"
-                  },
-                  {
-                    "label": "NodeJs",
-                    "href": "/posts#nodejs",
-                    "description": "NodeJs related articles"
-                  },
-                  {
-                    "label": "ReactJs",
-                    "href": "/posts#reactjs",
-                    "description": "React related articles"
-                  },
-                  {
-                    "label": "VueJS",
-                    "href": "/posts#vuejs",
-                    "description": "VueJS related articles"
-                  },
-                  {
-                    "label": "Others",
-                    "href": "/posts#others",
-                    "description": "Other technical articles"
-                  }
-                ]
+                "label": "Other Articles",
+                "href": "/posts#tag?tag=Others",
+                "description": "Other recommended articles"
               }
             ]
           }

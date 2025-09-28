@@ -1,3 +1,3 @@
 export { Tag } from './Tag';
-export type { TagProps } from './types';
-export { tagStyles, getTagStyles } from './styles';
+export type { TagProps, TagColor, TagSize } from './types';
+export { tagStyles, getTagStyles, getCloseIconStyles } from './styles';
