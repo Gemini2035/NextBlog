@@ -44,7 +44,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
 
 
         {/* 所有标签 */}
-        {tags.length > 0 && (
+        {tags && tags.length > 0 && (
           <div className="mb-8">
             <h2 className="text-lg font-semibold text-gray-900  mb-4">
               {t('allTags')}

@@ -1,6 +1,6 @@
 'use client'
 
-import { Link, Card, Tag } from '@/ui'
+import { Link, Card, Tag, Tooltip } from '@/ui'
 import type { Post } from '../../../../.contentlayer/generated'
 import { formatDate, cn } from '@/utils'
 import { useEffect, useRef, useState } from 'react'
@@ -41,47 +41,6 @@ function OverflowIndicator({ isVisible, direction, size = 'md', position }: Over
   )
 }
 
-interface TagTooltipProps {
-  remainingTags: string[]
-  children: React.ReactNode
-}
-
-function TagTooltip({ remainingTags, children }: TagTooltipProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  
-  if (remainingTags.length === 0) {
-    return <>{children}</>
-  }
-
-  return (
-    <div className="relative inline-block">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-        className="cursor-pointer"
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <>
-          <div className="fixed inset-0 z-40" onClick={() => setIsVisible(false)}></div>
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50">
-            <div className="bg-gray-900 text-white text-xs rounded-lg px-3 py-2 shadow-lg max-w-xs border border-gray-700">
-              <div className="flex flex-wrap gap-1">
-                {remainingTags.map((tag, index) => (
-                  <span key={tag} className="bg-gray-700 px-2 py-1 rounded text-xs">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  )
-}
 
 export function PostCard({ post, variant = 'default', showDescription = true }: PostCardProps) {
   const titleRef = useRef<HTMLHeadingElement>(null)
@@ -309,24 +268,41 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
               "flex items-center overflow-hidden",
               isCompact ? "gap-1" : "gap-2"
             )}>
-              <div className={cn(
-                "flex overflow-hidden",
-                isCompact ? "gap-1" : "gap-2"
-              )}>
-                {post.tags.slice(0, 3).map((tag: string) => (
-                  <Tag key={tag} size="sm" className={cn("flex-shrink-0", tagSize)}>
-                    {tag}
-                  </Tag>
-                ))}
+              <div className="flex items-center overflow-hidden w-full gap-1">
+                {/* 显示的标签 */}
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {post.tags.slice(0, 3).map((tag: string) => (
+                    <Tag key={tag} size="sm" className={cn("flex-shrink-0", tagSize)}>
+                      {tag}
+                    </Tag>
+                  ))}
+                </div>
+                
+                {/* 隐藏标签的提示 */}
                 {post.tags.length > 3 && (
-                  <TagTooltip remainingTags={post.tags.slice(3)}>
-                    <span className={cn(
-                      "text-gray-400 flex-shrink-0 cursor-pointer hover:text-gray-600 transition-colors bg-gray-100 hover:bg-gray-200 rounded px-2 py-1 border border-gray-200",
-                      isCompact ? "text-xs" : "text-xs"
-                    )}>
-                      +{post.tags.length - 3}
-                    </span>
-                  </TagTooltip>
+                  <div className="flex-shrink-0 flex items-center">
+                    <Tooltip 
+                      title={
+                        <div className="flex flex-wrap gap-1 max-w-xs">
+                          {post.tags.slice(3).map((tag: string) => (
+                            <span key={tag} className="bg-gray-700 text-white px-2 py-1 rounded text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      }
+                      placement="top"
+                      theme="dark"
+                      delay={200}
+                    >
+                      <span className={cn(
+                        "text-gray-500 text-xs font-medium",
+                        isCompact ? "text-xs" : "text-xs"
+                      )}>
+                        +{post.tags.length - 3}
+                      </span>
+                    </Tooltip>
+                  </div>
                 )}
               </div>
             </div>

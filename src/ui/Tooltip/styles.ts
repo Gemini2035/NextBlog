@@ -12,24 +12,12 @@ export const getThemeStyles = (theme: TooltipTheme): string => {
 }
 
 /**
- * 获取Tooltip位置样式
+ * 获取Tooltip位置样式 - 移除CSS定位，使用JavaScript计算位置
  */
 export const getPlacementStyles = (placement: TooltipPlacement): string => {
-  const placements = {
-    top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-2',
-    topLeft: 'bottom-full left-0 mb-2',
-    topRight: 'bottom-full right-0 mb-2',
-    bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-2',
-    bottomLeft: 'top-full left-0 mt-2',
-    bottomRight: 'top-full right-0 mt-2',
-    left: 'right-full top-1/2 transform -translate-y-1/2 mr-2',
-    leftTop: 'right-full top-0 mr-2',
-    leftBottom: 'right-full bottom-0 mr-2',
-    right: 'left-full top-1/2 transform -translate-y-1/2 ml-2',
-    rightTop: 'left-full top-0 ml-2',
-    rightBottom: 'left-full bottom-0 ml-2',
-  }
-  return placements[placement] || placements.top
+  // 由于使用JavaScript计算位置，这里只返回空字符串
+  // 避免CSS定位与JavaScript计算的位置冲突
+  return ''
 }
 
 /**
@@ -91,14 +79,20 @@ export const getBaseStyles = (): string => {
     'pointer-events-none',
     'max-w-xs',
     'break-words',
-    'whitespace-nowrap',
+    'whitespace-normal',
+    'min-h-fit',
+    'h-auto',
   ].join(' ')
 }
 
 /**
  * 获取交互式样式
  */
-export const getInteractiveStyles = (interactive: boolean): string => {
+export const getInteractiveStyles = (interactive: boolean, trigger: string): string => {
+  // 如果是hover触发，需要允许鼠标事件以便用户可以hover到tooltip内容上
+  if (trigger === 'hover') {
+    return 'pointer-events-auto'
+  }
   return interactive ? 'pointer-events-auto' : 'pointer-events-none'
 }
 
@@ -111,13 +105,14 @@ export const getTooltipStyles = (
   animation: TooltipAnimation = 'fade',
   visible: boolean = false,
   interactive: boolean = false,
-  customClassName?: string
+  customClassName?: string,
+  trigger: string = 'hover'
 ): string => {
   const baseStyles = getBaseStyles()
   const themeStyles = getThemeStyles(theme)
   const placementStyles = getPlacementStyles(placement)
   const animationStyles = getAnimationStyles(animation, visible)
-  const interactiveStyles = getInteractiveStyles(interactive)
+  const interactiveStyles = getInteractiveStyles(interactive, trigger)
   
   return [
     baseStyles,
@@ -133,33 +128,3 @@ export const getTooltipStyles = (
     .trim()
 }
 
-/**
- * 获取箭头样式类名
- */
-export const getArrowStyles = (
-  placement: TooltipPlacement = 'top',
-  theme: TooltipTheme = 'light'
-): string => {
-  const arrowBase = 'absolute w-2 h-2 transform rotate-45'
-  const lightArrow = 'bg-white border border-gray-200'
-  const darkArrow = 'bg-gray-900 border border-gray-700'
-  
-  const arrowColor = theme === 'dark' ? darkArrow : lightArrow
-  
-  const arrowPositions = {
-    top: `${arrowColor} -bottom-1 left-1/2 transform -translate-x-1/2`,
-    topLeft: `${arrowColor} -bottom-1 left-4`,
-    topRight: `${arrowColor} -bottom-1 right-4`,
-    bottom: `${arrowColor} -top-1 left-1/2 transform -translate-x-1/2`,
-    bottomLeft: `${arrowColor} -top-1 left-4`,
-    bottomRight: `${arrowColor} -top-1 right-4`,
-    left: `${arrowColor} -right-1 top-1/2 transform -translate-y-1/2`,
-    leftTop: `${arrowColor} -right-1 top-4`,
-    leftBottom: `${arrowColor} -right-1 bottom-4`,
-    right: `${arrowColor} -left-1 top-1/2 transform -translate-y-1/2`,
-    rightTop: `${arrowColor} -left-1 top-4`,
-    rightBottom: `${arrowColor} -left-1 bottom-4`,
-  }
-  
-  return `${arrowBase} ${arrowPositions[placement] || arrowPositions.top}`
-}

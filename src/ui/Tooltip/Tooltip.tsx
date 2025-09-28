@@ -1,3 +1,5 @@
+'use client'
+
 import React, { 
   useState, 
   useEffect, 
@@ -178,17 +180,23 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     const triggerRef = useRef<HTMLElement>(null)
     const tooltipRef = useRef<HTMLDivElement>(null)
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     const mousePositionRef = useRef({ x: 0, y: 0 })
+    const containerRef = useRef<HTMLElement | null>(null)
+    const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
     
     // 使用受控或非受控状态
     const isVisible = controlledVisible !== undefined ? controlledVisible : internalVisible
     
-    // 获取渲染容器
-    const getContainer = useCallback(() => {
+    // 获取渲染容器 - 使用useRef避免重复创建和依赖问题
+    useEffect(() => {
       if (getRenderContainer) {
-        return getRenderContainer()
+        containerRef.current = getRenderContainer()
+      } else if (typeof document !== 'undefined') {
+        containerRef.current = document.body
+      } else {
+        containerRef.current = null
       }
-      return document.body
     }, [getRenderContainer])
     
     // 处理显示状态变化
@@ -216,54 +224,106 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
       }
     }, [disabled, title, delay, handleVisibleChange])
     
+    // 检查鼠标是否在tooltip或触发元素上
+    const isMouseOverTooltip = useCallback(() => {
+      const triggerElement = triggerRef.current
+      const tooltipElement = tooltipRef.current
+      
+      if (!triggerElement || !tooltipElement) return false
+      
+      // 获取鼠标当前位置
+      const mouseX = mousePositionRef.current.x
+      const mouseY = mousePositionRef.current.y
+      
+      // 检查是否在触发元素上
+      const triggerRect = triggerElement.getBoundingClientRect()
+      const isOverTrigger = mouseX >= triggerRect.left && mouseX <= triggerRect.right &&
+                           mouseY >= triggerRect.top && mouseY <= triggerRect.bottom
+      
+      // 检查是否在tooltip上
+      const tooltipRect = tooltipElement.getBoundingClientRect()
+      const isOverTooltip = mouseX >= tooltipRect.left && mouseX <= tooltipRect.right &&
+                           mouseY >= tooltipRect.top && mouseY <= tooltipRect.bottom
+      
+      return isOverTrigger || isOverTooltip
+    }, [])
+    
     // 隐藏Tooltip
     const hideTooltip = useCallback(() => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
       }
-      
-      if (hideDelay > 0) {
-        timeoutRef.current = setTimeout(() => {
-          handleVisibleChange(false)
-        }, hideDelay)
-      } else {
-        handleVisibleChange(false)
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current)
       }
-    }, [hideDelay, handleVisibleChange])
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
+      
+      const delay = hideDelay > 0 ? hideDelay : 100
+      hideTimeoutRef.current = setTimeout(() => {
+        // 再次检查鼠标位置
+        if (!isMouseOverTooltip()) {
+          handleVisibleChange(false)
+        }
+      }, delay)
+    }, [hideDelay, handleVisibleChange, isMouseOverTooltip])
     
-    // 更新位置
+    // 更新位置 - 使用ref存储最新值避免依赖问题
+    const placementRef = useRef(placement)
+    const offsetRef = useRef(offset)
+    const followCursorRef = useRef(followCursor)
+    
+    // 更新ref值
+    useEffect(() => {
+      placementRef.current = placement
+      offsetRef.current = offset
+      followCursorRef.current = followCursor
+    }, [placement, offset, followCursor])
+    
     const updatePosition = useCallback(() => {
-      if (!triggerRef.current || !tooltipRef.current || !isVisible) return
+      if (!triggerRef.current || !tooltipRef.current || !containerRef.current) return
       
       const triggerElement = triggerRef.current
       const tooltipElement = tooltipRef.current
-      const container = getContainer()
+      const container = containerRef.current
       
       let newPosition
-      if (followCursor) {
+      if (followCursorRef.current) {
         newPosition = {
           top: mousePositionRef.current.y + 8,
           left: mousePositionRef.current.x + 8
         }
       } else {
-        newPosition = calculatePosition(triggerElement, tooltipElement, placement, offset, container)
+        newPosition = calculatePosition(
+          triggerElement, 
+          tooltipElement, 
+          placementRef.current, 
+          offsetRef.current, 
+          container
+        )
       }
       
       // 调整位置以避免超出视口
       const adjustedPosition = adjustPositionForViewport(
         newPosition,
         tooltipElement.getBoundingClientRect(),
-        placement,
+        placementRef.current,
         container
       )
       
       setPosition(adjustedPosition)
-    }, [isVisible, placement, offset, followCursor, getContainer])
+    }, [])
     
     // 处理鼠标移动
     const handleMouseMove = useCallback((e: MouseEvent) => {
       mousePositionRef.current = { x: e.clientX, y: e.clientY }
-    }, [])
+      
+      // 如果tooltip可见，检查是否需要隐藏
+      if (isVisible && !isMouseOverTooltip()) {
+        hideTooltip()
+      }
+    }, [isVisible, isMouseOverTooltip, hideTooltip])
     
     // 处理触发事件
     const handleTriggerEvents = useCallback(() => {
@@ -326,12 +386,25 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     // 效果钩子
     useEffect(() => {
       if (isVisible) {
-        updatePosition()
-        if (followCursor) {
+        // 延迟调用updatePosition，确保DOM已渲染
+        const timer = setTimeout(() => {
+          updatePosition()
+        }, 0)
+        
+        // 总是监听鼠标移动来检测hover状态
+        document.addEventListener('mousemove', handleMouseMove)
+        
+        if (followCursorRef.current) {
           document.addEventListener('mousemove', handleMouseMove)
         }
         if (trigger === 'click') {
           document.addEventListener('click', handleClickOutside)
+        }
+        
+        return () => {
+          clearTimeout(timer)
+          document.removeEventListener('mousemove', handleMouseMove)
+          document.removeEventListener('click', handleClickOutside)
         }
       }
       
@@ -339,7 +412,7 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('click', handleClickOutside)
       }
-    }, [isVisible, followCursor, trigger, updatePosition, handleMouseMove, handleClickOutside])
+    }, [isVisible, trigger, handleMouseMove, handleClickOutside, updatePosition])
     
     useEffect(() => {
       const cleanup = handleTriggerEvents()
@@ -350,6 +423,12 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
       return () => {
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current)
+        }
+        if (hideTimeoutRef.current) {
+          clearTimeout(hideTimeoutRef.current)
+        }
+        if (hoverTimeoutRef.current) {
+          clearTimeout(hoverTimeoutRef.current)
         }
       }
     }, [])
@@ -362,9 +441,10 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
         'fade',
         isVisible,
         interactive,
-        className
+        className,
+        trigger
       )
-    }, [placement, theme, isVisible, interactive, className])
+    }, [placement, theme, isVisible, interactive, className, trigger])
     
     const arrowStyles = useMemo(() => {
       return getArrowStyles(placement, theme)
@@ -404,7 +484,7 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     return (
       <>
         {renderTrigger()}
-        {isVisible && createPortal(
+        {isVisible && containerRef.current && createPortal(
           <div
             ref={(node) => {
               tooltipRef.current = node
@@ -416,12 +496,17 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
             }}
             className={cn(tooltipStyles)}
             style={{
-              position: 'absolute',
               top: position.top,
               left: position.left,
               maxWidth,
               minWidth,
               ...style
+            }}
+            onMouseEnter={() => {
+              // 鼠标进入tooltip内容时清除隐藏定时器
+              if (trigger === 'hover' && hideTimeoutRef.current) {
+                clearTimeout(hideTimeoutRef.current)
+              }
             }}
             {...props}
           >
@@ -430,7 +515,7 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
               <div className={cn(arrowStyles)} />
             )}
           </div>,
-          getContainer()
+          containerRef.current
         )}
       </>
     )
