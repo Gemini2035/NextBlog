@@ -18,46 +18,7 @@ import {
   getIndicatorContainerStyles,
 } from "./styles";
 import { cn } from "@/utils";
-
-/**
- * 左箭头图标
- */
-const ChevronLeftIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M15 19l-7-7 7-7"
-    />
-  </svg>
-);
-
-/**
- * 右箭头图标
- */
-const ChevronRightIcon = () => (
-  <svg
-    className="w-5 h-5"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={2}
-      d="M9 5l7 7-7 7"
-    />
-  </svg>
-);
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons';
 
 /**
  * Slider组件 - 轮播组件
@@ -409,7 +370,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               disabled={!canSlidePrev}
               aria-label="上一页"
             >
-              <ChevronLeftIcon />
+              <ChevronLeftIcon className="w-5 h-5" />
             </button>
             <button
               type="button"
@@ -421,7 +382,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               disabled={!canSlideNext}
               aria-label="下一页"
             >
-              <ChevronRightIcon />
+              <ChevronRightIcon className="w-5 h-5" />
             </button>
           </>
         )}

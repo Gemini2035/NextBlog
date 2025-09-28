@@ -42,3 +42,13 @@ export type {
   TooltipState,
   TooltipAnimation
 } from './Tooltip'
+export { Pagination } from './Pagination'
+export type { 
+  PaginationProps, 
+  PaginationSize, 
+  PaginationAlign,
+  PaginationItemProps,
+  PaginationJumpProps,
+  PaginationSizeChangerProps,
+  PaginationQuickJumperProps
+} from './Pagination'

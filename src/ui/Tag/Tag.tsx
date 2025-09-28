@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { TagProps } from "./types";
 import { getTagStyles, getCloseIconStyles } from "./styles";
+import { CloseIcon } from '../icons';
 
 export function Tag({ 
   children, 
@@ -63,15 +64,7 @@ export function Tag({
   }
 
   const defaultCloseIcon = (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="currentColor"
-      className={getCloseIconStyles()}
-    >
-      <path d="M9.5 3.205L8.795 2.5 6 5.295 3.205 2.5 2.5 3.205 5.295 6 2.5 8.795 3.205 9.5 6 6.705 8.795 9.5 9.5 8.795 6.705 6 9.5 3.205z" />
-    </svg>
+    <CloseIcon className={getCloseIconStyles()} />
   );
 
   return (
