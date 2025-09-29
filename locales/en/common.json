@@ -177,6 +177,7 @@
     "updateTimeDesc": "Update Time Descending",
     "updateTimePlaceholder": "Select update time sort",
     "clearAll": "Clear All Filters",
+    "clearAllTags": "Clear All Tags",
     "filteredCount": "Filtered results: {count} / {total} posts"
   },
   "Pagination": {

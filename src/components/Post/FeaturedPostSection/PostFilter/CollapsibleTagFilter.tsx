@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Collapse, CollapsePanel } from '@/ui'
+import { Collapse, CollapsePanel, Button, Tag } from '@/ui'
 import { cn } from '@/utils'
 import { TagOption } from './types'
 
@@ -45,29 +45,37 @@ export function CollapsibleTagFilter({ tags, selectedTags, onChange }: Collapsib
           <p className="text-sm text-gray-500">{t('noTags')}</p>
         ) : (
           <div className="relative">
-            <div className="flex flex-wrap gap-2 pb-8">
+            <div className="flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <button
+                <div
                   key={tag.value}
                   onClick={() => handleTagToggle(tag.value)}
-                  className={cn(
-                    "px-2 py-1 text-xs rounded-full border transition-colors cursor-pointer",
-                    selectedTags.includes(tag.value)
-                      ? 'bg-blue-500 text-white border-blue-500'
-                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                  )}
+                  className="cursor-pointer transition-all duration-200 hover:scale-105"
                 >
-                  {tag.label} ({tag.count})
-                </button>
+                  <Tag
+                    color={selectedTags.includes(tag.value) ? 'primary' : 'default'}
+                    size="small"
+                    className={cn(
+                      selectedTags.includes(tag.value)
+                        ? 'shadow-sm'
+                        : 'hover:shadow-sm'
+                    )}
+                  >
+                    {tag.label} ({tag.count})
+                  </Tag>
+                </div>
               ))}
             </div>
             {selectedCount > 0 && (
-              <button
+              <Button
+                type="secondary"
+                size="xs"
+                rounded
                 onClick={handleClearAll}
-                className="absolute bottom-0 right-0 text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
+                className="ml-auto text-gray-500 mt-2"
               >
                 {t('clearAllTags')}
-              </button>
+              </Button>
             )}
           </div>
         )}

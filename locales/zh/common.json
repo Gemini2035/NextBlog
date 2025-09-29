@@ -177,6 +177,7 @@
     "updateTimeDesc": "更新时间降序",
     "updateTimePlaceholder": "选择更新时间排序",
     "clearAll": "清除所有筛选",
+    "clearAllTags": "清除所有标签",
     "filteredCount": "筛选结果：{count} / {total} 篇文章"
   },
   "Pagination": {

@@ -182,6 +182,7 @@
     "updateTimeDesc": "更新時間降順",
     "updateTimePlaceholder": "更新時間ソートを選択",
     "clearAll": "すべてのフィルターをクリア",
+    "clearAllTags": "すべてのタグをクリア",
     "filteredCount": "フィルター結果：{count} / {total} 記事"
   },
   "Pagination": {
