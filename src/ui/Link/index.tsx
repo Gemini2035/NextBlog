@@ -31,7 +31,7 @@ export default function Link({
 }: LinkProps) {
   // 使用 clsx 管理 className，合并默认样式
   const linkClassName = clsx(
-    'text-inherit no-underline hover:no-underline', // 默认样式
+    'text-inherit no-underline hover:no-underline cursor-pointer', // 默认样式
     className // 用户自定义样式
   )
   

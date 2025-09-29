@@ -34,7 +34,7 @@ export function KeywordSearch({ value, onChange, placeholder }: KeywordSearchPro
             setInputValue('')
             onChange('')
           }}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
         >
           ✕
         </button>

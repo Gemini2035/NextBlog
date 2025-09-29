@@ -4,7 +4,8 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
-import { Pagination } from '@/ui/Pagination'
+import { Pagination, EmptyState } from '@/ui'
+import { useLayoutHeights, useAnchorScroll } from '@/hooks'
 import type { Post } from '.contentlayer/generated'
 
 interface StickyWrapperProps {
@@ -23,6 +24,8 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
   
   // 国际化翻译
   const t = useTranslations('Pagination')
+  const tEmpty = useTranslations('EmptyState')
+  const { headerHeight } = useLayoutHeights()
 
   // 使用useCallback包装setFilteredPosts函数
   const handleFilteredPostsChange = useCallback((newFilteredPosts: Post[]) => {
@@ -52,11 +55,10 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
     // 使用setTimeout确保DOM更新后再滚动
     setTimeout(() => {
       // 查找所有文章标题（使用ID选择器更精确）
-      const allPostsTitle = document.getElementById('all-posts-title')
+      const allPostsTitle = document.getElementById('all-posts')
       if (allPostsTitle) {
         const titleRect = allPostsTitle.getBoundingClientRect()
-        const headerHeight = 64 // 假设header高度为64px
-        const scrollTop = window.scrollY + titleRect.top - headerHeight - 20 // 额外20px的缓冲
+        const scrollTop = window.scrollY + titleRect.top - headerHeight - 10 // 使用动态headerHeight并预留10px空间
         window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
       } else {
         // 如果找不到标题，则滚动到顶部
@@ -75,10 +77,13 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
     setCurrentPage(currentPage)
   }, [currentPage])
 
+  // 使用通用锚点滚动hook
+  useAnchorScroll({ anchorId: 'all-posts' })
+
   return (
     <div className="mb-12">
       {/* 标题 */}
-      <h2 id="all-posts-title" className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 id="all-posts" className="text-2xl font-bold text-gray-900 mb-6">
         {title}
       </h2>
       
@@ -91,12 +96,22 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
         />
       </div>
       
-      {/* 文章列表 */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-        {paginationData.currentPosts.map((post) => (
-          <PostCard key={post._id} post={post} />
-        ))}
-      </div>
+      {/* 文章列表或空状态 */}
+      {paginationData.currentPosts.length === 0 ? (
+        <EmptyState
+          icon="search"
+          title={tEmpty('noPosts')}
+          description={tEmpty('noPostsDescription')}
+          size="md"
+          variant="card"
+        />
+      ) : (
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+          {paginationData.currentPosts.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))}
+        </div>
+      )}
 
       {/* 分页组件 */}
       {paginationData.totalPages > 1 && (

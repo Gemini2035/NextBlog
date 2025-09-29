@@ -77,7 +77,7 @@ export function Tag({
       {closable && (
         <span
           onClick={handleClose}
-          className="ml-1"
+          className="ml-1 cursor-pointer"
           role="button"
           tabIndex={0}
           onKeyDown={handleKeyDown}

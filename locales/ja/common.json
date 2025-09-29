@@ -20,7 +20,7 @@
     "Featured Articles": "おすすめ記事",
     "Featured recommended articles": "厳選された推奨記事",
     "Latest Articles": "最新記事",
-    "Articles updated in the last week": "過去1週間に更新された記事",
+    "Articles updated in the last month": "過去1ヶ月間に更新された記事",
     "Tech Categories": "技術カテゴリ",
     "TypeScript": "TypeScript",
     "TypeScript related articles": "TypeScript関連記事",
@@ -112,7 +112,7 @@
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
     "recentPosts": "最新記事",
-    "updatedThisWeek": "今週更新 ({count} 記事)",
+    "updatedThisMonth": "今月更新 ({count} 記事)",
     "techCategories": "技術カテゴリ",
     "postCount": "{count} 記事",
     "morePosts": "あと {count} 記事...",
@@ -182,6 +182,7 @@
     "updateTimeDesc": "更新時間降順",
     "updateTimePlaceholder": "更新時間ソートを選択",
     "clearAll": "すべてのフィルターをクリア",
+    "clearAllTags": "すべてのタグをクリア",
     "filteredCount": "フィルター結果：{count} / {total} 記事"
   },
   "Pagination": {
@@ -197,5 +198,28 @@
     "next": "次へ",
     "jumpPrev": "前へジャンプ",
     "jumpNext": "次へジャンプ"
+  },
+  "EmptyState": {
+    "noData": "データがありません",
+    "noDataDescription": "現在表示できるデータがありません",
+    "noResults": "結果が見つかりません",
+    "noResultsDescription": "検索条件を調整してみてください",
+    "noPosts": "記事が見つかりません",
+    "noPostsDescription": "現在のフィルター条件に一致するブログ記事がありません",
+    "noFiles": "ファイルが見つかりません",
+    "noFilesDescription": "検索条件に一致するファイルがありません",
+    "noUsers": "ユーザーが見つかりません",
+    "noUsersDescription": "検索条件に一致するユーザーがありません",
+    "emptyFolder": "空のフォルダ",
+    "emptyFolderDescription": "このフォルダは空です",
+    "error": "エラーが発生しました",
+    "errorDescription": "データの読み込み中にエラーが発生しました",
+    "loading": "読み込み中...",
+    "loadingDescription": "データを読み込んでいます。お待ちください"
+  },
+  "RelatedPosts": {
+    "title": "関連記事",
+    "refresh": "更新",
+    "refreshing": "更新中..."
   }
 }

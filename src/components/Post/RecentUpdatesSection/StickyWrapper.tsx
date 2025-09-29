@@ -1,5 +1,8 @@
+'use client'
+
 import { PostCard } from '../PostCard'
 import { Slider } from '@/ui'
+import { useAnchorScroll } from '@/hooks'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
@@ -8,16 +11,15 @@ interface StickyWrapperProps {
 }
 
 export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
+  // 使用通用锚点滚动hook
+  useAnchorScroll({ anchorId: 'recent' })
 
   return (
     <div className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+      <h2 id="recent" className="text-2xl font-bold text-gray-900 mb-6">
         {title}
       </h2>
-      {recentPosts.length === 1 ? (
-        <PostCard post={recentPosts[0]} />
-      ) : (
-        <div className="relative">
+      <div className="relative">
           <Slider
             items={recentPosts.map((post) => (
               <PostCard key={post._id} post={post} />
@@ -31,7 +33,6 @@ export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
             itemContainerClassName="py-1"
           />
         </div>
-      )}
     </div>
   )
 }

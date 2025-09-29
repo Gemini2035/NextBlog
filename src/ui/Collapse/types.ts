@@ -66,8 +66,10 @@ export interface CollapsePanelProps extends Omit<HTMLAttributes<HTMLDivElement>,
   arrow?: ReactNode
   /** 自定义类名 */
   className?: string
-  /** 面板头部自定义类名 */
-  headerClassName?: string
+  /** 面板头部容器自定义类名 */
+  headerContainerClassName?: string
+  /** 面板头部内容自定义类名 */
+  headerContentClassName?: string
   /** 面板内容自定义类名 */
   contentClassName?: string
   /** 面板头部点击时的回调 */

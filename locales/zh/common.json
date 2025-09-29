@@ -59,7 +59,7 @@
     "totalPosts": "共 {count} 篇文章",
     "featuredPost": "置顶文章",
     "recentPosts": "最新文章",
-    "updatedThisWeek": "最近一周更新，共 {count} 篇",
+    "updatedThisMonth": "最近一个月更新，共 {count} 篇",
     "techCategories": "技术分类",
     "postCount": "{count} 篇",
     "morePosts": "还有 {count} 篇文章...",
@@ -103,7 +103,7 @@
     "Featured Articles": "置顶文章",
     "Featured recommended articles": "精选推荐文章",
     "Latest Articles": "最新文章",
-    "Articles updated in the last week": "最近一周更新的文章",
+    "Articles updated in the last month": "最近一个月更新的文章",
     "Tech Categories": "技术分类",
     "TypeScript": "TypeScript",
     "TypeScript related articles": "TypeScript 相关文章",
@@ -177,6 +177,7 @@
     "updateTimeDesc": "更新时间降序",
     "updateTimePlaceholder": "选择更新时间排序",
     "clearAll": "清除所有筛选",
+    "clearAllTags": "清除所有标签",
     "filteredCount": "筛选结果：{count} / {total} 篇文章"
   },
   "Pagination": {
@@ -192,5 +193,28 @@
     "next": "下一页",
     "jumpPrev": "向前跳转",
     "jumpNext": "向后跳转"
+  },
+  "RelatedPosts": {
+    "title": "推荐文章",
+    "refresh": "换一批",
+    "refreshing": "更换中..."
+  },
+  "EmptyState": {
+    "noData": "暂无数据",
+    "noDataDescription": "当前没有可显示的数据",
+    "noResults": "未找到结果",
+    "noResultsDescription": "请尝试调整搜索条件",
+    "noPosts": "未找到文章",
+    "noPostsDescription": "没有符合当前筛选条件的博客文章",
+    "noFiles": "未找到文件",
+    "noFilesDescription": "没有符合搜索条件的文件",
+    "noUsers": "未找到用户",
+    "noUsersDescription": "没有符合搜索条件的用户",
+    "emptyFolder": "空文件夹",
+    "emptyFolderDescription": "此文件夹为空",
+    "error": "出现错误",
+    "errorDescription": "加载数据时发生错误",
+    "loading": "加载中...",
+    "loadingDescription": "请稍候，正在加载数据"
   }
 }

@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useLocale, useTranslations } from 'next-intl'

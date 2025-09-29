@@ -144,12 +144,12 @@ export const Collapse = forwardRef<CollapseRef, CollapseProps>(
           onToggle: () => handlePanelToggle(panelKey),
           collapsible,
         })
-      }) : (
+      }      ) : (
         isValidElement<CollapsePanelProps>(children) ? 
           cloneElement(children, {
             ...children.props,
-            isActive: currentActiveKey.includes('filter'),
-            onToggle: () => handlePanelToggle('filter'),
+            isActive: currentActiveKey.includes(children.key || 'filter'),
+            onToggle: () => handlePanelToggle(children.key || 'filter'),
             collapsible,
           }) : 
           children
@@ -187,7 +187,8 @@ export const CollapsePanel = forwardRef<HTMLDivElement, CollapsePanelProps & {
       showArrow = true,
       arrow,
       className,
-      headerClassName,
+      headerContainerClassName,
+      headerContentClassName,
       contentClassName,
       onHeaderClick,
       isActive = false,
@@ -249,13 +250,14 @@ export const CollapsePanel = forwardRef<HTMLDivElement, CollapsePanelProps & {
         )}
         {...props}
       >
-        {/* 面板头部 */}
+        {/* 面板头部容器 */}
         <div
           className={cn(
-            'flex items-center justify-between w-full px-4 py-3 text-left font-medium transition-colors duration-200',
+            'flex items-center justify-between w-full text-left font-medium transition-colors duration-200',
+            'px-4 py-3',
             disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50',
             'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset',
-            headerClassName
+            headerContainerClassName
           )}
           onClick={handleHeaderClick}
           tabIndex={disabled ? -1 : 0}
@@ -263,7 +265,8 @@ export const CollapsePanel = forwardRef<HTMLDivElement, CollapsePanelProps & {
           aria-expanded={isActive}
           aria-disabled={disabled}
         >
-          <div className="flex-1 pr-2">
+          {/* 面板头部内容 */}
+          <div className={cn('flex-1 pr-2', headerContentClassName)}>
             {header}
           </div>
           {renderArrow()}

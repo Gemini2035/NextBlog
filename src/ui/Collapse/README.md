@@ -178,16 +178,17 @@ const [activeKey, setActiveKey] = useState<string[]>(['1'])
 
 ### Collapse.Panel Props
 
-| 属性             | 说明                 | 类型                    | 默认值  |
-| ---------------- | -------------------- | ----------------------- | ------- |
-| key              | 面板的唯一标识       | `string`                | -       |
-| header           | 面板标题             | `ReactNode`             | -       |
-| disabled         | 是否禁用             | `boolean`               | `false` |
-| showArrow        | 是否显示箭头图标     | `boolean`               | `true`  |
-| arrow            | 自定义箭头图标       | `ReactNode`             | -       |
-| headerClassName  | 面板头部自定义类名   | `string`                | -       |
-| contentClassName | 面板内容自定义类名   | `string`                | -       |
-| onHeaderClick    | 面板头部点击时的回调 | `(key: string) => void` | -       |
+| 属性                     | 说明                   | 类型                    | 默认值  |
+| ------------------------ | ---------------------- | ----------------------- | ------- |
+| key                      | 面板的唯一标识         | `string`                | -       |
+| header                   | 面板标题               | `ReactNode`             | -       |
+| disabled                 | 是否禁用               | `boolean`               | `false` |
+| showArrow                | 是否显示箭头图标       | `boolean`               | `true`  |
+| arrow                    | 自定义箭头图标         | `ReactNode`             | -       |
+| headerContainerClassName | 面板头部容器自定义类名 | `string`                | -       |
+| headerContentClassName   | 面板头部内容自定义类名 | `string`                | -       |
+| contentClassName         | 面板内容自定义类名     | `string`                | -       |
+| onHeaderClick            | 面板头部点击时的回调   | `(key: string) => void` | -       |
 
 ## 样式定制
 
@@ -198,7 +199,7 @@ const [activeKey, setActiveKey] = useState<string[]>(['1'])
   <Collapse.Panel
     header="自定义样式面板"
     key="1"
-    headerClassName="bg-blue-50 text-blue-700"
+    headerContainerClassName="bg-blue-50 text-blue-700"
     contentClassName="bg-gray-50"
   >
     内容

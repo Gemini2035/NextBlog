@@ -59,7 +59,7 @@
     "totalPosts": "Total {count} posts",
     "featuredPost": "Featured Post",
     "recentPosts": "Recent Posts",
-    "updatedThisWeek": "Updated this week ({count} posts)",
+    "updatedThisMonth": "Updated this month ({count} posts)",
     "techCategories": "Tech Categories",
     "postCount": "{count} posts",
     "morePosts": "{count} more posts...",
@@ -103,7 +103,7 @@
     "Featured Articles": "Featured Articles",
     "Featured recommended articles": "Featured recommended articles",
     "Latest Articles": "Latest Articles",
-    "Articles updated in the last week": "Articles updated in the last week",
+    "Articles updated in the last month": "Articles updated in the last month",
     "Tech Categories": "Tech Categories",
     "TypeScript": "TypeScript",
     "TypeScript related articles": "TypeScript related articles",
@@ -177,6 +177,7 @@
     "updateTimeDesc": "Update Time Descending",
     "updateTimePlaceholder": "Select update time sort",
     "clearAll": "Clear All Filters",
+    "clearAllTags": "Clear All Tags",
     "filteredCount": "Filtered results: {count} / {total} posts"
   },
   "Pagination": {
@@ -192,5 +193,23 @@
     "next": "Next",
     "jumpPrev": "Jump Previous",
     "jumpNext": "Jump Next"
+  },
+  "EmptyState": {
+    "noData": "No data available",
+    "noDataDescription": "There is no data to display at the moment",
+    "noResults": "No results found",
+    "noResultsDescription": "Try adjusting your search criteria",
+    "noPosts": "No posts found",
+    "noPostsDescription": "No blog posts match your current filters",
+    "noFiles": "No files found",
+    "noFilesDescription": "No files match your search criteria",
+    "noUsers": "No users found",
+    "noUsersDescription": "No users match your search criteria",
+    "emptyFolder": "Empty folder",
+    "emptyFolderDescription": "This folder is empty",
+    "error": "Something went wrong",
+    "errorDescription": "An error occurred while loading the data",
+    "loading": "Loading...",
+    "loadingDescription": "Please wait while we load the data"
   }
 }

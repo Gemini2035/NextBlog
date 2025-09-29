@@ -12,7 +12,7 @@ export function MobileToggle({ isOpen, onToggle, title }: MobileToggleProps) {
   return (
     <button
       onClick={onToggle}
-      className="lg:hidden w-full flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+      className="lg:hidden w-full flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
     >
       <span className="font-medium text-gray-900 text-sm">{title}</span>
       <svg

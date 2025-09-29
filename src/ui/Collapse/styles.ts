@@ -24,7 +24,7 @@ export const getCollapseVariantStyles = (variant: CollapseVariant, bordered: boo
     return 'border border-gray-200 rounded-lg overflow-hidden'
   }
   
-  return 'bg-white rounded-lg shadow-sm'
+  return 'bg-white rounded-lg'
 }
 
 /**

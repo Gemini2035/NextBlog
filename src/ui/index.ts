@@ -61,3 +61,11 @@ export type {
   CollapseSize,
   CollapseVariant
 } from './Collapse'
+export { EmptyState, EmptyStateIcon } from './EmptyState'
+export type { 
+  EmptyStateProps, 
+  EmptyStateRef,
+  EmptyStateSize,
+  EmptyStateVariant,
+  EmptyStateIconType
+} from './EmptyState'
