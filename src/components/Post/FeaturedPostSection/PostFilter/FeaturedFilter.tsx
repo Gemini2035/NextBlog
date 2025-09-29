@@ -1,40 +1,52 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+import { StarIcon, StarFilledIcon } from '@/assets/icons'
+
 interface FeaturedFilterProps {
   value: boolean | null
   onChange: (value: boolean | null) => void
-  allLabel: string
-  featuredLabel: string
-  nonFeaturedLabel: string
 }
 
-export function FeaturedFilter({ 
-  value, 
-  onChange, 
-  allLabel, 
-  featuredLabel, 
-  nonFeaturedLabel 
-}: FeaturedFilterProps) {
-  const options = [
-    { value: null, label: allLabel },
-    { value: true, label: featuredLabel },
-    { value: false, label: nonFeaturedLabel }
-  ]
+export function FeaturedFilter({ value, onChange }: FeaturedFilterProps) {
+  const t = useTranslations('PostFilter')
+  
+  const handleClick = () => {
+    // 循环切换: null -> true -> false -> null
+    if (value === null) {
+      onChange(true)
+    } else if (value === true) {
+      onChange(false)
+    } else {
+      onChange(null)
+    }
+  }
+
+  const getIcon = () => {
+    if (value === true) {
+      return <StarFilledIcon className="w-4 h-4 text-yellow-500" />
+    } else if (value === false) {
+      return <StarIcon className="w-4 h-4 text-gray-400" />
+    }
+    return <StarIcon className="w-4 h-4 text-gray-300" />
+  }
+
+  const getTooltip = () => {
+    if (value === true) {
+      return t('featuredOnly')
+    } else if (value === false) {
+      return t('nonFeaturedOnly')
+    }
+    return t('allPosts')
+  }
 
   return (
-    <div className="space-y-2">
-      {options.map((option) => (
-        <label key={option.value === null ? 'all' : option.value.toString()} className="flex items-center">
-          <input
-            type="radio"
-            name="featured-filter"
-            checked={value === option.value}
-            onChange={() => onChange(option.value)}
-            className="mr-2 text-blue-600 focus:ring-blue-500"
-          />
-          <span className="text-xs text-gray-700">{option.label}</span>
-        </label>
-      ))}
-    </div>
+    <button
+      onClick={handleClick}
+      className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-gray-100"
+      title={getTooltip()}
+    >
+      {getIcon()}
+    </button>
   )
 }

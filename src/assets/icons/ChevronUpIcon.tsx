@@ -1,7 +1,7 @@
 import React from 'react'
 import { IconProps } from './types'
 
-export function ChevronDownIcon({ className = "w-4 h-4", size, strokeWidth = 2 }: IconProps) {
+export function ChevronUpIcon({ className = "w-4 h-4", size, strokeWidth = 2 }: IconProps) {
   return (
     <svg 
       className={className} 
@@ -11,7 +11,7 @@ export function ChevronDownIcon({ className = "w-4 h-4", size, strokeWidth = 2 }
       stroke="currentColor" 
       viewBox="0 0 24 24"
     >
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M19 9l-7 7-7-7" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={strokeWidth} d="M5 15l7-7 7 7" />
     </svg>
   )
 }

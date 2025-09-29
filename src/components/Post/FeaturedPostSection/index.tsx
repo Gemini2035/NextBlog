@@ -1,7 +1,7 @@
 
 
 import { StickyWrapper } from './StickyWrapper'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { Post } from '.contentlayer/generated'
 
 interface FeaturedPostSectionProps {
   featuredPosts: Post[] | null | undefined
