@@ -1,3 +1,5 @@
+'use client'
+
 import { useLocalStorage } from './useLocalStorage'
 import { useRouter, usePathname } from '@/i18n/navigation'
 import { useLocale } from 'next-intl'

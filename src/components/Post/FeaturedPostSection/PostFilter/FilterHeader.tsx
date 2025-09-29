@@ -28,7 +28,7 @@ export function FilterHeader({
         <h2 className="text-base font-semibold text-gray-900">{title}</h2>
         <p className="text-xs text-gray-600">{description}</p>
       </div>
-      <div onClick={handleSearchAreaClick} className="cursor-pointer">
+      <div onClick={handleSearchAreaClick}>
         <InlineSearch
           value={searchValue}
           onChange={onSearchChange}

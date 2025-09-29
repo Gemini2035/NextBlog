@@ -20,7 +20,7 @@
     "Featured Articles": "おすすめ記事",
     "Featured recommended articles": "厳選された推奨記事",
     "Latest Articles": "最新記事",
-    "Articles updated in the last week": "過去1週間に更新された記事",
+    "Articles updated in the last month": "過去1ヶ月間に更新された記事",
     "Tech Categories": "技術カテゴリ",
     "TypeScript": "TypeScript",
     "TypeScript related articles": "TypeScript関連記事",
@@ -112,7 +112,7 @@
     "totalPosts": "合計 {count} 記事",
     "featuredPost": "おすすめ記事",
     "recentPosts": "最新記事",
-    "updatedThisWeek": "今週更新 ({count} 記事)",
+    "updatedThisMonth": "今月更新 ({count} 記事)",
     "techCategories": "技術カテゴリ",
     "postCount": "{count} 記事",
     "morePosts": "あと {count} 記事...",
@@ -198,5 +198,10 @@
     "next": "次へ",
     "jumpPrev": "前へジャンプ",
     "jumpNext": "次へジャンプ"
+  },
+  "RelatedPosts": {
+    "title": "関連記事",
+    "refresh": "更新",
+    "refreshing": "更新中..."
   }
 }

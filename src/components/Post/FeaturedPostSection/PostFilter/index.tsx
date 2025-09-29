@@ -21,7 +21,7 @@ export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
     updateTimeSort: null
   })
 
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   // 获取所有标签
   const allTags = useMemo(() => getAllTagsWithCount(posts), [posts])
@@ -40,6 +40,11 @@ export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     setFilters(prev => ({ ...prev, [key]: value }))
   }, [])
+
+  // 搜索关键词更新函数
+  const handleSearchChange = useCallback((value: string) => {
+    updateFilter('keyword', value)
+  }, [updateFilter])
 
 
   // 清除所有筛选条件
@@ -72,7 +77,7 @@ export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
               title={t('title')}
               description={t('description')}
               searchValue={filters.keyword}
-              onSearchChange={(value) => updateFilter('keyword', value)}
+              onSearchChange={handleSearchChange}
               searchPlaceholder={t('keywordPlaceholder')}
             />
           }

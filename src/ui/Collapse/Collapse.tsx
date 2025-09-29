@@ -144,12 +144,12 @@ export const Collapse = forwardRef<CollapseRef, CollapseProps>(
           onToggle: () => handlePanelToggle(panelKey),
           collapsible,
         })
-      }) : (
+      }      ) : (
         isValidElement<CollapsePanelProps>(children) ? 
           cloneElement(children, {
             ...children.props,
-            isActive: currentActiveKey.includes('filter'),
-            onToggle: () => handlePanelToggle('filter'),
+            isActive: currentActiveKey.includes(children.key || 'filter'),
+            onToggle: () => handlePanelToggle(children.key || 'filter'),
             collapsible,
           }) : 
           children

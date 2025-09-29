@@ -39,7 +39,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
         {/* 最近更新文章 */}
         <RecentUpdatesSection 
           recentPosts={recentPosts.length > 0 ? recentPosts : null} 
-          title={`${t('recentPosts')} (${t('updatedThisWeek', { count: recentPosts.length })})`} 
+          title={`${t('recentPosts')} (${t('updatedThisMonth', { count: recentPosts.length })})`} 
         />
 
         {/* 所有文章 */}

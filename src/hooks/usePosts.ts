@@ -94,15 +94,15 @@ export function usePosts(): UsePostsReturn {
     )[0]
   }, [currentLocalePosts])
   
-  // 获取最近一周更新的文章
+  // 获取最近一个月更新的文章
   const getRecentPosts = useMemo(() => () => {
-    const oneWeekAgo = new Date()
-    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+    const oneMonthAgo = new Date()
+    oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
     
     return currentLocalePosts
       .filter((post) => {
         const updateDate = post.updatedAt ? new Date(post.updatedAt) : new Date(post.date)
-        return updateDate >= oneWeekAgo
+        return updateDate >= oneMonthAgo
       })
       .sort((a, b) => {
         const dateA = a.updatedAt ? new Date(a.updatedAt) : new Date(a.date)

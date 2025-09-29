@@ -79,17 +79,17 @@ export function getFeaturedPosts(locale?: string): Post[] {
   return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-// 获取最近一周更新的文章（最多10篇）
+// 获取最近一个月更新的文章（最多10篇）
 export function getRecentPosts(locale?: string): Post[] {
-  const oneWeekAgo = new Date()
-  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+  const oneMonthAgo = new Date()
+  oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
   
   let posts = allPosts.filter((post) => {
     if (post.published === false) return false
     
     // 使用 updatedAt 或 date 字段
     const updateDate = post.updatedAt ? new Date(post.updatedAt) : new Date(post.date)
-    return updateDate >= oneWeekAgo
+    return updateDate >= oneMonthAgo
   })
   
   if (locale) {

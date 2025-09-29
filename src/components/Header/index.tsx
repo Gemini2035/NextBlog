@@ -50,7 +50,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
 }
 
 export default function Header() {
-  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>('__search')
   const [isExiting, setIsExiting] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const navItemsRef = useRef<HTMLElement>(null)
