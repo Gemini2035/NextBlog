@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node -e \"if (process.platform !== 'win32') { require('child_process').execSync('pnpm contentlayer:fix', {stdio: 'inherit'}); }\" && next dev",
+    "dev": "node -e \"if (process.platform !== 'win32') { require('child_process').execSync('pnpm contentlayer', {stdio: 'inherit'}); }\" && next dev",
     "build": "pnpm contentlayer && next build",
     "start": "next start",
     "lint": "eslint",
