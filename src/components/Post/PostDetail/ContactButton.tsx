@@ -31,7 +31,7 @@ export function ContactButton() {
         <>     
           {/* 背景遮罩 */}
           <div 
-            className="fixed inset-0 z-100 bg-opacity-100 w-screen h-screen"
+            className="fixed inset-0 z-100 bg-opacity-100 w-screen h-screen cursor-pointer"
             onClick={() => setIsVisible(false)}
           />
           {/* 弹出卡片 */}

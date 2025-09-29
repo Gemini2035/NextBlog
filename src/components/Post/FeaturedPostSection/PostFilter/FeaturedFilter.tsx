@@ -43,7 +43,7 @@ export function FeaturedFilter({ value, onChange }: FeaturedFilterProps) {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-gray-100"
+      className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-gray-100 cursor-pointer"
       title={getTooltip()}
     >
       {getIcon()}

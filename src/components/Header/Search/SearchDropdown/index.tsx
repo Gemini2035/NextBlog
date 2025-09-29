@@ -85,7 +85,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
           {query && (
             <button
               onClick={clearSearch}
-              className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
+              className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
               aria-label={t('clearSearch')}
             >
               <CloseIcon className="h-5 w-5 text-gray-500" />

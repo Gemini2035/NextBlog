@@ -27,7 +27,7 @@ export function TagFilter({ tags, selectedTags, onChange }: TagFilterProps) {
             <button
               key={tag.value}
               onClick={() => handleTagToggle(tag.value)}
-              className={`px-2 py-1 text-xs rounded-full border transition-colors ${
+              className={`px-2 py-1 text-xs rounded-full border transition-colors cursor-pointer ${
                 selectedTags.includes(tag.value)
                   ? 'bg-blue-500 text-white border-blue-500'
                   : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'

@@ -41,7 +41,7 @@ export default function SearchResults({
           <li key={result.item.id}>
             <Link
               href={result.item.href}
-              className="block group"
+              className="block group cursor-pointer"
               onClick={() => onItemClick(result.item.href)}
             >
               <div className="flex items-start justify-between">
@@ -90,7 +90,7 @@ export default function SearchResults({
             <li key={item.id}>
               <Link
                 href={item.href}
-                className="block group"
+                className="block group cursor-pointer"
                 onClick={() => onItemClick(item.href)}
               >
                 <div className="flex items-start justify-between">

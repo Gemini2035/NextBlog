@@ -87,7 +87,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
       {!isExpanded ? (
         <button
           onClick={handleToggle}
-          className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200"
+          className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 bg-gray-100 text-gray-600 hover:bg-gray-200 cursor-pointer"
           title={placeholder}
         >
           <SearchIcon className="w-4 h-4" />
@@ -115,7 +115,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
                   setInputValue('')
                   onChange('')
                 }}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
               >
                 ✕
               </button>

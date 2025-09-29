@@ -22,6 +22,10 @@ export function CollapsibleTagFilter({ tags, selectedTags, onChange }: Collapsib
     }
   }
 
+  const handleClearAll = () => {
+    onChange([])
+  }
+
   const selectedCount = selectedTags.length
 
   return (
@@ -40,21 +44,31 @@ export function CollapsibleTagFilter({ tags, selectedTags, onChange }: Collapsib
         {tags.length === 0 ? (
           <p className="text-sm text-gray-500">{t('noTags')}</p>
         ) : (
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
+          <div className="relative">
+            <div className="flex flex-wrap gap-2 pb-8">
+              {tags.map((tag) => (
+                <button
+                  key={tag.value}
+                  onClick={() => handleTagToggle(tag.value)}
+                  className={cn(
+                    "px-2 py-1 text-xs rounded-full border transition-colors cursor-pointer",
+                    selectedTags.includes(tag.value)
+                      ? 'bg-blue-500 text-white border-blue-500'
+                      : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                  )}
+                >
+                  {tag.label} ({tag.count})
+                </button>
+              ))}
+            </div>
+            {selectedCount > 0 && (
               <button
-                key={tag.value}
-                onClick={() => handleTagToggle(tag.value)}
-                className={cn(
-                  "px-2 py-1 text-xs rounded-full border transition-colors",
-                  selectedTags.includes(tag.value)
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
-                )}
+                onClick={handleClearAll}
+                className="absolute bottom-0 right-0 text-xs text-gray-500 hover:text-gray-700 underline transition-colors"
               >
-                {tag.label} ({tag.count})
+                {t('clearAllTags')}
               </button>
-            ))}
+            )}
           </div>
         )}
       </CollapsePanel>
