@@ -19,7 +19,7 @@ export type CollapseVariant =
 /**
  * Collapse 组件的基础属性接口
  */
-export interface CollapseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+export interface CollapseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onChange'> {
   /** 当前激活的面板 key */
   activeKey?: string | string[]
   /** 默认激活的面板 key */
