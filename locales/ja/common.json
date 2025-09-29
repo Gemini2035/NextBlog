@@ -183,5 +183,19 @@
     "updateTimePlaceholder": "更新時間ソートを選択",
     "clearAll": "すべてのフィルターをクリア",
     "filteredCount": "フィルター結果：{count} / {total} 記事"
+  },
+  "Pagination": {
+    "total": "合計 {total} 件",
+    "range": "{start}-{end} 件目（全 {total} 件中）",
+    "jumpTo": "ジャンプ",
+    "page": "ページ",
+    "itemsPerPage": "1ページあたり",
+    "items": "件",
+    "first": "最初",
+    "last": "最後",
+    "previous": "前へ",
+    "next": "次へ",
+    "jumpPrev": "前へジャンプ",
+    "jumpNext": "次へジャンプ"
   }
 }

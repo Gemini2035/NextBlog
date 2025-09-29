@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
+import { Pagination } from '@/ui/Pagination'
 import type { Post } from '.contentlayer/generated'
 
 interface StickyWrapperProps {
@@ -18,6 +20,9 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
   const [currentPage, setCurrentPage] = useState(1)
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts || [])
   const pageSize = 9 // 3x3网格，每页显示9篇文章
+  
+  // 国际化翻译
+  const t = useTranslations('Pagination')
 
   // 使用useCallback包装setFilteredPosts函数
   const handleFilteredPostsChange = useCallback((newFilteredPosts: Post[]) => {
@@ -96,50 +101,21 @@ export function StickyWrapper({ posts, title, prevText = "上一页", nextText =
       {/* 分页组件 */}
       {paginationData.totalPages > 1 && (
         <div className="flex flex-col items-center gap-4">
-          {/* 分页信息 */}
-          <div className="text-sm text-gray-600">
-            第 {((currentPage - 1) * pageSize) + 1}-{Math.min(currentPage * pageSize, paginationData.total)} 条，共 {paginationData.total} 条
-          </div>
-          
-          {/* 简化的分页导航 */}
-          <div className="flex items-center gap-2">
-            {/* 上一页按钮 */}
-            {currentPage > 1 && (
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                className="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer"
-              >
-                {prevText}
-              </button>
-            )}
-            
-            {/* 页码按钮 */}
-            <div className="flex items-center gap-1">
-              {Array.from({ length: paginationData.totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 border rounded-md transition-colors ${
-                    page === currentPage
-                      ? 'bg-blue-500 text-white border-blue-500 cursor-default'
-                      : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 cursor-pointer'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
-            
-            {/* 下一页按钮 */}
-            {currentPage < paginationData.totalPages && (
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                className="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors cursor-pointer"
-              >
-                {nextText}
-              </button>
-            )}
-          </div>
+          <Pagination
+            current={currentPage}
+            total={paginationData.total}
+            pageSize={pageSize}
+            onChange={handlePageChange}
+            showTotal={(total, range) => 
+              t('range', { start: range[0], end: range[1], total })
+            }
+            showQuickJumper={paginationData.totalPages > 5}
+            showSizeChanger={false}
+            hideOnSinglePage={true}
+            size="small"
+            align="center"
+            className="mt-4"
+          />
         </div>
       )}
     </div>

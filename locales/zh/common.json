@@ -178,5 +178,19 @@
     "updateTimePlaceholder": "选择更新时间排序",
     "clearAll": "清除所有筛选",
     "filteredCount": "筛选结果：{count} / {total} 篇文章"
+  },
+  "Pagination": {
+    "total": "共 {total} 条",
+    "range": "第 {start}-{end} 条，共 {total} 条",
+    "jumpTo": "跳至",
+    "page": "页",
+    "itemsPerPage": "每页",
+    "items": "条",
+    "first": "首页",
+    "last": "末页",
+    "previous": "上一页",
+    "next": "下一页",
+    "jumpPrev": "向前跳转",
+    "jumpNext": "向后跳转"
   }
 }
