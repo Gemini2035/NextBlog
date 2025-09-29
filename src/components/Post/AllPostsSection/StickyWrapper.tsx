@@ -16,7 +16,7 @@ interface StickyWrapperProps {
 }
 
 
-export function StickyWrapper({ posts, title, prevText = "上一页", nextText = "下一页", locale }: StickyWrapperProps) {
+export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts || [])
   const pageSize = 9 // 3x3网格，每页显示9篇文章

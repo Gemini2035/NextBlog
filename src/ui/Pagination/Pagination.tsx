@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { cn } from "@/utils";
+// import { cn } from "@/utils";
 import { 
   PaginationProps, 
   PaginationItemProps, 
@@ -123,7 +123,6 @@ function PaginationSizeChanger({
 
 // 快速跳转组件
 function PaginationQuickJumper({ 
-  current, 
   totalPages, 
   onJump, 
   disabled = false,
@@ -186,7 +185,6 @@ export function Pagination({
   align = 'left',
   className,
   style,
-  showLessItems = false,
   simple = false,
   prevIcon,
   nextIcon,

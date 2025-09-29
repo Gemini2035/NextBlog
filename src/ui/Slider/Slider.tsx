@@ -82,7 +82,6 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [dragStartX, setDragStartX] = useState(0);
-    const [dragEndX, setDragEndX] = useState(0);
     const [hasDragged, setHasDragged] = useState(false);
 
     const autoPlayRef = useRef<NodeJS.Timeout | null>(null);

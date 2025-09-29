@@ -1,4 +1,4 @@
-import { ReactNode, MouseEvent, ChangeEvent } from 'react';
+import { ReactNode } from 'react';
 
 export type PaginationSize = 'small' | 'middle' | 'large';
 
