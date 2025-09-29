@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { StarIcon, ClockIcon, EditIcon, RefreshIcon } from '@/assets/icons'
 import { FeaturedFilter } from './FeaturedFilter'
 import { SortFilter } from './SortFilter'
 import { CollapsibleTagFilter } from './CollapsibleTagFilter'
@@ -53,7 +54,10 @@ export function FilterRow({
       <div className="grid grid-cols-2 gap-4">
         {/* Featured Filter */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">{t('featuredFilter')}</span>
+          <div className="flex items-center gap-2">
+            <StarIcon className="w-4 h-4 text-yellow-500" />
+            <span className="text-sm font-medium text-gray-700">{t('featuredFilter')}</span>
+          </div>
           <FeaturedFilter
             value={featuredValue}
             onChange={onFeaturedChange}
@@ -62,7 +66,10 @@ export function FilterRow({
 
         {/* 字数排序 */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">{t('wordCountSort')}</span>
+          <div className="flex items-center gap-2">
+            <EditIcon className="w-4 h-4 text-blue-500" />
+            <span className="text-sm font-medium text-gray-700">{t('wordCountSort')}</span>
+          </div>
           <SortFilter
             value={wordCountSort}
             onChange={onWordCountSortChange}
@@ -71,7 +78,10 @@ export function FilterRow({
 
         {/* 创建时间排序 */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">{t('createTimeSort')}</span>
+          <div className="flex items-center gap-2">
+            <ClockIcon className="w-4 h-4 text-green-500" />
+            <span className="text-sm font-medium text-gray-700">{t('createTimeSort')}</span>
+          </div>
           <SortFilter
             value={createTimeSort}
             onChange={onCreateTimeSortChange}
@@ -80,7 +90,10 @@ export function FilterRow({
 
         {/* 更新时间排序 */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-gray-700">{t('updateTimeSort')}</span>
+          <div className="flex items-center gap-2">
+            <RefreshIcon className="w-4 h-4 text-purple-500" />
+            <span className="text-sm font-medium text-gray-700">{t('updateTimeSort')}</span>
+          </div>
           <SortFilter
             value={updateTimeSort}
             onChange={onUpdateTimeSortChange}

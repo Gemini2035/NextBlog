@@ -199,6 +199,24 @@
     "jumpPrev": "前へジャンプ",
     "jumpNext": "次へジャンプ"
   },
+  "EmptyState": {
+    "noData": "データがありません",
+    "noDataDescription": "現在表示できるデータがありません",
+    "noResults": "結果が見つかりません",
+    "noResultsDescription": "検索条件を調整してみてください",
+    "noPosts": "記事が見つかりません",
+    "noPostsDescription": "現在のフィルター条件に一致するブログ記事がありません",
+    "noFiles": "ファイルが見つかりません",
+    "noFilesDescription": "検索条件に一致するファイルがありません",
+    "noUsers": "ユーザーが見つかりません",
+    "noUsersDescription": "検索条件に一致するユーザーがありません",
+    "emptyFolder": "空のフォルダ",
+    "emptyFolderDescription": "このフォルダは空です",
+    "error": "エラーが発生しました",
+    "errorDescription": "データの読み込み中にエラーが発生しました",
+    "loading": "読み込み中...",
+    "loadingDescription": "データを読み込んでいます。お待ちください"
+  },
   "RelatedPosts": {
     "title": "関連記事",
     "refresh": "更新",

@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
-import { Pagination } from '@/ui/Pagination'
+import { Pagination, EmptyState } from '@/ui'
 import { useLayoutHeights, useAnchorScroll } from '@/hooks'
 import type { Post } from '.contentlayer/generated'
 
@@ -24,6 +24,7 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
   
   // 国际化翻译
   const t = useTranslations('Pagination')
+  const tEmpty = useTranslations('EmptyState')
   const { headerHeight } = useLayoutHeights()
 
   // 使用useCallback包装setFilteredPosts函数
@@ -95,12 +96,22 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
         />
       </div>
       
-      {/* 文章列表 */}
-      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-        {paginationData.currentPosts.map((post) => (
-          <PostCard key={post._id} post={post} />
-        ))}
-      </div>
+      {/* 文章列表或空状态 */}
+      {paginationData.currentPosts.length === 0 ? (
+        <EmptyState
+          icon="search"
+          title={tEmpty('noPosts')}
+          description={tEmpty('noPostsDescription')}
+          size="md"
+          variant="card"
+        />
+      ) : (
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+          {paginationData.currentPosts.map((post) => (
+            <PostCard key={post._id} post={post} />
+          ))}
+        </div>
+      )}
 
       {/* 分页组件 */}
       {paginationData.totalPages > 1 && (

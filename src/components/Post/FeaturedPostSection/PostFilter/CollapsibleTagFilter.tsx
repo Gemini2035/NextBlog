@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Collapse, CollapsePanel, Button, Tag } from "@/ui";
 import { cn } from "@/utils";
+import { TagIcon } from "@/assets/icons";
 import { TagOption } from "./types";
 
 interface CollapsibleTagFilterProps {
@@ -42,9 +43,12 @@ export function CollapsibleTagFilter({
       <CollapsePanel
         key="tag-filter"
         header={
-          <span className="text-sm font-medium text-gray-700">
-            {t("tagFilter")} {selectedCount > 0 && `(${selectedCount})`}
-          </span>
+          <div className="flex items-center gap-2">
+            <TagIcon className="w-4 h-4 text-orange-500" />
+            <span className="text-sm font-medium text-gray-700">
+              {t("tagFilter")} {selectedCount > 0 && `(${selectedCount})`}
+            </span>
+          </div>
         }
         headerContainerClassName="p-0! border-0! rounded-0!"
         contentClassName="px-3 py-3"
