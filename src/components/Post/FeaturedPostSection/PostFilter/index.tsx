@@ -12,7 +12,7 @@ import { ClearButton } from './ClearButton'
 import { applyFilters, getAllTagsWithCount } from './utils'
 import type { PostFilterProps, FilterState, SortOption } from './types'
 
-export function PostFilter({ posts, onFilteredPostsChange, locale }: PostFilterProps) {
+export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
   const t = useTranslations('PostFilter')
   
   const [filters, setFilters] = useState<FilterState>({

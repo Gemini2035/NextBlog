@@ -178,5 +178,19 @@
     "updateTimePlaceholder": "Select update time sort",
     "clearAll": "Clear All Filters",
     "filteredCount": "Filtered results: {count} / {total} posts"
+  },
+  "Pagination": {
+    "total": "Total {total} items",
+    "range": "Items {start}-{end} of {total}",
+    "jumpTo": "Go to",
+    "page": "page",
+    "itemsPerPage": "Items per page",
+    "items": "items",
+    "first": "First",
+    "last": "Last",
+    "previous": "Previous",
+    "next": "Next",
+    "jumpPrev": "Jump Previous",
+    "jumpNext": "Jump Next"
   }
 }

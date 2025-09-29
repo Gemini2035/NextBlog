@@ -420,15 +420,20 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     }, [handleTriggerEvents])
     
     useEffect(() => {
+      // Capture the current value to avoid stale closure
+      const currentTimeout = timeoutRef.current
+      const currentHideTimeout = hideTimeoutRef.current
+      const currentHoverTimeout = hoverTimeoutRef.current
+      
       return () => {
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current)
+        if (currentTimeout) {
+          clearTimeout(currentTimeout)
         }
-        if (hideTimeoutRef.current) {
-          clearTimeout(hideTimeoutRef.current)
+        if (currentHideTimeout) {
+          clearTimeout(currentHideTimeout)
         }
-        if (hoverTimeoutRef.current) {
-          clearTimeout(hoverTimeoutRef.current)
+        if (currentHoverTimeout) {
+          clearTimeout(currentHoverTimeout)
         }
       }
     }, [])
@@ -436,7 +441,6 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     // 计算样式
     const tooltipStyles = useMemo(() => {
       return getTooltipStyles(
-        placement,
         theme,
         'fade',
         isVisible,
@@ -444,7 +448,7 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
         className,
         trigger
       )
-    }, [placement, theme, isVisible, interactive, className, trigger])
+    }, [theme, isVisible, interactive, className, trigger])
     
     const arrowStyles = useMemo(() => {
       return getArrowStyles(placement, theme)

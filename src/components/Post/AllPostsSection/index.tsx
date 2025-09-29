@@ -1,5 +1,5 @@
 import { StickyWrapper } from './StickyWrapper'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { Post } from '.contentlayer/generated'
 
 interface AllPostsSectionProps {
   posts: Post[] | null | undefined

@@ -58,7 +58,7 @@ export function getPostsByTag(tag: string, locale?: string): Post[] {
   return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-export function getAllTags(locale?: string): string[] {
+export function getAllTags(): string[] {
   // 使用 Contentlayer 生成的 tagList
   return tagList
 }
