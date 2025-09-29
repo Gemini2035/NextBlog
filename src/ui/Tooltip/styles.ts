@@ -14,7 +14,7 @@ export const getThemeStyles = (theme: TooltipTheme): string => {
 /**
  * 获取Tooltip位置样式 - 移除CSS定位，使用JavaScript计算位置
  */
-export const getPlacementStyles = (placement: TooltipPlacement): string => {
+export const getPlacementStyles = (): string => {
   // 由于使用JavaScript计算位置，这里只返回空字符串
   // 避免CSS定位与JavaScript计算的位置冲突
   return ''
@@ -100,7 +100,6 @@ export const getInteractiveStyles = (interactive: boolean, trigger: string): str
  * 组合所有样式类名
  */
 export const getTooltipStyles = (
-  placement: TooltipPlacement = 'top',
   theme: TooltipTheme = 'light',
   animation: TooltipAnimation = 'fade',
   visible: boolean = false,
@@ -110,7 +109,7 @@ export const getTooltipStyles = (
 ): string => {
   const baseStyles = getBaseStyles()
   const themeStyles = getThemeStyles(theme)
-  const placementStyles = getPlacementStyles(placement)
+  const placementStyles = getPlacementStyles()
   const animationStyles = getAnimationStyles(animation, visible)
   const interactiveStyles = getInteractiveStyles(interactive, trigger)
   

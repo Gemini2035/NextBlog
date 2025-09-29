@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { cn } from "@/utils";
+import { useTranslations } from 'next-intl';
+// import { cn } from "@/utils";
 import { 
   PaginationProps, 
   PaginationItemProps, 
@@ -63,6 +64,8 @@ function PaginationJump({
   className,
   icon 
 }: PaginationJumpProps) {
+  const t = useTranslations('Pagination');
+  
   const handleClick = () => {
     if (!disabled && onClick) {
       onClick();
@@ -75,7 +78,7 @@ function PaginationJump({
       onClick={handleClick}
       disabled={disabled}
       type="button"
-      title={direction === 'prev' ? '向前跳转' : '向后跳转'}
+      title={direction === 'prev' ? t('jumpPrev') : t('jumpNext')}
     >
       {icon}
     </button>
@@ -91,6 +94,8 @@ function PaginationSizeChanger({
   disabled = false,
   className 
 }: PaginationSizeChangerProps) {
+  const t = useTranslations('Pagination');
+  
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPageSize = parseInt(e.target.value);
     onChange(current, newPageSize);
@@ -98,7 +103,7 @@ function PaginationSizeChanger({
 
   return (
     <div className={getPaginationSizeChangerStyles(className)}>
-      <span className="text-gray-600">每页</span>
+      <span className="text-gray-600">{t('itemsPerPage')}</span>
       <select
         value={pageSize}
         onChange={handleChange}
@@ -111,19 +116,19 @@ function PaginationSizeChanger({
           </option>
         ))}
       </select>
-      <span className="text-gray-600">条</span>
+      <span className="text-gray-600">{t('items')}</span>
     </div>
   );
 }
 
 // 快速跳转组件
 function PaginationQuickJumper({ 
-  current, 
   totalPages, 
   onJump, 
   disabled = false,
   className 
 }: PaginationQuickJumperProps) {
+  const t = useTranslations('Pagination');
   const [jumpValue, setJumpValue] = useState('');
 
   const handleJump = () => {
@@ -142,7 +147,7 @@ function PaginationQuickJumper({
 
   return (
     <div className={getPaginationQuickJumperStyles(className)}>
-      <span className="text-gray-600">跳至</span>
+      <span className="text-gray-600">{t('jumpTo')}</span>
       <input
         type="number"
         value={jumpValue}
@@ -150,11 +155,11 @@ function PaginationQuickJumper({
         onKeyPress={handleKeyPress}
         disabled={disabled}
         className="w-16 px-2 py-1 border border-gray-300 rounded-md bg-white text-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 focus:border-blue-500"
-        placeholder="页码"
+        placeholder={t('page')}
         min="1"
         max={totalPages}
       />
-      <span className="text-gray-600">页</span>
+      <span className="text-gray-600">{t('page')}</span>
     </div>
   );
 }
@@ -180,7 +185,6 @@ export function Pagination({
   align = 'left',
   className,
   style,
-  showLessItems = false,
   simple = false,
   prevIcon,
   nextIcon,
@@ -189,6 +193,7 @@ export function Pagination({
   jumpPrevIcon,
   jumpNextIcon
 }: PaginationProps) {
+  const t = useTranslations('Pagination');
   const [current, setCurrent] = useState(controlledCurrent ?? defaultCurrent);
   const [pageSize, setPageSize] = useState(controlledPageSize ?? defaultPageSize);
 
@@ -310,7 +315,7 @@ export function Pagination({
         <div className={getPaginationTotalStyles()}>
           {typeof showTotal === 'function' 
             ? showTotal(total, [(current - 1) * pageSize + 1, Math.min(current * pageSize, total)])
-            : `共 ${total} 条`
+            : t('total', { total })
           }
         </div>
       )}
@@ -322,7 +327,7 @@ export function Pagination({
           onClick={() => handlePageChange(1)}
           disabled={disabled}
           type="button"
-          title="首页"
+          title={t('first')}
         >
           {firstIcon || <FirstIcon />}
         </button>
@@ -335,7 +340,7 @@ export function Pagination({
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled}
           type="button"
-          title="上一页"
+          title={t('previous')}
         >
           {prevIcon || <PrevIcon />}
         </button>
@@ -394,7 +399,7 @@ export function Pagination({
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled}
           type="button"
-          title="下一页"
+          title={t('next')}
         >
           {nextIcon || <NextIcon />}
         </button>
@@ -407,7 +412,7 @@ export function Pagination({
           onClick={() => handlePageChange(totalPages)}
           disabled={disabled}
           type="button"
-          title="末页"
+          title={t('last')}
         >
           {lastIcon || <LastIcon />}
         </button>

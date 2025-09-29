@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
-import type { Post } from '../../../../../.contentlayer/generated'
 import type { FilterState } from './types'
+import { Post } from '.contentlayer/generated/types';
 
 // 计算文章字数
 export function getWordCount(post: Post): number {
