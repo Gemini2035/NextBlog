@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { useAnchorScroll } from '@/hooks/useAnchorScroll';
-import { Collapse } from '@/ui/Collapse';
+import { Collapse, CollapsePanel } from '@/ui/Collapse';
 import Link from '@/ui/Link';
 import { ChevronRightIcon } from '@/assets/icons';
 import { useState, useEffect } from 'react';
@@ -126,7 +126,7 @@ export default function PoliciesPage({ params }: PoliciesPageProps) {
           {/* 使用Collapse组件展示协议内容 */}
           <Collapse defaultActiveKey={['terms']} accordion>
             {/* 服务条款 */}
-            <Collapse.Panel 
+            <CollapsePanel 
               header={
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">
@@ -159,10 +159,10 @@ export default function PoliciesPage({ params }: PoliciesPageProps) {
                   <p className="text-gray-600">{t('termsSection3Content')}</p>
                 </div>
               </div>
-            </Collapse.Panel>
+            </CollapsePanel>
 
             {/* 隐私政策 */}
-            <Collapse.Panel 
+            <CollapsePanel 
               header={
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">
@@ -195,10 +195,10 @@ export default function PoliciesPage({ params }: PoliciesPageProps) {
                   <p className="text-gray-600">{t('privacySection3Content')}</p>
                 </div>
               </div>
-            </Collapse.Panel>
+            </CollapsePanel>
 
             {/* 安全政策 */}
-            <Collapse.Panel 
+            <CollapsePanel 
               header={
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">
@@ -231,7 +231,7 @@ export default function PoliciesPage({ params }: PoliciesPageProps) {
                   <p className="text-gray-600">{t('securitySection3Content')}</p>
                 </div>
               </div>
-            </Collapse.Panel>
+            </CollapsePanel>
           </Collapse>
 
           {/* 联系信息 */}
