@@ -134,8 +134,8 @@ export const Collapse = forwardRef<CollapseRef, CollapseProps>(
       return Array.isArray(children) ? children.map((child, index) => {
         if (!isValidElement<CollapsePanelProps>(child)) return child
 
-        const { key, ...childProps } = child.props
-        const panelKey = key || String(index)
+        const { ...childProps } = child.props
+        const panelKey = child.key || String(index)
         const isActive = currentActiveKey.includes(panelKey)
 
         return cloneElement(child, {

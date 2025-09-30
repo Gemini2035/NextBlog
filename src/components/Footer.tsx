@@ -49,19 +49,19 @@ export default function Footer() {
             {/* 政策链接 */}
             <div className="flex items-center gap-4 text-sm whitespace-nowrap">
               <Link
-                href="/policies/terms"
+                href="/policies#terms"
                 className="text-gray-600 hover:text-gray-800 transition-colors"
               >
                 {t('terms')}
               </Link>
               <Link
-                href="/policies/privacy"
+                href="/policies#privacy"
                 className="text-gray-600 hover:text-gray-800 transition-colors"
               >
                 {t('privacy')}
               </Link>
               <Link
-                href="/policies/security"
+                href="/policies#security"
                 className="text-gray-600 hover:text-gray-800 transition-colors"
               >
                 {t('security')}
