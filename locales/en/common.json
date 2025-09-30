@@ -6,7 +6,16 @@
     "latestPosts": "Latest Posts",
     "viewMorePosts": "View More Posts",
     "exploreMore": "Explore more technical articles and development experience sharing",
-    "browseAllPosts": "Browse All Posts"
+    "browseAllPosts": "Browse All Posts",
+    "blogTitle": "Blog",
+    "blogIntro": "Featured and latest articles to get you up to speed.",
+    "aboutTitle": "About Me",
+    "aboutIntro": "A bit of background, direction and values to help you know me.",
+    "projectsTitle": "Projects",
+    "projectsIntro": "Selected solo/collab projects showcasing stacks and outcomes.",
+    "resourcesTitle": "Resources",
+    "resourcesIntro": "Tools and checklists to boost your efficiency and quality.",
+    "viewMore": "Learn more"
   },
   "AboutPage": {
     "title": "About Me",

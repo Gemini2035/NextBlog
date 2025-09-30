@@ -6,7 +6,16 @@
     "latestPosts": "最新記事",
     "viewMorePosts": "もっと見る",
     "exploreMore": "より多くの技術記事と開発経験の共有を探索",
-    "browseAllPosts": "すべての記事を閲覧"
+    "browseAllPosts": "すべての記事を閲覧",
+    "blogTitle": "ブログ",
+    "blogIntro": "厳選と最新の記事で素早く把握しましょう。",
+    "aboutTitle": "私について",
+    "aboutIntro": "背景・方向性・価値観を短く紹介します。",
+    "projectsTitle": "プロジェクト",
+    "projectsIntro": "個人/協力プロジェクトの厳選、技術スタックと成果を紹介。",
+    "resourcesTitle": "リソース",
+    "resourcesIntro": "効率と品質を向上させるツールとチェックリスト。",
+    "viewMore": "もっと見る"
   },
   "Navigation": {
     "search": "検索",

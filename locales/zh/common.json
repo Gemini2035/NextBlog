@@ -6,7 +6,16 @@
     "latestPosts": "最新文章",
     "viewMorePosts": "查看更多文章",
     "exploreMore": "探索更多技术文章和开发经验分享",
-    "browseAllPosts": "浏览所有文章"
+    "browseAllPosts": "浏览所有文章",
+    "blogTitle": "博客",
+    "blogIntro": "精选与最新文章，带你快速进入主题。",
+    "aboutTitle": "关于我",
+    "aboutIntro": "一点背景、方向与价值观，帮你更快建立认知。",
+    "projectsTitle": "项目",
+    "projectsIntro": "精选个人/协作项目，展示技术栈与实战产出。",
+    "resourcesTitle": "资源",
+    "resourcesIntro": "工具与清单，帮你提升效率与质量。",
+    "viewMore": "了解更多"
   },
   "AboutPage": {
     "title": "关于我",
