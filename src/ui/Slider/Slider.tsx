@@ -367,7 +367,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               )}
               onClick={() => handleNavigationClick("left")}
               disabled={!canSlidePrev}
-              aria-label="上一页"
+              aria-label={t('previousPage')}
             >
               <ChevronLeftIcon className="w-5 h-5" />
             </button>
@@ -379,7 +379,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               )}
               onClick={() => handleNavigationClick("right")}
               disabled={!canSlideNext}
-              aria-label="下一页"
+              aria-label={t('nextPage')}
             >
               <ChevronRightIcon className="w-5 h-5" />
             </button>
@@ -395,7 +395,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
                 type="button"
                 className={getIndicatorStyles("dot", index === currentIndex)}
                 onClick={() => handleIndicatorClick(index)}
-                aria-label={`跳转到第${index + 1}页`}
+                aria-label={t('goToPage', { page: index + 1 })}
               />
             ))}
           </div>

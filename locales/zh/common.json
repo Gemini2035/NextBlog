@@ -1,7 +1,7 @@
 {
   "HomePage": {
     "hello": "你好",
-    "welcome": "欢迎来到我的博客",
+    "welcome": "欢迎来到{siteTitle}的博客",
     "description": "分享技术见解、开发经验和生活感悟。使用 Next.js + Contentlayer + MDX + Tailwind 构建。",
     "latestPosts": "最新文章",
     "viewMorePosts": "查看更多文章",
@@ -15,7 +15,23 @@
     "projectsIntro": "精选个人/协作项目，展示技术栈与实战产出。",
     "resourcesTitle": "资源",
     "resourcesIntro": "工具与清单，帮你提升效率与质量。",
-    "viewMore": "了解更多"
+    "viewMore": "了解更多",
+    "continue": "继续",
+    "scrollToBlog": "点击跳转到博客区域",
+    "backToTop": "返回顶部",
+    "expandFeatured": "展开置顶文章",
+    "collapseFeatured": "收起置顶文章",
+    "mainNavigation": "主导航",
+    "actionToolbar": "操作工具栏",
+    "openMobileMenu": "打开移动端菜单",
+    "search": "搜索",
+    "toggleLanguage": "切换语言",
+    "languageSelection": "语言选择",
+    "expandInfo": "展开信息",
+    "collapseInfo": "收起信息",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "goToPage": "跳转到第{page}页"
   },
   "AboutPage": {
     "title": "关于我",
@@ -56,7 +72,8 @@
     "license": "本站内容采用 CC BY-NC-SA 4.0 协议许可",
     "terms": "服务条款",
     "privacy": "隐私政策",
-    "security": "安全政策"
+    "security": "安全政策",
+    "backToTop": "返回顶部"
   },
   "Site": {
     "title": "Apodidae",
@@ -103,6 +120,12 @@
   "Navigation": {
     "search": "搜索",
     "language": "语言",
+    "mainNavigation": "主导航",
+    "actionToolbar": "操作工具栏",
+    "openMobileMenu": "打开移动端菜单",
+    "toggleLanguage": "切换语言",
+    "languageSelection": "语言选择",
+    "currentLanguage": "当前语言",
     "Blog": "博客",
     "About": "关于",
     "Projects": "项目",

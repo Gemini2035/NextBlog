@@ -73,7 +73,7 @@ export default function Footer() {
           <button
             onClick={scrollToTop}
             className="flex items-center justify-center p-2 hover:bg-gray-100 transition-colors cursor-pointer"
-            aria-label="返回顶部"
+            aria-label={t('backToTop')}
           >
             <LogoIcon className="w-8 h-8 text-gray-600" />
           </button>

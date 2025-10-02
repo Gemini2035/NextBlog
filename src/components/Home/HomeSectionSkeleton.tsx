@@ -70,13 +70,7 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
         )}
       </div>
 
-      <div
-        aria-hidden
-        className={clsx(
-          'pointer-events-none absolute inset-0 -z-10 opacity-60 transition-opacity group-hover:opacity-80',
-          isEven ? 'bg-[radial-gradient(80%_60%_at_20%_10%,#dbeafe_0%,transparent_60%)]' : 'bg-[radial-gradient(80%_60%_at_80%_20%,#111827_0%,transparent_60%)]'
-        )}
-      />
+      {/* 移除渐变装饰元素 */}
     </section>
   )
 }

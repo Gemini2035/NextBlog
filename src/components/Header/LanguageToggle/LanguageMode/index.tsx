@@ -1,5 +1,6 @@
 import { LANGUAGES } from "@/constants"
 import { Variants, motion } from "framer-motion"
+import { useTranslations } from 'next-intl'
 
 // 语言选择模式组件
 interface LanguageModeProps {
@@ -9,13 +10,15 @@ interface LanguageModeProps {
   }
   
 export default function LanguageMode({ currentLang, onLanguageChange, itemVariants }: LanguageModeProps) {
+    const t = useTranslations('Navigation')
+    
     return (
       <motion.div 
         className="w-full" 
         variants={itemVariants}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <ul className="space-y-2" role="listbox" aria-label="语言选择">
+        <ul className="space-y-2" role="listbox" aria-label={t('languageSelection')}>
           {LANGUAGES.map((lang, index) => (
             <motion.li 
               key={lang.code}

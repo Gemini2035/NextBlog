@@ -1,7 +1,7 @@
 {
   "HomePage": {
     "hello": "こんにちは",
-    "welcome": "私のブログへようこそ",
+    "welcome": "{siteTitle}のブログへようこそ",
     "description": "技術的な洞察、開発経験、人生の感想を共有します。Next.js + Contentlayer + MDX + Tailwind で構築。",
     "latestPosts": "最新記事",
     "viewMorePosts": "もっと見る",
@@ -15,11 +15,33 @@
     "projectsIntro": "個人/協力プロジェクトの厳選、技術スタックと成果を紹介。",
     "resourcesTitle": "リソース",
     "resourcesIntro": "効率と品質を向上させるツールとチェックリスト。",
-    "viewMore": "もっと見る"
+    "viewMore": "もっと見る",
+    "continue": "続ける",
+    "scrollToBlog": "ブログセクションにスクロール",
+    "backToTop": "トップに戻る",
+    "expandFeatured": "おすすめ記事を展開",
+    "collapseFeatured": "おすすめ記事を折りたたむ",
+    "mainNavigation": "メインナビゲーション",
+    "actionToolbar": "アクションツールバー",
+    "openMobileMenu": "モバイルメニューを開く",
+    "search": "検索",
+    "toggleLanguage": "言語を切り替え",
+    "languageSelection": "言語選択",
+    "expandInfo": "情報を展開",
+    "collapseInfo": "情報を折りたたむ",
+    "previousPage": "前のページ",
+    "nextPage": "次のページ",
+    "goToPage": "{page}ページに移動"
   },
   "Navigation": {
     "search": "検索",
     "language": "言語",
+    "mainNavigation": "メインナビゲーション",
+    "actionToolbar": "アクションツールバー",
+    "openMobileMenu": "モバイルメニューを開く",
+    "toggleLanguage": "言語を切り替え",
+    "languageSelection": "言語選択",
+    "currentLanguage": "現在の言語",
     "Blog": "ブログ",
     "About": "について",
     "Projects": "プロジェクト",
@@ -109,7 +131,8 @@
     "license": "このサイトのコンテンツは CC BY-NC-SA 4.0 ライセンスの下で提供されています",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
-    "security": "セキュリティポリシー"
+    "security": "セキュリティポリシー",
+    "backToTop": "トップに戻る"
   },
   "Site": {
     "title": "Apodidae",

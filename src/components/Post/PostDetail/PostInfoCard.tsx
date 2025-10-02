@@ -189,7 +189,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                 type="ghost"
                 size="sm"
                 className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm"
-                aria-label={isCollapsed ? "展开信息" : "收起信息"}
+                aria-label={isCollapsed ? t('expandInfo') : t('collapseInfo')}
               >
                 <CollapseIcon 
                   className={cn(

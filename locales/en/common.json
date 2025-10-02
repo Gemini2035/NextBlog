@@ -1,7 +1,7 @@
 {
   "HomePage": {
     "hello": "Hello",
-    "welcome": "Welcome to my blog",
+    "welcome": "Welcome to {siteTitle}'s blog",
     "description": "Sharing technical insights, development experiences, and life reflections. Built with Next.js + Contentlayer + MDX + Tailwind.",
     "latestPosts": "Latest Posts",
     "viewMorePosts": "View More Posts",
@@ -15,7 +15,23 @@
     "projectsIntro": "Selected solo/collab projects showcasing stacks and outcomes.",
     "resourcesTitle": "Resources",
     "resourcesIntro": "Tools and checklists to boost your efficiency and quality.",
-    "viewMore": "Learn more"
+    "viewMore": "Learn more",
+    "continue": "Continue",
+    "scrollToBlog": "Click to scroll to blog section",
+    "backToTop": "Back to top",
+    "expandFeatured": "Expand featured posts",
+    "collapseFeatured": "Collapse featured posts",
+    "mainNavigation": "Main navigation",
+    "actionToolbar": "Action toolbar",
+    "openMobileMenu": "Open mobile menu",
+    "search": "Search",
+    "toggleLanguage": "Toggle language",
+    "languageSelection": "Language selection",
+    "expandInfo": "Expand info",
+    "collapseInfo": "Collapse info",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "goToPage": "Go to page {page}"
   },
   "AboutPage": {
     "title": "About Me",
@@ -56,7 +72,8 @@
     "license": "This site's content is licensed under CC BY-NC-SA 4.0",
     "terms": "Terms of Service",
     "privacy": "Privacy Policy",
-    "security": "Security Policy"
+    "security": "Security Policy",
+    "backToTop": "Back to top"
   },
   "Site": {
     "title": "Apodidae",
@@ -103,6 +120,12 @@
   "Navigation": {
     "search": "Search",
     "language": "Language",
+    "mainNavigation": "Main navigation",
+    "actionToolbar": "Action toolbar",
+    "openMobileMenu": "Open mobile menu",
+    "toggleLanguage": "Toggle language",
+    "languageSelection": "Language selection",
+    "currentLanguage": "Current language",
     "Blog": "Blog",
     "About": "About",
     "Projects": "Projects",
