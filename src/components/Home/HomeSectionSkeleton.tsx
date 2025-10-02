@@ -1,17 +1,17 @@
 'use client'
 
-import React from 'react'
+import { ReactNode } from 'react'
 import { Link } from '@/ui'
 import { useIntersectionObserver } from '@/hooks'
-import clsx from 'clsx'
+import { cn } from '@/utils'
 
 export interface HomeSectionSkeletonProps {
-  title?: React.ReactNode
-  description?: React.ReactNode
+  title?: ReactNode
+  description?: ReactNode
   href?: string
-  ctaText?: React.ReactNode
+  ctaText?: ReactNode
   index: number
-  children?: React.ReactNode
+  children?: ReactNode
 }
 
 export default function HomeSectionSkeleton({ title, description, href, ctaText, index, children }: HomeSectionSkeletonProps) {
@@ -27,7 +27,7 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
   return (
     <section
       ref={elementRef}
-      className={clsx(
+      className={cn(
         'w-full overflow-hidden border transition-all duration-700 ease-out',
         'group relative isolate',
         isEven
@@ -39,7 +39,7 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
           : 'opacity-0 translate-y-12 scale-95'
       )}
     >
-      <div className={clsx(
+      <div className={cn(
         'px-6 py-16 sm:px-10 sm:py-20 lg:px-16 transition-all duration-700 ease-out delay-150',
         isEven ? 'text-gray-900' : 'text-white',
         // 内容动画 - 稍微延迟出现
@@ -52,12 +52,12 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
         ) : (
           <div className="max-w-3xl">
             {title && (
-              <h2 className={clsx('font-bold tracking-tight', 'text-3xl sm:text-4xl lg:text-5xl')}>
+              <h2 className={cn('font-bold tracking-tight', 'text-3xl sm:text-4xl lg:text-5xl')}>
                 {title}
               </h2>
             )}
             {description && (
-              <p className={clsx('mt-4 sm:mt-6', 'text-base sm:text-lg lg:text-xl', isEven ? 'text-gray-600' : 'text-gray-300')}>
+              <p className={cn('mt-4 sm:mt-6', 'text-base sm:text-lg lg:text-xl', isEven ? 'text-gray-600' : 'text-gray-300')}>
                 {description}
               </p>
             )}
@@ -66,7 +66,7 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
               <div className="mt-8 sm:mt-10">
                 <Link
                   href={href}
-                  className={clsx(
+                  className={cn(
                     'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
                     isEven
                       ? 'bg-gray-900 text-white hover:bg-black focus-visible:outline-gray-900'

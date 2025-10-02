@@ -1,6 +1,5 @@
 'use client'
 
-import React from 'react'
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'

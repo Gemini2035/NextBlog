@@ -1,5 +1,4 @@
 "use client"
-import React from 'react'
 import BlogSection from './BlogSection/index'
 import AboutSection from './AboutSection/index'
 import ProjectsSection from './ProjectsSection/index'

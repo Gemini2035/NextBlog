@@ -1,4 +1,5 @@
 import type { Post } from '../../../../../.contentlayer/generated'
+import { ReactNode } from 'react'
 
 export interface FilterState {
   keyword: string
@@ -17,7 +18,7 @@ export interface PostFilterProps {
 
 export interface FilterSectionProps {
   title: string
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }
 
