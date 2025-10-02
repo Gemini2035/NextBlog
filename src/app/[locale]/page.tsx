@@ -5,7 +5,7 @@ import { useNavigation, useScrollParallax } from '@/hooks'
 import SectionSwitch from '@/components/Home/SectionSwitch'
 import HomeSectionSkeleton from '@/components/Home/HomeSectionSkeleton'
 import { SITE_CONFIG } from '@/constants'
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 
 export default function Home() {
   const t = useTranslations('HomePage')
@@ -29,6 +29,13 @@ export default function Home() {
 
   // 获取博客区域的引用
   const blogSectionRef = useRef<HTMLDivElement>(null)
+
+  // 确保页面首次加载时滚动到顶部
+  useEffect(() => {
+    if (isClient && window.scrollY > 0) {
+      window.scrollTo(0, 0)
+    }
+  }, [isClient])
 
   // 平滑滚动到博客区域
   const scrollToBlogSection = useCallback(() => {

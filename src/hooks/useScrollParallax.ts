@@ -29,6 +29,13 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
     let animationFrame: number
     const lastScrollY = 0
 
+    // 初始化时确保滚动位置正确
+    const initializeScroll = () => {
+      if (window.scrollY > 0) {
+        window.scrollTo(0, 0)
+      }
+    }
+
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -51,6 +58,9 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
       animationFrame = requestAnimationFrame(updateSmoothScroll)
     }
 
+    // 初始化滚动位置
+    initializeScroll()
+    
     window.addEventListener('scroll', handleScroll, { passive: true })
     updateSmoothScroll()
 
@@ -70,7 +80,9 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
     }
     
     const viewportHeight = window.innerHeight
-    const availableHeight = viewportHeight - headerHeight // 100vh - headerHeight
+    // 确保 headerHeight 有值，如果没有则使用默认值
+    const safeHeaderHeight = headerHeight > 0 ? headerHeight : 80
+    const availableHeight = viewportHeight - safeHeaderHeight // 100vh - headerHeight
     const isMobile = window.innerWidth < 768
     
     // 初始高度为可用高度的100%（即 100vh - headerHeight）

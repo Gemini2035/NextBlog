@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Link } from '@/ui'
+import { useIntersectionObserver } from '@/hooks'
 import clsx from 'clsx'
 
 export interface HomeSectionSkeletonProps {
@@ -15,18 +16,37 @@ export interface HomeSectionSkeletonProps {
 
 export default function HomeSectionSkeleton({ title, description, href, ctaText, index, children }: HomeSectionSkeletonProps) {
   const isEven = index % 2 === 0
+  
+  // 使用 Intersection Observer 检测元素是否进入视口
+  const { elementRef, shouldAnimate } = useIntersectionObserver({
+    threshold: 0, // 当元素开始进入视口时触发
+    rootMargin: '0px 0px 0px 0px', // 上边框出现到屏幕上时触发
+    triggerOnce: false // 支持重复播放
+  })
 
   return (
     <section
+      ref={elementRef}
       className={clsx(
-        'w-full overflow-hidden border transition-colors',
+        'w-full overflow-hidden border transition-all duration-700 ease-out',
         'group relative isolate',
         isEven
           ? 'bg-white border-gray-200 hover:border-gray-300'
-          : 'bg-gray-900 border-gray-800 hover:border-gray-700'
+          : 'bg-gray-900 border-gray-800 hover:border-gray-700',
+        // 动画状态 - 从下方滑入并淡入
+        shouldAnimate 
+          ? 'opacity-100 translate-y-0 scale-100' 
+          : 'opacity-0 translate-y-12 scale-95'
       )}
     >
-      <div className={clsx('px-6 py-16 sm:px-10 sm:py-20 lg:px-16', isEven ? 'text-gray-900' : 'text-white')}>
+      <div className={clsx(
+        'px-6 py-16 sm:px-10 sm:py-20 lg:px-16 transition-all duration-700 ease-out delay-150',
+        isEven ? 'text-gray-900' : 'text-white',
+        // 内容动画 - 稍微延迟出现
+        shouldAnimate 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-4'
+      )}>
         {children ? (
           children
         ) : (
