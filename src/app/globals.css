@@ -239,3 +239,226 @@ body {
 .scrollbar-track-gray-100::-webkit-scrollbar-track {
   background: #f3f4f6;
 }
+
+/* 漂浮动画样式 - 突破容器限制的大范围飘动 */
+@keyframes float-1 {
+  0%, 100% {
+    transform: translateX(8%) translateY(2%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(2%) translateY(1%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(1%) translateY(0.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(5%) translateY(1.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(12%) translateY(3%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(9%) translateY(3.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(6%) translateY(2.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(4%) translateY(1.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-2 {
+  0%, 100% {
+    transform: translateX(4%) translateY(4%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(1%) translateY(3%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(0.5%) translateY(2.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(3%) translateY(3.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(8%) translateY(5%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(7%) translateY(5.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(5%) translateY(4.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(2.5%) translateY(3.5%) rotate(0.8deg);
+  }
+}
+
+@keyframes float-3 {
+  0%, 100% {
+    transform: translateX(10%) translateY(6%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(6%) translateY(5%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(5%) translateY(4.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(7.5%) translateY(5.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(14%) translateY(7%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(12%) translateY(7.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(9.5%) translateY(6.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(7%) translateY(5.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-4 {
+  0%, 100% {
+    transform: translateX(2%) translateY(8%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(0.5%) translateY(7%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(0%) translateY(6.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(2.5%) translateY(7.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(7%) translateY(9%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(5.5%) translateY(9.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(3.5%) translateY(8.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(1.5%) translateY(7.5%) rotate(0.8deg);
+  }
+}
+
+@keyframes float-5 {
+  0%, 100% {
+    transform: translateX(9%) translateY(10%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(5%) translateY(9%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(4%) translateY(8.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(7%) translateY(9.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(12.5%) translateY(11%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(10.5%) translateY(11.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(8%) translateY(10.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(5.5%) translateY(9.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-6 {
+  0%, 100% {
+    transform: translateX(6%) translateY(12%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(2.5%) translateY(11%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(1.5%) translateY(10.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(4.5%) translateY(11.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(10%) translateY(13%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(8%) translateY(13.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(5.5%) translateY(12.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(3%) translateY(11.5%) rotate(0.8deg);
+  }
+}
+
+.animate-float-1 {
+  animation: float-1 15s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-2 18s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  animation: float-3 20s ease-in-out infinite;
+}
+
+.animate-float-4 {
+  animation: float-4 16s ease-in-out infinite;
+}
+
+.animate-float-5 {
+  animation: float-5 22s ease-in-out infinite;
+}
+
+.animate-float-6 {
+  animation: float-6 19s ease-in-out infinite;
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation: none;
+  }
+}
+
+/* 超大屏幕优化 */
+@media (min-width: 1536px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation-duration: 12s;
+  }
+}
+
+/* 中等屏幕优化 */
+@media (max-width: 1280px) and (min-width: 1024px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation-duration: 10s;
+  }
+}
