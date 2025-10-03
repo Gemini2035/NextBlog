@@ -1,15 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useNavigation, useScrollParallax } from '@/hooks'
+import { useNavigation, useScrollParallax, useLayoutHeights } from '@/hooks'
 import SectionSwitch from '@/components/Home/SectionSwitch'
 import HomeSectionSkeleton from '@/components/Home/HomeSectionSkeleton'
 import { SITE_CONFIG } from '@/constants'
+import { smoothScrollToElement } from '@/utils'
 import { useRef, useCallback, useEffect } from 'react'
 
 export default function Home() {
   const t = useTranslations('HomePage')
   const { navigationItems } = useNavigation()
+  const { headerHeight } = useLayoutHeights()
   const { scrollY, isScrolling, parallaxHeight, opacity, currentHeight, isClient } = useScrollParallax({
     threshold: 400,
     maxHeight: 100,
@@ -37,15 +39,12 @@ export default function Home() {
     }
   }, [isClient])
 
-  // 平滑滚动到博客区域
+  // 平滑滚动到博客区域，考虑header高度
   const scrollToBlogSection = useCallback(() => {
     if (blogSectionRef.current) {
-      blogSectionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      })
+      smoothScrollToElement(blogSectionRef.current, headerHeight)
     }
-  }, [])
+  }, [headerHeight])
 
   return (
     <div className="relative">
