@@ -31,7 +31,8 @@
     "collapseInfo": "Collapse info",
     "previousPage": "Previous page",
     "nextPage": "Next page",
-    "goToPage": "Go to page {page}"
+    "goToPage": "Go to page {page}",
+    "contentSection": "Content"
   },
   "AboutPage": {
     "title": "About Me",

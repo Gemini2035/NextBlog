@@ -31,7 +31,8 @@
     "collapseInfo": "情報を折りたたむ",
     "previousPage": "前のページ",
     "nextPage": "次のページ",
-    "goToPage": "{page}ページに移動"
+    "goToPage": "{page}ページに移動",
+    "contentSection": "コンテンツ"
   },
   "Navigation": {
     "search": "検索",

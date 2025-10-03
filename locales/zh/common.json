@@ -31,7 +31,8 @@
     "collapseInfo": "收起信息",
     "previousPage": "上一页",
     "nextPage": "下一页",
-    "goToPage": "跳转到第{page}页"
+    "goToPage": "跳转到第{page}页",
+    "contentSection": "内容区域"
   },
   "AboutPage": {
     "title": "关于我",
