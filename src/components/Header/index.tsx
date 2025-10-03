@@ -101,19 +101,24 @@ export default function Header() {
     
     // 如果鼠标在搜索按钮或语言切换按钮上
     if (isOnSearchButton || isOnLanguageButton) {
-      // 如果当前有 submenu 打开，但不是对应的类型，播放关闭动画
+      // 如果当前有 submenu 打开，但不是对应的类型
       if (activeSubmenu) {
         const shouldClose = (isOnSearchButton && activeSubmenu !== '__search') || 
                            (isOnLanguageButton && activeSubmenu !== '__language')
         
-        if (shouldClose) {
+        // 只有在不是从搜索切换到语言或从语言切换到搜索时才关闭
+        const isSwitchingBetweenSpecialMenus = 
+          (isOnSearchButton && activeSubmenu === '__language') ||
+          (isOnLanguageButton && activeSubmenu === '__search')
+        
+        if (shouldClose && !isSwitchingBetweenSpecialMenus) {
           setIsExiting(true)
           setTimeout(() => {
             setActiveSubmenu(null)
             setIsExiting(false)
           }, 250)
         }
-        // 如果是对应的类型，保持打开状态（什么都不做）
+        // 如果是对应的类型，或者是在特殊菜单之间切换，保持打开状态
       }
       return
     }
