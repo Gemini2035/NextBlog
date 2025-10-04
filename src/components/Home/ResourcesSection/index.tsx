@@ -3,6 +3,7 @@
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
+import { NAVIGATION_ITEMS } from '@/constants'
 
 interface ResourcesSectionProps {
   index: number
@@ -11,6 +12,11 @@ interface ResourcesSectionProps {
 
 export default function ResourcesSection({ index, href }: ResourcesSectionProps) {
   const t = useTranslations('HomePage')
+  const navT = useTranslations('Navigation')
+
+  // 获取resources section的导航配置
+  const resourcesNav = NAVIGATION_ITEMS.find(item => item.type === '__resources')
+  const submenuItems = resourcesNav?.submenu?.items || []
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -21,6 +27,27 @@ export default function ResourcesSection({ index, href }: ResourcesSectionProps)
         <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
           {t('resourcesIntro', { default: '工具与清单，帮你提升效率与质量。' })}
         </p>
+
+        {/* 快速导航链接 */}
+        {submenuItems.length > 0 && (
+          <div className="mt-8 sm:mt-10">
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {submenuItems.map((item, itemIndex) => (
+                item.items && item.items.length > 0 && (
+                  item.items.map((subItem, subIndex) => (
+                    <Link
+                      key={`${itemIndex}-${subIndex}`}
+                      href={subItem.href}
+                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                      {navT(subItem.label as keyof typeof navT, { default: subItem.label })}
+                    </Link>
+                  ))
+                )
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="mt-8 sm:mt-10">
           <Link
