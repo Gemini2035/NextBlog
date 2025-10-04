@@ -38,7 +38,7 @@ export const getColorStyles = (color?: string): string => {
   if (color) {
     return `bg-[${color}]`
   }
-  return 'bg-gray-200 dark:bg-gray-700'
+  return 'bg-gray-200'
 }
 
 /**

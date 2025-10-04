@@ -483,7 +483,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                         </div>
                       }
                       placement="top"
-                      theme="dark"
+                      theme="light"
                       delay={200}
                     >
                       <span className={cn(

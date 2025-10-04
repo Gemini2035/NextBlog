@@ -18,7 +18,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
           {t('blogTitle', { default: '博客' })}
         </h2>
-        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300/90">
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
           {t('blogIntro', { default: '精选与最新文章，带你快速进入主题。' })}
         </p>
 

@@ -18,7 +18,7 @@ export default function ResourcesSection({ index, href }: ResourcesSectionProps)
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
           {t('resourcesTitle', { default: '资源' })}
         </h2>
-        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300/90">
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
           {t('resourcesIntro', { default: '工具与清单，帮你提升效率与质量。' })}
         </p>
 
