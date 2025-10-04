@@ -1,7 +1,8 @@
 'use client'
 
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
-import { Link } from '@/ui'
+import { Link, Button } from '@/ui'
+import { ArrowRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import { NAVIGATION_ITEMS } from '@/constants'
 
@@ -63,14 +64,16 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
         )}
 
         <div className="mt-6 sm:mt-8">
-          <Link
-            href={href}
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900"
-          >
-            <span>{t('viewMore', { default: '了解更多' })}</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M7 17L17 7M17 7H8M17 7V16" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <Link href={href}>
+            <Button
+              type="primary"
+              size="sm"
+              rounded={true}
+              className="inline-flex items-center gap-2 bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900"
+            >
+              <span>{t('viewMore', { default: '了解更多' })}</span>
+              <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
+            </Button>
           </Link>
         </div>
       </div>

@@ -1,7 +1,8 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { Link } from '@/ui'
+import { Link, Button } from '@/ui'
+import { ArrowRightIcon } from '@/assets/icons'
 import { useIntersectionObserver } from '@/hooks'
 import { cn } from '@/utils'
 
@@ -85,26 +86,22 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
 
             {href && ctaText && (
               <div className="mt-8 sm:mt-10">
-                <Link
-                  href={href}
-                  className={cn(
-                    'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
-                    // 按钮颜色：博客部分和projects部分使用深蓝色按钮，其他部分根据背景色决定
-                    isBlogSection || (index - 1) % 2 !== 0
-                      ? 'bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800'
-                      : 'bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900'
-                  )}
-                >
-                  <span>{ctaText}</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path
-                      d="M7 17L17 7M17 7H8M17 7V16"
-                      stroke={isBlogSection || (index - 1) % 2 !== 0 ? 'white' : 'white'}
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                <Link href={href}>
+                  <Button
+                    type="primary"
+                    size="sm"
+                    rounded={true}
+                    className={cn(
+                      'inline-flex items-center gap-2',
+                      // 按钮颜色：博客部分和projects部分使用深蓝色按钮，其他部分根据背景色决定
+                      isBlogSection || (index - 1) % 2 !== 0
+                        ? 'bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800'
+                        : 'bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900'
+                    )}
+                  >
+                    <span>{ctaText}</span>
+                    <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
+                  </Button>
                 </Link>
               </div>
             )}
