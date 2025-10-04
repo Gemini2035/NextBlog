@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Card, Button } from "@/ui";
 import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
@@ -13,6 +14,7 @@ interface PostInfoCardProps {
 }
 
 export function PostInfoCard({ post }: PostInfoCardProps) {
+  const t = useTranslations('Posts');
   // 暂时禁用sticky功能
   const [isSticky, setIsSticky] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
@@ -188,11 +190,12 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 type="ghost"
                 size="sm"
-                className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm"
+                className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm min-h-[3rem] w-8 flex items-center justify-center"
                 aria-label={isCollapsed ? t('expandInfo') : t('collapseInfo')}
               >
                 <CollapseIcon 
                   className={cn(
+                    "w-5 h-5 scale-250",
                     isCollapsed ? "rotate-90" : "rotate-270"
                   )}
                 />

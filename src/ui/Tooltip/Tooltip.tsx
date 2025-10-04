@@ -451,8 +451,8 @@ export const Tooltip = forwardRef<TooltipRef, TooltipProps>(
     }, [theme, isVisible, interactive, className, trigger])
     
     const arrowStyles = useMemo(() => {
-      return getArrowStyles(placement, theme)
-    }, [placement, theme])
+      return getArrowStyles(placement)
+    }, [placement])
     
     // 渲染触发器
     const renderTrigger = () => {

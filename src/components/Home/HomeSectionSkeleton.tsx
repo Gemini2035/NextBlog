@@ -17,7 +17,6 @@ export interface HomeSectionSkeletonProps {
 
 export default function HomeSectionSkeleton({ title, description, href, ctaText, index, children }: HomeSectionSkeletonProps) {
   const isBlogSection = index === 0 // 博客部分
-  const isEven = index % 2 === 0
   
   // 使用 Intersection Observer 检测元素是否进入视口
   const { elementRef, shouldAnimate } = useIntersectionObserver({

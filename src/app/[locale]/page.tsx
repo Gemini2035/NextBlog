@@ -13,7 +13,7 @@ export default function Home() {
   const t = useTranslations('HomePage')
   const { navigationItems } = useNavigation()
   const { headerHeight } = useLayoutHeights()
-  const { scrollY, isScrolling, parallaxHeight, opacity, currentHeight, isClient } = useScrollParallax({
+  const { scrollY, isScrolling, opacity, currentHeight, isClient } = useScrollParallax({
     threshold: 400,
     maxHeight: 100,
     minHeight: 0

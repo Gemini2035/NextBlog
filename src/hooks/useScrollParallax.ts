@@ -27,7 +27,6 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
 
     let ticking = false
     let animationFrame: number
-    const lastScrollY = 0
 
     // 初始化时确保滚动位置正确
     const initializeScroll = () => {
@@ -70,7 +69,7 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [threshold, isClient])
+  }, [threshold, isClient, scrollY])
 
   // 计算渐进式高度 - 基于滚动距离的平滑过渡
   const calculateHeight = () => {

@@ -168,7 +168,7 @@ export default function Header() {
         }
       }, 150) // 150ms延迟，给用户足够时间移动到submenu
     }
-  }, [activeSubmenu])
+  }, [activeSubmenu, t])
 
   // 监听鼠标移动事件，检测鼠标是否在导航项区域或子菜单区域
   useEffect(() => {
