@@ -1,6 +1,7 @@
+import React from 'react'
 import { IconProps } from './types'
 
-export function StarIcon({ className = "w-4 h-4", size, strokeWidth = 2 }: IconProps) {
+export function StarIcon({ className = "w-6 h-6", size, strokeWidth = 2 }: IconProps) {
   return (
     <svg 
       className={className} 

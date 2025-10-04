@@ -1,13 +1,13 @@
 'use client'
 
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
-import { Link } from '@/ui'
+import { Link, Button } from '@/ui'
 import { useTranslations } from 'next-intl'
 import { usePosts } from '@/hooks/usePosts'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils'
 import { FloatingPost } from './FloatingPost'
-import { StarFilledIcon, ClockIcon, FileTextIcon, TagIcon } from '@/assets/icons'
+import { StarFilledIcon, ClockIcon, FileTextIcon, TagIcon, ArrowRightIcon } from '@/assets/icons'
 import { PostIcon } from '@/assets/icons/PostIcon'
 import type { Post } from '.contentlayer/generated'
 
@@ -155,19 +155,16 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
 
             {/* 主要CTA按钮 */}
             <div className="mt-8">
-              <Link
-                href={href}
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold',
-                  'shadow-xl focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
-                  'bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800',
-                  'border border-blue-600 hover:border-blue-700'
-                )}
-              >
-                <span>{t('viewMore', { default: '了解更多' })}</span>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M7 17L17 7M17 7H8M17 7V16" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <Link href={href}>
+                <Button
+                  type="primary"
+                  size="sm"
+                  rounded={true}
+                  className="inline-flex items-center gap-2 bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800 border border-blue-600 hover:border-blue-700"
+                >
+                  <span>{t('viewMore', { default: '了解更多' })}</span>
+                  <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
+                </Button>
               </Link>
             </div>
           </div>
@@ -186,12 +183,14 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
                 )}>
                   <Link href={post.url} className="block">
                     <div className="flex items-center gap-2">
-                      <div className="flex-shrink-0 w-4 h-4">
-                        <PostIcon />
+                      <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                        <PostIcon className="w-4 h-4" />
                       </div>
-                      <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
-                        {post.title}
-                      </h3>
+                      <div className="flex-1 min-w-0 flex items-center">
+                        <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
+                          {post.title}
+                        </h3>
+                      </div>
                     </div>
                   </Link>
                 </div>
