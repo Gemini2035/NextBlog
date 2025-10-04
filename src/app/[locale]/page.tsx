@@ -34,15 +34,6 @@ export default function Home() {
   // 获取博客区域的引用
   const blogSectionRef = useRef<HTMLDivElement>(null)
 
-  // 确保页面首次加载时滚动到顶部（仅在必要时）
-  useEffect(() => {
-    if (isClient && window.scrollY > 0 && window.location.pathname === `/${locale || ''}`) {
-      // 使用requestAnimationFrame确保DOM完全渲染后再滚动
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' })
-      })
-    }
-  }, [isClient, locale])
 
   // 平滑滚动到博客区域，考虑header高度
   const scrollToBlogSection = useCallback(() => {
