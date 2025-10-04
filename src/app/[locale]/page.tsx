@@ -7,11 +7,10 @@ import HomeSectionSkeleton from '@/components/Home/HomeSectionSkeleton'
 import { SITE_CONFIG } from '@/constants'
 import { smoothScrollToElement } from '@/utils'
 import { ChevronRightIcon } from '@/assets/icons'
-import { useRef, useCallback, useEffect } from 'react'
+import { useRef, useCallback } from 'react'
 
 export default function Home() {
   const t = useTranslations('HomePage')
-  const locale = useLocale()
   const { navigationItems } = useNavigation()
   const { headerHeight } = useLayoutHeights()
   const { scrollY, isScrolling, opacity, currentHeight, isClient } = useScrollParallax({

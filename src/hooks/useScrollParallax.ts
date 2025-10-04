@@ -69,7 +69,7 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
         cancelAnimationFrame(animationFrame)
       }
     }
-  }, [threshold, isClient])
+  }, [threshold, isClient]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // 计算渐进式高度 - 基于滚动距离的平滑过渡
   const calculateHeight = () => {
