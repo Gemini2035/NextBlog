@@ -1,4 +1,3 @@
-import { cn } from "@/utils";
 import { PaginationSize, PaginationAlign } from "./types";
 
 export const paginationStyles = {
@@ -56,12 +55,13 @@ export function getPaginationStyles(
   align: PaginationAlign = 'left',
   className?: string
 ) {
-  return cn(
+  const baseClasses = [
     paginationStyles.base,
     paginationStyles.sizes[size],
-    paginationStyles.alignments[align],
-    className
-  );
+    paginationStyles.alignments[align]
+  ].filter(Boolean).join(' ');
+  
+  return className ? `${baseClasses} ${className}` : baseClasses;
 }
 
 export function getPaginationItemStyles(
@@ -70,38 +70,40 @@ export function getPaginationItemStyles(
   ellipsis?: boolean,
   className?: string
 ) {
-  return cn(
+  const classes = [
     paginationStyles.item.base,
     active && paginationStyles.item.active,
     disabled && paginationStyles.item.disabled,
-    ellipsis && paginationStyles.item.ellipsis,
-    className
-  );
+    ellipsis && paginationStyles.item.ellipsis
+  ].filter(Boolean).join(' ');
+  
+  return className ? `${classes} ${className}` : classes;
 }
 
 export function getPaginationJumpStyles(
   disabled?: boolean,
   className?: string
 ) {
-  return cn(
+  const classes = [
     paginationStyles.jump.base,
-    disabled && paginationStyles.jump.disabled,
-    className
-  );
+    disabled && paginationStyles.jump.disabled
+  ].filter(Boolean).join(' ');
+  
+  return className ? `${classes} ${className}` : classes;
 }
 
 export function getPaginationSizeChangerStyles(className?: string) {
-  return cn(paginationStyles.sizeChanger.base, className);
+  return className ? `${paginationStyles.sizeChanger.base} ${className}` : paginationStyles.sizeChanger.base;
 }
 
 export function getPaginationQuickJumperStyles(className?: string) {
-  return cn(paginationStyles.quickJumper.base, className);
+  return className ? `${paginationStyles.quickJumper.base} ${className}` : paginationStyles.quickJumper.base;
 }
 
 export function getPaginationTotalStyles(className?: string) {
-  return cn(paginationStyles.total.base, className);
+  return className ? `${paginationStyles.total.base} ${className}` : paginationStyles.total.base;
 }
 
 export function getPaginationSimpleStyles(className?: string) {
-  return cn(paginationStyles.simple.base, className);
+  return className ? `${paginationStyles.simple.base} ${className}` : paginationStyles.simple.base;
 }
