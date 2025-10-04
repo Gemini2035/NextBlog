@@ -52,7 +52,7 @@ export default function ProjectsSection({ index, href }: ProjectsSectionProps) {
         <div className="mt-8 sm:mt-10">
           <Link
             href={href}
-            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-gray-900 dark:bg-gray-800 text-white hover:bg-black dark:hover:bg-gray-700 focus-visible:outline-gray-900 dark:focus-visible:outline-gray-800"
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900"
           >
             <span>{t('viewMore', { default: '了解更多' })}</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">

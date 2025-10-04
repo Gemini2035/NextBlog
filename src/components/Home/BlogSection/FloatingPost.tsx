@@ -121,10 +121,10 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
       onMouseLeave={onMouseLeave}
     >
       <div className={cn(
-        'bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg shadow-md',
-        'border border-gray-200/40 dark:border-gray-700/40 p-2.5',
+        'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-md',
+        'border border-blue-200/60 p-2.5',
         'hover:shadow-lg transition-all duration-300',
-        'hover:bg-white/85 dark:hover:bg-gray-800/85 hover:opacity-100 max-w-56'
+        'hover:bg-blue-100/95 hover:opacity-100 max-w-56'
       )}>
         <Link href={post.url} className="block">
           <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
             </div>
             
             <div className="flex-1 min-w-0">
-              <h3 className="text-xs font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 leading-tight">
+              <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
                 {post.title}
               </h3>
             </div>

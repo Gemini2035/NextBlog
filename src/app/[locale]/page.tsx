@@ -50,7 +50,7 @@ export default function Home() {
     <div className="relative">
       {/* Hero Section with Parallax Effect */}
       <section 
-        className="relative flex items-center justify-center overflow-hidden will-change-transform cursor-pointer hover:bg-gradient-to-br hover:from-blue-100 hover:via-white hover:to-purple-100 transition-all duration-300 active:scale-[0.98] touch-manipulation"
+        className="relative flex items-center justify-center overflow-hidden will-change-transform cursor-pointer hover:bg-gradient-to-br hover:from-blue-50 hover:via-blue-25 hover:to-blue-100 transition-all duration-300 active:scale-[0.98] touch-manipulation"
         style={{
           height: isClient ? `${currentHeight}px` : '600px',
           minHeight: isClient ? `${currentHeight}px` : '600px',
@@ -71,7 +71,7 @@ export default function Home() {
       >
         {/* Background with parallax effect */}
         <div 
-          className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 transition-opacity duration-500"
+          className="absolute inset-0 bg-gradient-to-br from-blue-50 via-blue-25 to-blue-100 transition-opacity duration-500"
           style={{ opacity }}
         />
         
