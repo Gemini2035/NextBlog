@@ -101,7 +101,13 @@
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "prevPage": "← Previous",
-    "nextPage": "Next →"
+    "nextPage": "Next →",
+    "expandInfo": "Expand info",
+    "collapseInfo": "Collapse info",
+    "expandFeatured": "Expand featured posts",
+    "collapseFeatured": "Collapse featured posts",
+    "previousPage": "Previous page",
+    "goToPage": "Go to page {page}"
   },
   "Header": {
     "mainNavigation": "Main navigation",

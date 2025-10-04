@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { useLayoutHeights, useAnchorScroll } from '@/hooks'
 import { PostCard } from '../PostCard'
@@ -14,6 +15,7 @@ interface StickyWrapperProps {
 }
 
 export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
+  const t = useTranslations('Posts')
   const [isSticky, setIsSticky] = useState(false)
   const [sectionHeight, setSectionHeight] = useState<number | null>(null)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -166,6 +168,9 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                     showIndicators={false}
                     className="h-auto"
                     itemContainerClassName="py-1"
+                    previousPageLabel={t('previousPage')}
+                    nextPageLabel={t('nextPage')}
+                    goToPageLabel={t('goToPage', { page: '{page}' })}
                   />
                 </div>
               </div>
@@ -192,6 +197,9 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                       showIndicators={false}
                       className="h-auto"
                       itemContainerClassName="py-1"
+                      previousPageLabel={t('previousPage')}
+                      nextPageLabel={t('nextPage')}
+                      goToPageLabel={t('goToPage', { page: '{page}' })}
                     />
                   </div>
                 </div>
@@ -212,6 +220,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
           >
             <CollapseIcon 
               className={cn(
+                "w-5 h-5 scale-250",
                 isCollapsed ? "rotate-0" : "rotate-180"
               )}
             />

@@ -160,7 +160,13 @@
     "refresh": "更新",
     "refreshing": "更新中...",
     "prevPage": "← 前へ",
-    "nextPage": "次へ →"
+    "nextPage": "次へ →",
+    "expandInfo": "情報を展開",
+    "collapseInfo": "情報を折りたたむ",
+    "expandFeatured": "おすすめ記事を展開",
+    "collapseFeatured": "おすすめ記事を折りたたむ",
+    "previousPage": "前のページ",
+    "goToPage": "{page}ページに移動"
   },
   "Header": {
     "mainNavigation": "メインナビゲーション",
@@ -254,11 +260,6 @@
     "errorDescription": "データの読み込み中にエラーが発生しました",
     "loading": "読み込み中...",
     "loadingDescription": "データを読み込んでいます。お待ちください"
-  },
-  "RelatedPosts": {
-    "title": "関連記事",
-    "refresh": "更新",
-    "refreshing": "更新中..."
   },
   "Policies": {
     "title": "ポリシー",

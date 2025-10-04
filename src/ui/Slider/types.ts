@@ -38,6 +38,12 @@ export interface SliderProps {
   style?: React.CSSProperties
   /** 导航按钮点击事件 */
   onSlideChange?: (currentIndex: number) => void
+  /** 上一页按钮的aria-label文本 */
+  previousPageLabel?: string
+  /** 下一页按钮的aria-label文本 */
+  nextPageLabel?: string
+  /** 指示器按钮的aria-label文本模板，{page}会被替换为页码 */
+  goToPageLabel?: string
 }
 
 /**

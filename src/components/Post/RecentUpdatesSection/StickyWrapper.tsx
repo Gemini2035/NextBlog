@@ -3,6 +3,7 @@
 import { PostCard } from '../PostCard'
 import { Slider } from '@/ui'
 import { useAnchorScroll } from '@/hooks'
+import { useTranslations } from 'next-intl'
 import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
@@ -11,6 +12,7 @@ interface StickyWrapperProps {
 }
 
 export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
+  const t = useTranslations('Posts')
   // 使用通用锚点滚动hook
   useAnchorScroll({ anchorId: 'recent' })
 
@@ -31,6 +33,9 @@ export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
             showIndicators={false}
             className="h-auto"
             itemContainerClassName="py-1"
+            previousPageLabel={t('previousPage')}
+            nextPageLabel={t('nextPage')}
+            goToPageLabel={t('goToPage', { page: '{page}' })}
           />
         </div>
     </div>

@@ -101,7 +101,13 @@
     "refresh": "换一批",
     "refreshing": "更换中...",
     "prevPage": "← 上一页",
-    "nextPage": "下一页 →"
+    "nextPage": "下一页 →",
+    "expandInfo": "展开信息",
+    "collapseInfo": "收起信息",
+    "expandFeatured": "展开置顶文章",
+    "collapseFeatured": "收起置顶文章",
+    "previousPage": "上一页",
+    "goToPage": "跳转到第 {page} 页"
   },
   "Header": {
     "mainNavigation": "主导航",

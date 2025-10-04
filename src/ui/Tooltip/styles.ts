@@ -22,7 +22,7 @@ export const getPlacementStyles = (): string => {
 /**
  * 获取箭头样式
  */
-export const getArrowStyles = (placement: TooltipPlacement, _theme: TooltipTheme): string => {
+export const getArrowStyles = (placement: TooltipPlacement): string => {
   const arrowBase = 'absolute w-2 h-2 transform rotate-45'
   const lightArrow = 'bg-white border border-gray-200'
   

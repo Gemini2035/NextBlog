@@ -74,6 +74,9 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
       itemContainerClassName,
       style,
       onSlideChange,
+      previousPageLabel = "Previous page",
+      nextPageLabel = "Next page",
+      goToPageLabel = "Go to page {page}",
       ...props
     },
     ref
@@ -367,7 +370,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               )}
               onClick={() => handleNavigationClick("left")}
               disabled={!canSlidePrev}
-              aria-label={t('previousPage')}
+              aria-label={previousPageLabel}
             >
               <ChevronLeftIcon className="w-5 h-5" />
             </button>
@@ -379,7 +382,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
               )}
               onClick={() => handleNavigationClick("right")}
               disabled={!canSlideNext}
-              aria-label={t('nextPage')}
+              aria-label={nextPageLabel}
             >
               <ChevronRightIcon className="w-5 h-5" />
             </button>
@@ -395,7 +398,7 @@ export const Slider = forwardRef<SliderRef, SliderProps>(
                 type="button"
                 className={getIndicatorStyles("dot", index === currentIndex)}
                 onClick={() => handleIndicatorClick(index)}
-                aria-label={t('goToPage', { page: index + 1 })}
+                aria-label={goToPageLabel.replace('{page}', (index + 1).toString())}
               />
             ))}
           </div>
