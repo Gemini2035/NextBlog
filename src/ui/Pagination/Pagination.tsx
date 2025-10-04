@@ -57,7 +57,7 @@ function PaginationItem({
 
 // 跳转按钮组件
 function PaginationJump({ 
-  direction, 
+  // direction, 
   onClick, 
   disabled = false, 
   className,
