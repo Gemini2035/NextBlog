@@ -32,7 +32,11 @@
     "previousPage": "前のページ",
     "nextPage": "次のページ",
     "goToPage": "{page}ページに移動",
-    "contentSection": "コンテンツ"
+    "contentSection": "コンテンツ",
+    "featuredArticles": "おすすめ記事",
+    "latestArticles": "最新記事",
+    "allArticles": "すべての記事",
+    "popularTags": "人気タグ"
   },
   "Navigation": {
     "search": "検索",

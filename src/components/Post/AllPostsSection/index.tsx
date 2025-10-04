@@ -7,9 +7,10 @@ interface AllPostsSectionProps {
   prevText?: string
   nextText?: string
   locale?: string
+  initialTag?: string | null
 }
 
-export function AllPostsSection({ posts, title, prevText, nextText, locale }: AllPostsSectionProps) {
+export function AllPostsSection({ posts, title, prevText, nextText, locale, initialTag }: AllPostsSectionProps) {
   if (!posts || posts.length === 0) {
     return null
   }
@@ -21,6 +22,7 @@ export function AllPostsSection({ posts, title, prevText, nextText, locale }: Al
       prevText={prevText}
       nextText={nextText}
       locale={locale}
+      initialTag={initialTag}
     />
   )
 }

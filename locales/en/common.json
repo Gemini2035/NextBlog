@@ -32,7 +32,11 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "goToPage": "Go to page {page}",
-    "contentSection": "Content"
+    "contentSection": "Content",
+    "featuredArticles": "Featured Articles",
+    "latestArticles": "Latest Articles",
+    "allArticles": "All Articles",
+    "popularTags": "Popular Tags"
   },
   "AboutPage": {
     "title": "About Me",
