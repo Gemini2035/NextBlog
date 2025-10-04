@@ -14,6 +14,7 @@ export interface PostFilterProps {
   posts: Post[]
   onFilteredPostsChange: (filteredPosts: Post[]) => void
   locale?: string
+  initialTag?: string | null
 }
 
 export interface FilterSectionProps {

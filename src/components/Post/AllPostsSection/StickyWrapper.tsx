@@ -14,10 +14,11 @@ interface StickyWrapperProps {
   prevText?: string
   nextText?: string
   locale?: string
+  initialTag?: string | null
 }
 
 
-export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
+export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrapperProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts || [])
   const pageSize = 9 // 3x3网格，每页显示9篇文章
@@ -80,6 +81,21 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
   // 使用通用锚点滚动hook
   useAnchorScroll({ anchorId: 'all-posts' })
 
+  // 当有initialTag时，自动滚动到all-posts区域
+  useEffect(() => {
+    if (initialTag) {
+      // 延迟执行，确保DOM已渲染
+      setTimeout(() => {
+        const allPostsTitle = document.getElementById('all-posts')
+        if (allPostsTitle) {
+          const titleRect = allPostsTitle.getBoundingClientRect()
+          const scrollTop = window.scrollY + titleRect.top - headerHeight - 20 // 预留更多空间
+          window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
+        }
+      }, 300) // 增加延迟确保筛选器已初始化
+    }
+  }, [initialTag, headerHeight])
+
   return (
     <div className="mb-12">
       {/* 标题 */}
@@ -93,6 +109,7 @@ export function StickyWrapper({ posts, title, locale }: StickyWrapperProps) {
           posts={posts}
           onFilteredPostsChange={handleFilteredPostsChange}
           locale={locale}
+          initialTag={initialTag}
         />
       </div>
       

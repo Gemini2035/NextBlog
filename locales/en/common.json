@@ -8,7 +8,7 @@
     "exploreMore": "Explore more technical articles and development experience sharing",
     "browseAllPosts": "Browse All Posts",
     "blogTitle": "Blog",
-    "blogIntro": "Featured and latest articles to get you up to speed.",
+    "blogIntro": "My articles, sharing the technologies and insights I've learned.",
     "aboutTitle": "About Me",
     "aboutIntro": "A bit of background, direction and values to help you know me.",
     "projectsTitle": "Projects",
@@ -32,7 +32,11 @@
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "goToPage": "Go to page {page}",
-    "contentSection": "Content"
+    "contentSection": "Content",
+    "featuredArticles": "Featured Articles",
+    "latestArticles": "Latest Articles",
+    "allArticles": "All Articles",
+    "popularTags": "Popular Tags"
   },
   "AboutPage": {
     "title": "About Me",

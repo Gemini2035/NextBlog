@@ -8,7 +8,7 @@
     "exploreMore": "より多くの技術記事と開発経験の共有を探索",
     "browseAllPosts": "すべての記事を閲覧",
     "blogTitle": "ブログ",
-    "blogIntro": "厳選と最新の記事で素早く把握しましょう。",
+    "blogIntro": "私の記事、学習した技術と洞察を共有します。",
     "aboutTitle": "私について",
     "aboutIntro": "背景・方向性・価値観を短く紹介します。",
     "projectsTitle": "プロジェクト",
@@ -32,7 +32,11 @@
     "previousPage": "前のページ",
     "nextPage": "次のページ",
     "goToPage": "{page}ページに移動",
-    "contentSection": "コンテンツ"
+    "contentSection": "コンテンツ",
+    "featuredArticles": "おすすめ記事",
+    "latestArticles": "最新記事",
+    "allArticles": "すべての記事",
+    "popularTags": "人気タグ"
   },
   "Navigation": {
     "search": "検索",

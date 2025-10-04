@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Collapse, CollapsePanel } from '@/ui'
 import { FilterHeader } from './FilterHeader'
 import { FilterRow } from './FilterRow'
@@ -9,8 +10,10 @@ import { ClearButton } from './ClearButton'
 import { applyFilters, getAllTagsWithCount } from './utils'
 import type { PostFilterProps, FilterState } from './types'
 
-export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
+export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFilterProps) {
   const t = useTranslations('PostFilter')
+  const router = useRouter()
+  const searchParams = useSearchParams()
   
   const [filters, setFilters] = useState<FilterState>({
     keyword: '',
@@ -35,6 +38,41 @@ export function PostFilter({ posts, onFilteredPostsChange }: PostFilterProps) {
   useEffect(() => {
     onFilteredPostsChange(filteredPosts)
   }, [filteredPosts, onFilteredPostsChange])
+
+  // 初始化tag筛选
+  useEffect(() => {
+    if (initialTag) {
+      setFilters(prev => ({
+        ...prev,
+        selectedTags: [initialTag]
+      }))
+      // 如果有初始标签，自动打开筛选面板
+      setIsOpen(true)
+    }
+  }, [initialTag])
+
+  // URL同步 - 当selectedTags变化时更新URL
+  useEffect(() => {
+    // 检查URL是否需要更新
+    const currentTag = searchParams.get('tag')
+    const newTag = filters.selectedTags.length > 0 ? filters.selectedTags[0] : null
+    
+    if (currentTag !== newTag) {
+      // 使用Next.js推荐的方式更新URL参数
+      const newSearchParams = new URLSearchParams(searchParams.toString())
+      
+      if (filters.selectedTags.length > 0) {
+        // 如果有选中的标签，更新URL
+        newSearchParams.set('tag', filters.selectedTags[0]) // Next.js会自动处理编码
+      } else {
+        // 如果没有选中的标签，移除URL参数
+        newSearchParams.delete('tag')
+      }
+      
+      // 使用router.replace更新URL，保持其他参数不变
+      router.replace(`?${newSearchParams.toString()}`, { scroll: false })
+    }
+  }, [filters.selectedTags, searchParams, router])
 
   // 更新筛选条件
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {

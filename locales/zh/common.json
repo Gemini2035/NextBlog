@@ -8,7 +8,7 @@
     "exploreMore": "探索更多技术文章和开发经验分享",
     "browseAllPosts": "浏览所有文章",
     "blogTitle": "博客",
-    "blogIntro": "精选与最新文章，带你快速进入主题。",
+    "blogIntro": "我的文章，分享我学习的技术与见解",
     "aboutTitle": "关于我",
     "aboutIntro": "一点背景、方向与价值观，帮你更快建立认知。",
     "projectsTitle": "项目",
@@ -32,7 +32,11 @@
     "previousPage": "上一页",
     "nextPage": "下一页",
     "goToPage": "跳转到第{page}页",
-    "contentSection": "内容区域"
+    "contentSection": "内容区域",
+    "featuredArticles": "精选文章",
+    "latestArticles": "最新文章",
+    "allArticles": "所有文章",
+    "popularTags": "热门标签"
   },
   "AboutPage": {
     "title": "关于我",
