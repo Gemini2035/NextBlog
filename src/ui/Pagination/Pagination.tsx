@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { useTranslations } from 'next-intl';
-// import { cn } from "@/utils";
+
 import { 
   PaginationProps, 
   PaginationItemProps, 
@@ -62,10 +61,9 @@ function PaginationJump({
   onClick, 
   disabled = false, 
   className,
-  icon 
-}: PaginationJumpProps) {
-  const t = useTranslations('Pagination');
-  
+  icon,
+  title
+}: PaginationJumpProps & { title?: string }) {
   const handleClick = () => {
     if (!disabled && onClick) {
       onClick();
@@ -78,7 +76,7 @@ function PaginationJump({
       onClick={handleClick}
       disabled={disabled}
       type="button"
-      title={direction === 'prev' ? t('jumpPrev') : t('jumpNext')}
+      title={title}
     >
       {icon}
     </button>
@@ -92,10 +90,9 @@ function PaginationSizeChanger({
   pageSizeOptions, 
   onChange, 
   disabled = false,
-  className 
-}: PaginationSizeChangerProps) {
-  const t = useTranslations('Pagination');
-  
+  className,
+  itemsPerPageText = '每页条数'
+}: PaginationSizeChangerProps & { itemsPerPageText?: string }) {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newPageSize = parseInt(e.target.value);
     onChange(current, newPageSize);
@@ -103,7 +100,7 @@ function PaginationSizeChanger({
 
   return (
     <div className={getPaginationSizeChangerStyles(className)}>
-      <span className="text-gray-600">{t('itemsPerPage')}</span>
+      <span className="text-gray-600">{itemsPerPageText}</span>
       <select
         value={pageSize}
         onChange={handleChange}
@@ -116,7 +113,7 @@ function PaginationSizeChanger({
           </option>
         ))}
       </select>
-      <span className="text-gray-600">{t('items')}</span>
+      <span className="text-gray-600">{itemsPerPageText}</span>
     </div>
   );
 }
@@ -126,9 +123,10 @@ function PaginationQuickJumper({
   totalPages, 
   onJump, 
   disabled = false,
-  className 
-}: PaginationQuickJumperProps) {
-  const t = useTranslations('Pagination');
+  className,
+  jumpToText = '跳转到',
+  pageText = '页'
+}: PaginationQuickJumperProps & { jumpToText?: string; pageText?: string }) {
   const [jumpValue, setJumpValue] = useState('');
 
   const handleJump = () => {
@@ -147,7 +145,7 @@ function PaginationQuickJumper({
 
   return (
     <div className={getPaginationQuickJumperStyles(className)}>
-      <span className="text-gray-600">{t('jumpTo')}</span>
+      <span className="text-gray-600">{jumpToText}</span>
       <input
         type="number"
         value={jumpValue}
@@ -155,11 +153,11 @@ function PaginationQuickJumper({
         onKeyPress={handleKeyPress}
         disabled={disabled}
         className="w-16 px-2 py-1 border border-gray-300 rounded-md bg-white text-gray-700 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 focus:border-blue-500"
-        placeholder={t('page')}
+        placeholder={pageText}
         min="1"
         max={totalPages}
       />
-      <span className="text-gray-600">{t('page')}</span>
+      <span className="text-gray-600">{pageText}</span>
     </div>
   );
 }
@@ -191,9 +189,25 @@ export function Pagination({
   firstIcon,
   lastIcon,
   jumpPrevIcon,
-  jumpNextIcon
+  jumpNextIcon,
+  texts = {}
 }: PaginationProps) {
-  const t = useTranslations('Pagination');
+  // 默认文字配置
+  const defaultTexts = {
+    itemsPerPage: '每页条数',
+    items: '条',
+    jumpTo: '跳转到',
+    page: '页',
+    total: '共 {total} 条',
+    first: '首页',
+    previous: '上一页',
+    next: '下一页',
+    last: '末页',
+    jumpPrev: '向前5页',
+    jumpNext: '向后5页'
+  };
+  
+  const finalTexts = { ...defaultTexts, ...texts };
   const [current, setCurrent] = useState(controlledCurrent ?? defaultCurrent);
   const [pageSize, setPageSize] = useState(controlledPageSize ?? defaultPageSize);
 
@@ -315,7 +329,7 @@ export function Pagination({
         <div className={getPaginationTotalStyles()}>
           {typeof showTotal === 'function' 
             ? showTotal(total, [(current - 1) * pageSize + 1, Math.min(current * pageSize, total)])
-            : t('total', { total })
+            : finalTexts.total.replace('{total}', total.toString())
           }
         </div>
       )}
@@ -327,7 +341,7 @@ export function Pagination({
           onClick={() => handlePageChange(1)}
           disabled={disabled}
           type="button"
-          title={t('first')}
+          title={finalTexts.first}
         >
           {firstIcon || <FirstIcon />}
         </button>
@@ -340,7 +354,7 @@ export function Pagination({
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled}
           type="button"
-          title={t('previous')}
+          title={finalTexts.previous}
         >
           {prevIcon || <PrevIcon />}
         </button>
@@ -353,6 +367,7 @@ export function Pagination({
           onClick={handleJumpPrev}
           disabled={disabled}
           icon={jumpPrevIcon || <JumpPrevIcon />}
+          title={finalTexts.jumpPrev}
         />
       )}
 
@@ -389,6 +404,7 @@ export function Pagination({
           onClick={handleJumpNext}
           disabled={disabled}
           icon={jumpNextIcon || <JumpNextIcon />}
+          title={finalTexts.jumpNext}
         />
       )}
 
@@ -399,7 +415,7 @@ export function Pagination({
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled}
           type="button"
-          title={t('next')}
+          title={finalTexts.next}
         >
           {nextIcon || <NextIcon />}
         </button>
@@ -412,7 +428,7 @@ export function Pagination({
           onClick={() => handlePageChange(totalPages)}
           disabled={disabled}
           type="button"
-          title={t('last')}
+          title={finalTexts.last}
         >
           {lastIcon || <LastIcon />}
         </button>
@@ -426,6 +442,7 @@ export function Pagination({
           pageSizeOptions={pageSizeOptions}
           onChange={handlePageSizeChange}
           disabled={disabled}
+          itemsPerPageText={finalTexts.itemsPerPage}
         />
       )}
 
@@ -436,6 +453,8 @@ export function Pagination({
           totalPages={totalPages}
           onJump={handleQuickJump}
           disabled={disabled}
+          jumpToText={finalTexts.jumpTo}
+          pageText={finalTexts.page}
         />
       )}
     </div>

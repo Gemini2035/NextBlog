@@ -24,7 +24,6 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
   const pageSize = 9 // 3x3网格，每页显示9篇文章
   
   // 国际化翻译
-  const t = useTranslations('Pagination')
   const tEmpty = useTranslations('EmptyState')
   const { headerHeight } = useLayoutHeights()
 
@@ -139,7 +138,7 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
             pageSize={pageSize}
             onChange={handlePageChange}
             showTotal={(total, range) => 
-              t('range', { start: range[0], end: range[1], total })
+              `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
             }
             showQuickJumper={paginationData.totalPages > 5}
             showSizeChanger={false}
@@ -147,6 +146,19 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
             size="small"
             align="center"
             className="mt-4"
+            texts={{
+              itemsPerPage: '每页条数',
+              items: '条',
+              jumpTo: '跳转到',
+              page: '页',
+              total: '共 {total} 条',
+              first: '首页',
+              previous: '上一页',
+              next: '下一页',
+              last: '末页',
+              jumpPrev: '向前5页',
+              jumpNext: '向后5页'
+            }}
           />
         </div>
       )}
