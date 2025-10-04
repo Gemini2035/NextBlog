@@ -100,29 +100,6 @@ body {
   margin: 1.5rem 0;
 }
 
-/* Dark mode prose styles */
-.dark .prose h1,
-.dark .prose h2,
-.dark .prose h3,
-.dark .prose h4,
-.dark .prose h5,
-.dark .prose h6 {
-  color: #f9fafb;
-}
-
-.dark .prose h1 {
-  border-bottom-color: #374151;
-}
-
-.dark .prose code {
-  background-color: #374151;
-  color: #f9fafb;
-}
-
-.dark .prose blockquote {
-  border-left-color: #374151;
-  color: #9ca3af;
-}
 
 /* 文本截断样式 */
 .line-clamp-2 {

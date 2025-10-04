@@ -136,9 +136,9 @@ const adjustPositionForViewport = (
  *   <Button>上方</Button>
  * </Tooltip>
  * 
- * // 不同主题
- * <Tooltip title="深色主题" theme="dark">
- *   <Button>深色</Button>
+ * // 主题
+ * <Tooltip title="浅色主题" theme="light">
+ *   <Button>浅色</Button>
  * </Tooltip>
  * 
  * // 点击触发
