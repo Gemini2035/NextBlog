@@ -31,7 +31,6 @@ export type TooltipPlacement =
  */
 export type TooltipTheme = 
   | 'light'        // 浅色主题
-  | 'dark'         // 深色主题
 
 /**
  * Tooltip组件的基础属性接口

@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { IconProps } from './types';
 
-export const NextIcon: React.FC<IconProps> = ({ 
+export const NextIcon: FC<IconProps> = ({ 
   size = 12, 
   className = '', 
   ...props 

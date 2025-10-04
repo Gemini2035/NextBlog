@@ -208,7 +208,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
             type="ghost"
             size="sm"
             className="absolute left-0 top-full px-3 py-2 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm hover:shadow-md"
-            aria-label={isCollapsed ? "展开置顶文章" : "收起置顶文章"}
+            aria-label={isCollapsed ? t('expandFeatured') : t('collapseFeatured')}
           >
             <CollapseIcon 
               className={cn(

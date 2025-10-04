@@ -1,6 +1,11 @@
+'use client'
+
+import { useEffect, useState, use } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/lib/posts-adapter'
 import { FeaturedPostSection, RecentUpdatesSection, AllPostsSection } from '@/components/Post'
-import { getTranslations } from 'next-intl/server'
+import type { Post } from '.contentlayer/generated'
 
 interface PostsPageProps {
   params: Promise<{
@@ -8,14 +13,32 @@ interface PostsPageProps {
   }>
 }
 
-export default async function PostsPage({ params }: PostsPageProps) {
-  const { locale } = await params
+export default function PostsPage({ params }: PostsPageProps) {
+  const { locale } = use(params)
+  const searchParams = useSearchParams()
+  const t = useTranslations('Posts')
   
-  const posts = getAllPosts(locale)
-  const featuredPosts = getFeaturedPosts(locale)
-  const recentPosts = getRecentPosts(locale)
+  const [posts, setPosts] = useState<Post[]>([])
+  const [featuredPosts, setFeaturedPosts] = useState<Post[]>([])
+  const [recentPosts, setRecentPosts] = useState<Post[]>([])
+  const [initialTag, setInitialTag] = useState<string | null>(null)
   
-  const t = await getTranslations('Posts')
+  // 初始化数据
+  useEffect(() => {
+    const allPosts = getAllPosts(locale)
+    const featured = getFeaturedPosts(locale)
+    const recent = getRecentPosts(locale)
+    
+    setPosts(allPosts)
+    setFeaturedPosts(featured)
+    setRecentPosts(recent)
+    
+    // 从URL参数中获取tag
+    const tagParam = searchParams.get('tag')
+    if (tagParam) {
+      setInitialTag(tagParam) // Next.js的useSearchParams已经自动解码
+    }
+  }, [locale, searchParams])
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -49,6 +72,7 @@ export default async function PostsPage({ params }: PostsPageProps) {
           prevText={t('prevPage')}
           nextText={t('nextPage')}
           locale={locale}
+          initialTag={initialTag}
         />
 
         {posts.length === 0 && (
