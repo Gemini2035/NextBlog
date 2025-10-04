@@ -1,6 +1,6 @@
 'use client'
 
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { useNavigation, useScrollParallax, useLayoutHeights } from '@/hooks'
 import SectionSwitch from '@/components/Home/SectionSwitch'
 import HomeSectionSkeleton from '@/components/Home/HomeSectionSkeleton'
