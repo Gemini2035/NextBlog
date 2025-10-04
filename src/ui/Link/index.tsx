@@ -1,11 +1,11 @@
-import React from 'react'
+import { ReactNode, AnchorHTMLAttributes } from 'react'
 import NextLink from 'next/link'
 import { Link as IntlLink } from '@/i18n/navigation'
-import clsx from 'clsx'
+import { cn } from '@/utils'
 
-interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string
-  children: React.ReactNode
+  children: ReactNode
   className?: string
   target?: string
   rel?: string
@@ -29,8 +29,8 @@ export default function Link({
   external = false,
   ...props 
 }: LinkProps) {
-  // 使用 clsx 管理 className，合并默认样式
-  const linkClassName = clsx(
+  // 使用 cn 管理 className，合并默认样式
+  const linkClassName = cn(
     'text-inherit no-underline hover:no-underline cursor-pointer', // 默认样式
     className // 用户自定义样式
   )

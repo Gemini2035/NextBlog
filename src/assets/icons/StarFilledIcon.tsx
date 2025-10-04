@@ -1,4 +1,3 @@
-import React from 'react'
 import { IconProps } from './types'
 
 export function StarFilledIcon({ className = "w-4 h-4", size }: IconProps) {

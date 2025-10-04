@@ -6,7 +6,7 @@
 
 - 🎯 **多种触发方式** - 支持 hover、click、focus、contextMenu 触发
 - 📍 **灵活定位** - 支持 12 种位置定位，自动调整避免超出视口
-- 🎨 **主题支持** - 内置 light 和 dark 主题
+- 🎨 **主题支持** - 内置 light 主题
 - ⚡ **性能优化** - 使用 Portal 渲染，避免层级问题
 - 🎭 **动画效果** - 支持淡入淡出、缩放、滑动等动画
 - 🎪 **交互式** - 支持可交互的 Tooltip 内容
@@ -28,7 +28,7 @@ import { Tooltip } from '@/ui'
 </Tooltip>
 
 // 不同主题
-<Tooltip title="深色主题" theme="dark">
+<Tooltip title="浅色主题" theme="light">
   <Button>深色</Button>
 </Tooltip>
 ```
@@ -95,7 +95,7 @@ import { Tooltip } from '@/ui'
 </Tooltip>
 
 // 深色主题
-<Tooltip title="深色主题" theme="dark">
+<Tooltip title="浅色主题" theme="light">
   <Button>深色</Button>
 </Tooltip>
 ```
@@ -168,7 +168,7 @@ import { Tooltip } from '@/ui'
 | title              | 提示内容             | `ReactNode`                                      | -         |
 | trigger            | 触发方式             | `'hover' \| 'click' \| 'focus' \| 'contextMenu'` | `'hover'` |
 | placement          | 显示位置             | `TooltipPlacement`                               | `'top'`   |
-| theme              | 主题                 | `'light' \| 'dark'`                              | `'light'` |
+| theme              | 主题                 | `'light'`                                        | `'light'` |
 | arrow              | 是否显示箭头         | `boolean`                                        | `true`    |
 | disabled           | 是否禁用             | `boolean`                                        | `false`   |
 | delay              | 延迟显示时间（毫秒） | `number`                                         | `0`       |

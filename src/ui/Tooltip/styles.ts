@@ -6,7 +6,6 @@ import { TooltipPlacement, TooltipTheme, TooltipAnimation } from './types'
 export const getThemeStyles = (theme: TooltipTheme): string => {
   const themes = {
     light: 'bg-white text-gray-900 border border-gray-200 shadow-lg',
-    dark: 'bg-gray-900 text-white border border-gray-700 shadow-xl',
   }
   return themes[theme] || themes.light
 }
@@ -23,12 +22,11 @@ export const getPlacementStyles = (): string => {
 /**
  * 获取箭头样式
  */
-export const getArrowStyles = (placement: TooltipPlacement, theme: TooltipTheme): string => {
+export const getArrowStyles = (placement: TooltipPlacement, _theme: TooltipTheme): string => {
   const arrowBase = 'absolute w-2 h-2 transform rotate-45'
   const lightArrow = 'bg-white border border-gray-200'
-  const darkArrow = 'bg-gray-900 border border-gray-700'
   
-  const arrowColor = theme === 'dark' ? darkArrow : lightArrow
+  const arrowColor = lightArrow
   
   const arrowPositions = {
     top: `${arrowColor} -bottom-1 left-1/2 transform -translate-x-1/2`,

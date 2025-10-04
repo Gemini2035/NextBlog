@@ -1,4 +1,5 @@
 import type { Post } from '../../../../../.contentlayer/generated'
+import { ReactNode } from 'react'
 
 export interface FilterState {
   keyword: string
@@ -13,11 +14,12 @@ export interface PostFilterProps {
   posts: Post[]
   onFilteredPostsChange: (filteredPosts: Post[]) => void
   locale?: string
+  initialTag?: string | null
 }
 
 export interface FilterSectionProps {
   title: string
-  children: React.ReactNode
+  children: ReactNode
   className?: string
 }
 

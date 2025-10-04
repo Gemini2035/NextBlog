@@ -53,3 +53,40 @@ export function getRelativeTime(date: string | Date): string {
 export function cn(...classes: (string | undefined | null | false)[]): string {
   return classes.filter(Boolean).join(' ')
 }
+
+/**
+ * 平滑滚动到指定元素
+ * @param element 目标元素
+ * @param offset 额外的偏移量，默认为0
+ * @param behavior 滚动行为，默认为'smooth'
+ */
+export function smoothScrollToElement(
+  element: HTMLElement, 
+  offset: number = 0, 
+  behavior: ScrollBehavior = 'smooth'
+): void {
+  const elementRect = element.getBoundingClientRect()
+  const scrollTop = window.scrollY + elementRect.top - offset
+  
+  window.scrollTo({ 
+    top: Math.max(0, scrollTop), 
+    behavior 
+  })
+}
+
+/**
+ * 平滑滚动到指定ID的元素
+ * @param elementId 目标元素的ID
+ * @param offset 额外的偏移量，默认为0
+ * @param behavior 滚动行为，默认为'smooth'
+ */
+export function smoothScrollToId(
+  elementId: string, 
+  offset: number = 0, 
+  behavior: ScrollBehavior = 'smooth'
+): void {
+  const element = document.getElementById(elementId)
+  if (element) {
+    smoothScrollToElement(element, offset, behavior)
+  }
+}

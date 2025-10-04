@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 import { IconProps } from './types';
 
-export const PrevIcon: React.FC<IconProps> = ({ 
+export const PrevIcon: FC<IconProps> = ({ 
   size = 12, 
   className = '', 
   ...props 

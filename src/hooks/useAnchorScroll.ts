@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { useLayoutHeights } from './useLayoutHeights'
+import { smoothScrollToElement } from '@/utils'
 
 interface UseAnchorScrollOptions {
   /** 锚点ID */
@@ -28,12 +29,7 @@ export function useAnchorScroll({
         setTimeout(() => {
           const element = document.getElementById(anchorId)
           if (element) {
-            const elementRect = element.getBoundingClientRect()
-            const scrollTop = window.scrollY + elementRect.top - headerHeight - extraOffset
-            window.scrollTo({ 
-              top: Math.max(0, scrollTop), 
-              behavior: 'smooth' 
-            })
+            smoothScrollToElement(element, headerHeight + extraOffset)
           }
         }, delay)
       }

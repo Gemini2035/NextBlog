@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import { ReactNode } from 'react';
 import { Tag } from '@/ui';
 import { TagProps } from '@/ui/Tag';
 import { cn } from '@/utils';
@@ -9,7 +9,7 @@ export interface PostTagProps extends Omit<TagProps, 'color' | 'size'> {
   /**
    * 标签文本
    */
-  children: React.ReactNode;
+  children: ReactNode;
   /**
    * 标签变体
    */

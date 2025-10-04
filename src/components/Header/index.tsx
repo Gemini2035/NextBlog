@@ -50,7 +50,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
 }
 
 export default function Header() {
-  const [activeSubmenu, setActiveSubmenu] = useState<string | null>('__search')
+  const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
   const [isExiting, setIsExiting] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const navItemsRef = useRef<HTMLElement>(null)
@@ -95,9 +95,9 @@ export default function Header() {
     const target = event.target as HTMLElement
     
     // 检查鼠标是否在搜索按钮上
-    const isOnSearchButton = target.closest('button[aria-label="搜索"]')
+    const isOnSearchButton = target.closest('button[aria-label*="' + t('search') + '"]')
     // 检查鼠标是否在语言切换按钮上
-    const isOnLanguageButton = target.closest('button[aria-label="切换语言"]')
+    const isOnLanguageButton = target.closest('button[aria-label*="' + t('toggleLanguage') + '"]')
     
     // 如果鼠标在搜索按钮或语言切换按钮上
     if (isOnSearchButton || isOnLanguageButton) {
@@ -282,7 +282,7 @@ export default function Header() {
           {/* 右侧区域：导航菜单 + Action Bar */}
           <div className="flex items-center space-x-6">
             {/* 导航菜单 */}
-            <nav ref={navItemsRef} className="hidden lg:flex" aria-label="主导航">
+            <nav ref={navItemsRef} className="hidden lg:flex" aria-label={t('mainNavigation')}>
               <ul className="flex space-x-8">
                 {navigationItems.map((item) => (
                   <li key={item.href} className="relative">
@@ -298,7 +298,7 @@ export default function Header() {
             </nav>
 
             {/* Action Bar */}
-            <ul className="flex items-center space-x-2" role="toolbar" aria-label="操作工具栏">
+            <ul className="flex items-center space-x-2" role="toolbar" aria-label={t('actionToolbar')}>
               {/* 搜索功能 */}
               <li className="hidden md:block">
                 <SearchBar onSearchClick={handleSearchClick} />
@@ -313,7 +313,7 @@ export default function Header() {
               <li className="lg:hidden">
                 <button 
                   className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
-                  aria-label="打开移动端菜单"
+                  aria-label={t('openMobileMenu')}
                   aria-expanded="false"
                 >
                   <MenuIcon className="h-6 w-6" />
