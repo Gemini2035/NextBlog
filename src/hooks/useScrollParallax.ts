@@ -28,6 +28,13 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
     let ticking = false
     let animationFrame: number
 
+    // 初始化时确保滚动位置在顶部
+    const initializeScroll = () => {
+      if (window.scrollY > 0) {
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      }
+    }
+
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -49,6 +56,9 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
       })
       animationFrame = requestAnimationFrame(updateSmoothScroll)
     }
+    
+    // 初始化滚动位置
+    initializeScroll()
     
     window.addEventListener('scroll', handleScroll, { passive: true })
     updateSmoothScroll()
