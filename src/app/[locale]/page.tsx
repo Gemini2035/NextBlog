@@ -108,7 +108,7 @@ export default function Home() {
             }}
           >
             <span 
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm border border-gray-200/50"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm"
               style={{
                 animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
               }}
