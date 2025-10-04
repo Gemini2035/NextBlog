@@ -6,6 +6,7 @@ import SectionSwitch from '@/components/Home/SectionSwitch'
 import HomeSectionSkeleton from '@/components/Home/HomeSectionSkeleton'
 import { SITE_CONFIG } from '@/constants'
 import { smoothScrollToElement } from '@/utils'
+import { ChevronRightIcon } from '@/assets/icons'
 import { useRef, useCallback, useEffect } from 'react'
 
 export default function Home() {
@@ -108,20 +109,13 @@ export default function Home() {
             }}
           >
             <span 
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/50 backdrop-blur-sm"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-transparent backdrop-blur-sm border border-white/20"
               style={{
                 animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
               }}
             >
               <span>{t('continue')}</span>
-              <svg 
-                className="w-4 h-4" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <ChevronRightIcon className="w-4 h-4" strokeWidth={2} />
             </span>
           </div>
         </div>
