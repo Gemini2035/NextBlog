@@ -59,6 +59,31 @@ export interface PaginationProps {
   jumpPrevIcon?: ReactNode;
   /** 自定义跳转按钮内容 */
   jumpNextIcon?: ReactNode;
+  /** 文字配置 */
+  texts?: {
+    /** 每页条数文字 */
+    itemsPerPage?: string;
+    /** 条目文字 */
+    items?: string;
+    /** 跳转到文字 */
+    jumpTo?: string;
+    /** 页码文字 */
+    page?: string;
+    /** 总数文字 */
+    total?: string;
+    /** 首页文字 */
+    first?: string;
+    /** 上一页文字 */
+    previous?: string;
+    /** 下一页文字 */
+    next?: string;
+    /** 末页文字 */
+    last?: string;
+    /** 跳转上一页文字 */
+    jumpPrev?: string;
+    /** 跳转下一页文字 */
+    jumpNext?: string;
+  };
 }
 
 export interface PaginationItemProps {
