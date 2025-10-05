@@ -29,7 +29,7 @@ export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
           {t('welcome', { siteTitle: SITE_CONFIG.title })}
         </p>
         <p className="text-gray-600 leading-relaxed mt-2 text-sm">
-          热爱技术的开发者，专注于前端技术和全栈开发，致力于构建优秀的用户体验。
+          {t('personalProfileDescription')}
         </p>
       </div>
 

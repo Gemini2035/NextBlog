@@ -327,7 +327,7 @@ export default function ExpandableWaterfall({
             {/* 关闭按钮 */}
             <button
               onClick={handleCloseExpanded}
-              className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110"
+              className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
             >
               <CloseIcon className="w-4 h-4 text-gray-600" />
             </button>
