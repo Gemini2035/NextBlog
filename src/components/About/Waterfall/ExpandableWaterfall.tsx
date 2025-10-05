@@ -4,6 +4,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Card } from '@/ui'
 import { cn } from '@/utils'
 import { CloseIcon } from '@/assets/icons'
+import { useIntersectionObserver } from '@/hooks'
 
 interface ExpandableWaterfallItem {
   id: string
@@ -13,6 +14,82 @@ interface ExpandableWaterfallItem {
   cardClassName?: string
   title?: string
   description?: string
+}
+
+// 单个Waterfall Item组件，处理动画
+interface WaterfallItemProps {
+  item: ExpandableWaterfallItem
+  position: { top: number; left: number; width: number }
+  isExpanded: boolean
+  onItemClick: (itemId: string) => void
+  index: number
+}
+
+function WaterfallItem({ item, position, isExpanded, onItemClick, index }: WaterfallItemProps) {
+  const { elementRef, shouldAnimate } = useIntersectionObserver({
+    threshold: 0.05,
+    rootMargin: '0px 0px -30px 0px',
+    triggerOnce: false
+  })
+
+  return (
+    <div
+      ref={elementRef as React.RefObject<HTMLDivElement>}
+      data-waterfall-item
+      className={cn(
+        'absolute transition-all duration-700 ease-out cursor-pointer group',
+        isExpanded ? 'z-50' : 'hover:scale-105',
+        // 动画状态 - 从下方滑入并淡入
+        shouldAnimate 
+          ? 'opacity-100 translate-y-0 scale-100' 
+          : 'opacity-0 translate-y-8 scale-95'
+      )}
+      style={{
+        top: `${position.top}px`,
+        left: `${position.left}px`,
+        width: `${position.width}px`,
+        maxWidth: `${position.width}px`,
+        transitionDelay: `${index * 100}ms` // 交错动画延迟
+      }}
+      onClick={() => onItemClick(item.id)}
+    >
+      <Card 
+        shadow="lg" 
+        border="sm" 
+        rounded 
+        className={cn(
+          'p-6 bg-white/90 backdrop-blur-sm h-full transition-all duration-300',
+          'hover:shadow-xl hover:bg-white',
+          item.cardClassName
+        )}
+      >
+        <div className={cn(
+          'transition-all duration-700 ease-out delay-150',
+          // 内容动画 - 稍微延迟出现
+          shouldAnimate 
+            ? 'opacity-100 translate-y-0' 
+            : 'opacity-0 translate-y-4'
+        )}>
+          {item.content}
+        </div>
+        
+        {/* 展开提示 */}
+        {item.expandedContent && (
+          <div className={cn(
+            'mt-4 pt-4 border-t border-gray-200 transition-all duration-700 ease-out delay-200',
+            shouldAnimate 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-2'
+          )}>
+            <div className="flex items-center justify-between text-sm text-gray-500">
+              <span>点击查看详情</span>
+              <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+          </div>
+        )}
+      </Card>
+    </div>
+  )
 }
 
 interface ExpandableWaterfallProps {
@@ -211,44 +288,14 @@ export default function ExpandableWaterfall({
           const isExpanded = expandedItem === item.id
 
           return (
-            <div
+            <WaterfallItem
               key={item.id}
-              data-waterfall-item
-              className={cn(
-                'absolute transition-all duration-500 ease-out cursor-pointer group',
-                isExpanded ? 'z-50' : 'animate-fade-in-up hover:scale-105'
-              )}
-              style={{
-                top: `${position.top}px`,
-                left: `${position.left}px`,
-                width: `${position.width}px`,
-                maxWidth: `${position.width}px`
-              }}
-              onClick={() => handleItemClick(item.id)}
-            >
-              <Card 
-                shadow="lg" 
-                border="sm" 
-                rounded 
-                className={cn(
-                  'p-6 bg-white/90 backdrop-blur-sm h-full transition-all duration-300',
-                  'hover:shadow-xl hover:bg-white',
-                  item.cardClassName
-                )}
-              >
-                {item.content}
-                
-                {/* 展开提示 */}
-                {item.expandedContent && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span>点击查看详情</span>
-                      <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                  </div>
-                )}
-              </Card>
-            </div>
+              item={item}
+              position={position}
+              isExpanded={isExpanded}
+              onItemClick={handleItemClick}
+              index={index}
+            />
           )
         })}
       </div>
