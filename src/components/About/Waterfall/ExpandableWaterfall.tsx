@@ -111,6 +111,7 @@ export default function ExpandableWaterfall({
   const [itemPositions, setItemPositions] = useState<Array<{ top: number; left: number; width: number }>>([])
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -228,15 +229,21 @@ export default function ExpandableWaterfall({
     if (isAnimating) return
     
     setIsAnimating(true)
-    setExpandedItem(null)
+    setIsClosing(true)
     
-    // 恢复body滚动
-    document.body.style.overflow = 'unset'
-    
-    // 动画完成后重置动画状态
+    // 开始关闭动画
     setTimeout(() => {
-      setIsAnimating(false)
-    }, 300)
+      setExpandedItem(null)
+      setIsClosing(false)
+      
+      // 恢复body滚动
+      document.body.style.overflow = 'unset'
+      
+      // 动画完成后重置动画状态
+      setTimeout(() => {
+        setIsAnimating(false)
+      }, 100)
+    }, 300) // 关闭动画持续时间
   }
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -303,17 +310,19 @@ export default function ExpandableWaterfall({
       {/* 展开的模态框 */}
       {expandedItem && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          className={cn(
+            "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all duration-300",
+            isClosing ? "opacity-0" : "opacity-100"
+          )}
           onClick={handleBackdropClick}
-          style={{
-            animation: isAnimating ? 'fadeIn 0.3s ease-out' : undefined
-          }}
         >
           <div 
-            className="relative max-w-4xl max-h-[90vh] w-full bg-white rounded-2xl shadow-2xl overflow-hidden"
-            style={{
-              animation: isAnimating ? 'slideInScale 0.3s ease-out' : undefined
-            }}
+            className={cn(
+              "relative max-w-4xl max-h-[90vh] w-full bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300",
+              isClosing 
+                ? "opacity-0 scale-95 translate-y-4" 
+                : "opacity-100 scale-100 translate-y-0"
+            )}
           >
             {/* 关闭按钮 */}
             <button
@@ -332,23 +341,6 @@ export default function ExpandableWaterfall({
         </div>
       )}
 
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        
-        @keyframes slideInScale {
-          from { 
-            opacity: 0;
-            transform: scale(0.9) translateY(20px);
-          }
-          to { 
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-      `}</style>
     </>
   )
 }
