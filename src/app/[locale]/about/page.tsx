@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
-import { Waterfall, BasicInfoSection, SkillsSection, WorkExperienceSection, EducationSection, AchievementsSection, TechStackSection, FeaturesSection } from '@/components/About'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
   const navT = useTranslations('Navigation')
@@ -18,53 +18,152 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* 瀑布流主要内容区域 */}
+        {/* 主要内容区域 - 使用ExpandableWaterfall */}
         <div className="mb-12">
-          <Waterfall
-            columns={3}
+          <ExpandableWaterfall
+            columns={2}
             items={[
               {
                 id: 'basic-info',
-                content: <BasicInfoSection />,
-                height: 'medium'
+                title: '个人信息',
+                description: '查看我的基本信息和联系方式',
+                content: (
+                  <div id="profile">
+                    <BasicInfoBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <BasicInfoDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'skills',
-                content: <SkillsSection />,
-                height: 'tall'
-              },
-              {
-                id: 'work-experience',
-                content: <WorkExperienceSection />,
-                height: 'medium'
+                title: '技能专长',
+                description: '查看我的技术技能和专业能力',
+                content: (
+                  <div id="skills">
+                    <SkillsBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <SkillsDetail />
+                  </div>
+                ),
+                height: 'tall',
+                cardClassName: 'bg-gradient-to-r from-green-50 to-white'
               },
               {
                 id: 'education',
-                content: <EducationSection />,
-                height: 'short'
+                title: '教育背景',
+                description: '查看我的教育经历和学习成果',
+                content: (
+                  <div id="education">
+                    <EducationBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <EducationDetail />
+                  </div>
+                ),
+                height: 'short',
+                cardClassName: 'bg-gradient-to-r from-purple-50 to-white'
               },
               {
-                id: 'achievements',
-                content: <AchievementsSection />,
-                height: 'medium'
+                id: 'tech-stack',
+                title: '技术栈',
+                description: '查看项目使用的技术栈',
+                content: (
+                  <div id="tech-stack">
+                    <TechStackBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <TechStackDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-cyan-50 to-white'
+              },
+              {
+                id: 'development',
+                title: '发展历史',
+                description: '查看项目的发展历程',
+                content: (
+                  <div id="development">
+                    <DevelopmentProgressBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <DevelopmentProgressDetail />
+                  </div>
+                ),
+                height: 'tall',
+                cardClassName: 'bg-white/80 backdrop-blur-sm'
+              },
+              {
+                id: 'open-source',
+                title: '开源库',
+                description: '查看使用的开源库和框架',
+                content: (
+                  <div id="open-source">
+                    <OpenSourceLibrariesBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <OpenSourceLibrariesDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-emerald-50 to-white'
+              },
+              {
+                id: 'online-services',
+                title: '在线服务',
+                description: '查看使用的在线服务',
+                content: (
+                  <div id="online-services">
+                    <OnlineServicesBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <OnlineServicesDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-violet-50 to-white'
+              },
+              {
+                id: 'protocols',
+                title: '开发协议',
+                description: '查看开发规范和协议',
+                content: (
+                  <div id="protocols">
+                    <DevelopmentProtocolsBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <DevelopmentProtocolsDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-amber-50 to-white'
               }
             ]}
           />
         </div>
 
-        {/* 技术栈展示 */}
-        <div className="mt-12">
-          <Card shadow="lg" border="sm" rounded className="p-8 bg-gradient-to-r from-blue-50 to-white">
-            <TechStackSection />
-          </Card>
-        </div>
 
-        {/* 特色功能 */}
-        <div className="mt-12">
-          <Card shadow="lg" border="sm" rounded className="p-8 bg-white/80 backdrop-blur-sm">
-            <FeaturesSection />
-          </Card>
-        </div>
       </div>
     </div>
   )
