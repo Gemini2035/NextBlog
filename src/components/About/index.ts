@@ -8,6 +8,5 @@ export { DevelopmentProgressBrief, DevelopmentProgressDetail } from './Developme
 export { OpenSourceLibrariesBrief, OpenSourceLibrariesDetail } from './OpenSourceLibrariesSection'
 export { OnlineServicesBrief, OnlineServicesDetail } from './OnlineServicesSection'
 export { DevelopmentProtocolsBrief, DevelopmentProtocolsDetail } from './DevelopmentProtocolsSection'
-export { SocialLinksBrief, SocialLinksDetail } from './SocialLinksSection'
 export { ContactLinksBrief, ContactLinksDetail } from './ContactLinksSection'
 export { MediaLinksBrief, MediaLinksDetail } from './MediaLinksSection'
