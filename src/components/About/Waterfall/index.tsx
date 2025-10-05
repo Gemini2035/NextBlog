@@ -1,12 +1,14 @@
 'use client'
 
 import { ReactNode, useEffect, useRef, useState } from 'react'
+import { Card } from '@/ui'
 import { cn } from '@/utils'
 
 interface WaterfallItem {
   id: string
   content: ReactNode
   height?: 'short' | 'medium' | 'tall'
+  cardClassName?: string
 }
 
 interface WaterfallProps {
@@ -162,7 +164,17 @@ export default function Waterfall({
               maxWidth: `${position.width}px`
             }}
           >
-            {item.content}
+            <Card 
+              shadow="lg" 
+              border="sm" 
+              rounded 
+              className={cn(
+                'p-8 bg-white/80 backdrop-blur-sm h-full',
+                item.cardClassName
+              )}
+            >
+              {item.content}
+            </Card>
           </div>
         )
       })}

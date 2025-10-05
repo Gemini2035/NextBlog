@@ -1,6 +1,5 @@
 'use client'
 
-import { Card } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 interface AchievementsSectionProps {
@@ -11,7 +10,7 @@ export default function AchievementsSection({ className }: AchievementsSectionPr
   const navT = useTranslations('Navigation')
 
   return (
-    <Card shadow="lg" border="sm" rounded className={`p-8 bg-white/80 backdrop-blur-sm h-full ${className || ''}`}>
+    <div className={className}>
       <div className="flex items-center mb-6">
         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
           <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,6 +44,6 @@ export default function AchievementsSection({ className }: AchievementsSectionPr
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }

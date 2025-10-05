@@ -2,7 +2,7 @@
 
 import { SITE_CONFIG } from '@/constants'
 import { GitHubIcon, TwitterIcon, LinkedInIcon, GlobeIcon } from '@/assets/icons'
-import { Link, Card } from '@/ui'
+import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 interface BasicInfoSectionProps {
@@ -14,7 +14,7 @@ export default function BasicInfoSection({ className }: BasicInfoSectionProps) {
   const navT = useTranslations('Navigation')
 
   return (
-    <Card shadow="lg" border="sm" rounded className={`p-8 bg-white/80 backdrop-blur-sm h-full ${className || ''}`}>
+    <div className={className}>
       <div className="flex items-center mb-6">
         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
           <GlobeIcon className="w-6 h-6 text-blue-600" />
@@ -82,6 +82,6 @@ export default function BasicInfoSection({ className }: BasicInfoSectionProps) {
           )}
         </div>
       </div>
-    </Card>
+    </div>
   )
 }

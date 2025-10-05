@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl'
+import { Card } from '@/ui'
 import { Waterfall, BasicInfoSection, SkillsSection, WorkExperienceSection, EducationSection, AchievementsSection, TechStackSection, FeaturesSection } from '@/components/About'
 
 export default function AboutPage() {
@@ -53,12 +54,16 @@ export default function AboutPage() {
 
         {/* 技术栈展示 */}
         <div className="mt-12">
-          <TechStackSection />
+          <Card shadow="lg" border="sm" rounded className="p-8 bg-gradient-to-r from-blue-50 to-white">
+            <TechStackSection />
+          </Card>
         </div>
 
         {/* 特色功能 */}
         <div className="mt-12">
-          <FeaturesSection />
+          <Card shadow="lg" border="sm" rounded className="p-8 bg-white/80 backdrop-blur-sm">
+            <FeaturesSection />
+          </Card>
         </div>
       </div>
     </div>

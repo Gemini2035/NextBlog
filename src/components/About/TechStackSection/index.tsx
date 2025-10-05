@@ -1,6 +1,5 @@
 'use client'
 
-import { Card } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 interface TechStackSectionProps {
@@ -11,7 +10,7 @@ export default function TechStackSection({ className }: TechStackSectionProps) {
   const t = useTranslations('AboutPage')
 
   return (
-    <Card shadow="lg" border="sm" rounded className={`p-8 bg-gradient-to-r from-blue-50 to-white ${className || ''}`}>
+    <div className={className}>
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">
           {t('techStack')}
@@ -70,6 +69,6 @@ export default function TechStackSection({ className }: TechStackSectionProps) {
           <p className="text-sm text-gray-600">静态网站托管</p>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }

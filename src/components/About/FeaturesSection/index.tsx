@@ -1,6 +1,5 @@
 'use client'
 
-import { Card } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 interface FeaturesSectionProps {
@@ -11,7 +10,7 @@ export default function FeaturesSection({ className }: FeaturesSectionProps) {
   const t = useTranslations('AboutPage')
 
   return (
-    <Card shadow="lg" border="sm" rounded className={`p-8 bg-white/80 backdrop-blur-sm ${className || ''}`}>
+    <div className={className}>
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-4">
           {t('features')}
@@ -73,6 +72,6 @@ export default function FeaturesSection({ className }: FeaturesSectionProps) {
           </div>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
