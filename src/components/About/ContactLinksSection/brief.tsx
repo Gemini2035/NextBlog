@@ -13,7 +13,7 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
   const navT = useTranslations('Navigation')
 
   return (
-    <div className={className}>
+    <div className={`${className} group`}>
       <div className="flex items-center mb-4">
         <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
           <ContactIcon className="w-5 h-5 text-gray-700" />
@@ -28,45 +28,57 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
         </div>
       </div>
       
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <GmailIcon className="w-4 h-4 text-gray-700 mr-2" />
-            <span className="text-sm text-gray-700">Gmail</span>
+      <div className="flex items-center space-x-4">
+        <Link
+          href={`mailto:${SITE_CONFIG.contactLink.googleMail}`}
+          className="block"
+        >
+          <div className="relative w-12 h-12 bg-gray-200 rounded-full transition-all duration-300 group-hover:w-24 group-hover:rounded-xl overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
+              <GmailIcon className="w-6 h-6 text-gray-700" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-start pl-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <GmailIcon className="w-5 h-5 text-gray-700 mr-2 flex-shrink-0" />
+              <span className="text-sm text-gray-700 font-medium whitespace-nowrap">
+                Gmail
+              </span>
+            </div>
           </div>
-          <Link
-            href={`mailto:${SITE_CONFIG.contactLink.googleMail}`}
-            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-          >
-            发送邮件 →
-          </Link>
-        </div>
+        </Link>
         
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <OutlookIcon className="w-4 h-4 text-gray-700 mr-2" />
-            <span className="text-sm text-gray-700">Outlook</span>
+        <Link
+          href={`mailto:${SITE_CONFIG.contactLink.outlookMail}`}
+          className="block"
+        >
+          <div className="relative w-12 h-12 bg-gray-200 rounded-full transition-all duration-300 group-hover:w-24 group-hover:rounded-xl overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
+              <OutlookIcon className="w-6 h-6 text-gray-700" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-start pl-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <OutlookIcon className="w-5 h-5 text-gray-700 mr-2 flex-shrink-0" />
+              <span className="text-sm text-gray-700 font-medium whitespace-nowrap">
+                Outlook
+              </span>
+            </div>
           </div>
-          <Link
-            href={`mailto:${SITE_CONFIG.contactLink.outlookMail}`}
-            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-          >
-            发送邮件 →
-          </Link>
-        </div>
+        </Link>
         
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <ICloudIcon className="w-4 h-4 text-gray-700 mr-2" />
-            <span className="text-sm text-gray-700">iCloud</span>
+        <Link
+          href={`mailto:${SITE_CONFIG.contactLink.appleMail}`}
+          className="block"
+        >
+          <div className="relative w-12 h-12 bg-gray-200 rounded-full transition-all duration-300 group-hover:w-24 group-hover:rounded-xl overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center group-hover:opacity-0 transition-opacity duration-300">
+              <ICloudIcon className="w-6 h-6 text-gray-700" />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-start pl-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              <ICloudIcon className="w-5 h-5 text-gray-700 mr-2 flex-shrink-0" />
+              <span className="text-sm text-gray-700 font-medium whitespace-nowrap">
+                iCloud
+              </span>
+            </div>
           </div>
-          <Link
-            href={`mailto:${SITE_CONFIG.contactLink.appleMail}`}
-            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
-          >
-            发送邮件 →
-          </Link>
-        </div>
+        </Link>
       </div>
     </div>
   )

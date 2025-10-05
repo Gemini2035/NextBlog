@@ -11,7 +11,7 @@ export function OutlookIcon({ className = "w-6 h-6", size }: IconProps) {
     >
       <path 
         fill="currentColor" 
-        d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 2v16h10V4H7zm2 2h6v2H9V6zm0 3h6v2H9V9zm0 3h4v2H9v-2z"
+        d="M7.462 2.5h9.076c.904 0 1.636.732 1.636 1.636v15.728c0 .904-.732 1.636-1.636 1.636H7.462c-.904 0-1.636-.732-1.636-1.636V4.136c0-.904.732-1.636 1.636-1.636zM9.5 6.5h5v11h-5v-11zm0-2v1h5v-1h-5z"
       />
     </svg>
   )
