@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
-import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ExpandableWaterfall } from '@/components/About'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, SocialLinksBrief, SocialLinksDetail, ContactLinksBrief, ContactLinksDetail, MediaLinksBrief, MediaLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
   const navT = useTranslations('Navigation')
@@ -23,6 +23,7 @@ export default function AboutPage() {
           <ExpandableWaterfall
             columns={2}
             items={[
+              // 站主信息 (Owner Information)
               {
                 id: 'basic-info',
                 title: '个人信息',
@@ -39,6 +40,40 @@ export default function AboutPage() {
                 ),
                 height: 'medium',
                 cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+              },
+              {
+                id: 'contact',
+                title: '联系方式',
+                description: '直接联系方式和邮箱地址',
+                content: (
+                  <div id="contact">
+                    <ContactLinksBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <ContactLinksDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-green-50 to-white'
+              },
+              {
+                id: 'media',
+                title: '媒体链接',
+                description: '关注我的媒体平台和社区',
+                content: (
+                  <div id="media">
+                    <MediaLinksBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <MediaLinksDetail />
+                  </div>
+                ),
+                height: 'short',
+                cardClassName: 'bg-gradient-to-r from-pink-50 to-white'
               },
               {
                 id: 'skills',
@@ -74,6 +109,7 @@ export default function AboutPage() {
                 height: 'short',
                 cardClassName: 'bg-gradient-to-r from-purple-50 to-white'
               },
+              // 站点信息 (Site Information)
               {
                 id: 'tech-stack',
                 title: '技术栈',
@@ -108,6 +144,7 @@ export default function AboutPage() {
                 height: 'tall',
                 cardClassName: 'bg-white/80 backdrop-blur-sm'
               },
+              // 相关资源 (Related Resources)
               {
                 id: 'open-source',
                 title: '开源库',
@@ -158,6 +195,23 @@ export default function AboutPage() {
                 ),
                 height: 'medium',
                 cardClassName: 'bg-gradient-to-r from-amber-50 to-white'
+              },
+              {
+                id: 'social',
+                title: '社交链接',
+                description: '关注我的社交媒体和平台',
+                content: (
+                  <div id="social">
+                    <SocialLinksBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <SocialLinksDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gradient-to-r from-purple-50 to-white'
               }
             ]}
           />

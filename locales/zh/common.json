@@ -217,7 +217,16 @@
     "Open Source Projects": "开源项目",
     "Commercial Projects": "商业项目",
     "Learning Projects": "学习项目",
-    "Self-Developed Projects": "自研项目"
+    "Self-Developed Projects": "自研项目",
+    "Social Links": "社交链接",
+    "Follow my open source projects": "关注我的开源项目",
+    "Follow my latest updates": "关注我的最新动态",
+    "Watch my technical videos": "观看我的技术视频",
+    "View my creative works": "查看我的创意作品",
+    "Join my community": "加入我的社区",
+    "Visit my personal website": "访问我的个人网站",
+    "Media Links": "媒体链接",
+    "Contact me directly": "直接联系我"
   },
   "Contact": {
     "contactButton": "联系我",

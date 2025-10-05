@@ -217,7 +217,16 @@
     "Open Source Projects": "Open Source Projects",
     "Commercial Projects": "Commercial Projects",
     "Learning Projects": "Learning Projects",
-    "Self-Developed Projects": "Self-Developed Projects"
+    "Self-Developed Projects": "Self-Developed Projects",
+    "Social Links": "Social Links",
+    "Follow my open source projects": "Follow my open source projects",
+    "Follow my latest updates": "Follow my latest updates",
+    "Watch my technical videos": "Watch my technical videos",
+    "View my creative works": "View my creative works",
+    "Join my community": "Join my community",
+    "Visit my personal website": "Visit my personal website",
+    "Media Links": "Media Links",
+    "Contact me directly": "Contact me directly"
   },
   "Contact": {
     "contactButton": "Contact Me",

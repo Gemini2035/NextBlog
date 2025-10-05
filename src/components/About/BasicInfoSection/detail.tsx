@@ -50,89 +50,52 @@ export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
         </div>
       </div>
 
-      {/* 详细联系方式 */}
-      <div id="contact" className="mb-8">
+      {/* 个人成就和特色 */}
+      <div className="mb-8">
         <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-          {navT('Contact Information')}
+          个人特色
         </h3>
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <h4 className="text-lg font-medium text-gray-900 mb-3">社交媒体</h4>
+            <h4 className="text-lg font-medium text-gray-900 mb-3">技术专长</h4>
             <div className="space-y-3">
-              {SITE_CONFIG.social.github && (
-                <Link
-                  href={SITE_CONFIG.social.github}
-                  external
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center p-4 bg-gray-50 hover:bg-blue-50 rounded-xl transition-all duration-200 group"
-                >
-                  <GitHubIcon className="w-6 h-6 text-gray-600 group-hover:text-blue-600 mr-4" />
-                  <div>
-                    <div className="font-medium text-gray-900">GitHub</div>
-                    <div className="text-sm text-gray-600">查看我的开源项目</div>
-                  </div>
-                </Link>
-              )}
-              {SITE_CONFIG.social.twitter && (
-                <Link
-                  href={SITE_CONFIG.social.twitter}
-                  external
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center p-4 bg-gray-50 hover:bg-blue-50 rounded-xl transition-all duration-200 group"
-                >
-                  <TwitterIcon className="w-6 h-6 text-gray-600 group-hover:text-blue-600 mr-4" />
-                  <div>
-                    <div className="font-medium text-gray-900">Twitter</div>
-                    <div className="text-sm text-gray-600">关注我的动态</div>
-                  </div>
-                </Link>
-              )}
-              {SITE_CONFIG.social.linkedin && (
-                <Link
-                  href={SITE_CONFIG.social.linkedin}
-                  external
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center p-4 bg-gray-50 hover:bg-blue-50 rounded-xl transition-all duration-200 group"
-                >
-                  <LinkedInIcon className="w-6 h-6 text-gray-600 group-hover:text-blue-600 mr-4" />
-                  <div>
-                    <div className="font-medium text-gray-900">LinkedIn</div>
-                    <div className="text-sm text-gray-600">专业网络联系</div>
-                  </div>
-                </Link>
-              )}
+              <div className="flex items-center p-4 bg-gray-50 rounded-xl">
+                <div className="w-3 h-3 bg-blue-500 rounded-full mr-4"></div>
+                <div>
+                  <div className="font-medium text-gray-900">前端开发</div>
+                  <div className="text-sm text-gray-600">React, Next.js, TypeScript</div>
+                </div>
+              </div>
+              <div className="flex items-center p-4 bg-gray-50 rounded-xl">
+                <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
+                <div>
+                  <div className="font-medium text-gray-900">全栈开发</div>
+                  <div className="text-sm text-gray-600">Node.js, 数据库设计</div>
+                </div>
+              </div>
             </div>
           </div>
           
           <div className="space-y-4">
-            <h4 className="text-lg font-medium text-gray-900 mb-3">直接联系</h4>
+            <h4 className="text-lg font-medium text-gray-900 mb-3">工作理念</h4>
             <div className="p-6 bg-blue-50 rounded-xl">
-              <h5 className="font-semibold text-blue-900 mb-4">合作与交流</h5>
+              <h5 className="font-semibold text-blue-900 mb-4">开发理念</h5>
               <p className="text-blue-800 mb-4">
-                如果您对我的工作感兴趣，或者想要合作，请随时联系我。
-                我很乐意与您交流技术想法和项目合作。
+                注重代码质量和用户体验，追求技术的最佳实践。
+                相信通过持续学习和分享，能够推动技术社区的发展。
               </p>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">
-                    <strong>邮箱：</strong>your-email@example.com
-                  </span>
+                  <span className="text-blue-700">代码质量优先</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">
-                    <strong>电话：</strong>+86 138-0000-0000
-                  </span>
+                  <span className="text-blue-700">用户体验至上</span>
                 </div>
                 <div className="flex items-center">
                   <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">
-                    <strong>微信：</strong>your-wechat-id
-                  </span>
+                  <span className="text-blue-700">持续学习成长</span>
                 </div>
               </div>
             </div>

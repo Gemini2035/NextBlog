@@ -5,10 +5,25 @@
     "author": "Apodidae",
     "url": "https://gemini2035.github.io",
     "baseYear": 2025,
-    "social": {
+    "socialLink": {
       "github": "https://github.com/Gemini2035",
-      "twitter": null,
-      "linkedin": null
+      "twitter": "https://x.com/Apodidae2035",
+      "pixiv": "https://www.pixiv.net/users/60170582",
+      "website": "https://apodidae2035.com",
+      "bilibili": "https://space.bilibili.com/176962783",
+      "telegram": "https://t.me/Apodidae2035",
+      "qq": "2530056984"
+    },
+    "contactLink": {
+      "googleMail": "apodidae2035@gmail.com",
+      "outlookMail": "apodidae2035@outlook.com",
+      "appleMail": "apodidae2035@icloud.com"
+    },
+    "mediaLink": {
+      "bilibili": "https://space.bilibili.com/176962783",
+      "pixiv": "https://www.pixiv.net/users/60170582",
+      "telegram": "https://t.me/Apodidae2035",
+      "qq": "2530056984"
     }
   },
   "app": {
@@ -98,6 +113,10 @@
                   {
                     "label": "Contact Information",
                     "href": "/about#contact"
+                  },
+                  {
+                    "label": "Media Links",
+                    "href": "/about#media"
                   },
                   {
                     "label": "Skills & Expertise",

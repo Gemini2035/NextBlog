@@ -92,7 +92,16 @@
     "Open Source Projects": "オープンソース",
     "Commercial Projects": "商用",
     "Learning Projects": "学習",
-    "Self-Developed Projects": "自主開発"
+    "Self-Developed Projects": "自主開発",
+    "Social Links": "ソーシャルリンク",
+    "Follow my open source projects": "オープンソースプロジェクトをフォロー",
+    "Follow my latest updates": "最新の更新をフォロー",
+    "Watch my technical videos": "技術動画を視聴",
+    "View my creative works": "クリエイティブ作品を閲覧",
+    "Join my community": "コミュニティに参加",
+    "Visit my personal website": "個人ウェブサイトを訪問",
+    "Media Links": "メディアリンク",
+    "Contact me directly": "直接連絡"
   },
   "AboutPage": {
     "title": "私について",

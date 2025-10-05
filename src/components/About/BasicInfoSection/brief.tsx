@@ -36,9 +36,9 @@ export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
 
       {/* 简化的联系方式 */}
       <div className="flex flex-wrap gap-2">
-        {SITE_CONFIG.social.github && (
+        {SITE_CONFIG.socialLink.github && (
           <Link
-            href={SITE_CONFIG.social.github}
+            href={SITE_CONFIG.socialLink.github}
             external
             target="_blank"
             rel="noopener noreferrer"
@@ -48,9 +48,9 @@ export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
             GitHub
           </Link>
         )}
-        {SITE_CONFIG.social.twitter && (
+        {SITE_CONFIG.socialLink.twitter && (
           <Link
-            href={SITE_CONFIG.social.twitter}
+            href={SITE_CONFIG.socialLink.twitter}
             external
             target="_blank"
             rel="noopener noreferrer"
