@@ -88,38 +88,56 @@
             "description": "Learn about my background, skills, experience and contact information",
             "items": [
               {
-                "label": "Basic Information",
-                "href": "/about#basic",
+                "label": "Owner Information",
+                "href": "/about#owner-info",
                 "items": [
                   {
                     "label": "Personal Profile",
-                    "href": "/about"
+                    "href": "/about#profile"
                   },
                   {
                     "label": "Contact Information",
                     "href": "/about#contact"
-                  }
-                ]
-              },
-              {
-                "label": "Professional Information",
-                "href": "/about#professional",
-                "items": [
+                  },
                   {
                     "label": "Skills & Expertise",
                     "href": "/about#skills"
                   },
                   {
-                    "label": "Work Experience",
-                    "href": "/about#work"
-                  },
-                  {
                     "label": "Education Background",
                     "href": "/about#education"
+                  }
+                ]
+              },
+              {
+                "label": "Site Information",
+                "href": "/about#site-info",
+                "items": [
+                  {
+                    "label": "Tech Stack",
+                    "href": "/about#tech-stack"
                   },
                   {
-                    "label": "Personal Achievements",
-                    "href": "/about#achievements"
+                    "label": "Development History",
+                    "href": "/about#development"
+                  }
+                ]
+              },
+              {
+                "label": "Related Resources",
+                "href": "/about#resources",
+                "items": [
+                  {
+                    "label": "Open Source Libraries",
+                    "href": "/about#open-source"
+                  },
+                  {
+                    "label": "Online Services",
+                    "href": "/about#online-services"
+                  },
+                  {
+                    "label": "Development Protocols",
+                    "href": "/about#protocols"
                   }
                 ]
               }
@@ -153,49 +171,6 @@
                   {
                     "label": "Self-Developed Projects",
                     "href": "/projects#self-developed"
-                  }
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "type": "__resources",
-          "label": "Resources",
-          "href": "/resources",
-          "submenu": {
-            "title": "Technical Resources",
-            "description": "Share useful technical resources and tools",
-            "items": [
-              {
-                "label": "Learning Resources",
-                "href": "/resources#learning",
-                "items": [
-                  {
-                    "label": "Technical Books",
-                    "href": "/resources#books"
-                  },
-                  {
-                    "label": "Development Documentation",
-                    "href": "/resources#docs"
-                  }
-                ]
-              },
-              {
-                "label": "Tools & Services",
-                "href": "/resources#tools-services",
-                "items": [
-                  {
-                    "label": "Development Tools",
-                    "href": "/resources#tools"
-                  },
-                  {
-                    "label": "Design Resources",
-                    "href": "/resources#design"
-                  },
-                  {
-                    "label": "Online Services",
-                    "href": "/resources#services"
                   }
                 ]
               }

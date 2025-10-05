@@ -16,7 +16,7 @@ export interface SubmenuItem {
 }
 
 export interface NavigationItem {
-  type: '__blog' | '__about' | '__projects' | '__resources' | '__search' | '__language' // 唯一标识符，用于程序逻辑判断
+  type: '__blog' | '__about' | '__projects' | '__search' | '__language' // 唯一标识符，用于程序逻辑判断
   label: string
   href: string
   submenu?: {
