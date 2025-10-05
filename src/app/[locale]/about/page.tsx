@@ -56,7 +56,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-green-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'media',
@@ -73,7 +73,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'short',
-                cardClassName: 'bg-gradient-to-r from-pink-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
               },
               {
                 id: 'skills',
@@ -90,7 +90,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'tall',
-                cardClassName: 'bg-gradient-to-r from-green-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'education',
@@ -107,7 +107,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'short',
-                cardClassName: 'bg-gradient-to-r from-purple-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
               },
               // 站点信息 (Site Information)
               {
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-cyan-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'development',
@@ -142,7 +142,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'tall',
-                cardClassName: 'bg-white/80 backdrop-blur-sm'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               // 相关资源 (Related Resources)
               {
@@ -160,7 +160,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-emerald-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
               },
               {
                 id: 'online-services',
@@ -177,7 +177,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-violet-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'protocols',
@@ -194,7 +194,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-amber-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
               },
               {
                 id: 'social',
@@ -211,7 +211,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-purple-50 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               }
             ]}
           />
