@@ -32,6 +32,7 @@ alwaysApply: true
 - ui文件夹为存放基础ui组件的地方，站点需要尽可能的使用ui中封装好的组件
 - 样式管理使用Tailwind库，除ui中文件外其余文件class均需要用utils中封装好的cn方法
 - 脚本和组件文件只允许ts或tsx文件
+- icons应该封装到assets/icons中，使用tsx的形式保存起来
 
 ## 国际化 (i18n)
 
