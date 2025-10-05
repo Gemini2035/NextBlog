@@ -50,58 +50,6 @@ export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
         </div>
       </div>
 
-      {/* 个人成就和特色 */}
-      <div className="mb-8">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-          个人特色
-        </h3>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            <h4 className="text-lg font-medium text-gray-900 mb-3">技术专长</h4>
-            <div className="space-y-3">
-              <div className="flex items-center p-4 bg-gray-50 rounded-xl">
-                <div className="w-3 h-3 bg-blue-500 rounded-full mr-4"></div>
-                <div>
-                  <div className="font-medium text-gray-900">前端开发</div>
-                  <div className="text-sm text-gray-600">React, Next.js, TypeScript</div>
-                </div>
-              </div>
-              <div className="flex items-center p-4 bg-gray-50 rounded-xl">
-                <div className="w-3 h-3 bg-green-500 rounded-full mr-4"></div>
-                <div>
-                  <div className="font-medium text-gray-900">全栈开发</div>
-                  <div className="text-sm text-gray-600">Node.js, 数据库设计</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="space-y-4">
-            <h4 className="text-lg font-medium text-gray-900 mb-3">工作理念</h4>
-            <div className="p-6 bg-blue-50 rounded-xl">
-              <h5 className="font-semibold text-blue-900 mb-4">开发理念</h5>
-              <p className="text-blue-800 mb-4">
-                注重代码质量和用户体验，追求技术的最佳实践。
-                相信通过持续学习和分享，能够推动技术社区的发展。
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">代码质量优先</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">用户体验至上</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
-                  <span className="text-blue-700">持续学习成长</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   )
 }

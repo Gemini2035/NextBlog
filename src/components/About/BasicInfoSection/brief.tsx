@@ -1,8 +1,7 @@
 'use client'
 
 import { SITE_CONFIG } from '@/constants'
-import { GitHubIcon, TwitterIcon, LinkedInIcon, GlobeIcon } from '@/assets/icons'
-import { Link } from '@/ui'
+import { GlobeIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 
 interface BasicInfoBriefProps {
@@ -34,33 +33,6 @@ export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
         </p>
       </div>
 
-      {/* 简化的联系方式 */}
-      <div className="flex flex-wrap gap-2">
-        {SITE_CONFIG.socialLink.github && (
-          <Link
-            href={SITE_CONFIG.socialLink.github}
-            external
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg transition-all duration-200 text-sm"
-          >
-            <GitHubIcon className="w-4 h-4 mr-1.5" />
-            GitHub
-          </Link>
-        )}
-        {SITE_CONFIG.socialLink.twitter && (
-          <Link
-            href={SITE_CONFIG.socialLink.twitter}
-            external
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center px-3 py-1.5 bg-gray-100 hover:bg-blue-100 text-gray-700 hover:text-blue-700 rounded-lg transition-all duration-200 text-sm"
-          >
-            <TwitterIcon className="w-4 h-4 mr-1.5" />
-            Twitter
-          </Link>
-        )}
-      </div>
     </div>
   )
 }
