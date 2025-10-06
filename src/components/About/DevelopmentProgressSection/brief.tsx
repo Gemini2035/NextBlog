@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { ClockIcon } from '@/assets/icons'
 
 interface DevelopmentProgressBriefProps {
   className?: string
@@ -12,8 +13,8 @@ export default function DevelopmentProgressBrief({ className }: DevelopmentProgr
   return (
     <div className={className}>
       <div className="flex items-center mb-4">
-        <div className="w-10 h-10 bg-white/80 rounded-lg flex items-center justify-center mr-3">
-          <span className="text-lg">🚀</span>
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+          <ClockIcon className="w-5 h-5 text-blue-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">
           {t('developmentProgress')}
