@@ -12,8 +12,12 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
   return (
     <div className={className}>
       <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-cyan-100 rounded-xl flex items-center justify-center mr-6">
-          <span className="text-3xl">⚛️</span>
+        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
+          <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <rect x="4" y="14" width="16" height="4" rx="1.5"/>
+            <rect x="6" y="9" width="12" height="3" rx="1.5"/>
+            <rect x="8" y="5" width="8" height="2" rx="1"/>
+          </svg>
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
