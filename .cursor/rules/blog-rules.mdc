@@ -18,6 +18,7 @@ alwaysApply: true
 - 使用有意义的变量和函数名
 - 避免使用 `any` 类型，优先使用具体类型
 - 避免存在未使用的变量或导入
+- 优先使用es6解构语法
 
 ### React 最佳实践
 - 使用函数式组件而非类组件
@@ -25,6 +26,7 @@ alwaysApply: true
 - 避免在 render 中创建新对象或函数
 - 使用 React.memo 优化不必要的重渲染
 - 组件应该单一职责，保持简洁
+- React相关方法应该使用解构的方式导入，如 React.ComponentType需要使用 import { ComponentType } from 'react'
 
 ### 文件组织
 - 每个组件一个文件夹，包含 index.tsx 和样式文件
