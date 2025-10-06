@@ -2,9 +2,9 @@
 
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { Card } from '@/ui'
-import { cn } from '@/utils'
+import { cn, smoothScrollToElement } from '@/utils'
 import { CloseIcon } from '@/assets/icons'
-import { useIntersectionObserver } from '@/hooks'
+import { useIntersectionObserver, useLayoutHeights } from '@/hooks'
 
 interface ExpandableWaterfallItem {
   id: string
@@ -14,18 +14,21 @@ interface ExpandableWaterfallItem {
   cardClassName?: string
   title?: string
   description?: string
+  /** 锚点ID，用于URL定位 */
+  anchorId?: string
 }
 
-// 单个Waterfall Item组件，处理动画
+// 单个Waterfall Item组件，处理动画和锚点聚焦
 interface WaterfallItemProps {
   item: ExpandableWaterfallItem
   position: { top: number; left: number; width: number }
   isExpanded: boolean
   onItemClick: (itemId: string) => void
   index: number
+  isFocused?: boolean
 }
 
-function WaterfallItem({ item, position, isExpanded, onItemClick, index }: WaterfallItemProps) {
+function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocused = false }: WaterfallItemProps) {
   const { elementRef, shouldAnimate } = useIntersectionObserver({
     threshold: 0.05,
     rootMargin: '0px 0px -30px 0px',
@@ -39,6 +42,8 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index }: Water
       className={cn(
         'absolute transition-all duration-700 ease-out cursor-pointer group',
         isExpanded ? 'z-50' : 'hover:scale-105',
+        // 锚点聚焦样式
+        isFocused && 'ring-4 ring-blue-400 ring-opacity-60 shadow-2xl scale-105',
         // 动画状态 - 从下方滑入并淡入
         shouldAnimate 
           ? 'opacity-100 translate-y-0 scale-100' 
@@ -60,6 +65,8 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index }: Water
         className={cn(
           'p-6 bg-white/90 backdrop-blur-sm h-full transition-all duration-300',
           'hover:shadow-xl hover:bg-white',
+          // 锚点聚焦时的卡片样式
+          isFocused && 'bg-blue-50/90 shadow-2xl border-blue-200',
           item.cardClassName
         )}
       >
@@ -106,16 +113,62 @@ export default function ExpandableWaterfall({
   className 
 }: ExpandableWaterfallProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { headerHeight } = useLayoutHeights()
   const [mounted, setMounted] = useState(false)
   const [columnHeights, setColumnHeights] = useState<number[]>([])
   const [itemPositions, setItemPositions] = useState<Array<{ top: number; left: number; width: number }>>([])
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [isAnimating, setIsAnimating] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
+  const [focusedItemId, setFocusedItemId] = useState<string | null>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // 锚点定位和聚焦逻辑
+  useEffect(() => {
+    const handleHashChange = () => {
+      const currentHash = window.location.hash.slice(1) // 移除 # 符号
+      if (!currentHash) {
+        setFocusedItemId(null)
+        return
+      }
+
+      // 查找匹配的锚点ID
+      const targetItem = items.find(item => 
+        item.anchorId === currentHash || item.id === currentHash
+      )
+
+      if (targetItem) {
+        // 设置聚焦状态
+        setFocusedItemId(targetItem.id)
+
+        // 滚动到目标元素
+        setTimeout(() => {
+          const element = document.getElementById(targetItem.anchorId || targetItem.id)
+          if (element) {
+            smoothScrollToElement(element, headerHeight + 20)
+          }
+        }, 200)
+
+        // 3秒后清除聚焦状态
+        setTimeout(() => {
+          setFocusedItemId(null)
+        }, 3000)
+      }
+    }
+
+    // 监听hash变化
+    window.addEventListener('hashchange', handleHashChange)
+    
+    // 页面加载时检查hash
+    handleHashChange()
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [items, headerHeight])
 
   useEffect(() => {
     if (!mounted || !containerRef.current) return
@@ -294,6 +347,7 @@ export default function ExpandableWaterfall({
           if (!position) return null
 
           const isExpanded = expandedItem === item.id
+          const isFocused = focusedItemId === item.id
 
           return (
             <WaterfallItem
@@ -303,6 +357,7 @@ export default function ExpandableWaterfall({
               isExpanded={isExpanded}
               onItemClick={handleItemClick}
               index={index}
+              isFocused={isFocused}
             />
           )
         })}

@@ -28,6 +28,7 @@ export default function AboutPage() {
                 id: 'basic-info',
                 title: '个人信息',
                 description: '查看我的基本信息和联系方式',
+                anchorId: 'profile',
                 content: (
                   <div id="profile">
                     <BasicInfoBrief />
@@ -45,6 +46,7 @@ export default function AboutPage() {
                 id: 'contact',
                 title: '联系方式',
                 description: navT('Contact Description'),
+                anchorId: 'contact',
                 content: (
                   <div id="contact">
                     <ContactLinksBrief />
@@ -62,6 +64,7 @@ export default function AboutPage() {
                 id: 'social',
                 title: '社交链接',
                 description: '关注我的社交媒体和平台',
+                anchorId: 'social',
                 content: (
                   <div id="social">
                     <SocialLinksBrief />
@@ -79,6 +82,7 @@ export default function AboutPage() {
                 id: 'skills',
                 title: '技能专长',
                 description: '查看我的技术技能和专业能力',
+                anchorId: 'skills',
                 content: (
                   <div id="skills">
                     <SkillsBrief />
@@ -96,6 +100,7 @@ export default function AboutPage() {
                 id: 'education',
                 title: '教育背景',
                 description: '查看我的教育经历和学习成果',
+                anchorId: 'education',
                 content: (
                   <div id="education">
                     <EducationBrief />
@@ -114,6 +119,7 @@ export default function AboutPage() {
                 id: 'tech-stack',
                 title: '技术栈',
                 description: '查看项目使用的技术栈',
+                anchorId: 'tech-stack',
                 content: (
                   <div id="tech-stack">
                     <TechStackBrief />
@@ -131,6 +137,7 @@ export default function AboutPage() {
                 id: 'development',
                 title: '发展历史',
                 description: '查看项目的发展历程',
+                anchorId: 'development',
                 content: (
                   <div id="development">
                     <DevelopmentProgressBrief />
@@ -149,6 +156,7 @@ export default function AboutPage() {
                 id: 'open-source',
                 title: '开源库',
                 description: '查看使用的开源库和框架',
+                anchorId: 'open-source',
                 content: (
                   <div id="open-source">
                     <OpenSourceLibrariesBrief />
@@ -166,6 +174,7 @@ export default function AboutPage() {
                 id: 'online-services',
                 title: '在线服务',
                 description: '查看使用的在线服务',
+                anchorId: 'online-services',
                 content: (
                   <div id="online-services">
                     <OnlineServicesBrief />
@@ -183,6 +192,7 @@ export default function AboutPage() {
                 id: 'protocols',
                 title: '开发协议',
                 description: '查看开发规范和协议',
+                anchorId: 'protocols',
                 content: (
                   <div id="protocols">
                     <DevelopmentProtocolsBrief />

@@ -29,60 +29,99 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
         </div>
       </div>
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">⚛️</span>
+      <div className="space-y-4 mb-8">
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="6"/>
+              <line x1="9" y1="15" x2="15" y2="9"/>
+            </svg>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('nextjs')}</h3>
-          <p className="text-sm text-gray-600 mb-2">React 全栈框架</p>
-          <p className="text-xs text-gray-500">v15.0.0+</p>
-        </div>
-        
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">📝</span>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">{t('nextjs')}</h3>
+            <p className="text-sm text-gray-700">React 全栈框架，基于 App Router 实现 SSR/SSG/ISR；内置图片优化、数据获取、路由与可访问性等能力，提供优良的性能默认值与 DX。</p>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('contentlayer')}</h3>
-          <p className="text-sm text-gray-600 mb-2">内容管理系统</p>
-          <p className="text-xs text-gray-500">v0.3.0+</p>
         </div>
-        
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">📄</span>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <rect x="6" y="7" width="12" height="8" rx="1"/>
+              <rect x="8" y="11" width="8" height="4" rx="1"/>
+            </svg>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('mdx')}</h3>
-          <p className="text-sm text-gray-600 mb-2">Markdown + JSX 支持</p>
-          <p className="text-xs text-gray-500">v3.0.0+</p>
-        </div>
-        
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-cyan-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">🎨</span>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">{t('contentlayer')}</h3>
+            <p className="text-sm text-gray-700">类型安全的内容层，与 TS 深度集成；通过 schema 生成推断类型，结合 MDX 将内容结构化为可渲染的 React 组件，避免运行时解析错误。</p>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('tailwind')}</h3>
-          <p className="text-sm text-gray-600 mb-2">实用优先的 CSS 框架</p>
-          <p className="text-xs text-gray-500">v3.4.0+</p>
         </div>
-        
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">🔷</span>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <polyline points="8,12 11,9 8,6"/>
+              <polyline points="16,6 13,9 16,12"/>
+              <line x1="12" y1="13" x2="12" y2="18"/>
+            </svg>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('typescript')}</h3>
-          <p className="text-sm text-gray-600 mb-2">类型安全的 JavaScript</p>
-          <p className="text-xs text-gray-500">v5.0.0+</p>
-        </div>
-        
-        <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-gray-200">
-          <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-3">
-            <span className="text-2xl">🚀</span>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">{t('mdx')}</h3>
+            <p className="text-sm text-gray-700">Markdown + JSX，支持在内容中引入交互式组件；与 Contentlayer 结合可获得强类型与快速预览，提升创作与维护效率。</p>
           </div>
-          <h3 className="font-semibold text-gray-900 mb-1">{t('githubPages')}</h3>
-          <p className="text-sm text-gray-600 mb-2">静态网站托管</p>
-          <p className="text-xs text-gray-500">免费托管</p>
         </div>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <rect x="7" y="7" width="6" height="3" rx="1"/>
+              <rect x="11" y="12" width="6" height="3" rx="1"/>
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">{t('tailwind')}</h3>
+            <p className="text-sm text-gray-700">实用优先 CSS 原子类库，降低样式命名与级联复杂度；通过预设与插件落地设计系统，快速实现响应式与暗色模式等特性。</p>
+          </div>
+        </div>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <rect x="7" y="6" width="10" height="10" rx="2"/>
+              <line x1="12" y1="8" x2="12" y2="14"/>
+              <line x1="9" y1="8" x2="15" y2="8"/>
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">{t('typescript')}</h3>
+            <p className="text-sm text-gray-700">严格模式下的类型系统，为组件与接口提供静态检查；结合 ESLint/Prettier 与 CI 工作流保证风格一致与质量门禁。</p>
+          </div>
+        </div>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <circle cx="7" cy="12" r="2"/>
+              <circle cx="17" cy="7" r="2"/>
+              <circle cx="17" cy="17" r="2"/>
+              <line x1="9" y1="12" x2="15" y2="8"/>
+              <line x1="9" y1="12" x2="15" y2="16"/>
+            </svg>
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">GitHub Actions + Vercel</h3>
+            <p className="text-sm text-gray-700">GitHub Actions 进行 lint/type-check/build 的 CI 流程，PR 和主分支 push 自动触发；Vercel 提供 Preview 与 Production 环境的一键部署与回滚能力。</p>
+          </div>
+        </div>
+      </div>
+      <div className="mb-8 flex items-center text-sm text-gray-700">
+        <svg className="w-5 h-5 text-blue-600 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <circle cx="12" cy="16" r="1"/>
+        </svg>
+        <span className="ml-1 text-blue-600 font-medium">
+          对应的官方介绍请跳转开源库部分
+        </span>
       </div>
 
       {/* 技术栈特点 */}
