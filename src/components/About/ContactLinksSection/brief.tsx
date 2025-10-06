@@ -2,7 +2,7 @@
 
 import { ComponentType } from 'react'
 import { SITE_CONFIG } from '@/constants'
-import { ContactIcon, GmailIcon, OutlookIcon, ICloudIcon, TelegramIcon, QQIcon, DefaultContactIcon } from '@/assets/icons'
+import { ContactIcon, GmailIcon, OutlookIcon, ICloudIcon, TelegramIcon, DefaultContactIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 
 interface ContactLinksBriefProps {
@@ -17,31 +17,30 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
     googleMail: GmailIcon,
     outlookMail: OutlookIcon,
     appleMail: ICloudIcon,
-    telegram: TelegramIcon,
-    qq: QQIcon
+    telegram: TelegramIcon
     // 后续可以在这里添加更多图标的映射
   }
 
-  // 联系方式配置 - 支持动态扩展
-  const contactConfigs = [
-    { key: 'googleMail', name: 'Gmail', isEmail: true },
-    { key: 'outlookMail', name: 'Outlook', isEmail: true },
-    { key: 'appleMail', name: 'iCloud', isEmail: true },
-    { key: 'telegram', name: 'Telegram', isEmail: false },
-    { key: 'qq', name: 'QQ', isEmail: false }
-    // 后续可以在这里添加更多联系方式配置
-  ]
-
-  // 动态生成联系方式数组
-  const contactMethods = contactConfigs
-    .map(config => {
-      const value = SITE_CONFIG.contactLink[config.key as keyof typeof SITE_CONFIG.contactLink]
+  // 动态生成联系方式数组 - 从site-config读取
+  const contactMethods = Object.entries(SITE_CONFIG.contactLink)
+    .map(([key, value]) => {
+      // 联系方式名称映射
+      const nameMap: Record<string, string> = {
+        googleMail: 'Gmail',
+        outlookMail: 'Outlook', 
+        appleMail: 'iCloud',
+        telegram: 'Telegram'
+      }
+      
+      // 判断是否为邮箱
+      const isEmail = key.includes('Mail')
+      
       return {
-        key: config.key,
-        name: config.name,
+        key,
+        name: nameMap[key] || key,
         value,
-        icon: iconMap[config.key] || DefaultContactIcon, // 如果没有专门图标，使用默认图标
-        isEmail: config.isEmail
+        icon: iconMap[key] || DefaultContactIcon,
+        isEmail
       }
     })
     .filter(method => method.value) // 过滤掉空值
