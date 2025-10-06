@@ -73,6 +73,7 @@
     "Basic Information": "基本情報",
     "Personal Profile": "個人プロフィール",
     "Contact Information": "連絡先",
+    "Contact Description": "メールで連絡してください",
     "Professional Information": "専門情報",
     "Skills & Expertise": "スキル・専門性",
     "Work Experience": "職歴",
@@ -101,7 +102,8 @@
     "Join my community": "コミュニティに参加",
     "Visit my personal website": "個人ウェブサイトを訪問",
     "Media Links": "メディアリンク",
-    "Contact me directly": "直接連絡"
+    "Contact me directly": "直接連絡",
+    "Contact Description Detail": "メールで連絡してください。最適なメールアドレスを選択してください"
   },
   "AboutPage": {
     "title": "私について",
