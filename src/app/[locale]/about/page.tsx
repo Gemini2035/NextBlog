@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
-import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, MediaLinksBrief, MediaLinksDetail, ExpandableWaterfall } from '@/components/About'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
   const navT = useTranslations('Navigation')
@@ -59,21 +59,21 @@ export default function AboutPage() {
                 cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
-                id: 'media',
-                title: '媒体链接',
-                description: '关注我的媒体平台和社区',
+                id: 'social',
+                title: '社交链接',
+                description: '关注我的社交媒体和平台',
                 content: (
-                  <div id="media">
-                    <MediaLinksBrief />
+                  <div id="social">
+                    <SocialLinksBrief />
                   </div>
                 ),
                 expandedContent: (
                   <div>
-                    <MediaLinksDetail />
+                    <SocialLinksDetail />
                   </div>
                 ),
                 height: 'short',
-                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
+                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
               },
               {
                 id: 'skills',

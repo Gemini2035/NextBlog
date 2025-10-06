@@ -9,4 +9,4 @@ export { OpenSourceLibrariesBrief, OpenSourceLibrariesDetail } from './OpenSourc
 export { OnlineServicesBrief, OnlineServicesDetail } from './OnlineServicesSection'
 export { DevelopmentProtocolsBrief, DevelopmentProtocolsDetail } from './DevelopmentProtocolsSection'
 export { ContactLinksBrief, ContactLinksDetail } from './ContactLinksSection'
-export { MediaLinksBrief, MediaLinksDetail } from './MediaLinksSection'
+export { SocialLinksBrief, SocialLinksDetail } from './SocialLinksSection'
