@@ -11,6 +11,7 @@ interface SocialLinksBriefProps {
 
 export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
   const navT = useTranslations('Navigation')
+  const skillsT = useTranslations('Skills')
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -24,18 +25,18 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
   // 动态生成社交链接数组 - 从site-config读取
   const socialLinks = Object.entries(SITE_CONFIG.socialLink)
     .map(([key, value]) => {
-      // 社交平台名称映射
-      const nameMap: Record<string, string> = {
-        github: 'GitHub',
-        twitter: 'Twitter',
-        website: 'Website',
-        bilibili: 'Bilibili',
-        pixiv: 'Pixiv'
+      // 社交平台名称映射 - 使用国际化
+      const getSocialName = (key: string) => {
+        try {
+          return skillsT(`socialPlatforms.${key}`)
+        } catch {
+          return key
+        }
       }
       
       return {
         key,
-        name: nameMap[key] || key,
+        name: getSocialName(key),
         value,
         icon: iconMap[key] || GlobeIcon
       }
@@ -53,7 +54,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
             {navT('Social Links')}
           </h3>
           <p className="text-sm text-gray-600">
-            关注我的社交媒体和平台
+            {skillsT('socialDescription')}
           </p>
         </div>
       </div>

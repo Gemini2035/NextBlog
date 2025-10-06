@@ -149,7 +149,27 @@
       "ChatGPT": "AIアシスタントツール、コード作成、問題解決、知識獲得を支援",
       "Figma": "UI/UXデザインとプロトタイピングのための協働デザインツール",
       "SFSymbol": "Appleシステムアイコンライブラリ、一貫したアイコンデザイン言語を提供"
-    }
+    },
+    "contactMethods": {
+      "googleMail": "Gmail",
+      "outlookMail": "Outlook",
+      "appleMail": "iCloud",
+      "telegram": "Telegram"
+    },
+    "contactDescription": "以下の方法でお問い合わせください",
+    "contactDescriptionDetail": "以下の方法でお問い合わせください",
+    "sendEmail": "メール送信",
+    "visitLink": "リンクにアクセス",
+    "socialPlatforms": {
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "website": "個人ウェブサイト",
+      "bilibili": "Bilibili",
+      "pixiv": "Pixiv"
+    },
+    "socialDescription": "ソーシャルメディアとプラットフォームをフォロー",
+    "socialDescriptionDetail": "ソーシャルメディアとプラットフォームをフォローして、より多くのコンテンツを取得",
+    "visitPlatform": "プラットフォームにアクセス"
   },
   "AboutPage": {
     "title": "私について",

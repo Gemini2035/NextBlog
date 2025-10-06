@@ -11,6 +11,7 @@ interface ContactLinksBriefProps {
 
 export default function ContactLinksBrief({ className }: ContactLinksBriefProps) {
   const navT = useTranslations('Navigation')
+  const skillsT = useTranslations('Skills')
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -24,12 +25,13 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
   // 动态生成联系方式数组 - 从site-config读取
   const contactMethods = Object.entries(SITE_CONFIG.contactLink)
     .map(([key, value]) => {
-      // 联系方式名称映射
-      const nameMap: Record<string, string> = {
-        googleMail: 'Gmail',
-        outlookMail: 'Outlook', 
-        appleMail: 'iCloud',
-        telegram: 'Telegram'
+      // 联系方式名称映射 - 使用国际化
+      const getContactName = (key: string) => {
+        try {
+          return skillsT(`contactMethods.${key}`)
+        } catch {
+          return key
+        }
       }
       
       // 判断是否为邮箱
@@ -37,7 +39,7 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
       
       return {
         key,
-        name: nameMap[key] || key,
+        name: getContactName(key),
         value,
         icon: iconMap[key] || DefaultContactIcon,
         isEmail
@@ -56,7 +58,7 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
             {navT('Contact Information')}
           </h3>
           <p className="text-sm text-gray-600">
-            通过以下方式联系我
+            {skillsT('contactDescription')}
           </p>
         </div>
       </div>

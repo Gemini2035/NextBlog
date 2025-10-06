@@ -12,6 +12,7 @@ interface ContactLinksDetailProps {
 
 export default function ContactLinksDetail({ className }: ContactLinksDetailProps) {
   const navT = useTranslations('Navigation')
+  const skillsT = useTranslations('Skills')
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -25,12 +26,13 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
   // 动态生成联系方式数组 - 从site-config读取
   const contactMethods = Object.entries(SITE_CONFIG.contactLink)
     .map(([key, value]) => {
-      // 联系方式名称映射
-      const nameMap: Record<string, string> = {
-        googleMail: 'Gmail',
-        outlookMail: 'Outlook', 
-        appleMail: 'iCloud',
-        telegram: 'Telegram'
+      // 联系方式名称映射 - 使用国际化
+      const getContactName = (key: string) => {
+        try {
+          return skillsT(`contactMethods.${key}`)
+        } catch {
+          return key
+        }
       }
       
       // 判断是否为邮箱
@@ -38,7 +40,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
       
       return {
         key,
-        name: nameMap[key] || key,
+        name: getContactName(key),
         value,
         icon: iconMap[key] || DefaultContactIcon,
         isEmail
@@ -57,7 +59,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
             {navT('Contact Information')}
           </h2>
           <p className="text-lg text-gray-600">
-            通过以下方式联系我
+            {skillsT('contactDescriptionDetail')}
           </p>
         </div>
       </div>
@@ -66,7 +68,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
         {contactMethods.map((contact) => {
           const IconComponent = contact.icon
           const href = contact.isEmail ? `mailto:${contact.value}` : contact.value
-          const linkText = contact.isEmail ? '发送邮件' : '访问链接'
+          const linkText = contact.isEmail ? skillsT('sendEmail') : skillsT('visitLink')
           const linkIcon = contact.isEmail ? <EmailIcon className="ml-1 w-4 h-4" /> : <span className="ml-1">→</span>
           
           return (

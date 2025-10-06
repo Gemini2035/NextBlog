@@ -12,6 +12,7 @@ interface SocialLinksDetailProps {
 
 export default function SocialLinksDetail({ className }: SocialLinksDetailProps) {
   const navT = useTranslations('Navigation')
+  const skillsT = useTranslations('Skills')
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -25,19 +26,19 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
   // 动态生成社交链接数组 - 从site-config读取
   const socialLinks = Object.entries(SITE_CONFIG.socialLink)
     .map(([key, value]) => {
-      // 社交平台名称映射
-      const nameMap: Record<string, string> = {
-        github: 'GitHub',
-        twitter: 'Twitter',
-        website: '个人网站',
-        bilibili: 'Bilibili',
-        pixiv: 'Pixiv'
+      // 社交平台名称映射 - 使用国际化
+      const getSocialName = (key: string) => {
+        try {
+          return skillsT(`socialPlatforms.${key}`)
+        } catch {
+          return key
+        }
       }
       
       
       return {
         key,
-        name: nameMap[key] || key,
+        name: getSocialName(key),
         value,
         icon: iconMap[key] || GlobeIcon
       }
@@ -55,7 +56,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
             {navT('Social Links')}
           </h2>
           <p className="text-lg text-gray-600">
-            关注我的社交媒体和平台，获取更多内容
+            {skillsT('socialDescriptionDetail')}
           </p>
         </div>
       </div>
@@ -91,7 +92,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
                   >
-                    访问平台
+                    {skillsT('visitPlatform')}
                     <span className="ml-1">→</span>
                   </Link>
                 </div>

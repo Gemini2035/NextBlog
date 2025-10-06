@@ -280,7 +280,27 @@
       "ChatGPT": "AI assistant tool, assisting with code writing, problem solving, and knowledge acquisition",
       "Figma": "Collaborative design tool for UI/UX design and prototyping",
       "SFSymbol": "Apple system icon library, providing consistent icon design language"
-    }
+    },
+    "contactMethods": {
+      "googleMail": "Gmail",
+      "outlookMail": "Outlook",
+      "appleMail": "iCloud",
+      "telegram": "Telegram"
+    },
+    "contactDescription": "Contact me through the following methods",
+    "contactDescriptionDetail": "Contact me through the following methods",
+    "sendEmail": "Send Email",
+    "visitLink": "Visit Link",
+    "socialPlatforms": {
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "website": "Personal Website",
+      "bilibili": "Bilibili",
+      "pixiv": "Pixiv"
+    },
+    "socialDescription": "Follow my social media and platforms",
+    "socialDescriptionDetail": "Follow my social media and platforms for more content",
+    "visitPlatform": "Visit Platform"
   },
   "Contact": {
     "contactButton": "Contact Me",

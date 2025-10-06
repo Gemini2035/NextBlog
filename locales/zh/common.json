@@ -280,7 +280,27 @@
       "ChatGPT": "AI助手工具，辅助代码编写、问题解决和知识获取",
       "Figma": "协作式设计工具，用于UI/UX设计和原型制作",
       "SFSymbol": "苹果系统图标库，提供一致的图标设计语言"
-    }
+    },
+    "contactMethods": {
+      "googleMail": "Gmail",
+      "outlookMail": "Outlook",
+      "appleMail": "iCloud",
+      "telegram": "Telegram"
+    },
+    "contactDescription": "通过以下方式联系我",
+    "contactDescriptionDetail": "通过以下方式联系我",
+    "sendEmail": "发送邮件",
+    "visitLink": "访问链接",
+    "socialPlatforms": {
+      "github": "GitHub",
+      "twitter": "Twitter",
+      "website": "个人网站",
+      "bilibili": "Bilibili",
+      "pixiv": "Pixiv"
+    },
+    "socialDescription": "关注我的社交媒体和平台",
+    "socialDescriptionDetail": "关注我的社交媒体和平台，获取更多内容",
+    "visitPlatform": "访问平台"
   },
   "Contact": {
     "contactButton": "联系我",
