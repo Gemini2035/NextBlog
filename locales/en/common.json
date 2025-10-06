@@ -404,5 +404,25 @@
     "contactTitle": "Contact Me",
     "contactDescription": "If you have any questions or suggestions about these policies, please contact us through the website contact information.",
     "contactButton": "Contact Me"
+  },
+  "Education": {
+    "sectionTitle": "Education Background",
+    "mainEducationTitle": "Main Education Experience",
+    "achievementsTitle": "Academics & Competitions",
+    "projectsTitle": "Project Experience",
+    "briefTitle": "Chengdu University of Technology (Yibin Campus) · IoT Engineering",
+    "briefDegreeYears": "Bachelor's Degree | 2020 - 2024",
+    "briefDescription": "Focused on Web track: frontend engineering, database & API design, full‑stack development and deployment.",
+    "detailSummary": "Primarily Web/full‑stack oriented: learned frontend engineering, modern frameworks and state management, API and database design, performance optimization, and deployment/operations to deliver end‑to‑end solutions.",
+    "coreCoursesTitle": "Core Courses (Web Track)",
+    "course1": "Frontend engineering & performance optimization",
+    "course2": "Web application development (React/Next.js)",
+    "course3": "Database & API design (REST/GraphQL)",
+    "course4": "Computer networks & security fundamentals",
+    "project1": "Personal blog/content site (Next.js + content system)",
+    "project2": "Backend API & database modeling (Node.js/Prisma)",
+    "project3": "End‑to‑end deployment & monitoring (Vercel/containers)",
+    "achievement1": "Lanqiao Cup Provincial Third Prize",
+    "achievement2": "National Champion, China Computer Game Competition · Einstein Chess"
   }
 }

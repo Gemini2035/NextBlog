@@ -409,5 +409,25 @@
     "contactTitle": "联系我",
     "contactDescription": "如果您对这些政策有任何疑问或建议，请通过网站联系方式与我们取得联系。",
     "contactButton": "联系我"
+  },
+  "Education": {
+    "sectionTitle": "教育背景",
+    "mainEducationTitle": "主要教育经历",
+    "achievementsTitle": "学术与竞赛",
+    "projectsTitle": "项目经验",
+    "briefTitle": "成都理工大学（宜宾校区） · 物联网工程",
+    "briefDegreeYears": "学士学位 | 2020 - 2024",
+    "briefDescription": "重点学习 Web 相关方向：前端工程化、数据库与 API 设计、全栈开发与部署实践。",
+    "detailSummary": "以 Web/全栈方向为主，系统学习前端工程化、现代框架与状态管理、接口与数据库设计、性能优化与部署运维等，培养从前端到后端的完整交付能力。",
+    "coreCoursesTitle": "核心课程（Web方向）",
+    "course1": "前端工程化与性能优化",
+    "course2": "Web 应用开发（React/Next.js）",
+    "course3": "数据库与 API 设计（REST/GraphQL）",
+    "course4": "计算机网络与安全基础",
+    "project1": "个人博客/内容站点（Next.js + 内容系统）",
+    "project2": "后端 API 与数据库建模（Node.js/Prisma）",
+    "project3": "端到端部署与监控（Vercel/容器化）",
+    "achievement1": "蓝桥杯省赛三等奖",
+    "achievement2": "全国计算机博弈大赛·爱恩斯坦棋 全国冠军"
   }
 }

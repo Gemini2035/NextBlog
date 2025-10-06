@@ -8,6 +8,7 @@ interface EducationBriefProps {
 
 export default function EducationBrief({ className }: EducationBriefProps) {
   const navT = useTranslations('Navigation')
+  const eduT = useTranslations('Education')
 
   return (
     <div className={className}>
@@ -19,16 +20,14 @@ export default function EducationBrief({ className }: EducationBriefProps) {
           </svg>
         </div>
         <h2 className="text-xl font-bold text-gray-900" id="education">
-          {navT('Education Background')}
+          {eduT('sectionTitle')}
         </h2>
       </div>
       <div className="space-y-3">
         <div className="border-l-3 border-purple-200 pl-3">
-          <h4 className="font-medium text-gray-800 text-sm">计算机科学与技术</h4>
-          <p className="text-xs text-gray-600">学士学位 | 2016 - 2020</p>
-          <p className="text-gray-600 text-xs mt-1">
-            系统学习计算机基础知识，包括数据结构、算法、数据库等核心课程。
-          </p>
+          <h4 className="font-medium text-gray-800 text-sm">{eduT('briefTitle')}</h4>
+          <p className="text-xs text-gray-600">{eduT('briefDegreeYears')}</p>
+          <p className="text-gray-600 text-xs mt-1">{eduT('briefDescription')}</p>
         </div>
       </div>
     </div>

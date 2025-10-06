@@ -409,5 +409,25 @@
     "contactTitle": "お問い合わせ",
     "contactDescription": "これらのポリシーについてご質問やご提案がございましたら、ウェブサイトの連絡先情報を通じてお気軽にお問い合わせください。",
     "contactButton": "お問い合わせ"
+  },
+  "Education": {
+    "sectionTitle": "学歴",
+    "mainEducationTitle": "主要な学歴",
+    "achievementsTitle": "学術・コンペティション",
+    "projectsTitle": "プロジェクト経験",
+    "briefTitle": "成都理工大学（宜賓キャンパス）· IoT 工学",
+    "briefDegreeYears": "学士 | 2020 - 2024",
+    "briefDescription": "Web 分野に注力：フロントエンドエンジニアリング、データベースと API 設計、フルスタック開発とデプロイ。",
+    "detailSummary": "主に Web/フルスタック志向。フロントエンドエンジニアリング、モダンフレームワークと状態管理、API とデータベース設計、性能最適化、デプロイ/運用を体系的に学習し、エンドツーエンドでの提供能力を養成。",
+    "coreCoursesTitle": "コア科目（Web 分野）",
+    "course1": "フロントエンドエンジニアリングと性能最適化",
+    "course2": "Web アプリ開発（React/Next.js）",
+    "course3": "データベースと API 設計（REST/GraphQL）",
+    "course4": "コンピュータネットワークとセキュリティ基礎",
+    "project1": "個人ブログ/コンテンツサイト（Next.js + コンテンツシステム）",
+    "project2": "バックエンド API とデータベースモデリング（Node.js/Prisma）",
+    "project3": "エンドツーエンドのデプロイと監視（Vercel/コンテナ）",
+    "achievement1": "藍橋杯 省大会 三等賞",
+    "achievement2": "全国計算機博弈大会・アインシュタインチェス 全国優勝"
   }
 }
