@@ -11,19 +11,19 @@ interface WaterfallItem {
   cardClassName?: string
 }
 
-interface WaterfallProps {
+interface WaterfallCoreProps {
   items: WaterfallItem[]
   columns?: number
   gap?: number
   className?: string
 }
 
-export default function Waterfall({ 
+export default function WaterfallCore({ 
   items, 
   columns = 2,
   gap = 24,
   className 
-}: WaterfallProps) {
+}: WaterfallCoreProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [columnHeights, setColumnHeights] = useState<number[]>([])

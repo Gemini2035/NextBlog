@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { Card } from '@/ui'
 import { cn } from '@/utils'
 import { CloseIcon } from '@/assets/icons'
@@ -210,6 +210,7 @@ export default function ExpandableWaterfall({
     return () => clearTimeout(timer)
   }, [mounted, items, gap])
 
+
   const handleItemClick = (itemId: string) => {
     if (isAnimating) return
     
@@ -252,18 +253,18 @@ export default function ExpandableWaterfall({
     }
   }
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape' && expandedItem) {
       handleCloseExpanded()
     }
-  }
+  }, [expandedItem])
 
   useEffect(() => {
     if (expandedItem) {
       document.addEventListener('keydown', handleKeyDown)
       return () => document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [expandedItem])
+  }, [expandedItem, handleKeyDown])
 
   if (!mounted) {
     return (
