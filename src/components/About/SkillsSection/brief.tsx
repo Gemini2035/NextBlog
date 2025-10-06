@@ -7,7 +7,7 @@ interface SkillsBriefProps {
 }
 
 export default function SkillsBrief({ className }: SkillsBriefProps) {
-  const navT = useTranslations('Navigation')
+  const skillsT = useTranslations('Skills')
 
   return (
     <div className={className}>
@@ -18,13 +18,13 @@ export default function SkillsBrief({ className }: SkillsBriefProps) {
           </svg>
         </div>
         <h2 className="text-xl font-bold text-gray-900">
-          {navT('Skills & Expertise')}
+          {skillsT('title')}
         </h2>
       </div>
 
       <div className="space-y-4" id="skills">
         <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">前端技术</h4>
+          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('frontendTech')}</h4>
           <div className="flex flex-wrap gap-1.5">
             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">React</span>
             <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Vue</span>
@@ -41,7 +41,7 @@ export default function SkillsBrief({ className }: SkillsBriefProps) {
           </div>
         </div>
         <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">后端技术</h4>
+          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('backendTech')}</h4>
           <div className="flex flex-wrap gap-1.5">
             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Node.js</span>
             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">PostgreSQL</span>
@@ -50,7 +50,7 @@ export default function SkillsBrief({ className }: SkillsBriefProps) {
           </div>
         </div>
         <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">开发工具</h4>
+          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('devTools')}</h4>
           <div className="flex flex-wrap gap-1.5">
             <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Git</span>
             <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Docker</span>
