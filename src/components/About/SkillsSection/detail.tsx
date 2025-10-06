@@ -33,23 +33,29 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
           <h3 className="text-xl font-semibold text-green-900 mb-6">核心技术栈</h3>
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium text-green-800 mb-3">前端开发</h4>
+              <h4 className="font-medium text-green-800 mb-3">前端技术</h4>
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">React</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Vue</span>
                 <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Next.js</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">HTML5</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">CSS3</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Vite</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Tailwind</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Magento</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Catalyst</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">ES6</span>
+                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">JavaScript</span>
                 <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">TypeScript</span>
-                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Vue.js</span>
-                <span className="px-3 py-1 bg-white text-blue-800 rounded-full text-sm font-medium">Tailwind CSS</span>
               </div>
             </div>
             <div>
-              <h4 className="font-medium text-green-800 mb-3">后端开发</h4>
+              <h4 className="font-medium text-green-800 mb-3">后端技术</h4>
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">Node.js</span>
-                <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">Express</span>
-                <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">Python</span>
                 <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">PostgreSQL</span>
-                <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">MongoDB</span>
+                <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">RESTful</span>
+                <span className="px-3 py-1 bg-white text-green-800 rounded-full text-sm font-medium">GraphQL</span>
               </div>
             </div>
             <div>
@@ -57,8 +63,11 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
               <div className="flex flex-wrap gap-2">
                 <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">Git</span>
                 <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">Docker</span>
-                <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">VS Code</span>
+                <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">VSCode</span>
+                <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">Cursor</span>
+                <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">ChatGPT</span>
                 <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">Figma</span>
+                <span className="px-3 py-1 bg-white text-purple-800 rounded-full text-sm font-medium">SF Symbol</span>
               </div>
             </div>
           </div>
