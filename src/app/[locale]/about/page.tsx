@@ -44,7 +44,7 @@ export default function AboutPage() {
               {
                 id: 'contact',
                 title: '联系方式',
-                description: '直接联系方式和邮箱地址',
+                description: navT('Contact Description'),
                 content: (
                   <div id="contact">
                     <ContactLinksBrief />

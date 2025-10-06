@@ -47,7 +47,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
             {navT('Contact Information')}
           </h2>
           <p className="text-lg text-gray-600">
-            多种联系方式，选择最适合的方式与我联系
+            {navT('Contact Description Detail')}
           </p>
         </div>
       </div>

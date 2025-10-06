@@ -198,6 +198,7 @@
     "Basic Information": "基础信息",
     "Personal Profile": "个人简介",
     "Contact Information": "联系方式",
+    "Contact Description": "通过邮箱联系我",
     "Professional Information": "专业信息",
     "Skills & Expertise": "技能专长",
     "Work Experience": "工作经历",
@@ -226,7 +227,8 @@
     "Join my community": "加入我的社区",
     "Visit my personal website": "访问我的个人网站",
     "Media Links": "媒体链接",
-    "Contact me directly": "直接联系我"
+    "Contact me directly": "直接联系我",
+    "Contact Description Detail": "通过邮箱联系我，选择最适合的邮箱地址"
   },
   "Contact": {
     "contactButton": "联系我",

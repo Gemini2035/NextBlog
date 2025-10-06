@@ -198,6 +198,7 @@
     "Basic Information": "Basic Information",
     "Personal Profile": "Personal Profile",
     "Contact Information": "Contact Information",
+    "Contact Description": "Contact me via email",
     "Professional Information": "Professional Information",
     "Skills & Expertise": "Skills & Expertise",
     "Work Experience": "Work Experience",
@@ -226,7 +227,8 @@
     "Join my community": "Join my community",
     "Visit my personal website": "Visit my personal website",
     "Media Links": "Media Links",
-    "Contact me directly": "Contact me directly"
+    "Contact me directly": "Contact me directly",
+    "Contact Description Detail": "Contact me via email, choose the most suitable email address"
   },
   "Contact": {
     "contactButton": "Contact Me",

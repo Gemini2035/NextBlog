@@ -23,7 +23,7 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
             {navT('Contact Information')}
           </h3>
           <p className="text-sm text-gray-600">
-            直接联系方式和邮箱地址
+            {navT('Contact Description')}
           </p>
         </div>
       </div>
