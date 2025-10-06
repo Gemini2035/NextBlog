@@ -12,8 +12,8 @@ export default function EducationDetail({ className }: EducationDetailProps) {
   return (
     <div className={className}>
       <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mr-6">
-          <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
+          <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
           </svg>
@@ -68,8 +68,8 @@ export default function EducationDetail({ className }: EducationDetailProps) {
       <div className="mb-8">
         <h3 className="text-2xl font-semibold text-gray-900 mb-6">{eduT('achievementsTitle')}</h3>
         <div className="grid md:grid-cols-2 gap-6">
-          <div className="p-6 bg-purple-50 rounded-xl">
-            <h4 className="text-lg font-semibold text-purple-900 mb-4">{eduT('achievementsTitle')}</h4>
+          <div className="p-6 bg-gray-50 rounded-xl">
+            <h4 className="text-lg font-semibold text-gray-900 mb-4">{eduT('achievementsTitle')}</h4>
             <div className="space-y-3">
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
@@ -82,8 +82,8 @@ export default function EducationDetail({ className }: EducationDetailProps) {
             </div>
           </div>
           
-          <div className="p-6 bg-blue-50 rounded-xl">
-            <h4 className="text-lg font-semibold text-blue-900 mb-4">{eduT('projectsTitle')}</h4>
+          <div className="p-6 bg-gray-50 rounded-xl">
+            <h4 className="text-lg font-semibold text-gray-900 mb-4">{eduT('projectsTitle')}</h4>
             <div className="space-y-3">
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>

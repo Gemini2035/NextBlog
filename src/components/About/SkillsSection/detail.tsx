@@ -48,8 +48,8 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
   return (
     <div className={className}>
       <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mr-6">
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
+          <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
           </svg>
         </div>
@@ -65,11 +65,11 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
 
       <div className="space-y-8" id="skills">
         {/* 核心技术栈 */}
-        <div className="p-6 bg-green-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-green-900 mb-6">{skillsT('coreTechStack')}</h3>
+        <div className="p-6 bg-gray-50 rounded-xl">
+          <h3 className="text-xl font-semibold text-gray-900 mb-6">{skillsT('coreTechStack')}</h3>
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium text-green-800 mb-3">{skillsT('frontendTech')}</h4>
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('frontendTech')}</h4>
               <div className="flex flex-wrap gap-2">
                 <TechTag name="React" color="text-blue-800" isSelected={selectedTech === 'React'} onClick={() => handleTechClick('React')} />
                 <TechTag name="Vue" color="text-blue-800" isSelected={selectedTech === 'Vue'} onClick={() => handleTechClick('Vue')} />
@@ -86,7 +86,7 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
               </div>
             </div>
             <div>
-              <h4 className="font-medium text-green-800 mb-3">{skillsT('backendTech')}</h4>
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('backendTech')}</h4>
               <div className="flex flex-wrap gap-2">
                 <TechTag name="Node.js" color="text-green-800" isSelected={selectedTech === 'NodeJS'} onClick={() => handleTechClick('NodeJS')} />
                 <TechTag name="PostgreSQL" color="text-green-800" isSelected={selectedTech === 'PostgreSQL'} onClick={() => handleTechClick('PostgreSQL')} />
@@ -95,7 +95,7 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
               </div>
             </div>
             <div>
-              <h4 className="font-medium text-green-800 mb-3">{skillsT('devTools')}</h4>
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('devTools')}</h4>
               <div className="flex flex-wrap gap-2">
                 <TechTag name="Git" color="text-purple-800" isSelected={selectedTech === 'Git'} onClick={() => handleTechClick('Git')} />
                 <TechTag name="Docker" color="text-purple-800" isSelected={selectedTech === 'Docker'} onClick={() => handleTechClick('Docker')} />
@@ -111,17 +111,17 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
 
         {/* 技术描述显示区域 */}
         {selectedTech && (
-          <div className="p-6 bg-blue-50 rounded-xl border-l-4 border-blue-500">
+          <div className="p-6 bg-gray-50 rounded-xl border-l-4 border-gray-300">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-blue-900 mb-2">{selectedTech}</h3>
-                <p className="text-blue-700 leading-relaxed">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedTech}</h3>
+                <p className="text-gray-700 leading-relaxed">
                   {getTechDescription(selectedTech)}
                 </p>
               </div>
               <button
                 onClick={() => setSelectedTech(null)}
-                className="ml-4 p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full transition-colors"
+                className="ml-4 p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="关闭描述"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,56 +133,56 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
         )}
 
         {/* 专业领域 */}
-        <div className="p-6 bg-purple-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-purple-900 mb-6">{skillsT('specializedAreas')}</h3>
+        <div className="p-6 bg-gray-50 rounded-xl">
+          <h3 className="text-xl font-semibold text-gray-900 mb-6">{skillsT('specializedAreas')}</h3>
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium text-purple-800 mb-3">{skillsT('codeArchitecture')}</h4>
-              <ul className="space-y-2 text-purple-700">
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('codeArchitecture')}</h4>
+              <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('frontendArchitecture')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('microserviceArchitecture')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('performanceOptimization')}
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-purple-800 mb-3">{skillsT('teamCollaboration')}</h4>
-              <ul className="space-y-2 text-purple-700">
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('teamCollaboration')}</h4>
+              <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('agileDevelopment')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('codeReview')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('techSharing')}
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="font-medium text-purple-800 mb-3">{skillsT('projectManagement')}</h4>
-              <ul className="space-y-2 text-purple-700">
+              <h4 className="font-medium text-gray-800 mb-3">{skillsT('projectManagement')}</h4>
+              <ul className="space-y-2 text-gray-700">
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('projectPlanning')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('riskManagement')}
                 </li>
                 <li className="flex items-center">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
                   {skillsT('crossTeamCommunication')}
                 </li>
               </ul>

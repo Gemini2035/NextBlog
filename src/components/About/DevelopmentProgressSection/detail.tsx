@@ -27,7 +27,7 @@ export default function DevelopmentProgressDetail({ className }: DevelopmentProg
       
       <div className="space-y-8">
         <div className="relative">
-          <div className="absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-500 to-blue-300 rounded-full"></div>
+          <div className="absolute left-6 top-0 bottom-0 w-1 bg-gray-300 rounded-full"></div>
           
           <div className="space-y-12">
             <div className="relative flex items-start space-x-6">
@@ -145,7 +145,7 @@ export default function DevelopmentProgressDetail({ className }: DevelopmentProg
       </div>
 
       {/* 发展里程碑 */}
-      <div className="mt-12 p-8 bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl">
+      <div className="mt-12 p-8 bg-gray-50 rounded-2xl">
         <h3 className="text-2xl font-semibold text-gray-900 mb-6 text-center">发展里程碑</h3>
         <div className="grid md:grid-cols-3 gap-6">
           <div className="text-center">

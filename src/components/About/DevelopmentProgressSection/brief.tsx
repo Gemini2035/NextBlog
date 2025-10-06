@@ -22,7 +22,7 @@ export default function DevelopmentProgressBrief({ className }: DevelopmentProgr
       
       <div className="space-y-4">
         <div className="relative">
-          <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-blue-300"></div>
+          <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-300"></div>
           
           <div className="space-y-4">
             <div className="relative flex items-start space-x-3">

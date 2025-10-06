@@ -50,8 +50,8 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
   return (
     <div className={`${className} group`}>
       <div className="flex items-center mb-4">
-        <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
-          <ContactIcon className="w-5 h-5 text-gray-700" />
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3 shrink-0">
+          <ContactIcon className="w-5 h-5 text-blue-600" />
         </div>
         <div>
           <h3 className="text-lg font-bold text-gray-900 mb-1">
@@ -70,7 +70,7 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
           return (
             <div
               key={method.key}
-              className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0"
+              className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
               title={method.name}
             >
               <IconComponent className="w-6 h-6 text-gray-700" />

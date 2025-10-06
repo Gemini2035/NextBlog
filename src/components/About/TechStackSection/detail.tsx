@@ -83,8 +83,8 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
       {/* 技术栈特点 */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="p-6 bg-blue-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-blue-900 mb-4">技术特点</h3>
+        <div className="p-6 bg-gray-50 rounded-xl">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">技术特点</h3>
           <ul className="space-y-3">
             <li className="flex items-start">
               <div className="w-2 h-2 bg-blue-500 rounded-full mr-3 mt-2"></div>
@@ -110,8 +110,8 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
           </ul>
         </div>
 
-        <div className="p-6 bg-green-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-green-900 mb-4">开发体验</h3>
+        <div className="p-6 bg-gray-50 rounded-xl">
+          <h3 className="text-xl font-semibold text-gray-900 mb-4">开发体验</h3>
           <ul className="space-y-3">
             <li className="flex items-start">
               <div className="w-2 h-2 bg-green-500 rounded-full mr-3 mt-2"></div>

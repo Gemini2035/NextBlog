@@ -6,7 +6,7 @@ export default function AboutPage() {
   const navT = useTranslations('Navigation')
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* 页面标题 */}
         <div className="text-center mb-12">
@@ -39,7 +39,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'contact',
@@ -56,7 +56,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'social',
@@ -73,7 +73,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'short',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'skills',
@@ -90,7 +90,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'tall',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'education',
@@ -107,7 +107,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'short',
-                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
+                cardClassName: 'bg-gray-50'
               },
               // 站点信息 (Site Information)
               {
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'development',
@@ -142,7 +142,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'tall',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               // 相关资源 (Related Resources)
               {
@@ -160,7 +160,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'online-services',
@@ -177,7 +177,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-50 to-white'
+                cardClassName: 'bg-gray-50'
               },
               {
                 id: 'protocols',
@@ -194,7 +194,7 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gradient-to-r from-blue-100 to-white'
+                cardClassName: 'bg-gray-50'
               }
             ]}
           />

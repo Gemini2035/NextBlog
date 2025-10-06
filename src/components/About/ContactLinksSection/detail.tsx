@@ -51,8 +51,8 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
   return (
     <div className={className}>
       <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mr-6">
-          <ContactIcon className="w-8 h-8 text-gray-700" />
+        <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mr-6 shrink-0">
+          <ContactIcon className="w-8 h-8 text-blue-600" />
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -77,7 +77,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
               className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
             >
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
                   <IconComponent className="w-6 h-6 text-gray-700" />
                 </div>
                 <div className="flex-1 min-w-0">
