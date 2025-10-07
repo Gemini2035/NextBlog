@@ -118,6 +118,39 @@
     "visit": "访问",
     "onlineServices": "在线服务",
     "onlineServicesDescription": "项目部署和维护使用的在线服务",
+    "onlineServicesBrief": {
+      "vercel": "部署平台",
+      "githubActions": "CI/CD",
+      "seo": "SEO工具",
+      "godaddy": "数据分析"
+    },
+    "onlineServicesDetail": {
+      "description": "项目部署、托管和监控使用的在线服务平台",
+      "visitWebsite": "访问网站",
+      "viewDocs": "查看文档",
+      "paid": "付费",
+      "hostingDeployment": "托管与部署",
+      "domainServices": "域名服务",
+      "analyticsMonitoring": "分析与监控",
+      "versionControlCICD": "版本控制与CI/CD",
+      "categories": {
+        "hosting": "托管服务",
+        "deployment": "部署平台",
+        "domain": "域名注册",
+        "analytics": "数据分析",
+        "seo": "SEO工具",
+        "versionControl": "版本控制",
+        "cicd": "CI/CD"
+      },
+      "services": {
+        "vercel": "现代化的前端部署平台，提供自动化构建、预览和全球 CDN 加速",
+        "godaddyDomain": "本站域名由 GoDaddy 提供注册和管理服务，提供稳定可靠的域名解析和管理功能",
+        "searchConsole": "Google 搜索优化工具，监控网站在搜索结果中的表现和索引状态",
+        "godaddy": "GoDaddy 网站分析工具，提供域名管理和网站流量监控功能",
+        "github": "全球最大的代码托管平台，提供版本控制、协作开发和 CI/CD 功能",
+        "githubActions": "GitHub 提供的自动化 CI/CD 平台，用于构建、测试和部署代码工作流"
+      }
+    },
     "hosting": "托管服务",
     "deployment": "部署平台",
     "analytics": "数据分析",
