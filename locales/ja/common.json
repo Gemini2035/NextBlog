@@ -260,6 +260,39 @@
     "visit": "訪問",
     "onlineServices": "オンラインサービス",
     "onlineServicesDescription": "プロジェクトのデプロイとメンテナンスに使用されるオンラインサービス",
+    "onlineServicesBrief": {
+      "vercel": "デプロイメント",
+      "githubActions": "CI/CD",
+      "seo": "SEO",
+      "godaddy": "分析"
+    },
+    "onlineServicesDetail": {
+      "description": "プロジェクトのデプロイ、ホスティング、監視に使用するオンラインサービスプラットフォーム",
+      "visitWebsite": "ウェブサイト",
+      "viewDocs": "ドキュメント",
+      "paid": "有料",
+      "hostingDeployment": "ホスティングとデプロイ",
+      "domainServices": "ドメインサービス",
+      "analyticsMonitoring": "分析と監視",
+      "versionControlCICD": "バージョン管理とCI/CD",
+      "categories": {
+        "hosting": "ホスティング",
+        "deployment": "デプロイメント",
+        "domain": "ドメイン登録",
+        "analytics": "分析",
+        "seo": "SEOツール",
+        "versionControl": "バージョン管理",
+        "cicd": "CI/CD"
+      },
+      "services": {
+        "vercel": "自動ビルド、プレビューデプロイ、グローバルCDNアクセラレーションを備えたモダンなフロントエンドデプロイメントプラットフォーム",
+        "godaddyDomain": "本サイトのドメイン登録と管理サービスをGoDaddyが提供し、安定したDNS解決とドメイン管理機能を提供",
+        "searchConsole": "検索結果におけるウェブサイトのパフォーマンスとインデックス状態を監視するGoogle検索最適化ツール",
+        "godaddy": "ドメイン管理とウェブサイトトラフィック監視機能を提供するGoDaddyウェブサイト分析ツール",
+        "github": "バージョン管理、共同開発、CI/CD機能を備えた世界最大のコードホスティングプラットフォーム",
+        "githubActions": "コードワークフローの構築、テスト、デプロイを行うGitHubの自動化CI/CDプラットフォーム"
+      }
+    },
     "hosting": "ホスティングサービス",
     "deployment": "デプロイメントプラットフォーム",
     "analytics": "データ分析",
