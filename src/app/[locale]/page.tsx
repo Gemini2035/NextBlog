@@ -26,9 +26,8 @@ export default function Home() {
   const sections = [
     getNav('__blog'),
     getNav('__about'),
-    getNav('__projects'),
-    getNav('__resources')
-  ].filter(Boolean) as Array<{ type: '__blog' | '__about' | '__projects' | '__resources'; href: string }>
+    getNav('__projects')
+  ].filter(Boolean) as Array<{ type: '__blog' | '__about' | '__projects'; href: string }>
 
   // 获取博客区域的引用
   const blogSectionRef = useRef<HTMLDivElement>(null)

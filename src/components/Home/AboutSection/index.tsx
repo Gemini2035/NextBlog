@@ -17,6 +17,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
 
   // 获取about section的导航配置
   const aboutNav = NAVIGATION_ITEMS.find(item => item.type === '__about')
+  const aboutDescription = aboutNav?.submenu?.description || 'Learn about my background, skills, experience and contact information'
   const submenuItems = aboutNav?.submenu?.items || []
 
   return (
@@ -26,7 +27,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
           {t('aboutTitle', { default: '关于我' })}
         </h2>
         <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
-          {t('aboutIntro', { default: '我是谁，我的故事，联系我。' })}
+          {navT(aboutDescription, { default: aboutDescription })}
         </p>
 
         {/* 快速导航链接 */}

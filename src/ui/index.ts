@@ -69,3 +69,14 @@ export type {
   EmptyStateVariant,
   EmptyStateIconType
 } from './EmptyState'
+export { Timeline, TimelineItem } from './Timeline'
+export type { 
+  TimelineProps, 
+  TimelineRef,
+  TimelineMode,
+  TimelineSize,
+  TimelineColor,
+  TimelineStatus,
+  TimelineItemProps, 
+  TimelineItemRef
+} from './Timeline'

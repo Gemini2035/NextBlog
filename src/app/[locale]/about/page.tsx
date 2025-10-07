@@ -1,95 +1,217 @@
-import { SITE_CONFIG } from '@/constants'
-import { GitHubIcon, TwitterIcon, LinkedInIcon } from '@/assets/icons'
-import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
+import { Card } from '@/ui'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentHistoryBrief, DevelopmentHistoryDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
-  const t = useTranslations('AboutPage')
+  const navT = useTranslations('Navigation')
   
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white  rounded-lg shadow-md overflow-hidden">
-          <div className="px-8 py-12">
-            <h1 className="text-3xl font-bold text-gray-900  mb-8">
-              {t('title')}
-            </h1>
-            
-            <div className="prose prose-lg max-w-none ">
-              <p className="text-lg text-gray-600  mb-6">
-                {t('welcome', { siteTitle: SITE_CONFIG.title })}
-              </p>
-              
-              <h2 className="text-2xl font-semibold text-gray-900  mt-8 mb-4">
-                {t('techStack')}
-              </h2>
-              <p className="text-gray-600  mb-6">
-                {t('techStackDescription')}
-              </p>
-              <ul className="list-disc pl-6 text-gray-600  mb-6">
-                <li><strong>{t('nextjs')}</strong></li>
-                <li><strong>{t('contentlayer')}</strong></li>
-                <li><strong>{t('mdx')}</strong></li>
-                <li><strong>{t('tailwind')}</strong></li>
-                <li><strong>{t('typescript')}</strong></li>
-                <li><strong>{t('githubPages')}</strong></li>
-              </ul>
-              
-              <h2 className="text-2xl font-semibold text-gray-900  mt-8 mb-4">
-                {t('features')}
-              </h2>
-              <ul className="list-disc pl-6 text-gray-600  mb-6">
-                <li>{t('feature1')}</li>
-                <li>{t('feature2')}</li>
-                <li>{t('feature3')}</li>
-                <li>{t('feature4')}</li>
-                <li>{t('feature5')}</li>
-                <li>{t('feature6')}</li>
-              </ul>
-              
-              <h2 className="text-2xl font-semibold text-gray-900  mt-8 mb-4">
-                {t('contact')}
-              </h2>
-              <div className="flex space-x-4">
-                {SITE_CONFIG.social.github && (
-                  <Link
-                    href={SITE_CONFIG.social.github}
-                    external
-                    className="text-gray-400 hover:text-gray-600  transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="GitHub"
-                  >
-                    <GitHubIcon className="w-6 h-6" />
-                  </Link>
-                )}
-                {SITE_CONFIG.social.twitter && (
-                  <Link
-                    href={SITE_CONFIG.social.twitter}
-                    external
-                    className="text-gray-400 hover:text-gray-600  transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Twitter"
-                  >
-                    <TwitterIcon className="w-6 h-6" />
-                  </Link>
-                )}
-                {SITE_CONFIG.social.linkedin && (
-                  <Link
-                    href={SITE_CONFIG.social.linkedin}
-                    external
-                    className="text-gray-400 hover:text-gray-600  transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                  >
-                    <LinkedInIcon className="w-6 h-6" />
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* 页面标题 */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+            {navT('About Me')}
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            {navT('Learn about my background, skills, experience and contact information')}
+          </p>
         </div>
+
+        {/* 主要内容区域 - 使用ExpandableWaterfall */}
+        <div className="mb-12">
+          <ExpandableWaterfall
+            columns={2}
+            items={[
+              // 站主信息 (Owner Information)
+              {
+                id: 'basic-info',
+                title: '个人信息',
+                description: '查看我的基本信息和联系方式',
+                anchorId: 'profile',
+                content: (
+                  <div id="profile">
+                    <BasicInfoBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <BasicInfoDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'contact',
+                title: '联系方式',
+                description: navT('Contact Description'),
+                anchorId: 'contact',
+                content: (
+                  <div id="contact">
+                    <ContactLinksBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <ContactLinksDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'social',
+                title: '社交链接',
+                description: '关注我的社交媒体和平台',
+                anchorId: 'social',
+                content: (
+                  <div id="social">
+                    <SocialLinksBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <SocialLinksDetail />
+                  </div>
+                ),
+                height: 'short',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'skills',
+                title: '技能专长',
+                description: '查看我的技术技能和专业能力',
+                anchorId: 'skills',
+                content: (
+                  <div id="skills">
+                    <SkillsBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <SkillsDetail />
+                  </div>
+                ),
+                height: 'tall',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'education',
+                title: '教育背景',
+                description: '查看我的教育经历和学习成果',
+                anchorId: 'education',
+                content: (
+                  <div id="education">
+                    <EducationBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <EducationDetail />
+                  </div>
+                ),
+                height: 'short',
+                cardClassName: 'bg-gray-50'
+              },
+              // 站点信息 (Site Information)
+              {
+                id: 'tech-stack',
+                title: '技术栈',
+                description: '查看项目使用的技术栈',
+                anchorId: 'tech-stack',
+                content: (
+                  <div id="tech-stack">
+                    <TechStackBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <TechStackDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'development-history',
+                title: '发展历程',
+                description: '查看博客从1.0到2.0的完整发展历程',
+                anchorId: 'development-history',
+                content: (
+                  <div id="development-history">
+                    <DevelopmentHistoryBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <DevelopmentHistoryDetail />
+                  </div>
+                ),
+                height: 'tall',
+                cardClassName: 'bg-gray-50'
+              },
+              // 相关资源 (Related Resources)
+              {
+                id: 'open-source',
+                title: '开源库',
+                description: '查看使用的开源库和框架',
+                anchorId: 'open-source',
+                content: (
+                  <div id="open-source">
+                    <OpenSourceLibrariesBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <OpenSourceLibrariesDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'online-services',
+                title: '在线服务',
+                description: '查看使用的在线服务',
+                anchorId: 'online-services',
+                content: (
+                  <div id="online-services">
+                    <OnlineServicesBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <OnlineServicesDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'protocols',
+                title: '开发协议',
+                description: '查看开发规范和协议',
+                anchorId: 'protocols',
+                content: (
+                  <div id="protocols">
+                    <DevelopmentProtocolsBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <DevelopmentProtocolsDetail />
+                  </div>
+                ),
+                height: 'medium',
+                cardClassName: 'bg-gray-50'
+              }
+            ]}
+          />
+        </div>
+
+
+      </div>
     </div>
   )
 }
