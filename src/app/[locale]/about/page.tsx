@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
-import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, DevelopmentHistoryBrief, DevelopmentHistoryDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentHistoryBrief, DevelopmentHistoryDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
   const navT = useTranslations('Navigation')
@@ -131,24 +131,6 @@ export default function AboutPage() {
                   </div>
                 ),
                 height: 'medium',
-                cardClassName: 'bg-gray-50'
-              },
-              {
-                id: 'development',
-                title: '发展历史',
-                description: '查看项目的发展历程',
-                anchorId: 'development',
-                content: (
-                  <div id="development">
-                    <DevelopmentProgressBrief />
-                  </div>
-                ),
-                expandedContent: (
-                  <div>
-                    <DevelopmentProgressDetail />
-                  </div>
-                ),
-                height: 'tall',
                 cardClassName: 'bg-gray-50'
               },
               {

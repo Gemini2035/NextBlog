@@ -9,7 +9,6 @@ interface DevelopmentHistoryDetailProps {
 
 export default function DevelopmentHistoryDetail({ className }: DevelopmentHistoryDetailProps) {
   const t = useTranslations('DevelopmentHistory')
-  const tAbout = useTranslations('AboutPage')
 
   return (
     <div className={className} id="development-history">
@@ -19,10 +18,10 @@ export default function DevelopmentHistoryDetail({ className }: DevelopmentHisto
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {tAbout('developmentHistory')}
+            {t('sectionTitle')}
           </h2>
           <p className="text-lg text-gray-600">
-            {tAbout('developmentHistoryDescription')}
+            {t('sectionDescription')}
           </p>
         </div>
       </div>
