@@ -8,7 +8,7 @@ interface DevelopmentHistoryBriefProps {
 }
 
 export default function DevelopmentHistoryBrief({ className }: DevelopmentHistoryBriefProps) {
-  const t = useTranslations('AboutPage')
+  const t = useTranslations('DevelopmentHistory')
 
   return (
     <div className={className}>
@@ -34,19 +34,19 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
               <div className="flex-1 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-semibold text-gray-900">
-                    Blog 1.0
+                    {t('blog1Title')}
                   </h3>
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">
-                    2023 - 2025
+                  <span className="px-2 py-0.5 bg-gray-400 text-gray-800 text-xs rounded-full">
+                    {t('blog1Period')}
                   </span>
                 </div>
                 <p className="text-xs text-gray-600 mb-2">
-                  初始版本，基础功能实现
+                  {t('blog1Description')}
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">React</span>
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">Next.js</span>
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">MDX</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">{t('techTags.vue3')}</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">{t('techTags.vite')}</span>
+                  <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full">{t('techTags.githubPages')}</span>
                 </div>
               </div>
             </div>
@@ -59,19 +59,19 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
               <div className="flex-1 bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-sm font-semibold text-gray-900">
-                    Blog 2.0
+                    {t('blog2Title')}
                   </h3>
                   <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">
-                    2025 - 至今
+                    {t('blog2Period')}
                   </span>
                 </div>
                 <p className="text-xs text-gray-600 mb-2">
-                  全面升级，现代化架构
+                  {t('blog2Description')}
                 </p>
                 <div className="flex flex-wrap gap-1">
-                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">i18n</span>
-                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">SEO</span>
-                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">Performance</span>
+                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">{t('techTags.nextjs15')}</span>
+                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">{t('techTags.i18n')}</span>
+                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full">{t('techTags.typescript')}</span>
                 </div>
               </div>
             </div>
