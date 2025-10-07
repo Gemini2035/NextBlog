@@ -1,6 +1,13 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { 
+  OpenSourceIcon, 
+  ReactIcon, 
+  NextJsIcon, 
+  ContentlayerIcon, 
+  TailwindIcon 
+} from '@/assets/icons'
 
 interface OpenSourceLibrariesBriefProps {
   className?: string
@@ -12,8 +19,8 @@ export default function OpenSourceLibrariesBrief({ className }: OpenSourceLibrar
   return (
     <div className={className}>
       <div className="flex items-center mb-4">
-        <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mr-3">
-          <span className="text-lg">📚</span>
+        <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3 shrink-0">
+          <OpenSourceIcon className="w-5 h-5 text-blue-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">
           {t('openSourceLibraries')}
@@ -23,54 +30,54 @@ export default function OpenSourceLibrariesBrief({ className }: OpenSourceLibrar
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center mr-2">
-              <span className="text-blue-600 text-sm">⚛️</span>
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <ReactIcon className="w-4 h-4 text-gray-700" />
             </div>
             <div>
               <h3 className="font-medium text-gray-900 text-sm">React</h3>
-              <p className="text-xs text-gray-600">UI Library</p>
+              <p className="text-xs text-gray-600">{t('openSourceLibrariesBrief.react')}</p>
             </div>
           </div>
-          <span className="text-xs text-gray-500">v18.2.0+</span>
+          <span className="text-xs text-gray-500">v19.1.0</span>
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-black rounded flex items-center justify-center mr-2">
-              <span className="text-white text-sm">▲</span>
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <NextJsIcon className="w-4 h-4 text-gray-700" />
             </div>
             <div>
               <h3 className="font-medium text-gray-900 text-sm">Next.js</h3>
-              <p className="text-xs text-gray-600">Framework</p>
+              <p className="text-xs text-gray-600">{t('openSourceLibrariesBrief.nextjs')}</p>
             </div>
           </div>
-          <span className="text-xs text-gray-500">v15.0.0+</span>
+          <span className="text-xs text-gray-500">v15.5.3</span>
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-blue-100 rounded flex items-center justify-center mr-2">
-              <span className="text-blue-600 text-sm">📝</span>
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <ContentlayerIcon className="w-4 h-4 text-gray-700" />
             </div>
             <div>
               <h3 className="font-medium text-gray-900 text-sm">Contentlayer</h3>
-              <p className="text-xs text-gray-600">CMS</p>
+              <p className="text-xs text-gray-600">{t('openSourceLibrariesBrief.contentlayer')}</p>
             </div>
           </div>
-          <span className="text-xs text-gray-500">v0.3.0+</span>
+          <span className="text-xs text-gray-500">v0.5.8</span>
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
           <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-cyan-100 rounded flex items-center justify-center mr-2">
-              <span className="text-cyan-600 text-sm">🎨</span>
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <TailwindIcon className="w-4 h-4 text-gray-700" />
             </div>
             <div>
-              <h3 className="font-medium text-gray-900 text-sm">Tailwind</h3>
-              <p className="text-xs text-gray-600">CSS</p>
+              <h3 className="font-medium text-gray-900 text-sm">Tailwind CSS</h3>
+              <p className="text-xs text-gray-600">{t('openSourceLibrariesBrief.tailwind')}</p>
             </div>
           </div>
-          <span className="text-xs text-gray-500">v3.4.0+</span>
+          <span className="text-xs text-gray-500">v4.0.0</span>
         </div>
       </div>
     </div>
