@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
-import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
+import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentProgressBrief, DevelopmentProgressDetail, DevelopmentHistoryBrief, DevelopmentHistoryDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
   const navT = useTranslations('Navigation')
@@ -146,6 +146,24 @@ export default function AboutPage() {
                 expandedContent: (
                   <div>
                     <DevelopmentProgressDetail />
+                  </div>
+                ),
+                height: 'tall',
+                cardClassName: 'bg-gray-50'
+              },
+              {
+                id: 'development-history',
+                title: '发展历程',
+                description: '查看博客从1.0到2.0的完整发展历程',
+                anchorId: 'development-history',
+                content: (
+                  <div id="development-history">
+                    <DevelopmentHistoryBrief />
+                  </div>
+                ),
+                expandedContent: (
+                  <div>
+                    <DevelopmentHistoryDetail />
                   </div>
                 ),
                 height: 'tall',

@@ -51,6 +51,8 @@
     "githubPages": "GitHub Pages - 静态网站托管",
     "developmentProgress": "发展历史",
     "developmentProgressDescription": "这个博客的构建历程和主要里程碑",
+    "developmentHistory": "发展历程",
+    "developmentHistoryDescription": "博客从1.0到2.0的完整发展历程，包含各版本的详细功能演进",
     "phase1Title": "项目初始化阶段",
     "phase1Description": "搭建基础框架，配置开发环境，建立项目结构",
     "phase2Title": "内容管理系统",
