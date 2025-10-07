@@ -34,9 +34,12 @@ export const getTimelineStyles = (
 export const getTimelineItemStyles = (
   mode: TimelineMode = 'left',
   size: TimelineSize = 'md',
-  status: TimelineStatus = 'process',
-  color: TimelineColor = 'blue',
-  showLine: boolean = true,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _status: TimelineStatus = 'process',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _color: TimelineColor = 'blue',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _showLine: boolean = true,
   className?: string
 ): string => {
   const baseStyles = 'relative flex items-start'
@@ -116,7 +119,8 @@ export const getTimelineDotStyles = (
  * 获取 Timeline 内容区域的样式类名
  */
 export const getTimelineContentStyles = (
-  mode: TimelineMode = 'left',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _mode: TimelineMode = 'left',
   size: TimelineSize = 'md',
   className?: string
 ): string => {

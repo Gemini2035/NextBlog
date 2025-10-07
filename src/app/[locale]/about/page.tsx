@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl'
-import { Card } from '@/ui'
 import { BasicInfoBrief, BasicInfoDetail, SkillsBrief, SkillsDetail, EducationBrief, EducationDetail, TechStackBrief, TechStackDetail, DevelopmentHistoryBrief, DevelopmentHistoryDetail, OpenSourceLibrariesBrief, OpenSourceLibrariesDetail, OnlineServicesBrief, OnlineServicesDetail, DevelopmentProtocolsBrief, DevelopmentProtocolsDetail, ContactLinksBrief, ContactLinksDetail, SocialLinksBrief, SocialLinksDetail, ExpandableWaterfall } from '@/components/About'
 
 export default function AboutPage() {
