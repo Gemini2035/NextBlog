@@ -169,8 +169,136 @@
     "searchConsoleDescription": "Google搜索优化工具",
     "free": "免费",
     "learnMore": "了解更多",
-    "developmentProtocols": "开发协议",
-    "developmentProtocolsDescription": "项目开发和维护遵循的规范和协议",
+    "developmentProtocols": "国际协议",
+    "developmentProtocolsDescription": "本站遵循的国际标准和协议规范",
+    "protocolsBrief": {
+      "wcag": "WCAG 2.1",
+      "ccLicense": "CC BY-NC-SA 4.0",
+      "https": "HTTPS/TLS 1.3",
+      "opengraph": "OpenGraph"
+    },
+    "protocolsDetail": {
+      "title": "遵循的国际协议",
+      "description": "本站严格遵循以下国际标准和协议，确保网站的可访问性、安全性和互操作性",
+      "viewSpec": "查看规范",
+      "officialSite": "官方网站",
+      "keyFeatures": "主要特性",
+      "categories": {
+        "accessibility": "可访问性",
+        "licensing": "内容许可",
+        "security": "安全传输",
+        "metadata": "元数据标准",
+        "syndication": "内容分发",
+        "markup": "标记规范",
+        "api": "API规范"
+      },
+      "protocols": {
+        "wcag": {
+          "name": "WCAG 2.1",
+          "fullName": "Web内容无障碍指南 2.1",
+          "description": "由W3C制定的Web无障碍国际标准，确保网站内容对所有用户（包括残障人士）都可访问",
+          "features": [
+            "语义化HTML结构",
+            "键盘导航支持",
+            "适当的颜色对比度",
+            "ARIA标签支持",
+            "屏幕阅读器兼容"
+          ],
+          "url": "https://www.w3.org/WAI/WCAG21/quickref/"
+        },
+        "ccLicense": {
+          "name": "CC BY-NC-SA 4.0",
+          "fullName": "知识共享 署名-非商业性使用-相同方式共享 4.0",
+          "description": "国际通用的内容授权协议，允许他人在非商业用途下共享和修改内容",
+          "features": [
+            "署名 (BY) - 必须注明作者",
+            "非商业 (NC) - 仅限非商业用途",
+            "相同方式共享 (SA) - 需使用相同许可",
+            "国际认可的版权标准",
+            "自由文化许可证"
+          ],
+          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
+        },
+        "https": {
+          "name": "HTTPS/TLS 1.3",
+          "fullName": "超文本传输安全协议 / 传输层安全协议",
+          "description": "互联网安全通信的国际标准协议，确保数据传输的加密和完整性",
+          "features": [
+            "端到端加密传输",
+            "TLS 1.3 最新协议",
+            "防止中间人攻击",
+            "数据完整性验证",
+            "现代加密算法支持"
+          ],
+          "url": "https://tools.ietf.org/html/rfc8446"
+        },
+        "opengraph": {
+          "name": "Open Graph Protocol",
+          "fullName": "开放图谱协议",
+          "description": "由Facebook制定的社交媒体元数据标准，优化内容在社交平台的展示效果",
+          "features": [
+            "社交媒体预览优化",
+            "统一的元数据格式",
+            "支持多平台分享",
+            "富媒体内容展示",
+            "SEO优化支持"
+          ],
+          "url": "https://ogp.me/"
+        },
+        "schema": {
+          "name": "Schema.org",
+          "fullName": "结构化数据标准",
+          "description": "由Google、Microsoft、Yahoo等制定的结构化数据标准，提升搜索引擎理解",
+          "features": [
+            "语义化数据标记",
+            "搜索引擎优化",
+            "富媒体搜索结果",
+            "JSON-LD格式",
+            "多种内容类型支持"
+          ],
+          "url": "https://schema.org/"
+        },
+        "rss": {
+          "name": "RSS 2.0 / Atom",
+          "fullName": "内容订阅协议",
+          "description": "标准化的内容聚合和订阅格式，支持用户通过RSS阅读器订阅内容",
+          "features": [
+            "标准化内容格式",
+            "支持RSS和Atom",
+            "自动内容更新",
+            "跨平台订阅",
+            "聚合器兼容"
+          ],
+          "url": "https://www.rssboard.org/rss-specification"
+        },
+        "html5": {
+          "name": "Semantic HTML5",
+          "fullName": "语义化HTML5标准",
+          "description": "W3C制定的现代Web标记标准，使用语义化标签提升可访问性和SEO",
+          "features": [
+            "语义化标签结构",
+            "可访问性提升",
+            "SEO友好",
+            "现代Web标准",
+            "向后兼容"
+          ],
+          "url": "https://html.spec.whatwg.org/"
+        },
+        "restful": {
+          "name": "RESTful API",
+          "fullName": "表述性状态转移API规范",
+          "description": "基于HTTP的API设计架构风格，提供标准化的Web服务接口设计原则",
+          "features": [
+            "统一接口设计",
+            "无状态通信",
+            "资源导向架构",
+            "HTTP标准方法",
+            "可缓存性"
+          ],
+          "url": "https://restfulapi.net/"
+        }
+      }
+    },
     "codeStandards": "代码规范",
     "codeStandardsDescription": "确保代码质量和一致性的开发规范",
     "internationalization": "国际化",
