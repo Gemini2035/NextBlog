@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Card } from '@/ui'
 import { cn, smoothScrollToElement } from '@/utils'
 import { CloseIcon } from '@/assets/icons'
@@ -29,6 +30,7 @@ interface WaterfallItemProps {
 }
 
 function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocused = false }: WaterfallItemProps) {
+  const t = useTranslations('AboutPage')
   const { elementRef, shouldAnimate } = useIntersectionObserver({
     threshold: 0.05,
     rootMargin: '0px 0px -30px 0px',
@@ -89,7 +91,7 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
               : 'opacity-0 translate-y-2'
           )}>
             <div className="flex items-center justify-between text-sm text-gray-500">
-              <span>点击查看详情</span>
+              <span>{t('clickToViewDetails')}</span>
               <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           </div>
@@ -279,7 +281,7 @@ export default function ExpandableWaterfall({
     }, 300)
   }
 
-  const handleCloseExpanded = () => {
+  const handleCloseExpanded = useCallback(() => {
     if (isAnimating) return
     
     setIsAnimating(true)
@@ -298,7 +300,7 @@ export default function ExpandableWaterfall({
         setIsAnimating(false)
       }, 100)
     }, 300) // 关闭动画持续时间
-  }
+  }, [isAnimating])
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -310,7 +312,7 @@ export default function ExpandableWaterfall({
     if (e.key === 'Escape' && expandedItem) {
       handleCloseExpanded()
     }
-  }, [expandedItem])
+  }, [expandedItem, handleCloseExpanded])
 
   useEffect(() => {
     if (expandedItem) {
