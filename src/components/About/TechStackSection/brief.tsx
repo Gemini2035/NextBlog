@@ -27,7 +27,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <NextJsIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">Next.js</h3>
-          <p className="text-xs text-gray-600">React 全栈（App Router）</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.nextjsDesc')}</p>
         </div>
         
         <div className="text-center">
@@ -35,7 +35,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <ContentlayerIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">Contentlayer</h3>
-          <p className="text-xs text-gray-600">类型安全内容</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.contentlayerDesc')}</p>
         </div>
         
         <div className="text-center">
@@ -43,7 +43,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <MdxIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">MDX</h3>
-          <p className="text-xs text-gray-600">Markdown + JSX</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.mdxDesc')}</p>
         </div>
         
         <div className="text-center">
@@ -51,7 +51,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <TailwindIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">Tailwind</h3>
-          <p className="text-xs text-gray-600">实用优先 CSS</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.tailwindDesc')}</p>
         </div>
         
         <div className="text-center">
@@ -59,7 +59,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <TypeScriptIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">TypeScript</h3>
-          <p className="text-xs text-gray-600">类型安全（严格）</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.typescriptDesc')}</p>
         </div>
         
         <div className="text-center">
@@ -67,7 +67,7 @@ export default function TechStackBrief({ className }: TechStackBriefProps) {
             <DeploymentIcon className="w-5 h-5 text-gray-700" />
           </div>
           <h3 className="font-medium text-gray-900 text-xs mb-1">GitHub Actions + Vercel</h3>
-          <p className="text-xs text-gray-600">CI/CD 与部署</p>
+          <p className="text-xs text-gray-600">{t('techStackBrief.deploymentDesc')}</p>
         </div>
       </div>
     </div>

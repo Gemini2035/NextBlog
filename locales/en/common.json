@@ -57,6 +57,14 @@
       "contentlayer": "CMS",
       "tailwind": "CSS"
     },
+    "techStackBrief": {
+      "nextjsDesc": "React Full-stack (App Router)",
+      "contentlayerDesc": "Type-safe content",
+      "mdxDesc": "Markdown + JSX",
+      "tailwindDesc": "Utility-first CSS",
+      "typescriptDesc": "Type-safe (strict)",
+      "deploymentDesc": "CI/CD & deployment"
+    },
     "openSourceLibrariesDetail": {
       "description": "Open source libraries used in the project tech stack with official documentation",
       "viewDocs": "View Docs",

@@ -191,6 +191,14 @@
       "contentlayer": "CMS",
       "tailwind": "CSS"
     },
+    "techStackBrief": {
+      "nextjsDesc": "React フルスタック (App Router)",
+      "contentlayerDesc": "型安全コンテンツ",
+      "mdxDesc": "Markdown + JSX",
+      "tailwindDesc": "ユーティリティファースト CSS",
+      "typescriptDesc": "型安全（厳格）",
+      "deploymentDesc": "CI/CD とデプロイ"
+    },
     "openSourceLibrariesDetail": {
       "description": "プロジェクトの技術スタックで使用されているオープンソースライブラリと公式ドキュメント",
       "viewDocs": "ドキュメント",
