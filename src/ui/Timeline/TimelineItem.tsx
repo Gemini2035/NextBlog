@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode } from 'react'
-import { TimelineItemProps, TimelineItemRef, TimelineMode, TimelineSize, TimelineColor, TimelineStatus } from './types'
+import type { TimelineItemProps, TimelineItemRef, TimelineMode, TimelineSize } from './types'
 import { getTimelineItemStyles, getTimelineDotStyles, getTimelineContentStyles, getTimelineLabelStyles } from './styles'
 import { cn } from '@/utils'
 

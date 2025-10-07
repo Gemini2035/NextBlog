@@ -7,7 +7,6 @@ interface EducationBriefProps {
 }
 
 export default function EducationBrief({ className }: EducationBriefProps) {
-  const navT = useTranslations('Navigation')
   const eduT = useTranslations('Education')
 
   return (
