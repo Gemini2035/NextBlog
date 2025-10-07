@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { TechStackIcon, NextJsIcon, ContentlayerIcon, MdxIcon, TailwindIcon, TypeScriptIcon, DeploymentIcon } from '@/assets/icons'
 
 interface TechStackDetailProps {
   className?: string
@@ -13,11 +14,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
     <div className={className}>
       <div className="flex items-center mb-8">
         <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
-          <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <rect x="4" y="14" width="16" height="4" rx="1.5"/>
-            <rect x="6" y="9" width="12" height="3" rx="1.5"/>
-            <rect x="8" y="5" width="8" height="2" rx="1"/>
-          </svg>
+          <TechStackIcon className="w-8 h-8 text-blue-600" />
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
@@ -32,10 +29,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
       <div className="space-y-4 mb-8">
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="6"/>
-              <line x1="9" y1="15" x2="15" y2="9"/>
-            </svg>
+            <NextJsIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('nextjs')}</h3>
@@ -45,10 +39,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect x="6" y="7" width="12" height="8" rx="1"/>
-              <rect x="8" y="11" width="8" height="4" rx="1"/>
-            </svg>
+            <ContentlayerIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('contentlayer')}</h3>
@@ -58,11 +49,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <polyline points="8,12 11,9 8,6"/>
-              <polyline points="16,6 13,9 16,12"/>
-              <line x1="12" y1="13" x2="12" y2="18"/>
-            </svg>
+            <MdxIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('mdx')}</h3>
@@ -72,10 +59,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect x="7" y="7" width="6" height="3" rx="1"/>
-              <rect x="11" y="12" width="6" height="3" rx="1"/>
-            </svg>
+            <TailwindIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('tailwind')}</h3>
@@ -85,11 +69,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <rect x="7" y="6" width="10" height="10" rx="2"/>
-              <line x1="12" y1="8" x2="12" y2="14"/>
-              <line x1="9" y1="8" x2="15" y2="8"/>
-            </svg>
+            <TypeScriptIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('typescript')}</h3>
@@ -99,13 +79,7 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
 
         <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
           <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
-            <svg className="w-6 h-6 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <circle cx="7" cy="12" r="2"/>
-              <circle cx="17" cy="7" r="2"/>
-              <circle cx="17" cy="17" r="2"/>
-              <line x1="9" y1="12" x2="15" y2="8"/>
-              <line x1="9" y1="12" x2="15" y2="16"/>
-            </svg>
+            <DeploymentIcon className="w-6 h-6 text-gray-700" />
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">GitHub Actions + Vercel</h3>
