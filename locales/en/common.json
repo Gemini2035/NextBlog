@@ -439,7 +439,7 @@
     "Online Services": "Online Services",
     "Development Protocols": "Development Protocols",
     "My Projects": "My Projects",
-    "Showcase my technical projects and portfolio": "Showcase my technical projects and portfolio",
+    "Showcase my technical projects and portfolio": "Showcase my technical projects and portfolio (Data from Github)",
     "Project Types": "Project Types",
     "Open Source Projects": "Open Source Projects",
     "Commercial Projects": "Commercial Projects",
@@ -624,6 +624,88 @@
     "contactTitle": "Contact Me",
     "contactDescription": "If you have any questions or suggestions about these policies, please contact us through the website contact information.",
     "contactButton": "Contact Me"
+  },
+  "Projects": {
+    "title": "My Projects",
+    "description": "Showcase my open source projects and portfolio (Data from Github)",
+    "loading": "Loading...",
+    "loadingProjects": "Loading project data...",
+    "error": "Failed to load",
+    "errorDescription": "Unable to load GitHub project data, please try again later",
+    "retry": "Retry",
+    "stats": {
+      "totalProjects": "Total Projects",
+      "totalStars": "Total Stars",
+      "totalForks": "Total Forks",
+      "activeProjects": "Active Projects",
+      "archivedProjects": "Archived"
+    },
+    "filters": {
+      "title": "Filters",
+      "search": "Search projects...",
+      "category": "Category",
+      "language": "Language",
+      "sort": "Sort",
+      "sortBy": {
+        "stars": "By Stars",
+        "updated": "By Updated Time",
+        "created": "By Created Time",
+        "name": "By Name",
+        "weight": "By Recommendation"
+      },
+      "categories": {
+        "all": "All",
+        "featured": "Featured",
+        "active": "Active Development",
+        "stable": "Stable Maintenance",
+        "completed": "Completed",
+        "archived": "Archived",
+        "fork": "Forked",
+        "learning": "Learning"
+      },
+      "includeForked": "Include forked projects",
+      "includeArchived": "Include archived projects",
+      "clear": "Clear filters"
+    },
+    "project": {
+      "viewOnGitHub": "View on GitHub",
+      "homepage": "Homepage",
+      "stars": "Stars",
+      "forks": "Forks",
+      "watchers": "Watchers",
+      "openIssues": "Open Issues",
+      "license": "License",
+      "language": "Primary Language",
+      "languages": "Language Distribution",
+      "contributors": "Contributors",
+      "contributorCount": "{count} contributors",
+      "topics": "Topics",
+      "created": "Created at",
+      "updated": "Updated at",
+      "lastPush": "Last pushed",
+      "noDescription": "No description",
+      "viewDetails": "View details",
+      "hideDetails": "Hide details"
+    },
+    "rateLimit": {
+      "title": "API Limit Notice",
+      "exceeded": "GitHub API rate limit exceeded",
+      "remaining": "{count} requests remaining",
+      "reset": "Will reset in {time}",
+      "suggestion": "Consider configuring GitHub Token for higher rate limits"
+    },
+    "empty": {
+      "title": "No Projects",
+      "description": "No projects found matching the criteria",
+      "noProjects": "This user has no public projects"
+    },
+    "debug": {
+      "title": "Debug Info",
+      "apiCalls": "API Calls",
+      "cacheHit": "Cache Hit",
+      "loadTime": "Load Time",
+      "dataSource": "Data Source"
+    }
   },
   "Education": {
     "sectionTitle": "Education Background",

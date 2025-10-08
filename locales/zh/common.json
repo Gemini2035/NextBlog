@@ -439,7 +439,7 @@
     "Online Services": "线上服务",
     "Development Protocols": "开发协议",
     "My Projects": "我的项目",
-    "Showcase my technical projects and portfolio": "展示我的技术项目和作品集",
+    "Showcase my technical projects and portfolio": "展示我的技术项目和作品集(数据来源Github)",
     "Project Types": "项目类型",
     "Open Source Projects": "开源项目",
     "Commercial Projects": "商业项目",
@@ -649,6 +649,88 @@
     "project3": "端到端部署与监控（Vercel/容器化）",
     "achievement1": "蓝桥杯省赛三等奖",
     "achievement2": "全国计算机博弈大赛·爱恩斯坦棋 全国冠军"
+  },
+  "Projects": {
+    "title": "我的项目",
+    "description": "展示我的开源项目和作品集(数据来源Github)",
+    "loading": "加载中...",
+    "loadingProjects": "正在加载项目数据...",
+    "error": "加载失败",
+    "errorDescription": "无法加载GitHub项目数据，请稍后重试",
+    "retry": "重试",
+    "stats": {
+      "totalProjects": "项目总数",
+      "totalStars": "总Star数",
+      "totalForks": "总Fork数",
+      "activeProjects": "活跃项目",
+      "archivedProjects": "已归档"
+    },
+    "filters": {
+      "title": "筛选条件",
+      "search": "搜索项目...",
+      "category": "分类",
+      "language": "语言",
+      "sort": "排序",
+      "sortBy": {
+        "stars": "按Star数",
+        "updated": "按更新时间",
+        "created": "按创建时间",
+        "name": "按名称",
+        "weight": "按推荐度"
+      },
+      "categories": {
+        "all": "全部",
+        "featured": "特色项目",
+        "active": "活跃开发",
+        "stable": "稳定维护",
+        "completed": "已完成",
+        "archived": "已归档",
+        "fork": "Fork项目",
+        "learning": "学习项目"
+      },
+      "includeForked": "包含Fork项目",
+      "includeArchived": "包含归档项目",
+      "clear": "清除筛选"
+    },
+    "project": {
+      "viewOnGitHub": "在GitHub上查看",
+      "homepage": "项目主页",
+      "stars": "Stars",
+      "forks": "Forks",
+      "watchers": "Watchers",
+      "openIssues": "待解决Issues",
+      "license": "许可证",
+      "language": "主要语言",
+      "languages": "代码语言占比",
+      "contributors": "贡献者",
+      "contributorCount": "{count} 位贡献者",
+      "topics": "标签",
+      "created": "创建于",
+      "updated": "更新于",
+      "lastPush": "最后推送",
+      "noDescription": "暂无描述",
+      "viewDetails": "查看详情",
+      "hideDetails": "收起详情"
+    },
+    "rateLimit": {
+      "title": "API限制提示",
+      "exceeded": "GitHub API调用次数已达上限",
+      "remaining": "剩余 {count} 次调用",
+      "reset": "将在 {time} 后重置",
+      "suggestion": "建议配置GitHub Token以获得更高的调用限额"
+    },
+    "empty": {
+      "title": "暂无项目",
+      "description": "没有找到符合条件的项目",
+      "noProjects": "该用户还没有公开的项目"
+    },
+    "debug": {
+      "title": "调试信息",
+      "apiCalls": "API调用次数",
+      "cacheHit": "缓存命中",
+      "loadTime": "加载耗时",
+      "dataSource": "数据来源"
+    }
   },
   "DevelopmentHistory": {
     "sectionTitle": "发展历程",
