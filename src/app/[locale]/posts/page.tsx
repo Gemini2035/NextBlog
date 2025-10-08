@@ -40,6 +40,21 @@ export default function PostsPage({ params }: PostsPageProps) {
     }
   }, [locale, searchParams])
 
+  // 当有URL参数时，自动滚动到筛选器位置
+  useEffect(() => {
+    const hasParams = searchParams.toString().length > 0
+    if (hasParams) {
+      setTimeout(() => {
+        const allPostsElement = document.getElementById('all-posts')
+        if (allPostsElement) {
+          const rect = allPostsElement.getBoundingClientRect()
+          const scrollTop = window.scrollY + rect.top - 100 // 预留100px空间
+          window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
+        }
+      }, 300)
+    }
+  }, [searchParams])
+
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">

@@ -10,7 +10,7 @@ interface ClearButtonProps {
 export function ClearButton({ onClear, label }: ClearButtonProps) {
   return (
     <Button
-      type="default"
+      type="outline"
       size="sm"
       onClick={onClear}
       className="w-full sm:w-auto"
