@@ -22,7 +22,10 @@ import {
   AnimateIcon,
   EmotionIcon,
   GitHubIcon,
-  GlobeIcon
+  GlobeIcon,
+  OctokitIcon,
+  RechartsIcon,
+  SWRIcon
 } from '@/assets/icons'
 import { cn } from '@/utils'
 
@@ -226,6 +229,40 @@ export default function OpenSourceLibrariesDetail({ className }: OpenSourceLibra
             version="v4.0.3"
             docsUrl="https://github.com/jonschlinkert/gray-matter"
             githubUrl="https://github.com/jonschlinkert/gray-matter"
+          />
+        </div>
+      </div>
+
+      {/* 数据获取与状态管理 */}
+      <div className="mb-8">
+        <h3 className="text-xl font-semibold text-gray-900 mb-4">数据获取与状态管理</h3>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <LibraryCard 
+            icon={<OctokitIcon className="w-5 h-5 text-gray-700" />}
+            name="@octokit/graphql"
+            category="GraphQL 客户端"
+            description="GitHub 官方 GraphQL 客户端，类型安全的 API 调用；一次请求获取完整数据，相比 REST API 减少 99% 的网络请求。"
+            version="v9.0.2"
+            docsUrl="https://github.com/octokit/graphql.js"
+            githubUrl="https://github.com/octokit/graphql.js"
+          />
+          <LibraryCard 
+            icon={<SWRIcon className="w-5 h-5 text-gray-700" />}
+            name="SWR"
+            category="数据缓存"
+            description="Vercel 出品的 React Hooks 数据获取库；提供缓存、重新验证、去重等功能，优化用户体验与性能。"
+            version="v2.3.6"
+            docsUrl="https://swr.vercel.app"
+            githubUrl="https://github.com/vercel/swr"
+          />
+          <LibraryCard 
+            icon={<RechartsIcon className="w-5 h-5 text-gray-700" />}
+            name="Recharts"
+            category="数据可视化"
+            description="基于 React 和 D3 的图表库；提供柱状图、饼图、折线图等多种图表类型，用于项目统计数据展示。"
+            version="v3.2.1"
+            docsUrl="https://recharts.org"
+            githubUrl="https://github.com/recharts/recharts"
           />
         </div>
       </div>

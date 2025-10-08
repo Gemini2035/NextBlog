@@ -29,6 +29,74 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
   // 获取所有标签
   const allTags = useMemo(() => getAllTagsWithCount(posts), [posts])
 
+  // 从URL参数初始化筛选条件（仅在首次加载时）
+  useEffect(() => {
+    const newFilters: Partial<FilterState> = {}
+    let hasFilters = false
+
+    // 读取关键词
+    const keyword = searchParams.get('keyword')
+    if (keyword) {
+      newFilters.keyword = keyword
+      hasFilters = true
+    }
+
+    // 读取标签
+    const tag = searchParams.get('tag')
+    if (tag) {
+      newFilters.selectedTags = [tag]
+      hasFilters = true
+    }
+
+    // 读取featured筛选
+    const featured = searchParams.get('featured')
+    if (featured === 'true') {
+      newFilters.featuredFilter = true
+      hasFilters = true
+    } else if (featured === 'false') {
+      newFilters.featuredFilter = false
+      hasFilters = true
+    }
+
+    // 读取排序（只能有一个）
+    const sort = searchParams.get('sort')
+    if (sort) {
+      const [sortKey, direction] = sort.split('-')
+      const sortDir = (direction === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc'
+      
+      switch (sortKey) {
+        case 'wordCount':
+          newFilters.wordCountSort = sortDir
+          hasFilters = true
+          break
+        case 'created':
+          newFilters.createTimeSort = sortDir
+          hasFilters = true
+          break
+        case 'updated':
+          newFilters.updateTimeSort = sortDir
+          hasFilters = true
+          break
+      }
+    }
+
+    // 应用筛选条件
+    if (hasFilters) {
+      setFilters(prev => ({ ...prev, ...newFilters }))
+      setIsOpen(true)
+    }
+
+    // 如果有initialTag（从其他页面跳转），优先使用
+    if (initialTag && !hasFilters) {
+      setFilters(prev => ({
+        ...prev,
+        selectedTags: [initialTag]
+      }))
+      setIsOpen(true)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // 仅在首次加载时执行
+
   // 应用筛选条件
   const filteredPosts = useMemo(() => {
     return applyFilters(posts, filters)
@@ -39,44 +107,89 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     onFilteredPostsChange(filteredPosts)
   }, [filteredPosts, onFilteredPostsChange])
 
-  // 初始化tag筛选
+  // 检查是否有活跃的筛选条件
+  const hasActiveFilters = useMemo(() => {
+    return (
+      filters.keyword.trim() !== '' ||
+      filters.selectedTags.length > 0 ||
+      filters.featuredFilter !== null ||
+      filters.wordCountSort !== null ||
+      filters.createTimeSort !== null ||
+      filters.updateTimeSort !== null
+    )
+  }, [filters])
+
+  // 当有活跃筛选条件时，自动打开面板
   useEffect(() => {
-    if (initialTag) {
-      setFilters(prev => ({
-        ...prev,
-        selectedTags: [initialTag]
-      }))
-      // 如果有初始标签，自动打开筛选面板
+    if (hasActiveFilters) {
       setIsOpen(true)
     }
-  }, [initialTag])
+  }, [hasActiveFilters])
 
-  // URL同步 - 当selectedTags变化时更新URL
+  // URL同步 - 当筛选条件变化时更新URL
   useEffect(() => {
-    // 检查URL是否需要更新
-    const currentTag = searchParams.get('tag')
-    const newTag = filters.selectedTags.length > 0 ? filters.selectedTags[0] : null
-    
-    if (currentTag !== newTag) {
-      // 使用Next.js推荐的方式更新URL参数
-      const newSearchParams = new URLSearchParams(searchParams.toString())
+    const newSearchParams = new URLSearchParams()
+
+    // 写入关键词
+    if (filters.keyword.trim()) {
+      newSearchParams.set('keyword', filters.keyword)
+    }
+
+    // 写入标签（支持多个标签）
+    if (filters.selectedTags.length > 0) {
+      newSearchParams.set('tag', filters.selectedTags[0])
+    }
+
+    // 写入featured筛选
+    if (filters.featuredFilter !== null) {
+      newSearchParams.set('featured', String(filters.featuredFilter))
+    }
+
+    // 写入排序（只能有一个）
+    if (filters.wordCountSort) {
+      newSearchParams.set('sort', `wordCount-${filters.wordCountSort}`)
+    } else if (filters.createTimeSort) {
+      newSearchParams.set('sort', `created-${filters.createTimeSort}`)
+    } else if (filters.updateTimeSort) {
+      newSearchParams.set('sort', `updated-${filters.updateTimeSort}`)
+    }
+
+    // 构建新URL
+    const newUrl = newSearchParams.toString()
+      ? `?${newSearchParams.toString()}`
+      : window.location.pathname
+
+    // 获取当前URL
+    const currentParams = searchParams.toString()
+    const currentUrl = currentParams ? `?${currentParams}` : window.location.pathname
+
+    // 只在URL确实需要变化时更新
+    if (newUrl !== currentUrl) {
+      router.replace(newUrl, { scroll: false })
+    }
+  }, [filters, router, searchParams])
+
+  // 更新筛选条件，并重置其他排序
+  const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
+    setFilters(prev => {
+      const newFilters = { ...prev, [key]: value }
       
-      if (filters.selectedTags.length > 0) {
-        // 如果有选中的标签，更新URL
-        newSearchParams.set('tag', filters.selectedTags[0]) // Next.js会自动处理编码
-      } else {
-        // 如果没有选中的标签，移除URL参数
-        newSearchParams.delete('tag')
+      // 如果是排序字段，重置其他排序
+      if (key.includes('Sort') && value !== null) {
+        const sortKeys = [
+          'wordCountSort',
+          'createTimeSort',
+          'updateTimeSort'
+        ] as const
+        sortKeys.forEach(sortKey => {
+          if (sortKey !== key) {
+            newFilters[sortKey] = null
+          }
+        })
       }
       
-      // 使用router.replace更新URL，保持其他参数不变
-      router.replace(`?${newSearchParams.toString()}`, { scroll: false })
-    }
-  }, [filters.selectedTags, searchParams, router])
-
-  // 更新筛选条件
-  const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
-    setFilters(prev => ({ ...prev, [key]: value }))
+      return newFilters
+    })
   }, [])
 
   // 搜索关键词更新函数

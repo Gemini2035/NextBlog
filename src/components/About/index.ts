@@ -1,5 +1,5 @@
-export { default as Waterfall } from './Waterfall'
-export { default as ExpandableWaterfall } from './Waterfall/ExpandableWaterfall'
+export { default as Waterfall } from '../Waterfall'
+export { default as ExpandableWaterfall } from '../Waterfall/ExpandableWaterfall'
 export { BasicInfoBrief, BasicInfoDetail } from './BasicInfoSection'
 export { SkillsBrief, SkillsDetail } from './SkillsSection'
 export { EducationBrief, EducationDetail } from './EducationSection'

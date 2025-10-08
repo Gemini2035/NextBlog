@@ -25,6 +25,24 @@
       "qq": "2530056984"
     }
   },
+  "github": {
+    "username": "Gemini2035",
+    "useMockData": false,
+    "fetchOptions": {
+      "repoType": "all",
+      "includeForked": true,
+      "includeArchived": true,
+      "includeLanguages": true,
+      "includeContributors": true,
+      "minStars": 0,
+      "sortBy": "updated",
+      "maxProjects": 100,
+      "maxPages": 10
+    },
+    "featuredRepos": ["NextBlog"],
+    "excludeRepos": [],
+    "cacheTime": 3600
+  },
   "app": {
     "postsPerPage": 6,
     "tagColors": [
@@ -171,24 +189,16 @@
             "description": "Showcase my technical projects and portfolio",
             "items": [
               {
-                "label": "Project Types",
-                "href": "/projects#types",
+                "label": "Projects by Ownership",
+                "href": "/projects#ownership",
                 "items": [
                   {
-                    "label": "Open Source Projects",
-                    "href": "/projects#open-source"
+                    "label": "Created by Me",
+                    "href": "/projects?owned=true"
                   },
                   {
-                    "label": "Commercial Projects",
-                    "href": "/projects#commercial"
-                  },
-                  {
-                    "label": "Learning Projects",
-                    "href": "/projects#learning"
-                  },
-                  {
-                    "label": "Self-Developed Projects",
-                    "href": "/projects#self-developed"
+                    "label": "Contributed by Me",
+                    "href": "/projects?contributed=true"
                   }
                 ]
               }

@@ -5,6 +5,7 @@ import { ReactNode, ButtonHTMLAttributes } from 'react'
  */
 export type ButtonType = 
   | 'primary'     // 主要按钮
+  | 'default'     // 默认按钮
   | 'secondary'   // 次要按钮
   | 'outline'     // 轮廓按钮
   | 'ghost'       // 幽灵按钮

@@ -5,6 +5,7 @@ import siteConfigData from './site-config.json'
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
 export const HEADER_CONFIG = siteConfigData.app.header
+export const GITHUB_CONFIG = siteConfigData.github
 
 // 导航项类型定义
 export interface SubmenuItem {

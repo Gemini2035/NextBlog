@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
+import { ToastContainer } from "@/ui";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="zh-CN">
       <body className="antialiased">
         {children}
+        <ToastContainer />
       </body>
     </html>
   );
