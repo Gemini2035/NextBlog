@@ -2,6 +2,8 @@
 
 import { useTranslations } from 'next-intl'
 import { PinnedFilter } from './PinnedFilter'
+import { OwnedFilter } from './OwnedFilter'
+import { ContributedFilter } from './ContributedFilter'
 import { ForkFilter } from './ForkFilter'
 import { ArchivedFilter } from './ArchivedFilter'
 import { SortFilter } from './SortFilter'
@@ -10,6 +12,10 @@ interface FilterRowProps {
   // Boolean filters
   showPinned: boolean | null
   onShowPinnedChange: (value: boolean | null) => void
+  showOwned: boolean | null
+  onShowOwnedChange: (value: boolean | null) => void
+  showContributed: boolean | null
+  onShowContributedChange: (value: boolean | null) => void
   showFork: boolean | null
   onShowForkChange: (value: boolean | null) => void
   showArchived: boolean | null
@@ -33,6 +39,10 @@ interface FilterRowProps {
 export function FilterRow({
   showPinned,
   onShowPinnedChange,
+  showOwned,
+  onShowOwnedChange,
+  showContributed,
+  onShowContributedChange,
   showFork,
   onShowForkChange,
   showArchived,
@@ -54,7 +64,7 @@ export function FilterRow({
   
   return (
     <div className="space-y-4">
-      {/* 3x3 网格布局 */}
+      {/* 3x5 网格布局 */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {/* 置顶项目筛选 */}
         <div className="flex items-center justify-between">
@@ -62,6 +72,24 @@ export function FilterRow({
           <PinnedFilter
             value={showPinned}
             onChange={onShowPinnedChange}
+          />
+        </div>
+
+        {/* 我创建的项目筛选 */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-700">{t('showOwned')}</span>
+          <OwnedFilter
+            value={showOwned}
+            onChange={onShowOwnedChange}
+          />
+        </div>
+
+        {/* 我参与的项目筛选 */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-medium text-gray-700">{t('showContributed')}</span>
+          <ContributedFilter
+            value={showContributed}
+            onChange={onShowContributedChange}
           />
         </div>
 

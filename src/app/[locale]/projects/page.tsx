@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { getGitHubRepositoriesWithRetry } from '@/actions/github'
 import {
   categorizeProject,
@@ -27,6 +28,7 @@ import { ExpandableWaterfall } from '@/components/Waterfall'
  */
 export default function ProjectsPage() {
   const t = useTranslations('Projects')
+  const searchParams = useSearchParams()
   
   // 状态管理
   const [loading, setLoading] = useState(true)
@@ -34,6 +36,21 @@ export default function ProjectsPage() {
   const [allProjects, setAllProjects] = useState<ProcessedRepository[]>([])
   const [filteredProjects, setFilteredProjects] = useState<ProcessedRepository[]>([])
   const [stats, setStats] = useState<ProjectStats | null>(null)
+  
+  // 当有URL参数时，自动滚动到筛选器位置
+  useEffect(() => {
+    const hasParams = searchParams.toString().length > 0
+    if (hasParams) {
+      setTimeout(() => {
+        const filterElement = document.getElementById('project-filter')
+        if (filterElement) {
+          const rect = filterElement.getBoundingClientRect()
+          const scrollTop = window.scrollY + rect.top - 100 // 预留100px空间
+          window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
+        }
+      }, 300)
+    }
+  }, [searchParams])
 
   /**
    * 获取GitHub数据（支持Mock模式）
@@ -186,7 +203,7 @@ export default function ProjectsPage() {
       )}
 
       {/* 项目筛选器 */}
-      <div className="mb-8">
+      <div id="project-filter" className="mb-8">
         <ProjectFilter
           projects={allProjects}
           onFilteredProjectsChange={handleFilteredProjectsChange}

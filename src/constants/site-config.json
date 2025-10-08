@@ -194,11 +194,11 @@
                 "items": [
                   {
                     "label": "Created by Me",
-                    "href": "/projects#created-by-me"
+                    "href": "/projects?owned=true"
                   },
                   {
                     "label": "Contributed by Me",
-                    "href": "/projects#contributed-by-me"
+                    "href": "/projects?contributed=true"
                   }
                 ]
               }

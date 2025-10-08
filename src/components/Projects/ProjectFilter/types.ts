@@ -3,6 +3,8 @@ import type { ProcessedRepository } from '@/types/github'
 export interface ProjectFilterState {
   keyword: string
   showPinned: boolean | null
+  showOwned: boolean | null
+  showContributed: boolean | null
   showFork: boolean | null
   showArchived: boolean | null
   starSort: 'asc' | 'desc' | null

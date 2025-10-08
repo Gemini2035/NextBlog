@@ -46,19 +46,32 @@ export function applyFilters(
     result = result.filter((project) => project.isPinned === filters.showPinned)
   }
 
-  // 3. Fork 项目筛选
+  // 3. 我创建的项目筛选（非Fork项目）
+  if (filters.showOwned !== null) {
+    result = result.filter((project) => !project.isFork === filters.showOwned)
+  }
+
+  // 4. 我参与的项目筛选（Fork项目或有多个贡献者）
+  if (filters.showContributed !== null) {
+    result = result.filter((project) => {
+      const isContributed = project.isFork || (project.contributors && project.contributors.length > 1)
+      return isContributed === filters.showContributed
+    })
+  }
+
+  // 5. Fork 项目筛选
   if (filters.showFork !== null) {
     result = result.filter((project) => project.isFork === filters.showFork)
   }
 
-  // 4. 归档项目筛选
+  // 6. 归档项目筛选
   if (filters.showArchived !== null) {
     result = result.filter(
       (project) => project.isArchived === filters.showArchived
     )
   }
 
-  // 5. 排序（只应用一个排序，优先级从上到下）
+  // 7. 排序（只应用一个排序，优先级从上到下）
   // 使用通用排序函数，始终保证置顶项目在前
   const sortWithPinned = (a: ProcessedRepository, b: ProcessedRepository, getValue: (item: ProcessedRepository) => number, ascending: boolean) => {
     // 置顶项目始终排在前面
