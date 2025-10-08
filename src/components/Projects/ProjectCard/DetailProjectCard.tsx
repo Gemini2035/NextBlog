@@ -5,6 +5,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/utils'
+import { Tab } from '@/ui'
 import { 
   ComposedChart,
   Bar,
@@ -45,8 +46,6 @@ interface DetailProjectCardProps {
  */
 export function DetailProjectCard({ project, category }: DetailProjectCardProps) {
   const t = useTranslations('Projects')
-  const [languageView, setLanguageView] = useState<'list' | 'chart'>('chart')
-  const [contributorView, setContributorView] = useState<'list' | 'chart'>('list')
   
   // 格式化日期
   const formatDate = (date: Date) => {
@@ -210,54 +209,31 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {/* 语言占比 */}
       {project.languages && project.languages.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <LanguageIcon className="w-5 h-5 text-gray-600" />
-              <h3 className="text-sm font-semibold text-gray-900">
-                {t('project.languages')}
-              </h3>
-            </div>
-            
-            {/* 视图切换按钮 */}
-            <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setLanguageView('chart')}
-                className={cn(
-                  'px-3 py-1 text-xs font-medium rounded transition-all',
-                  languageView === 'chart'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                )}
-              >
-                图表
-              </button>
-              <button
-                onClick={() => setLanguageView('list')}
-                className={cn(
-                  'px-3 py-1 text-xs font-medium rounded transition-all',
-                  languageView === 'list'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                )}
-              >
-                列表
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <LanguageIcon className="w-5 h-5 text-gray-600" />
+            <h3 className="text-sm font-semibold text-gray-900">
+              {t('project.languages')}
+            </h3>
           </div>
           
-          {languageView === 'chart' ? (
-            /* 组合图表模式 - 柱状图+折线图 */
-            <div className="space-y-4">
-              <div className="text-xs text-gray-600 mb-2">
-                <span className="inline-flex items-center gap-2">
-                  <span className="w-4 h-3 rounded" style={{ backgroundColor: 'rgba(59, 130, 246, 0.7)' }}></span>
-                  <span>占比 (%)</span>
-                </span>
-                <span className="inline-flex items-center gap-2 ml-4">
-                  <span className="w-4 h-0.5 bg-red-500"></span>
-                  <span>字节数 (bytes)</span>
-                </span>
-              </div>
+          <Tab
+            items={[
+              {
+                key: 'chart',
+                label: '图表',
+                children: (
+                  <div className="space-y-4">
+                    {/* 图例 - 修复垂直居中 */}
+                    <div className="flex items-center gap-6 text-xs text-gray-600">
+                      <div className="flex items-center gap-2">
+                        <span className="w-4 h-3 rounded" style={{ backgroundColor: 'rgba(59, 130, 246, 0.7)' }}></span>
+                        <span>占比 (%)</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="w-4 h-0.5 bg-red-500"></span>
+                        <span>字节数 (bytes)</span>
+                      </div>
+                    </div>
               
               <ResponsiveContainer width="100%" height={320}>
                 <ComposedChart
@@ -339,219 +315,214 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                 </ComposedChart>
               </ResponsiveContainer>
               
-              {/* 如果语言超过10个，显示剩余提示 */}
-              {project.languages.length > 10 && (
-                <div className="text-xs text-gray-500 text-center">
-                  还有 {project.languages.length - 10} 种语言未显示，切换到列表模式查看全部
-                </div>
-              )}
-            </div>
-          ) : (
-            /* 列表模式 - 显示所有语言详细信息 */
-            <div className="space-y-3">
-              {project.languages.map((lang) => (
-                <div key={lang.name} className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full shadow-sm"
-                        style={{ backgroundColor: lang.color || '#ccc' }}
-                      />
-                      <span className="text-sm font-medium text-gray-700">{lang.name}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-sm">
-                      <span className="text-gray-600">{lang.bytes.toLocaleString()} bytes</span>
-                      <span className="font-semibold text-gray-900">{lang.percentage.toFixed(2)}%</span>
-                    </div>
+                    {/* 如果语言超过10个，显示剩余提示 */}
+                    {project.languages.length > 10 && (
+                      <div className="text-xs text-gray-500 text-center">
+                        还有 {project.languages.length - 10} 种语言未显示，切换到列表模式查看全部
+                      </div>
+                    )}
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div
-                      className="h-2 rounded-full transition-all"
-                      style={{
-                        width: `${lang.percentage}%`,
-                        backgroundColor: lang.color || '#ccc'
-                      }}
-                    />
+                )
+              },
+              {
+                key: 'list',
+                label: '列表',
+                children: (
+                  <div className="space-y-3">
+                    {project.languages.map((lang) => (
+                      <div key={lang.name} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div
+                              className="w-3 h-3 rounded-full shadow-sm"
+                              style={{ backgroundColor: lang.color || '#ccc' }}
+                            />
+                            <span className="text-sm font-medium text-gray-700">{lang.name}</span>
+                          </div>
+                          <div className="flex items-center gap-3 text-sm">
+                            <span className="text-gray-600">{lang.bytes.toLocaleString()} bytes</span>
+                            <span className="font-semibold text-gray-900">{lang.percentage.toFixed(2)}%</span>
+                          </div>
+                        </div>
+                        <div className="w-full bg-gray-100 rounded-full h-2">
+                          <div
+                            className="h-2 rounded-full transition-all"
+                            style={{
+                              width: `${lang.percentage}%`,
+                              backgroundColor: lang.color || '#ccc'
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                )
+              }
+            ]}
+            defaultActiveKey="chart"
+            type="card"
+            size="small"
+          />
         </div>
       )}
 
       {/* 贡献者 */}
       {project.contributors && project.contributors.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ContributorIcon className="w-5 h-5 text-gray-600" />
-              <h3 className="text-sm font-semibold text-gray-900">
-                {t('project.contributors')} ({project.contributors.length})
-              </h3>
-            </div>
-            
-            {/* 视图切换按钮 */}
-            <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setContributorView('list')}
-                className={cn(
-                  'px-3 py-1 text-xs font-medium rounded transition-all',
-                  contributorView === 'list'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                )}
-              >
-                列表
-              </button>
-              <button
-                onClick={() => setContributorView('chart')}
-                className={cn(
-                  'px-3 py-1 text-xs font-medium rounded transition-all',
-                  contributorView === 'chart'
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                )}
-              >
-                图表
-              </button>
-            </div>
+          <div className="flex items-center gap-2">
+            <ContributorIcon className="w-5 h-5 text-gray-600" />
+            <h3 className="text-sm font-semibold text-gray-900">
+              {t('project.contributors')} ({project.contributors.length})
+            </h3>
           </div>
           
-          {contributorView === 'list' ? (
-            /* 列表模式 - 显示详细贡献信息 */
-            <div className="space-y-3">
-              {project.contributors.map((contributor) => (
-                <Link
-                  key={contributor.login}
-                  href={contributor.profileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
-                >
-                  <Image
-                    src={contributor.avatarUrl}
-                    alt={contributor.login}
-                    width={48}
-                    height={48}
-                    className="w-12 h-12 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {contributor.login}
-                    </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
-                      <span>{contributor.contributions} commits</span>
-                      <span>•</span>
-                      <span>{contributor.percentage.toFixed(1)}%</span>
-                    </div>
-                  </div>
-                  {/* 贡献占比进度条 */}
-                  <div className="w-24">
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className="bg-blue-500 h-2 rounded-full transition-all"
-                        style={{ width: `${contributor.percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            /* 图表模式 - 使用Recharts饼图 */
-            <div className="space-y-4">
-              <ResponsiveContainer width="100%" height={280}>
-                <PieChart>
-                  <Pie
-                    data={project.contributors.map(c => ({
-                      name: c.login,
-                      value: parseFloat(c.percentage.toFixed(2)),
-                      contributions: c.contributions
-                    }))}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(props) => {
-                      const value = props.value as number
-                      return value > 8 ? `${value.toFixed(1)}%` : ''
-                    }}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {project.contributors.map((contributor, index) => {
-                      // 为不同贡献者生成不同的蓝色系颜色
-                      const baseColors = [
-                        '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a',
-                        '#60a5fa', '#93c5fd', '#1f2937', '#4b5563', '#6b7280'
-                      ]
-                      return (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={baseColors[index % baseColors.length]}
+          <Tab
+            items={[
+              {
+                key: 'list',
+                label: '列表',
+                children: (
+                  <div className="space-y-3">
+                    {project.contributors.map((contributor) => (
+                      <Link
+                        key={contributor.login}
+                        href={contributor.profileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                      >
+                        <Image
+                          src={contributor.avatarUrl}
+                          alt={contributor.login}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
                         />
-                      )
-                    })}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#fff',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '8px',
-                      padding: '8px 12px'
-                    }}
-                    formatter={(value, _name, item) => {
-                      const contributions = (item.payload as { contributions: number }).contributions
-                      return [`${value}% (${contributions} commits)`, '贡献占比']
-                    }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-              
-              {/* 自定义图例 - 带头像 */}
-              <div className="flex flex-wrap gap-4 pt-2 justify-center">
-                {project.contributors.map((contributor, index) => {
-                  const baseColors = [
-                    '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a',
-                    '#60a5fa', '#93c5fd', '#1f2937', '#4b5563', '#6b7280'
-                  ]
-                  const color = baseColors[index % baseColors.length]
-                  
-                  return (
-                    <Link
-                      key={contributor.login}
-                      href={contributor.profileUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 group"
-                      title={`${contributor.login}: ${contributor.contributions} commits (${contributor.percentage.toFixed(1)}%)`}
-                    >
-                      {/* 颜色指示器 */}
-                      <div 
-                        className="w-2.5 h-2.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: color }}
-                      />
-                      
-                      {/* 头像 */}
-                      <Image
-                        src={contributor.avatarUrl}
-                        alt={contributor.login}
-                        width={32}
-                        height={32}
-                        className="w-8 h-8 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
-                      />
-                      
-                      {/* 名字 */}
-                      <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
-                        {contributor.login}
-                      </span>
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          )}
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                            {contributor.login}
+                          </div>
+                          <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
+                            <span>{contributor.contributions} commits</span>
+                            <span>•</span>
+                            <span>{contributor.percentage.toFixed(1)}%</span>
+                          </div>
+                        </div>
+                        {/* 贡献占比进度条 */}
+                        <div className="w-24">
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-500 h-2 rounded-full transition-all"
+                              style={{ width: `${contributor.percentage}%` }}
+                            />
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )
+              },
+              {
+                key: 'chart',
+                label: '图表',
+                children: (
+                  <div className="space-y-4">
+                    <ResponsiveContainer width="100%" height={280}>
+                      <PieChart>
+                        <Pie
+                          data={project.contributors.map(c => ({
+                            name: c.login,
+                            value: parseFloat(c.percentage.toFixed(2)),
+                            contributions: c.contributions
+                          }))}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={(props) => {
+                            const value = props.value as number
+                            return value > 8 ? `${value.toFixed(1)}%` : ''
+                          }}
+                          outerRadius={100}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {project.contributors.map((contributor, index) => {
+                            const baseColors = [
+                              '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a',
+                              '#60a5fa', '#93c5fd', '#1f2937', '#4b5563', '#6b7280'
+                            ]
+                            return (
+                              <Cell 
+                                key={`cell-${index}`} 
+                                fill={baseColors[index % baseColors.length]}
+                              />
+                            )
+                          })}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: '#fff',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '8px',
+                            padding: '8px 12px'
+                          }}
+                          formatter={(value, _name, item) => {
+                            const contributions = (item.payload as { contributions: number }).contributions
+                            return [`${value}% (${contributions} commits)`, '贡献占比']
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    
+                    {/* 自定义图例 - 带头像 */}
+                    <div className="flex flex-wrap gap-4 pt-2 justify-center">
+                      {project.contributors.map((contributor, index) => {
+                        const baseColors = [
+                          '#3b82f6', '#2563eb', '#1d4ed8', '#1e40af', '#1e3a8a',
+                          '#60a5fa', '#93c5fd', '#1f2937', '#4b5563', '#6b7280'
+                        ]
+                        const color = baseColors[index % baseColors.length]
+                        
+                        return (
+                          <Link
+                            key={contributor.login}
+                            href={contributor.profileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 group"
+                            title={`${contributor.login}: ${contributor.contributions} commits (${contributor.percentage.toFixed(1)}%)`}
+                          >
+                            {/* 颜色指示器 */}
+                            <div 
+                              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                              style={{ backgroundColor: color }}
+                            />
+                            
+                            {/* 头像 */}
+                            <Image
+                              src={contributor.avatarUrl}
+                              alt={contributor.login}
+                              width={32}
+                              height={32}
+                              className="w-8 h-8 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
+                            />
+                            
+                            {/* 名字 */}
+                            <span className="text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
+                              {contributor.login}
+                            </span>
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              }
+            ]}
+            defaultActiveKey="list"
+            type="card"
+            size="small"
+          />
         </div>
       )}
 

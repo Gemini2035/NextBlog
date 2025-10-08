@@ -33,6 +33,7 @@ export type {
   IndicatorVariant
 } from './Slider'
 export { Tooltip } from './Tooltip'
+export { Tab } from './Tab'
 export type { 
   TooltipProps, 
   TooltipRef,
