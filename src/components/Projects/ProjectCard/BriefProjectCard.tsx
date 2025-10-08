@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/types/github'
+import type { ProcessedRepository, ProjectCategory } from '@/services/github'
 
 interface BriefProjectCardProps {
   project: ProcessedRepository
@@ -50,13 +50,11 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
     <div className="space-y-4">
       {/* 项目头部 - 名称和状态 */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-2 flex-1 min-w-0">
-          <ProjectIcon className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold text-gray-900 truncate">
-              {project.name}
-            </h3>
-          </div>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <ProjectIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+          <h3 className="text-lg font-bold text-gray-900 truncate leading-5">
+            {project.name}
+          </h3>
         </div>
         
         {/* 标签组 - 置顶标签和分类标签 */}
@@ -96,7 +94,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         {project.primaryLanguage && (
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 rounded-full bg-blue-500" />
-            <span>{project.primaryLanguage}</span>
+            <span>{project.primaryLanguage.name}</span>
           </div>
         )}
       </div>
@@ -116,12 +114,12 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         <div className="flex gap-2 text-xs">
           {project.isArchived && (
             <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded">
-              已归档
+              {t('project.archived')}
             </span>
           )}
           {project.isFork && (
             <span className="px-2 py-1 bg-orange-100 text-orange-600 rounded">
-              Fork
+              {t('project.forked')}
             </span>
           )}
         </div>

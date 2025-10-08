@@ -689,7 +689,19 @@
       "noDescription": "説明なし",
       "viewDetails": "詳細を表示",
       "hideDetails": "詳細を非表示",
-      "pinned": "ピン留め"
+      "pinned": "ピン留め",
+      "archived": "アーカイブ済み",
+      "forked": "フォークプロジェクト",
+      "activityScore": "アクティビティスコア",
+      "displayWeight": "表示ウェイト",
+      "comprehensiveScore": "総合評価：スター + アクティビティ + 更新頻度",
+      "chart": "チャート",
+      "list": "リスト",
+      "percentage": "割合",
+      "bytes": "バイト数",
+      "commits": "コミット",
+      "contributionRatio": "貢献率",
+      "languagesMore": "あと {count} 言語が非表示、リストモードに切り替えてすべて表示"
     },
     "rateLimit": {
       "title": "API制限通知",

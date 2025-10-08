@@ -684,7 +684,19 @@
       "noDescription": "No description",
       "viewDetails": "View details",
       "hideDetails": "Hide details",
-      "pinned": "Pinned"
+      "pinned": "Pinned",
+      "archived": "Archived",
+      "forked": "Forked Project",
+      "activityScore": "Activity Score",
+      "displayWeight": "Display Weight",
+      "comprehensiveScore": "Comprehensive Score: Stars + Activity + Update Frequency",
+      "chart": "Chart",
+      "list": "List",
+      "percentage": "Percentage",
+      "bytes": "Bytes",
+      "commits": "commits",
+      "contributionRatio": "Contribution Ratio",
+      "languagesMore": "{count} more languages not shown, switch to list mode to view all"
     },
     "rateLimit": {
       "title": "API Limit Notice",

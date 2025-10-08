@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, ReactNode, Children, isValidElement } from 'react'
+import { useState, type ReactNode } from 'react'
 import { cn } from '@/utils'
 
 export interface TabItem {

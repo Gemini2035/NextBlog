@@ -1,37 +1,64 @@
 /**
- * GitHub 服务层统一导出
+ * GitHub GraphQL 服务统一导出
+ * 新架构：基于 GraphQL 的清晰分层
  */
 
-// API 服务
-export {
-  githubApiService,
-  githubApi, // 向后兼容别名
-  createGitHubApiService,
-  GitHubApiService,
-} from './api'
+// ============ 核心客户端 ============
+export { githubGraphQLClient, createGraphQLClient, handleGraphQLError, delay } from './client'
 
-// 数据处理
+// ============ GraphQL 查询 ============
+export { GET_USER_REPOSITORIES } from './queries/repositories.graphql'
+export { GET_REPOSITORY_DETAIL } from './queries/repository.graphql'
+export { GET_RATE_LIMIT } from './queries/rateLimit.graphql'
+
+// ============ GraphQL 操作 ============
 export {
-  processLanguages,
-  processContributors,
-  calculateActivityScore,
-  calculateDisplayWeight,
+  getUserRepositories,
+  getAllUserRepositories,
+  getRepositoryDetail,
+  batchGetRepositoryDetails,
+  getRateLimit,
+} from './operations/repositories'
+
+// ============ 数据转换器 ============
+export {
+  transformRepository,
+  transformRepositories,
+  filterRepositories as filterRepositoriesByOptions,
+} from './transformers/repository'
+
+export {
   categorizeProject,
-  processRepository,
-  processRepositories,
-  filterProjects,
-  sortProjects,
   generateProjectStats,
-} from './processor'
+  sortProjects,
+  filterProjects,
+} from './transformers/stats'
 
-// 类型
+// ============ GraphQL 类型 ============
 export type {
-  GitHubRepository,
-  GitHubContributor,
-  GitHubLanguages,
-  GitHubRepoQueryParams,
-  GitHubRateLimit,
-  GitHubResponseHeaders,
+  GraphQLRepository,
+  UserRepositoriesResponse,
+  RepositoryDetailResponse,
+  RateLimitResponse,
+  GetUserRepositoriesVariables,
+  GetRepositoryDetailVariables,
+  RepositoryAffiliation,
+  PageInfo,
+  LanguageNode,
+  LanguageEdge,
+  LanguagesConnection,
+  CollaboratorNode,
+  CollaboratorsConnection,
+  LicenseInfo,
+  RepositoryOwner,
+  BranchRef,
+  TopicNode,
+  TopicsConnection,
+  RepositoryOrder,
+} from './types/graphql'
+
+// ============ 应用数据类型 ============
+export type {
   ProcessedRepository,
   LanguageStat,
   ContributorStat,
@@ -39,5 +66,4 @@ export type {
   ProjectFilters,
   ProjectSortOption,
   ProjectStats,
-} from './types'
-
+} from './types/processed'

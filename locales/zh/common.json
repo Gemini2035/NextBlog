@@ -709,7 +709,19 @@
       "noDescription": "暂无描述",
       "viewDetails": "查看详情",
       "hideDetails": "收起详情",
-      "pinned": "置顶"
+      "pinned": "置顶",
+      "archived": "已归档",
+      "forked": "Fork 项目",
+      "activityScore": "活跃度评分",
+      "displayWeight": "展示权重",
+      "comprehensiveScore": "综合评分：Stars + 活跃度 + 更新频率",
+      "chart": "图表",
+      "list": "列表",
+      "percentage": "占比",
+      "bytes": "字节数",
+      "commits": "commits",
+      "contributionRatio": "贡献占比",
+      "languagesMore": "还有 {count} 种语言未显示，切换到列表模式查看全部"
     },
     "rateLimit": {
       "title": "API限制提示",

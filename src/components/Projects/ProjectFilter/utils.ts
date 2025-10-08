@@ -88,7 +88,7 @@ export function applyFilters(
   } else if (filters.forkSort) {
     result.sort((a, b) => sortWithPinned(a, b, (item) => item.forks, filters.forkSort === 'asc'))
   } else if (filters.weightSort) {
-    result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight, filters.weightSort === 'asc'))
+    result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight || 0, filters.weightSort === 'asc'))
   } else if (filters.createTimeSort) {
     result.sort((a, b) => sortWithPinned(a, b, (item) => item.createdAt.getTime(), filters.createTimeSort === 'asc'))
   } else if (filters.updateTimeSort) {
@@ -97,7 +97,7 @@ export function applyFilters(
     result.sort((a, b) => sortWithPinned(a, b, (item) => item.pushedAt.getTime(), filters.pushTimeSort === 'asc'))
   } else {
     // 默认按权重降序排序（置顶项目优先）
-    result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight, false))
+    result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight || 0, false))
   }
 
   return result

@@ -70,6 +70,12 @@ export type {
   EmptyStateVariant,
   EmptyStateIconType
 } from './EmptyState'
+export { Loading } from './Loading'
+export type { 
+  LoadingProps, 
+  LoadingSize, 
+  LoadingVariant
+} from './Loading'
 export { Timeline, TimelineItem } from './Timeline'
 export type { 
   TimelineProps, 
@@ -81,3 +87,5 @@ export type {
   TimelineItemProps, 
   TimelineItemRef
 } from './Timeline'
+export { toast, ToastContainer } from './Toast'
+export type { ToastOptions, ToastType, ToastInstance } from './Toast'
