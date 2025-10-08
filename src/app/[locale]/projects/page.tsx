@@ -21,6 +21,7 @@ import {
   ProjectFilter 
 } from '@/components/Projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
+import { Loading } from '@/ui'
 
 /**
  * Projects Page - 项目展示页面
@@ -153,74 +154,76 @@ export default function ProjectsPage() {
     fetchGitHubData()
   }, [fetchGitHubData])
 
-  /**
-   * 渲染加载状态
-   */
-  if (loading) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
-        <div className="p-8 bg-blue-50 rounded-lg">
-          <p className="text-xl">{t('loadingProjects')}</p>
-          <p className="text-sm text-gray-600 mt-2">请查看浏览器Console查看详细加载过程...</p>
-        </div>
-      </div>
-    )
-  }
-
-  /**
-   * 渲染错误状态
-   */
-  if (error) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold mb-4">{t('title')}</h1>
-        <div className="p-8 bg-red-50 rounded-lg">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">{t('error')}</h2>
-          <p className="text-red-700 mb-4">{error}</p>
-          <button
-            onClick={fetchGitHubData}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            {t('retry')}
-          </button>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="relative max-w-6xl mx-auto px-4 py-12 min-h-[calc(100vh-64px)]">
       {/* 页面标题 */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">{t('title')}</h1>
         <p className="text-xl text-gray-600">{t('description')}</p>
       </div>
 
+      {/* 加载状态 - 覆盖内容区域 */}
+      {loading && (
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-50 flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="relative">
+              {/* 外圈 - 扁平化圆环 */}
+              <div className="w-12 h-12 rounded-full border-4 border-gray-200" />
+              {/* 内圈 - 旋转的蓝色弧线 */}
+              <div 
+                className="absolute inset-0 w-12 h-12 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"
+                style={{ animationDuration: '0.8s' }}
+              />
+            </div>
+            <p className="text-gray-700 font-medium text-lg">
+              {t('loadingProjects')}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* 错误状态 */}
+      {error && (
+        <div className="p-8 bg-red-50 rounded-lg">
+          <h2 className="text-2xl font-bold text-red-600 mb-2">{t('error')}</h2>
+          <p className="text-red-700 mb-4">{error}</p>
+          <button
+            onClick={fetchGitHubData}
+            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+          >
+            {t('retry')}
+          </button>
+        </div>
+      )}
+
       {/* 统计概览 */}
-      {stats && (
+      {!loading && !error && stats && (
         <StatsOverview stats={stats} className="mb-8" />
       )}
 
       {/* 项目筛选器 */}
-      <div id="project-filter" className="mb-8">
-        <ProjectFilter
-          projects={allProjects}
-          onFilteredProjectsChange={handleFilteredProjectsChange}
-        />
-      </div>
+      {!loading && !error && (
+        <div id="project-filter" className="mb-8">
+          <ProjectFilter
+            projects={allProjects}
+            onFilteredProjectsChange={handleFilteredProjectsChange}
+          />
+        </div>
+      )}
 
       {/* 项目瀑布流 */}
-      {waterfallItems.length > 0 ? (
-        <ExpandableWaterfall 
-          items={waterfallItems}
-          columns={2}
-          gap={24}
-        />
-      ) : (
-        <div className="py-12 text-center">
-          <p className="text-gray-500 text-lg">{t('empty.description')}</p>
-        </div>
+      {!loading && !error && (
+        waterfallItems.length > 0 ? (
+          <ExpandableWaterfall 
+            items={waterfallItems}
+            columns={2}
+            gap={24}
+          />
+        ) : (
+          <div className="py-12 text-center">
+            <p className="text-gray-500 text-lg">{t('empty.description')}</p>
+          </div>
+        )
       )}
     </div>
   )
