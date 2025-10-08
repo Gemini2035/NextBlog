@@ -116,12 +116,12 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         <div className="flex gap-2 text-xs">
           {project.isArchived && (
             <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded">
-              已归档
+              {t('project.archived')}
             </span>
           )}
           {project.isFork && (
             <span className="px-2 py-1 bg-orange-100 text-orange-600 rounded">
-              Fork
+              {t('project.forked')}
             </span>
           )}
         </div>

@@ -181,7 +181,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-100">
         {project.activityScore !== undefined && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">活跃度评分</div>
+            <div className="text-xs text-gray-500 mb-1">{t('project.activityScore')}</div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-purple-600">
                 {project.activityScore.toFixed(1)}
@@ -199,14 +199,14 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
         
         {project.displayWeight !== undefined && (
           <div>
-            <div className="text-xs text-gray-500 mb-1">展示权重</div>
+            <div className="text-xs text-gray-500 mb-1">{t('project.displayWeight')}</div>
             <div className="flex items-baseline gap-2">
               <span className="text-2xl font-bold text-indigo-600">
                 {project.displayWeight.toFixed(1)}
               </span>
             </div>
             <div className="mt-2 text-xs text-gray-600">
-              综合评分：Stars + 活跃度 + 更新频率
+              {t('project.comprehensiveScore')}
             </div>
           </div>
         )}
@@ -226,18 +226,18 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
             items={[
               {
                 key: 'chart',
-                label: '图表',
+                label: t('project.chart'),
                 children: (
                   <div className="space-y-4">
                     {/* 图例 - 修复垂直居中 */}
                     <div className="flex items-center gap-6 text-xs text-gray-600">
                       <div className="flex items-center gap-2">
                         <span className="w-4 h-3 rounded" style={{ backgroundColor: 'rgba(59, 130, 246, 0.7)' }}></span>
-                        <span>占比 (%)</span>
+                        <span>{t('project.percentage')} (%)</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="w-4 h-0.5 bg-red-500"></span>
-                        <span>字节数 (bytes)</span>
+                        <span>{t('project.bytes')} (bytes)</span>
                       </div>
                     </div>
               
@@ -262,14 +262,14 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                   {/* 左侧Y轴 - 百分比 */}
                   <YAxis 
                     yAxisId="left"
-                    label={{ value: '占比 (%)', angle: -90, position: 'insideLeft', style: { fontSize: 12, fill: '#3b82f6' } }}
+                    label={{ value: `${t('project.percentage')} (%)`, angle: -90, position: 'insideLeft', style: { fontSize: 12, fill: '#3b82f6' } }}
                     tick={{ fontSize: 12, fill: '#3b82f6' }}
                   />
                   {/* 右侧Y轴 - 字节数 */}
                   <YAxis 
                     yAxisId="right"
                     orientation="right"
-                    label={{ value: '字节数 (bytes)', angle: 90, position: 'insideRight', style: { fontSize: 12, fill: '#ef4444' } }}
+                    label={{ value: `${t('project.bytes')} (bytes)`, angle: 90, position: 'insideRight', style: { fontSize: 12, fill: '#ef4444' } }}
                     tick={{ fontSize: 12, fill: '#ef4444' }}
                     tickFormatter={(value) => {
                       if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`
@@ -286,10 +286,10 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                     }}
                     formatter={(value, name) => {
                       if (name === 'percentage') {
-                        return [`${value}%`, '占比']
+                        return [`${value}%`, t('project.percentage')]
                       }
                       if (name === 'bytes') {
-                        return [`${(value as number).toLocaleString()} bytes`, '字节数']
+                        return [`${(value as number).toLocaleString()} bytes`, t('project.bytes')]
                       }
                       return [value, name]
                     }}
@@ -324,7 +324,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                     {/* 如果语言超过10个，显示剩余提示 */}
                     {project.languages.length > 10 && (
                       <div className="text-xs text-gray-500 text-center">
-                        还有 {project.languages.length - 10} 种语言未显示，切换到列表模式查看全部
+                        {t('project.languagesMore', { count: project.languages.length - 10 })}
                       </div>
                     )}
                   </div>
@@ -332,7 +332,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
               },
               {
                 key: 'list',
-                label: '列表',
+                label: t('project.list'),
                 children: (
                   <div className="space-y-3">
                     {project.languages.map((lang) => (
@@ -386,7 +386,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
             items={[
               {
                 key: 'list',
-                label: '列表',
+                label: t('project.list'),
                 children: (
                   <div className="space-y-3">
                     {project.contributors.map((contributor) => (
@@ -409,7 +409,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                             {contributor.login}
                           </div>
                           <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
-                            <span>{contributor.contributions} commits</span>
+                            <span>{contributor.contributions} {t('project.commits')}</span>
                             <span>•</span>
                             <span>{contributor.percentage.toFixed(1)}%</span>
                           </div>
@@ -430,7 +430,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
               },
               {
                 key: 'chart',
-                label: '图表',
+                label: t('project.chart'),
                 children: (
                   <div className="space-y-4">
                     <ResponsiveContainer width="100%" height={280}>
@@ -474,7 +474,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                           }}
                           formatter={(value, _name, item) => {
                             const contributions = (item.payload as { contributions: number }).contributions
-                            return [`${value}% (${contributions} commits)`, '贡献占比']
+                            return [`${value}% (${contributions} ${t('project.commits')})`, t('project.contributionRatio')]
                           }}
                         />
                       </PieChart>
@@ -496,7 +496,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 group"
-                            title={`${contributor.login}: ${contributor.contributions} commits (${contributor.percentage.toFixed(1)}%)`}
+                            title={`${contributor.login}: ${contributor.contributions} ${t('project.commits')} (${contributor.percentage.toFixed(1)}%)`}
                           >
                             {/* 颜色指示器 */}
                             <div 
@@ -596,13 +596,13 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           {project.isArchived && (
             <span className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium flex items-center gap-2">
               <ArchiveIcon className="w-4 h-4" />
-              已归档项目
+              {t('project.archived')}
             </span>
           )}
           {project.isFork && (
             <span className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium flex items-center gap-2">
               <ForkIcon className="w-4 h-4" />
-              Fork 项目
+              {t('project.forked')}
             </span>
           )}
         </div>
