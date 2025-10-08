@@ -87,3 +87,5 @@ export type {
   TimelineItemProps, 
   TimelineItemRef
 } from './Timeline'
+export { toast, ToastContainer } from './Toast'
+export type { ToastOptions, ToastType, ToastInstance } from './Toast'

@@ -38,6 +38,15 @@ export function transformRepository(
   // 生成稳定的数字ID（使用fullName的hash）
   const stableId = generateStableId(repo.nameWithOwner)
   
+  // 调试日志：检查原始数据
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`📊 转换仓库数据: ${repo.nameWithOwner}`, {
+      stargazerCount: repo.stargazerCount,
+      forkCount: repo.forkCount,
+      watchers: repo.watchers.totalCount,
+    })
+  }
+  
   return {
     // 基本信息
     id: stableId,
@@ -63,8 +72,9 @@ export function transformRepository(
     isPinned: isFeatured, // 别名：向后兼容
 
     // 统计数据
-    stars: repo.stargazerCount,
-    forks: repo.forkCount,
+    // 如果是 fork 项目，显示原仓库的 star 数
+    stars: repo.isFork && repo.parent ? repo.parent.stargazerCount : repo.stargazerCount,
+    forks: repo.isFork && repo.parent ? repo.parent.forkCount : repo.forkCount,
     watchers: repo.watchers.totalCount,
     openIssues: repo.issues.totalCount,
     openPullRequests: repo.pullRequests.totalCount,

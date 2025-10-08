@@ -7,6 +7,7 @@ import { useGitHubRepositories } from '@/hooks'
 import { categorizeProject, type ProcessedRepository } from '@/services/github'
 import { GITHUB_CONFIG } from '@/constants'
 import { MOCK_PROJECTS, MOCK_STATS } from '@/mocks/github-projects'
+import { toast } from '@/ui'
 import { 
   StatsOverview, 
   BriefProjectCard, 
@@ -70,6 +71,18 @@ export default function ProjectsPage() {
       setFilteredProjects(finalProjects)
     }
   }, [finalProjects, loading])
+
+  // 监听错误并显示Toast
+  useEffect(() => {
+    if (error && !useMock) {
+      // 判断是否为速率限制错误
+      if (error.includes('速率限制') || error.includes('rate limit')) {
+        toast.error(error, 5000) // 显示5秒
+      } else {
+        toast.error(error, 3000) // 普通错误显示3秒
+      }
+    }
+  }, [error, useMock])
   
   // 当有URL参数时，自动滚动到筛选器位置
   useEffect(() => {
@@ -139,11 +152,18 @@ export default function ProjectsPage() {
         />
       )}
 
-      {/* 错误状态 */}
+      {/* 错误状态 - Toast已经显示，这里只显示简化版 */}
       {error && (
-        <div className="p-8 bg-red-50 rounded-lg">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">{t('error')}</h2>
-          <p className="text-red-700 mb-4">{error}</p>
+        <div className="p-8 bg-red-50 rounded-lg border border-red-200">
+          <div className="flex items-center gap-3">
+            <svg className="w-6 h-6 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-red-600 mb-1">{t('error')}</h2>
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          </div>
         </div>
       )}
 

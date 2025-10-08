@@ -58,6 +58,14 @@ export const GET_USER_REPOSITORIES = `
             totalCount
           }
           
+          # Fork 源仓库信息
+          parent {
+            nameWithOwner
+            stargazerCount
+            forkCount
+            url
+          }
+          
           # 许可证
           licenseInfo {
             name

@@ -91,7 +91,25 @@ export const getGitHubRepositories = cache(
         featuredRepos = [],
       } = params
 
-      // 转换 repoType 为 GraphQL affiliations
+      // 1. 先检查API速率限制
+      try {
+        const currentRateLimit = await getRateLimit()
+        console.log('🔍 当前API速率限制:', currentRateLimit)
+        
+        if (currentRateLimit.remaining < 100) {
+          const resetDate = new Date(currentRateLimit.resetAt)
+          const resetTime = resetDate.toLocaleTimeString('zh-CN')
+          
+          return {
+            success: false,
+            error: `API 速率限制不足！剩余 ${currentRateLimit.remaining} 次请求，需要至少 100 次。请在 ${resetTime} 后重试。`
+          }
+        }
+      } catch (rateLimitError) {
+        console.warn('无法获取速率限制信息，继续执行:', rateLimitError)
+      }
+
+      // 2. 转换 repoType 为 GraphQL affiliations
       const affiliations: RepositoryAffiliation[] =
         repoType === 'owner'
           ? ['OWNER']
@@ -99,7 +117,7 @@ export const getGitHubRepositories = cache(
             ? ['COLLABORATOR', 'ORGANIZATION_MEMBER']
             : ['OWNER', 'COLLABORATOR', 'ORGANIZATION_MEMBER']
 
-      // 获取所有仓库（GraphQL 自动包含语言和贡献者数据）
+      // 3. 获取所有仓库（GraphQL 自动包含语言和贡献者数据）
       const graphqlRepos = await getAllUserRepositories(username, {
         maxPages,
         orderBy: 'UPDATED_AT',
@@ -107,8 +125,20 @@ export const getGitHubRepositories = cache(
         affiliations,
       })
 
+      console.log('📦 GraphQL 原始数据（前3个）:', graphqlRepos.slice(0, 3).map(r => ({
+        name: r.nameWithOwner,
+        stars: r.stargazerCount,
+        forks: r.forkCount,
+      })))
+
       // 转换为 ProcessedRepository 格式
       let projects = transformRepositories(graphqlRepos, featuredRepos)
+      
+      console.log('✅ 转换后的数据（前3个）:', projects.slice(0, 3).map(p => ({
+        name: p.fullName,
+        stars: p.stars,
+        forks: p.forks,
+      })))
 
       // 应用筛选
       projects = filterRepositoriesByOptions(projects, {

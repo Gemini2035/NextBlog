@@ -148,6 +148,14 @@ export interface GraphQLRepository {
   owner: RepositoryOwner
   defaultBranchRef: BranchRef | null
   repositoryTopics: TopicsConnection
+  
+  // Fork 源仓库
+  parent: {
+    nameWithOwner: string
+    stargazerCount: number
+    forkCount: number
+    url: string
+  } | null
 }
 
 /**

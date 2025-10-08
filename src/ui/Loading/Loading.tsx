@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect } from 'react'
-import { LoadingProps } from './types'
+import type { LoadingProps } from './types'
 import { getLoaderSize, getTextSize } from './styles'
 import { cn } from '@/utils'
 
