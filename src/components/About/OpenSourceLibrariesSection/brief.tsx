@@ -6,7 +6,9 @@ import {
   ReactIcon, 
   NextJsIcon, 
   ContentlayerIcon, 
-  TailwindIcon 
+  TailwindIcon,
+  OctokitIcon,
+  RechartsIcon
 } from '@/assets/icons'
 
 interface OpenSourceLibrariesBriefProps {
@@ -78,6 +80,32 @@ export default function OpenSourceLibrariesBrief({ className }: OpenSourceLibrar
             </div>
           </div>
           <span className="text-xs text-gray-500">v4.0.0</span>
+        </div>
+
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center mb-2">
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <OctokitIcon className="w-4 h-4 text-gray-700" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 text-sm">Octokit</h3>
+              <p className="text-xs text-gray-600">GraphQL 客户端</p>
+            </div>
+          </div>
+          <span className="text-xs text-gray-500">v9.0.2</span>
+        </div>
+
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
+          <div className="flex items-center mb-2">
+            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+              <RechartsIcon className="w-4 h-4 text-gray-700" />
+            </div>
+            <div>
+              <h3 className="font-medium text-gray-900 text-sm">Recharts</h3>
+              <p className="text-xs text-gray-600">数据可视化</p>
+            </div>
+          </div>
+          <span className="text-xs text-gray-500">v3.2.1</span>
         </div>
       </div>
     </div>
