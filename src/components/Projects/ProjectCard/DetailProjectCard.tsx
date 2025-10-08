@@ -83,11 +83,11 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
     <div className="space-y-6">
       {/* 项目头部 */}
       <div className="space-y-3">
-        <div className="flex items-start gap-3">
-          <ProjectIcon className="w-6 h-6 text-gray-700 flex-shrink-0 mt-1" />
+        <div className="flex items-center gap-3">
+          <ProjectIcon className="w-6 h-6 text-gray-700 flex-shrink-0" />
           <div className="flex-1 min-w-0">
-            <div className="flex items-start gap-2 flex-wrap mb-2">
-              <h2 className="text-2xl font-bold text-gray-900">
+            <div className="flex items-center gap-2 flex-wrap mb-2">
+              <h2 className="text-2xl font-bold text-gray-900 leading-6">
                 {project.name}
               </h2>
               {/* 置顶标签 */}
@@ -216,8 +216,8 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.languageStats && project.languageStats.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <LanguageIcon className="w-5 h-5 text-gray-600" />
-            <h3 className="text-sm font-semibold text-gray-900">
+            <LanguageIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+            <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.languages')}
             </h3>
           </div>
@@ -376,8 +376,8 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.contributors && project.contributors.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <ContributorIcon className="w-5 h-5 text-gray-600" />
-            <h3 className="text-sm font-semibold text-gray-900">
+            <ContributorIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+            <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.contributors')} ({project.contributors.length})
             </h3>
           </div>
@@ -536,8 +536,8 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.topics.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <TagIcon className="w-5 h-5 text-gray-600" />
-            <h3 className="text-sm font-semibold text-gray-900">
+            <TagIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+            <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.topics')}
             </h3>
           </div>

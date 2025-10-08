@@ -50,13 +50,11 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
     <div className="space-y-4">
       {/* 项目头部 - 名称和状态 */}
       <div className="flex items-start justify-between gap-3">
-        <div className="flex items-start gap-2 flex-1 min-w-0">
-          <ProjectIcon className="w-5 h-5 text-gray-600 flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-bold text-gray-900 truncate">
-              {project.name}
-            </h3>
-          </div>
+        <div className="flex items-center gap-2 flex-1 min-w-0">
+          <ProjectIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+          <h3 className="text-lg font-bold text-gray-900 truncate leading-5">
+            {project.name}
+          </h3>
         </div>
         
         {/* 标签组 - 置顶标签和分类标签 */}
