@@ -304,5 +304,19 @@ export const MOCK_STATS: ProjectStats = {
   },
   activeProjects: 2,
   archivedProjects: 0,
+  // 我创建的项目统计
+  ownedStats: {
+    count: 5,
+    stars: 128,
+    forks: 32,
+    languages: 3,
+  },
+  // 我参与的项目统计
+  contributedStats: {
+    count: 2,
+    stars: 12350,
+    forks: 2458,
+    languages: 2,
+  },
 }
 

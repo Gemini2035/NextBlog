@@ -89,11 +89,9 @@
     "Development Protocols": "開発プロトコル",
     "My Projects": "私のプロジェクト",
     "Showcase my technical projects and portfolio": "私の技術プロジェクトとポートフォリオを紹介(データソース: Github)",
-    "Project Types": "プロジェクトタイプ",
-    "Open Source Projects": "オープンソース",
-    "Commercial Projects": "商用",
-    "Learning Projects": "学習",
-    "Self-Developed Projects": "自主開発",
+    "Projects by Ownership": "プロジェクト所有権",
+    "Created by Me": "私が作成",
+    "Contributed by Me": "私が参加",
     "Social Links": "ソーシャルリンク",
     "Follow my open source projects": "オープンソースプロジェクトをフォロー",
     "Follow my latest updates": "最新の更新をフォロー",
@@ -710,6 +708,18 @@
       "cacheHit": "キャッシュヒット",
       "loadTime": "読み込み時間",
       "dataSource": "データソース"
+    },
+    "statsOverview": {
+      "title": "統計概要",
+      "myProjects": "私が作成",
+      "contributedProjects": "私が参加",
+      "projectCount": "プロジェクト数",
+      "totalStars": "スター数",
+      "totalForks": "フォーク数",
+      "languages": "言語数",
+      "overallStats": "全体統計",
+      "totalProjects": "総プロジェクト数",
+      "activeProjects": "アクティブプロジェクト"
     }
   },
   "Education": {

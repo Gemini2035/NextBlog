@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { getGitHubRepositoriesWithRetry } from '@/actions/github'
 import {
@@ -17,7 +17,9 @@ import type {
 } from '@/types/github'
 import { GITHUB_CONFIG } from '@/constants'
 import { MOCK_PROJECTS, MOCK_STATS } from '@/mocks/github-projects'
-import Image from 'next/image'
+import { StatsOverview } from '@/components/Projects/StatsOverview'
+import { BriefProjectCard, DetailProjectCard } from '@/components/Projects/ProjectCard'
+import { ExpandableWaterfall } from '@/components/Waterfall'
 
 /**
  * Projects Page - 项目展示页面
@@ -35,25 +37,16 @@ export default function ProjectsPage() {
   
   // 筛选和排序状态
   const [filters, setFilters] = useState<ProjectFilters>({
-    includeForked: false,
+    includeForked: true,  // 默认显示Fork项目
     includeArchived: false,
     searchText: '',
   })
   const [sortBy, setSortBy] = useState<ProjectSortOption>('weight')
-  
-  // 调试信息
-  const [debugInfo, setDebugInfo] = useState({
-    apiCalls: 0,
-    loadTime: 0,
-    cacheHit: false,
-    dataSource: 'github',
-  })
 
   /**
    * 获取GitHub数据（支持Mock模式）
    */
   const fetchGitHubData = useCallback(async () => {
-    const startTime = Date.now()
     setLoading(true)
     setError(null)
 
@@ -71,15 +64,6 @@ export default function ProjectsPage() {
         setAllProjects(MOCK_PROJECTS)
         setFilteredProjects(MOCK_PROJECTS)
         setStats(MOCK_STATS)
-
-        // 更新调试信息
-        const endTime = Date.now()
-        setDebugInfo({
-          apiCalls: 0,
-          loadTime: endTime - startTime,
-          cacheHit: false,
-          dataSource: 'mock-data',
-        })
 
       } else {
         // 调用真实 API
@@ -108,23 +92,6 @@ export default function ProjectsPage() {
         setAllProjects(result.data.projects)
         setFilteredProjects(result.data.projects)
         setStats(result.data.stats)
-
-        // 更新调试信息
-        const endTime = Date.now()
-        setDebugInfo({
-          apiCalls: 1,
-          loadTime: endTime - startTime,
-          cacheHit: false,
-          dataSource: 'server-actions',
-        })
-
-        // 检查速率限制
-        if (result.data.rateLimit) {
-          console.log('🔥 GitHub API速率限制:', result.data.rateLimit)
-          if (result.data.rateLimit.remaining < 100) {
-            console.warn('⚠️ GitHub API调用次数不足100次!')
-          }
-        }
       }
 
     } catch (err) {
@@ -146,6 +113,33 @@ export default function ProjectsPage() {
 
     setFilteredProjects(result)
   }, [allProjects, filters, sortBy])
+
+  /**
+   * 将项目转换为Waterfall项目
+   */
+  const waterfallItems = useMemo(() => {
+    return filteredProjects.map((project) => {
+      const category = categorizeProject({
+        archived: project.isArchived,
+        fork: project.isFork,
+        updated_at: project.updatedAt.toISOString(),
+        name: project.name,
+        description: project.description,
+      } as GitHubRepository)
+
+      return {
+        id: project.id.toString(),
+        content: (
+          <BriefProjectCard project={project} category={category} />
+        ),
+        expandedContent: (
+          <DetailProjectCard project={project} category={category} />
+        ),
+        height: 'medium' as const,
+        anchorId: `project-${project.id}`,
+      }
+    })
+  }, [filteredProjects])
 
   /**
    * 初始化加载
@@ -198,38 +192,14 @@ export default function ProjectsPage() {
         <p className="text-xl text-gray-600">{t('description')}</p>
       </div>
 
-      {/* 统计信息 */}
+      {/* 统计概览 */}
       {stats && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
-          <h2 className="text-2xl font-bold mb-4">📊 统计概览</h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-white p-4 rounded shadow">
-              <div className="text-3xl font-bold text-blue-600">{stats.totalProjects}</div>
-              <div className="text-sm text-gray-600">{t('stats.totalProjects')}</div>
-            </div>
-            <div className="bg-white p-4 rounded shadow">
-              <div className="text-3xl font-bold text-yellow-600">{stats.totalStars}</div>
-              <div className="text-sm text-gray-600">{t('stats.totalStars')}</div>
-            </div>
-            <div className="bg-white p-4 rounded shadow">
-              <div className="text-3xl font-bold text-green-600">{stats.totalForks}</div>
-              <div className="text-sm text-gray-600">{t('stats.totalForks')}</div>
-            </div>
-            <div className="bg-white p-4 rounded shadow">
-              <div className="text-3xl font-bold text-purple-600">{stats.activeProjects}</div>
-              <div className="text-sm text-gray-600">{t('stats.activeProjects')}</div>
-            </div>
-            <div className="bg-white p-4 rounded shadow">
-              <div className="text-3xl font-bold text-gray-600">{stats.archivedProjects}</div>
-              <div className="text-sm text-gray-600">{t('stats.archivedProjects')}</div>
-            </div>
-          </div>
-        </div>
+        <StatsOverview stats={stats} className="mb-8" />
       )}
 
       {/* 筛选控制 */}
-      <div className="mb-8 p-6 bg-gray-50 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">🔍 {t('filters.title')}</h2>
+      <div className="mb-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900">🔍 {t('filters.title')}</h2>
         
         {/* 搜索框 */}
         <div className="mb-4">
@@ -238,37 +208,43 @@ export default function ProjectsPage() {
             placeholder={t('filters.search')}
             value={filters.searchText || ''}
             onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
-            className="w-full px-4 py-2 border rounded"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
         </div>
 
         {/* 复选框 */}
-        <div className="flex gap-4 mb-4">
-          <label className="flex items-center gap-2">
+        <div className="flex gap-6 mb-4">
+          <label className="flex items-center gap-2 cursor-pointer group">
             <input
               type="checkbox"
               checked={filters.includeForked}
               onChange={(e) => setFilters({ ...filters, includeForked: e.target.checked })}
+              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
             />
-            <span>{t('filters.includeForked')}</span>
+            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+              {t('filters.includeForked')}
+            </span>
           </label>
-          <label className="flex items-center gap-2">
+          <label className="flex items-center gap-2 cursor-pointer group">
             <input
               type="checkbox"
               checked={filters.includeArchived}
               onChange={(e) => setFilters({ ...filters, includeArchived: e.target.checked })}
+              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
             />
-            <span>{t('filters.includeArchived')}</span>
+            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
+              {t('filters.includeArchived')}
+            </span>
           </label>
         </div>
 
         {/* 排序选择 */}
         <div>
-          <label className="block mb-2 font-semibold">{t('filters.sort')}:</label>
+          <label className="block mb-2 font-semibold text-gray-900">{t('filters.sort')}:</label>
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as ProjectSortOption)}
-            className="px-4 py-2 border rounded"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
           >
             <option value="weight">{t('filters.sortBy.weight')}</option>
             <option value="stars">{t('filters.sortBy.stars')}</option>
@@ -279,167 +255,25 @@ export default function ProjectsPage() {
         </div>
 
         <div className="mt-4 text-sm text-gray-600">
-          显示 {filteredProjects.length} / {allProjects.length} 个项目
+          显示 <span className="font-semibold text-blue-600">{filteredProjects.length}</span> / {allProjects.length} 个项目
         </div>
       </div>
 
-      {/* 项目列表（简单展示，仅用于调试） */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">📦 项目列表</h2>
-        {filteredProjects.map((project) => {
-          const category = categorizeProject({
-            archived: project.isArchived,
-            fork: project.isFork,
-            updated_at: project.updatedAt.toISOString(),
-            name: project.name,
-            description: project.description,
-          } as GitHubRepository)
-
-          return (
-            <div key={project.id} className="p-6 bg-white border rounded-lg shadow-sm">
-              {/* 项目标题和基本信息 */}
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold">
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    {project.name}
-                  </a>
-                </h3>
-                <span className="px-2 py-1 text-xs bg-gray-100 rounded">
-                  {category}
-                </span>
-              </div>
-
-              {/* 描述 */}
-              <p className="text-gray-600 mb-3">{project.description}</p>
-
-              {/* 统计信息 */}
-              <div className="flex gap-4 text-sm text-gray-600 mb-3">
-                <span>⭐ {project.stars}</span>
-                <span>🔀 {project.forks}</span>
-                <span>👀 {project.watchers}</span>
-                {project.primaryLanguage && (
-                  <span>💻 {project.primaryLanguage}</span>
-                )}
-              </div>
-
-              {/* 语言占比（如果有） */}
-              {project.languages && project.languages.length > 0 && (
-                <div className="mb-3">
-                  <h4 className="text-sm font-semibold mb-2">💻 语言占比:</h4>
-                  <div className="space-y-2">
-                    {project.languages.map(lang => (
-                      <div key={lang.name}>
-                        <div className="flex justify-between text-xs text-gray-600 mb-1">
-                          <span>{lang.name}</span>
-                          <span>{lang.percentage.toFixed(1)}%</span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
-                          <div 
-                            className="h-1.5 rounded-full transition-all"
-                            style={{ 
-                              width: `${lang.percentage}%`,
-                              backgroundColor: lang.color 
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* 贡献者（如果有） */}
-              {project.contributors && project.contributors.length > 0 && (
-                <div className="mb-3">
-                  <h4 className="text-sm font-semibold mb-2">👥 贡献者 ({project.contributors.length}):</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {project.contributors.slice(0, 10).map(contributor => (
-                      <a
-                        key={contributor.login}
-                        href={contributor.profileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative"
-                        title={`${contributor.login} (${contributor.percentage.toFixed(1)}%)`}
-                      >
-                        <Image
-                          src={contributor.avatarUrl}
-                          alt={contributor.login}
-                          width={32}
-                          height={32}
-                          className="w-8 h-8 rounded-full border-2 border-white hover:border-blue-500 transition-colors"
-                        />
-                      </a>
-                    ))}
-                    {project.contributors.length > 10 && (
-                      <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-600">
-                        +{project.contributors.length - 10}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Topics */}
-              {project.topics.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {project.topics.map((topic) => (
-                    <span key={topic} className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
-                      {topic}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              {/* 时间信息 */}
-              <div className="text-xs text-gray-500">
-                创建于: {project.createdAt.toLocaleDateString()} | 
-                更新于: {project.updatedAt.toLocaleDateString()} | 
-                活跃度评分: {project.activityScore?.toFixed(1)} | 
-                展示权重: {project.displayWeight?.toFixed(1)}
-              </div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* 调试信息 */}
-      <div className="mt-8 p-6 bg-gray-900 text-white rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">🐛 {t('debug.title')}</h2>
-        <div className="grid grid-cols-2 gap-4 font-mono text-sm">
-          <div>
-            <span className="text-gray-400">{t('debug.apiCalls')}:</span> {debugInfo.apiCalls}
-          </div>
-          <div>
-            <span className="text-gray-400">{t('debug.loadTime')}:</span> {debugInfo.loadTime}ms
-          </div>
-          <div>
-            <span className="text-gray-400">{t('debug.cacheHit')}:</span> {debugInfo.cacheHit ? '✅' : '❌'}
-          </div>
-          <div>
-            <span className="text-gray-400">{t('debug.dataSource')}:</span> {debugInfo.dataSource}
-          </div>
+      {/* 项目瀑布流 */}
+      {waterfallItems.length > 0 ? (
+        <ExpandableWaterfall 
+          items={waterfallItems}
+          columns={2}
+          gap={24}
+        />
+      ) : (
+        <div className="py-12 text-center">
+          <p className="text-gray-500 text-lg">{t('empty.description')}</p>
         </div>
-        
-        {/* 速率限制信息 */}
-        {stats && (
-          <div className="mt-4 p-4 bg-gray-800 rounded">
-            <h3 className="font-bold mb-2">数据来源信息</h3>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div>数据源: Server Actions</div>
-              <div>架构: 服务端执行</div>
-              <div>调用方式: actions/github.ts</div>
-              <div>缓存: React cache + 自动重复删除</div>
-            </div>
-          </div>
-        )}
-      </div>
+      )}
     </div>
   )
 }
+
+
 

@@ -189,24 +189,16 @@
             "description": "Showcase my technical projects and portfolio",
             "items": [
               {
-                "label": "Project Types",
-                "href": "/projects#types",
+                "label": "Projects by Ownership",
+                "href": "/projects#ownership",
                 "items": [
                   {
-                    "label": "Open Source Projects",
-                    "href": "/projects#open-source"
+                    "label": "Created by Me",
+                    "href": "/projects#created-by-me"
                   },
                   {
-                    "label": "Commercial Projects",
-                    "href": "/projects#commercial"
-                  },
-                  {
-                    "label": "Learning Projects",
-                    "href": "/projects#learning"
-                  },
-                  {
-                    "label": "Self-Developed Projects",
-                    "href": "/projects#self-developed"
+                    "label": "Contributed by Me",
+                    "href": "/projects#contributed-by-me"
                   }
                 ]
               }

@@ -120,7 +120,7 @@ export const getGitHubRepositories = cache(async (params: GetReposParams = {}): 
 
     // 处理数据
     const projects = processRepositories(filteredRepos, detailsMap)
-    const stats = generateProjectStats(projects)
+    const stats = generateProjectStats(projects, username)
     const rateLimit = githubApiService.getRateLimit()
 
     return {

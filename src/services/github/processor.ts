@@ -338,7 +338,7 @@ export function sortProjects(
 /**
  * 生成项目统计信息
  */
-export function generateProjectStats(projects: ProcessedRepository[]): ProjectStats {
+export function generateProjectStats(projects: ProcessedRepository[], username?: string): ProjectStats {
   const totalStars = projects.reduce((sum, p) => sum + p.stars, 0)
   const totalForks = projects.reduce((sum, p) => sum + p.forks, 0)
 
@@ -387,6 +387,41 @@ export function generateProjectStats(projects: ProcessedRepository[]): ProjectSt
   const activeProjects = projects.filter((p) => !p.isArchived && !p.isFork).length
   const archivedProjects = projects.filter((p) => p.isArchived).length
 
+  // 计算"我创建的"和"我参与的"统计
+  let ownedStats, contributedStats
+  
+  if (username) {
+    // 我创建的项目（非fork且owner是当前用户）
+    const ownedProjects = projects.filter((p) => {
+      const ownerName = p.fullName.split('/')[0]
+      return ownerName.toLowerCase() === username.toLowerCase() && !p.isFork
+    })
+    
+    // 我参与的项目（fork的项目或owner不是当前用户的项目）
+    const contributedProjects = projects.filter((p) => {
+      const ownerName = p.fullName.split('/')[0]
+      return ownerName.toLowerCase() !== username.toLowerCase() || p.isFork
+    })
+
+    // 统计我创建的项目
+    const ownedLanguages = new Set(ownedProjects.map(p => p.primaryLanguage).filter(Boolean))
+    ownedStats = {
+      count: ownedProjects.length,
+      stars: ownedProjects.reduce((sum, p) => sum + p.stars, 0),
+      forks: ownedProjects.reduce((sum, p) => sum + p.forks, 0),
+      languages: ownedLanguages.size,
+    }
+
+    // 统计我参与的项目
+    const contributedLanguages = new Set(contributedProjects.map(p => p.primaryLanguage).filter(Boolean))
+    contributedStats = {
+      count: contributedProjects.length,
+      stars: contributedProjects.reduce((sum, p) => sum + p.stars, 0),
+      forks: contributedProjects.reduce((sum, p) => sum + p.forks, 0),
+      languages: contributedLanguages.size,
+    }
+  }
+
   return {
     totalProjects: projects.length,
     totalStars,
@@ -395,6 +430,8 @@ export function generateProjectStats(projects: ProcessedRepository[]): ProjectSt
     categoryDistribution,
     activeProjects,
     archivedProjects,
+    ownedStats,
+    contributedStats,
   }
 }
 

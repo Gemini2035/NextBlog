@@ -440,11 +440,9 @@
     "Development Protocols": "Development Protocols",
     "My Projects": "My Projects",
     "Showcase my technical projects and portfolio": "Showcase my technical projects and portfolio (Data from Github)",
-    "Project Types": "Project Types",
-    "Open Source Projects": "Open Source Projects",
-    "Commercial Projects": "Commercial Projects",
-    "Learning Projects": "Learning Projects",
-    "Self-Developed Projects": "Self-Developed Projects",
+    "Projects by Ownership": "Projects by Ownership",
+    "Created by Me": "Created by Me",
+    "Contributed by Me": "Contributed by Me",
     "Social Links": "Social Links",
     "Follow my open source projects": "Follow my open source projects",
     "Follow my latest updates": "Follow my latest updates",
@@ -705,6 +703,18 @@
       "cacheHit": "Cache Hit",
       "loadTime": "Load Time",
       "dataSource": "Data Source"
+    },
+    "statsOverview": {
+      "title": "Statistics Overview",
+      "myProjects": "Created by Me",
+      "contributedProjects": "Contributed by Me",
+      "projectCount": "Projects",
+      "totalStars": "Stars",
+      "totalForks": "Forks",
+      "languages": "Languages",
+      "overallStats": "Overall Statistics",
+      "totalProjects": "Total Projects",
+      "activeProjects": "Active Projects"
     }
   },
   "Education": {

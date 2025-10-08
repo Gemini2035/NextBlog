@@ -440,11 +440,9 @@
     "Development Protocols": "开发协议",
     "My Projects": "我的项目",
     "Showcase my technical projects and portfolio": "展示我的技术项目和作品集(数据来源Github)",
-    "Project Types": "项目类型",
-    "Open Source Projects": "开源项目",
-    "Commercial Projects": "商业项目",
-    "Learning Projects": "学习项目",
-    "Self-Developed Projects": "自研项目",
+    "Projects by Ownership": "项目归属",
+    "Created by Me": "我创建的项目",
+    "Contributed by Me": "我参与的项目",
     "Social Links": "社交链接",
     "Follow my open source projects": "关注我的开源项目",
     "Follow my latest updates": "关注我的最新动态",
@@ -730,6 +728,18 @@
       "cacheHit": "缓存命中",
       "loadTime": "加载耗时",
       "dataSource": "数据来源"
+    },
+    "statsOverview": {
+      "title": "统计概览",
+      "myProjects": "我创建的",
+      "contributedProjects": "我参与的",
+      "projectCount": "项目数",
+      "totalStars": "Star数",
+      "totalForks": "Fork数",
+      "languages": "语言数",
+      "overallStats": "总体统计",
+      "totalProjects": "总项目数",
+      "activeProjects": "活跃项目"
     }
   },
   "DevelopmentHistory": {

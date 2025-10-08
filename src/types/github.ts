@@ -228,5 +228,19 @@ export interface ProjectStats {
   categoryDistribution: Record<ProjectCategory, number>
   activeProjects: number
   archivedProjects: number
+  // 我创建的项目统计
+  ownedStats?: {
+    count: number
+    stars: number
+    forks: number
+    languages: number
+  }
+  // 我参与的项目统计
+  contributedStats?: {
+    count: number
+    stars: number
+    forks: number
+    languages: number
+  }
 }
 
