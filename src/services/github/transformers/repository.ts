@@ -6,6 +6,19 @@ import type { GraphQLRepository } from '../types/graphql'
 import type { ProcessedRepository, LanguageStat, ContributorStat } from '../types/processed'
 
 /**
+ * 生成稳定的数字ID（基于字符串的简单hash）
+ */
+function generateStableId(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return Math.abs(hash)
+}
+
+/**
  * 将 GraphQL 仓库数据转换为 ProcessedRepository
  */
 export function transformRepository(
@@ -22,9 +35,12 @@ export function transformRepository(
   // 提取 topics
   const topics = repo.repositoryTopics.nodes.map((node) => node.topic.name)
 
+  // 生成稳定的数字ID（使用fullName的hash）
+  const stableId = generateStableId(repo.nameWithOwner)
+  
   return {
     // 基本信息
-    id: parseInt(repo.id.replace(/[^0-9]/g, '')) || 0, // 从 GraphQL ID 提取数字
+    id: stableId,
     name: repo.name,
     fullName: repo.nameWithOwner,
     description: repo.description || '',

@@ -14,6 +14,7 @@ import {
   ProjectFilter 
 } from '@/components/Projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
+import { Loading } from '@/ui'
 
 /**
  * Projects Page - 项目展示页面
@@ -127,24 +128,15 @@ export default function ProjectsPage() {
         <p className="text-xl text-gray-600">{t('description')}</p>
       </div>
 
-      {/* 加载状态 - 覆盖内容区域 */}
+      {/* 加载状态 */}
       {loading && (
-        <div className="absolute inset-0 bg-white/70 backdrop-blur-[2px] z-50 flex items-center justify-center">
-          <div className="flex flex-col items-center justify-center gap-4">
-            <div className="relative">
-              {/* 外圈 - 扁平化圆环 */}
-              <div className="w-12 h-12 rounded-full border-4 border-gray-200" />
-              {/* 内圈 - 旋转的蓝色弧线 */}
-              <div 
-                className="absolute inset-0 w-12 h-12 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"
-                style={{ animationDuration: '0.8s' }}
-              />
-            </div>
-            <p className="text-gray-700 font-medium text-lg">
-              {t('loadingProjects')}
-            </p>
-          </div>
-        </div>
+        <Loading 
+          fullscreen 
+          size="lg"
+          variant="spinner"
+          text={t('loadingProjects')}
+          showText
+        />
       )}
 
       {/* 错误状态 */}

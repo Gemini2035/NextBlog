@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { LoadingProps } from './types'
 import { getLoaderSize, getTextSize } from './styles'
 import { cn } from '@/utils'
@@ -23,7 +24,7 @@ import { cn } from '@/utils'
  * <Loading variant="dots" />
  * <Loading variant="pulse" />
  * 
- * // 全屏加载
+ * // 全屏加载（会锁定屏幕滚动）
  * <Loading fullscreen text="加载中..." showText />
  * ```
  */
@@ -35,6 +36,30 @@ export function Loading({
   fullscreen = false,
   className
 }: LoadingProps) {
+  
+  // 锁定屏幕滚动
+  useEffect(() => {
+    if (!fullscreen) return
+
+    // 保存原始的 overflow 样式
+    const originalOverflow = document.body.style.overflow
+    const originalPaddingRight = document.body.style.paddingRight
+    
+    // 获取滚动条宽度，避免内容抖动
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    
+    // 锁定滚动
+    document.body.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`
+    }
+
+    // 组件卸载时恢复滚动
+    return () => {
+      document.body.style.overflow = originalOverflow
+      document.body.style.paddingRight = originalPaddingRight
+    }
+  }, [fullscreen])
   
   const renderLoader = () => {
     const sizeClass = getLoaderSize(size)
