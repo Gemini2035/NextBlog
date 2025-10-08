@@ -57,12 +57,14 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "topics": [],
     "isFork": false,
     "isArchived": false,
+    "isPinned": true, // 置顶项目
     "license": null,
     "createdAt": new Date("2025-09-19T09:27:33.000Z"),
     "updatedAt": new Date("2025-10-07T12:35:51.000Z"),
     "pushedAt": new Date("2025-10-07T12:42:33.000Z"),
     "activityScore": 71.80617997398389,
-    "displayWeight": 119.9
+    "displayWeight": 119.9,
+    "weight": 10119.9 // 基础权重 + 10000（置顶加成）
   },
   {
     "id": 616380451,
@@ -97,12 +99,14 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "topics": [],
     "isFork": false,
     "isArchived": false,
+    "isPinned": false,
     "license": "Apache License 2.0",
     "createdAt": new Date("2023-03-20T09:24:36.000Z"),
     "updatedAt": new Date("2025-09-24T03:37:01.000Z"),
     "pushedAt": new Date("2023-12-01T07:18:23.000Z"),
     "activityScore": 73.61235994796778,
-    "displayWeight": 116.5
+    "displayWeight": 116.5,
+    "weight": 116.5
   },
   {
     "id": 845906905,
@@ -144,12 +148,14 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "topics": [],
     "isFork": false,
     "isArchived": false,
+    "isPinned": false,
     "license": null,
     "createdAt": new Date("2024-08-22T06:48:56.000Z"),
     "updatedAt": new Date("2024-10-18T02:51:31.000Z"),
     "pushedAt": new Date("2024-10-18T02:51:28.000Z"),
     "activityScore": 28,
-    "displayWeight": 13.2
+    "displayWeight": 13.2,
+    "weight": 13.2
   },
   {
     "id": 816574184,
@@ -196,12 +202,14 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "topics": [],
     "isFork": false,
     "isArchived": false,
+    "isPinned": false,
     "license": "Apache License 2.0",
     "createdAt": new Date("2024-06-18T02:43:31.000Z"),
     "updatedAt": new Date("2024-06-18T06:47:31.000Z"),
     "pushedAt": new Date("2025-09-20T11:49:18.000Z"),
     "activityScore": 14,
-    "displayWeight": 10
+    "displayWeight": 10,
+    "weight": 10
   },
   {
     "id": 751831936,
@@ -274,12 +282,14 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "topics": [],
     "isFork": true,
     "isArchived": false,
+    "isPinned": false,
     "license": null,
     "createdAt": new Date("2024-02-02T12:29:16.000Z"),
     "updatedAt": new Date("2025-06-01T04:38:05.000Z"),
     "pushedAt": new Date("2025-10-07T16:53:24.000Z"),
     "activityScore": 42,
-    "displayWeight": 71.3
+    "displayWeight": 71.3,
+    "weight": 71.3
   }
 ]
 

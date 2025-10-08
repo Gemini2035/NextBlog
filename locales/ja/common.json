@@ -688,7 +688,8 @@
       "lastPush": "最終プッシュ",
       "noDescription": "説明なし",
       "viewDetails": "詳細を表示",
-      "hideDetails": "詳細を非表示"
+      "hideDetails": "詳細を非表示",
+      "pinned": "ピン留め"
     },
     "rateLimit": {
       "title": "API制限通知",
@@ -721,6 +722,31 @@
       "totalProjects": "総プロジェクト数",
       "activeProjects": "アクティブプロジェクト"
     }
+  },
+  "ProjectFilter": {
+    "title": "プロジェクトフィルター",
+    "description": "条件でプロジェクトをフィルタリングして並べ替え",
+    "searchPlaceholder": "プロジェクト名または説明を検索...",
+    "showPinned": "ピン留めプロジェクト",
+    "pinnedOnly": "ピン留めのみ",
+    "noPinned": "ピン留めなし",
+    "showFork": "フォークプロジェクト",
+    "forkOnly": "フォークのみ",
+    "noFork": "フォークなし",
+    "allProjects": "すべてのプロジェクト",
+    "showArchived": "アーカイブプロジェクト",
+    "archivedOnly": "アーカイブのみ",
+    "noArchived": "アーカイブなし",
+    "starSort": "スター順",
+    "forkSort": "フォーク順",
+    "weightSort": "おすすめ順",
+    "createTimeSort": "作成時刻順",
+    "updateTimeSort": "更新時刻順",
+    "pushTimeSort": "プッシュ時刻順",
+    "sortAsc": "昇順",
+    "sortDesc": "降順",
+    "filteredCount": "{count} / {total} プロジェクトを表示",
+    "clearAll": "すべてのフィルターをクリア"
   },
   "Education": {
     "sectionTitle": "学歴",

@@ -683,7 +683,8 @@
       "lastPush": "Last pushed",
       "noDescription": "No description",
       "viewDetails": "View details",
-      "hideDetails": "Hide details"
+      "hideDetails": "Hide details",
+      "pinned": "Pinned"
     },
     "rateLimit": {
       "title": "API Limit Notice",
@@ -716,6 +717,31 @@
       "totalProjects": "Total Projects",
       "activeProjects": "Active Projects"
     }
+  },
+  "ProjectFilter": {
+    "title": "Project Filter",
+    "description": "Filter and sort projects by criteria",
+    "searchPlaceholder": "Search project name or description...",
+    "showPinned": "Pinned Projects",
+    "pinnedOnly": "Pinned only",
+    "noPinned": "No pinned",
+    "showFork": "Fork Projects",
+    "forkOnly": "Forked only",
+    "noFork": "No forks",
+    "allProjects": "All projects",
+    "showArchived": "Archived Projects",
+    "archivedOnly": "Archived only",
+    "noArchived": "No archived",
+    "starSort": "Sort by Stars",
+    "forkSort": "Sort by Forks",
+    "weightSort": "Sort by Recommendation",
+    "createTimeSort": "Sort by Create Time",
+    "updateTimeSort": "Sort by Update Time",
+    "pushTimeSort": "Sort by Push Time",
+    "sortAsc": "Ascending",
+    "sortDesc": "Descending",
+    "filteredCount": "Showing {count} / {total} projects",
+    "clearAll": "Clear all filters"
   },
   "Education": {
     "sectionTitle": "Education Background",

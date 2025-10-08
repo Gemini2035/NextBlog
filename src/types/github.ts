@@ -117,6 +117,19 @@ export interface GitHubResponseHeaders {
 }
 
 /**
+ * GitHub置顶仓库响应（GraphQL）
+ */
+export interface GitHubPinnedRepositoriesResponse {
+  data: {
+    user: {
+      pinnedItems: {
+        nodes: GitHubRepository[]
+      }
+    }
+  }
+}
+
+/**
  * 处理后的仓库数据（用于前端展示）
  */
 export interface ProcessedRepository {
@@ -146,6 +159,7 @@ export interface ProcessedRepository {
   topics: string[]
   isFork: boolean
   isArchived: boolean
+  isPinned?: boolean // 是否置顶
   
   // 许可证
   license: string | null
@@ -158,6 +172,7 @@ export interface ProcessedRepository {
   // 活跃度评分（自定义）
   activityScore?: number
   displayWeight?: number
+  weight: number // 综合权重（包含置顶加成）
 }
 
 /**

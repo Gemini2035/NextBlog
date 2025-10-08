@@ -59,6 +59,7 @@ export interface GetReposParams {
   maxPages?: number
   includeLanguages?: boolean        // 是否获取语言占比（会增加API调用）
   includeContributors?: boolean     // 是否获取贡献者（会增加API调用）
+  featuredRepos?: string[]          // 置顶项目列表
 }
 
 /**
@@ -84,6 +85,7 @@ export const getGitHubRepositories = cache(async (params: GetReposParams = {}): 
       maxPages = 10,
       includeLanguages = false,      // 默认不获取（节省API调用）
       includeContributors = false,   // 默认不获取（节省API调用）
+      featuredRepos = [],            // 置顶项目列表
     } = params
 
     // 获取所有仓库
@@ -119,7 +121,7 @@ export const getGitHubRepositories = cache(async (params: GetReposParams = {}): 
     }
 
     // 处理数据
-    const projects = processRepositories(filteredRepos, detailsMap)
+    const projects = processRepositories(filteredRepos, detailsMap, featuredRepos)
     const stats = generateProjectStats(projects, username)
     const rateLimit = githubApiService.getRateLimit()
 

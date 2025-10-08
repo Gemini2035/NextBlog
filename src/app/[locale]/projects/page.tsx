@@ -4,21 +4,21 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { getGitHubRepositoriesWithRetry } from '@/actions/github'
 import {
-  filterProjects,
-  sortProjects,
   categorizeProject,
 } from '@/services'
 import type {
   GitHubRepository,
   ProcessedRepository,
-  ProjectFilters,
-  ProjectSortOption,
   ProjectStats,
 } from '@/types/github'
 import { GITHUB_CONFIG } from '@/constants'
 import { MOCK_PROJECTS, MOCK_STATS } from '@/mocks/github-projects'
-import { StatsOverview } from '@/components/Projects/StatsOverview'
-import { BriefProjectCard, DetailProjectCard } from '@/components/Projects/ProjectCard'
+import { 
+  StatsOverview, 
+  BriefProjectCard, 
+  DetailProjectCard,
+  ProjectFilter 
+} from '@/components/Projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
 
 /**
@@ -34,14 +34,6 @@ export default function ProjectsPage() {
   const [allProjects, setAllProjects] = useState<ProcessedRepository[]>([])
   const [filteredProjects, setFilteredProjects] = useState<ProcessedRepository[]>([])
   const [stats, setStats] = useState<ProjectStats | null>(null)
-  
-  // 筛选和排序状态
-  const [filters, setFilters] = useState<ProjectFilters>({
-    includeForked: true,  // 默认显示Fork项目
-    includeArchived: false,
-    searchText: '',
-  })
-  const [sortBy, setSortBy] = useState<ProjectSortOption>('weight')
 
   /**
    * 获取GitHub数据（支持Mock模式）
@@ -79,6 +71,7 @@ export default function ProjectsPage() {
           maxPages: fetchOptions.maxPages,
           includeLanguages: fetchOptions.includeLanguages,
           includeContributors: fetchOptions.includeContributors,
+          featuredRepos: GITHUB_CONFIG?.featuredRepos || [],
         })
 
         // 检查是否成功
@@ -103,16 +96,11 @@ export default function ProjectsPage() {
   }, [])
 
   /**
-   * 应用筛选和排序
+   * 筛选器变化回调
    */
-  useEffect(() => {
-    if (allProjects.length === 0) return
-
-    let result = filterProjects(allProjects, filters)
-    result = sortProjects(result, sortBy, 'desc')
-
-    setFilteredProjects(result)
-  }, [allProjects, filters, sortBy])
+  const handleFilteredProjectsChange = useCallback((projects: ProcessedRepository[]) => {
+    setFilteredProjects(projects)
+  }, [])
 
   /**
    * 将项目转换为Waterfall项目
@@ -197,66 +185,12 @@ export default function ProjectsPage() {
         <StatsOverview stats={stats} className="mb-8" />
       )}
 
-      {/* 筛选控制 */}
-      <div className="mb-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100">
-        <h2 className="text-2xl font-bold mb-4 text-gray-900">🔍 {t('filters.title')}</h2>
-        
-        {/* 搜索框 */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder={t('filters.search')}
-            value={filters.searchText || ''}
-            onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
-            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          />
-        </div>
-
-        {/* 复选框 */}
-        <div className="flex gap-6 mb-4">
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={filters.includeForked}
-              onChange={(e) => setFilters({ ...filters, includeForked: e.target.checked })}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-            />
-            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
-              {t('filters.includeForked')}
-            </span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer group">
-            <input
-              type="checkbox"
-              checked={filters.includeArchived}
-              onChange={(e) => setFilters({ ...filters, includeArchived: e.target.checked })}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-            />
-            <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors">
-              {t('filters.includeArchived')}
-            </span>
-          </label>
-        </div>
-
-        {/* 排序选择 */}
-        <div>
-          <label className="block mb-2 font-semibold text-gray-900">{t('filters.sort')}:</label>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as ProjectSortOption)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
-          >
-            <option value="weight">{t('filters.sortBy.weight')}</option>
-            <option value="stars">{t('filters.sortBy.stars')}</option>
-            <option value="updated">{t('filters.sortBy.updated')}</option>
-            <option value="created">{t('filters.sortBy.created')}</option>
-            <option value="name">{t('filters.sortBy.name')}</option>
-          </select>
-        </div>
-
-        <div className="mt-4 text-sm text-gray-600">
-          显示 <span className="font-semibold text-blue-600">{filteredProjects.length}</span> / {allProjects.length} 个项目
-        </div>
+      {/* 项目筛选器 */}
+      <div className="mb-8">
+        <ProjectFilter
+          projects={allProjects}
+          onFilteredProjectsChange={handleFilteredProjectsChange}
+        />
       </div>
 
       {/* 项目瀑布流 */}

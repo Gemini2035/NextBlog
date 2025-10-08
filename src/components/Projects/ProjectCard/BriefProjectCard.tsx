@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
-import { ClockIcon, ProjectIcon, StarIcon, ForkIcon } from '@/assets/icons'
+import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
 import type { ProcessedRepository, ProjectCategory } from '@/types/github'
 
 interface BriefProjectCardProps {
@@ -59,16 +59,27 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
           </div>
         </div>
         
-        {/* 分类标签 */}
-        {category && (
-          <span className={cn(
-            'px-2 py-1 text-xs font-medium rounded border whitespace-nowrap flex items-center gap-1',
-            getCategoryStyle(category)
-          )}>
-            {category === 'fork' && <ForkIcon className="w-3 h-3" />}
-            {t(`filters.categories.${category}`)}
-          </span>
-        )}
+        {/* 标签组 - 置顶标签和分类标签 */}
+        <div className="flex items-center gap-2">
+          {/* 置顶标签 */}
+          {project.isPinned && (
+            <span className="px-2 py-1 text-xs font-medium rounded border whitespace-nowrap flex items-center gap-1 bg-yellow-100 text-yellow-800 border-yellow-200">
+              <StarFilledIcon className="w-3 h-3" />
+              {t('project.pinned')}
+            </span>
+          )}
+          
+          {/* 分类标签 */}
+          {category && (
+            <span className={cn(
+              'px-2 py-1 text-xs font-medium rounded border whitespace-nowrap flex items-center gap-1',
+              getCategoryStyle(category)
+            )}>
+              {category === 'fork' && <ForkIcon className="w-3 h-3" />}
+              {t(`filters.categories.${category}`)}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* 项目描述 */}

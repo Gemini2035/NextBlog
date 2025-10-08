@@ -1,7 +1,6 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/utils'
@@ -17,8 +16,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
-  Legend
+  Cell
 } from 'recharts'
 import { 
   ClockIcon, 
@@ -31,7 +29,8 @@ import {
   GitHubIcon,
   WatchersIcon,
   IssuesIcon,
-  ArchiveIcon
+  ArchiveIcon,
+  StarFilledIcon
 } from '@/assets/icons'
 import type { ProcessedRepository, ProjectCategory } from '@/types/github'
 
@@ -91,6 +90,13 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
               <h2 className="text-2xl font-bold text-gray-900">
                 {project.name}
               </h2>
+              {/* 置顶标签 */}
+              {project.isPinned && (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium bg-gradient-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
+                  <StarFilledIcon className="w-4 h-4 text-amber-500" />
+                  {t('project.pinned')}
+                </span>
+              )}
               {/* 分类标签紧邻标题 */}
               {category && (
                 <span className={cn(

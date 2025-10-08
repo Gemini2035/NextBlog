@@ -708,7 +708,8 @@
       "lastPush": "最后推送",
       "noDescription": "暂无描述",
       "viewDetails": "查看详情",
-      "hideDetails": "收起详情"
+      "hideDetails": "收起详情",
+      "pinned": "置顶"
     },
     "rateLimit": {
       "title": "API限制提示",
@@ -741,6 +742,31 @@
       "totalProjects": "总项目数",
       "activeProjects": "活跃项目"
     }
+  },
+  "ProjectFilter": {
+    "title": "项目筛选器",
+    "description": "根据条件筛选和排序项目",
+    "searchPlaceholder": "搜索项目名称或描述...",
+    "showPinned": "置顶项目",
+    "pinnedOnly": "仅置顶项目",
+    "noPinned": "非置顶项目",
+    "showFork": "Fork项目",
+    "forkOnly": "仅Fork项目",
+    "noFork": "非Fork项目",
+    "allProjects": "全部项目",
+    "showArchived": "归档项目",
+    "archivedOnly": "仅归档项目",
+    "noArchived": "非归档项目",
+    "starSort": "按Star排序",
+    "forkSort": "按Fork排序",
+    "weightSort": "按推荐度排序",
+    "createTimeSort": "按创建时间排序",
+    "updateTimeSort": "按更新时间排序",
+    "pushTimeSort": "按推送时间排序",
+    "sortAsc": "升序",
+    "sortDesc": "降序",
+    "filteredCount": "显示 {count} / {total} 个项目",
+    "clearAll": "清除所有筛选"
   },
   "DevelopmentHistory": {
     "sectionTitle": "发展历程",

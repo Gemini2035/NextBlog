@@ -179,8 +179,14 @@ export function categorizeProject(repo: GitHubRepository): ProjectCategory {
 export function processRepository(
   repo: GitHubRepository,
   languages?: GitHubLanguages,
-  contributors?: GitHubContributor[]
+  contributors?: GitHubContributor[],
+  featuredRepos?: string[]
 ): ProcessedRepository {
+  const isPinned = featuredRepos ? featuredRepos.includes(repo.name) : false
+  const baseWeight = calculateDisplayWeight(repo)
+  // 置顶项目权重加 10000，确保排在最前面
+  const finalWeight = isPinned ? baseWeight + 10000 : baseWeight
+  
   return {
     id: repo.id,
     name: repo.name,
@@ -203,6 +209,7 @@ export function processRepository(
     topics: repo.topics || [],
     isFork: repo.fork,
     isArchived: repo.archived,
+    isPinned,
     
     license: repo.license?.name || null,
     
@@ -211,7 +218,8 @@ export function processRepository(
     pushedAt: new Date(repo.pushed_at),
     
     activityScore: calculateActivityScore(repo),
-    displayWeight: calculateDisplayWeight(repo),
+    displayWeight: baseWeight,
+    weight: finalWeight,
   }
 }
 
@@ -220,11 +228,12 @@ export function processRepository(
  */
 export function processRepositories(
   repos: GitHubRepository[],
-  detailsMap?: Map<string, { languages?: GitHubLanguages; contributors?: GitHubContributor[] }>
+  detailsMap?: Map<string, { languages?: GitHubLanguages; contributors?: GitHubContributor[] }>,
+  featuredRepos?: string[]
 ): ProcessedRepository[] {
   return repos.map((repo) => {
     const details = detailsMap?.get(repo.full_name)
-    return processRepository(repo, details?.languages, details?.contributors)
+    return processRepository(repo, details?.languages, details?.contributors, featuredRepos)
   })
 }
 
@@ -309,6 +318,11 @@ export function sortProjects(
   const sorted = [...projects]
 
   sorted.sort((a, b) => {
+    // 置顶项目始终排在前面
+    if (a.isPinned && !b.isPinned) return -1
+    if (!a.isPinned && b.isPinned) return 1
+    
+    // 如果两者都是置顶或都不是置顶，则按照指定排序
     let comparison = 0
 
     switch (sortBy) {
@@ -325,7 +339,7 @@ export function sortProjects(
         comparison = a.name.localeCompare(b.name)
         break
       case 'weight':
-        comparison = (a.displayWeight || 0) - (b.displayWeight || 0)
+        comparison = a.weight - b.weight
         break
     }
 
