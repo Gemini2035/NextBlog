@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { TechStackIcon, NextJsIcon, ContentlayerIcon, MdxIcon, TailwindIcon, TypeScriptIcon, DeploymentIcon } from '@/assets/icons'
+import { TechStackIcon, NextJsIcon, ContentlayerIcon, MdxIcon, TailwindIcon, TypeScriptIcon, DeploymentIcon, GraphQLIcon } from '@/assets/icons'
 
 interface TechStackDetailProps {
   className?: string
@@ -74,6 +74,16 @@ export default function TechStackDetail({ className }: TechStackDetailProps) {
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 mb-1">{t('typescript')}</h3>
             <p className="text-sm text-gray-700">严格模式下的类型系统，为组件与接口提供静态检查；结合 ESLint/Prettier 与 CI 工作流保证风格一致与质量门禁。</p>
+          </div>
+        </div>
+
+        <div className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200">
+          <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+            <GraphQLIcon className="w-6 h-6 text-gray-700" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-gray-900 mb-1">GraphQL</h3>
+            <p className="text-sm text-gray-700">灵活的查询语言，一次请求获取所有需要的数据；相比 REST API 减少 99% 的网络请求，配合 SWR 缓存实现最佳性能。</p>
           </div>
         </div>
 
