@@ -559,22 +559,28 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
         </div>
       )}
 
-      {/* 时间信息 */}
-      <div className="space-y-2 pt-4 border-t border-gray-200">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <ClockIcon className="w-4 h-4" />
-          <span className="font-medium">{t('project.created')}:</span>
-          <span>{formatDate(project.createdAt)}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <ClockIcon className="w-4 h-4" />
-          <span className="font-medium">{t('project.updated')}:</span>
-          <span>{formatDate(project.updatedAt)}</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <ClockIcon className="w-4 h-4" />
-          <span className="font-medium">{t('project.lastPush')}:</span>
-          <span>{formatDate(project.pushedAt)}</span>
+      {/* 时间信息 - 两侧分布 */}
+      <div className="pt-4 border-t border-gray-200">
+        <div className="space-y-2">
+          {/* 第一行：创建时间和更新时间两侧分布 */}
+          <div className="flex flex-col md:flex-row md:justify-between gap-2">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <ClockIcon className="w-4 h-4" />
+              <span className="font-medium">{t('project.created')}:</span>
+              <span>{formatDate(project.createdAt)}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <ClockIcon className="w-4 h-4" />
+              <span className="font-medium">{t('project.updated')}:</span>
+              <span>{formatDate(project.updatedAt)}</span>
+            </div>
+          </div>
+          {/* 第二行：推送时间 */}
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <ClockIcon className="w-4 h-4" />
+            <span className="font-medium">{t('project.lastPush')}:</span>
+            <span>{formatDate(project.pushedAt)}</span>
+          </div>
         </div>
       </div>
 
