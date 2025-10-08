@@ -3,15 +3,8 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
-import { getGitHubRepositoriesWithRetry } from '@/actions/github'
-import {
-  categorizeProject,
-} from '@/services'
-import type {
-  GitHubRepository,
-  ProcessedRepository,
-  ProjectStats,
-} from '@/types/github'
+import { useGitHubRepositories } from '@/hooks'
+import { categorizeProject, type ProcessedRepository } from '@/services/github'
 import { GITHUB_CONFIG } from '@/constants'
 import { MOCK_PROJECTS, MOCK_STATS } from '@/mocks/github-projects'
 import { 
@@ -21,22 +14,61 @@ import {
   ProjectFilter 
 } from '@/components/Projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
-import { Loading } from '@/ui'
 
 /**
  * Projects Page - 项目展示页面
- * 暂时不做复杂UI，主要关注数据交互和调试
+ * 使用 SWR 进行数据获取和缓存管理
  */
 export default function ProjectsPage() {
   const t = useTranslations('Projects')
   const searchParams = useSearchParams()
   
-  // 状态管理
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [allProjects, setAllProjects] = useState<ProcessedRepository[]>([])
-  const [filteredProjects, setFilteredProjects] = useState<ProcessedRepository[]>([])
-  const [stats, setStats] = useState<ProjectStats | null>(null)
+  // 检查是否使用 Mock 数据
+  const useMock = GITHUB_CONFIG?.useMockData ?? false
+  
+  // 使用 SWR Hook 获取 GitHub 数据（支持缓存）
+  const fetchOptions = GITHUB_CONFIG?.fetchOptions || {}
+  const {
+    projects: allProjects,
+    stats,
+    isLoading,
+    isError,
+    error: fetchError,
+  } = useGitHubRepositories(
+    useMock
+      ? {} // Mock 模式不调用 API
+      : {
+          username: GITHUB_CONFIG?.username,
+          repoType: (fetchOptions.repoType as 'all' | 'owner' | 'member' | 'public') || 'owner',
+          includeForked: fetchOptions.includeForked,
+          includeArchived: fetchOptions.includeArchived,
+          minStars: fetchOptions.minStars,
+          maxProjects: fetchOptions.maxProjects,
+          maxPages: fetchOptions.maxPages,
+          featuredRepos: GITHUB_CONFIG?.featuredRepos || [],
+        },
+    {
+      // SWR 配置
+      revalidateOnFocus: false, // 窗口获得焦点时不重新验证
+      dedupingInterval: 60000, // 60秒内不重复请求
+    }
+  )
+
+  // Mock 数据覆盖（如果启用 Mock 模式）
+  const finalProjects = useMock ? MOCK_PROJECTS : allProjects
+  const finalStats = useMock ? MOCK_STATS : stats
+  const loading = useMock ? false : isLoading
+  const error = useMock ? null : (isError ? (fetchError || '加载失败') : null)
+  
+  // 筛选后的项目
+  const [filteredProjects, setFilteredProjects] = useState<ProcessedRepository[]>(finalProjects)
+  
+  // 当数据加载完成后，更新筛选项目
+  useEffect(() => {
+    if (!loading && finalProjects.length > 0) {
+      setFilteredProjects(finalProjects)
+    }
+  }, [finalProjects, loading])
   
   // 当有URL参数时，自动滚动到筛选器位置
   useEffect(() => {
@@ -52,66 +84,6 @@ export default function ProjectsPage() {
       }, 300)
     }
   }, [searchParams])
-
-  /**
-   * 获取GitHub数据（支持Mock模式）
-   */
-  const fetchGitHubData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-
-    try {
-      // 检查是否使用 Mock 数据
-      const useMock = GITHUB_CONFIG?.useMockData ?? false
-
-      if (useMock) {
-        // 使用 Mock 数据（模拟异步延迟）
-        await new Promise(resolve => setTimeout(resolve, 500))
-        
-        console.log('📦 项目列表 (Mock):', MOCK_PROJECTS)
-
-        // 更新状态
-        setAllProjects(MOCK_PROJECTS)
-        setFilteredProjects(MOCK_PROJECTS)
-        setStats(MOCK_STATS)
-
-      } else {
-        // 调用真实 API
-        const fetchOptions = GITHUB_CONFIG?.fetchOptions || {}
-        
-        const result = await getGitHubRepositoriesWithRetry({
-          username: GITHUB_CONFIG?.username,
-          repoType: (fetchOptions.repoType as 'all' | 'owner' | 'member' | 'public') || 'owner',
-          includeForked: fetchOptions.includeForked,
-          includeArchived: fetchOptions.includeArchived,
-          minStars: fetchOptions.minStars,
-          maxProjects: fetchOptions.maxProjects,
-          maxPages: fetchOptions.maxPages,
-          includeLanguages: fetchOptions.includeLanguages,
-          includeContributors: fetchOptions.includeContributors,
-          featuredRepos: GITHUB_CONFIG?.featuredRepos || [],
-        })
-
-        // 检查是否成功
-        if (!result.success || !result.data) {
-          throw new Error(result.error || '加载失败')
-        }
-
-        console.log('📦 项目列表:', result.data.projects)
-
-        // 更新状态
-        setAllProjects(result.data.projects)
-        setFilteredProjects(result.data.projects)
-        setStats(result.data.stats)
-      }
-
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : '加载失败'
-      setError(errorMessage)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
 
   /**
    * 筛选器变化回调
@@ -131,7 +103,7 @@ export default function ProjectsPage() {
         updated_at: project.updatedAt.toISOString(),
         name: project.name,
         description: project.description,
-      } as GitHubRepository)
+      })
 
       return {
         id: project.id.toString(),
@@ -146,13 +118,6 @@ export default function ProjectsPage() {
       }
     })
   }, [filteredProjects])
-
-  /**
-   * 初始化加载
-   */
-  useEffect(() => {
-    fetchGitHubData()
-  }, [fetchGitHubData])
 
   return (
     <div className="relative max-w-6xl mx-auto px-4 py-12 min-h-[calc(100vh-64px)]">
@@ -187,25 +152,19 @@ export default function ProjectsPage() {
         <div className="p-8 bg-red-50 rounded-lg">
           <h2 className="text-2xl font-bold text-red-600 mb-2">{t('error')}</h2>
           <p className="text-red-700 mb-4">{error}</p>
-          <button
-            onClick={fetchGitHubData}
-            className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
-          >
-            {t('retry')}
-          </button>
         </div>
       )}
 
       {/* 统计概览 */}
-      {!loading && !error && stats && (
-        <StatsOverview stats={stats} className="mb-8" />
+      {!loading && !error && finalStats && (
+        <StatsOverview stats={finalStats} className="mb-8" />
       )}
 
       {/* 项目筛选器 */}
       {!loading && !error && (
         <div id="project-filter" className="mb-8">
           <ProjectFilter
-            projects={allProjects}
+            projects={finalProjects}
             onFilteredProjectsChange={handleFilteredProjectsChange}
           />
         </div>

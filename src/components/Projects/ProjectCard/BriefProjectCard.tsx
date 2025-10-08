@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/types/github'
+import type { ProcessedRepository, ProjectCategory } from '@/services/github'
 
 interface BriefProjectCardProps {
   project: ProcessedRepository
@@ -96,7 +96,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         {project.primaryLanguage && (
           <div className="flex items-center gap-1">
             <div className="w-2 h-2 rounded-full bg-blue-500" />
-            <span>{project.primaryLanguage}</span>
+            <span>{project.primaryLanguage.name}</span>
           </div>
         )}
       </div>

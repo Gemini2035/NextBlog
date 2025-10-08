@@ -3,7 +3,7 @@
  * 用于开发调试，避免频繁调用 GitHub API
  */
 
-import type { ProcessedRepository, ProjectStats } from '@/types/github'
+import type { ProcessedRepository, ProjectStats } from '@/services/github'
 
 export const MOCK_PROJECTS: ProcessedRepository[] = [
   {
@@ -17,8 +17,16 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "forks": 0,
     "watchers": 1,
     "openIssues": 0,
-    "primaryLanguage": "TypeScript",
-    "languages": [
+    "owner": {
+      "login": "Gemini2035",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/76091679?v=4",
+      "url": "https://github.com/Gemini2035"
+    },
+    "primaryLanguage": {
+      "name": "TypeScript",
+      "color": "#3178c6"
+    },
+    "languageStats": [
       {
         "name": "TypeScript",
         "bytes": 533586,
@@ -53,7 +61,6 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
         "percentage": 100
       }
     ],
-    "totalContributions": 48,
     "topics": [],
     "isFork": false,
     "isArchived": false,
@@ -77,8 +84,16 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "forks": 0,
     "watchers": 3,
     "openIssues": 0,
-    "primaryLanguage": "HTML",
-    "languages": [
+    "owner": {
+      "login": "Gemini2035",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/76091679?v=4",
+      "url": "https://github.com/Gemini2035"
+    },
+    "primaryLanguage": {
+      "name": "HTML",
+      "color": "#e34c26"
+    },
+    "languageStats": [
       {
         "name": "HTML",
         "bytes": 6750,
@@ -95,7 +110,6 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
         "percentage": 100
       }
     ],
-    "totalContributions": 89,
     "topics": [],
     "isFork": false,
     "isArchived": false,
@@ -119,8 +133,16 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "forks": 1,
     "watchers": 0,
     "openIssues": 0,
-    "primaryLanguage": "TypeScript",
-    "languages": [
+    "owner": {
+      "login": "Gemini2035",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/76091679?v=4",
+      "url": "https://github.com/Gemini2035"
+    },
+    "primaryLanguage": {
+      "name": "TypeScript",
+      "color": "#3178c6"
+    },
+    "languageStats": [
       {
         "name": "TypeScript",
         "bytes": 23251,
@@ -144,7 +166,6 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
         "percentage": 40
       }
     ],
-    "totalContributions": 10,
     "topics": [],
     "isFork": false,
     "isArchived": false,
@@ -168,8 +189,16 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "forks": 0,
     "watchers": 0,
     "openIssues": 0,
-    "primaryLanguage": "TypeScript",
-    "languages": [
+    "owner": {
+      "login": "Gemini2035",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/76091679?v=4",
+      "url": "https://github.com/Gemini2035"
+    },
+    "primaryLanguage": {
+      "name": "TypeScript",
+      "color": "#3178c6"
+    },
+    "languageStats": [
       {
         "name": "TypeScript",
         "bytes": 1461,
@@ -198,7 +227,6 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
         "percentage": 100
       }
     ],
-    "totalContributions": 4,
     "topics": [],
     "isFork": false,
     "isArchived": false,
@@ -222,8 +250,16 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
     "forks": 1,
     "watchers": 0,
     "openIssues": 3,
-    "primaryLanguage": "TypeScript",
-    "languages": [
+    "owner": {
+      "login": "Gemini2035",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/76091679?v=4",
+      "url": "https://github.com/Gemini2035"
+    },
+    "primaryLanguage": {
+      "name": "TypeScript",
+      "color": "#3178c6"
+    },
+    "languageStats": [
       {
         "name": "TypeScript",
         "bytes": 810392,
@@ -278,7 +314,6 @@ export const MOCK_PROJECTS: ProcessedRepository[] = [
         "percentage": 1.738122827346466
       }
     ],
-    "totalContributions": 863,
     "topics": [],
     "isFork": true,
     "isArchived": false,

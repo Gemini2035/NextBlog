@@ -32,7 +32,7 @@ import {
   ArchiveIcon,
   StarFilledIcon
 } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/types/github'
+import type { ProcessedRepository, ProjectCategory } from '@/services/github'
 
 interface DetailProjectCardProps {
   project: ProcessedRepository
@@ -213,7 +213,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       </div>
 
       {/* 语言占比 */}
-      {project.languages && project.languages.length > 0 && (
+      {project.languageStats && project.languageStats.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <LanguageIcon className="w-5 h-5 text-gray-600" />
@@ -243,7 +243,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
               
               <ResponsiveContainer width="100%" height={320}>
                 <ComposedChart
-                  data={project.languages.slice(0, 10).map(lang => ({
+                  data={(project.languageStats || []).slice(0, 10).map((lang) => ({
                     name: lang.name,
                     percentage: parseFloat(lang.percentage.toFixed(2)),
                     bytes: lang.bytes,
@@ -303,7 +303,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                     radius={[8, 8, 0, 0]}
                     opacity={0.7}
                   >
-                    {project.languages.slice(0, 10).map((lang, index) => (
+                    {(project.languageStats || []).slice(0, 10).map((lang, index) => (
                       <Cell key={`cell-${index}`} fill={lang.color || '#ccc'} />
                     ))}
                   </Bar>
@@ -322,9 +322,9 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
               </ResponsiveContainer>
               
                     {/* 如果语言超过10个，显示剩余提示 */}
-                    {project.languages.length > 10 && (
+                    {project.languageStats && project.languageStats.length > 10 && (
                       <div className="text-xs text-gray-500 text-center">
-                        {t('project.languagesMore', { count: project.languages.length - 10 })}
+                        {t('project.languagesMore', { count: project.languageStats.length - 10 })}
                       </div>
                     )}
                   </div>
@@ -335,7 +335,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                 label: t('project.list'),
                 children: (
                   <div className="space-y-3">
-                    {project.languages.map((lang) => (
+                    {(project.languageStats || []).map((lang) => (
                       <div key={lang.name} className="space-y-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -411,7 +411,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                           <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
                             <span>{contributor.contributions} {t('project.commits')}</span>
                             <span>•</span>
-                            <span>{contributor.percentage.toFixed(1)}%</span>
+                            <span>{(contributor.percentage || 0).toFixed(1)}%</span>
                           </div>
                         </div>
                         {/* 贡献占比进度条 */}
@@ -419,7 +419,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                           <div className="w-full bg-gray-200 rounded-full h-2">
                             <div
                               className="bg-blue-500 h-2 rounded-full transition-all"
-                              style={{ width: `${contributor.percentage}%` }}
+                              style={{ width: `${contributor.percentage || 0}%` }}
                             />
                           </div>
                         </div>
@@ -438,7 +438,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                         <Pie
                           data={project.contributors.map(c => ({
                             name: c.login,
-                            value: parseFloat(c.percentage.toFixed(2)),
+                            value: parseFloat((c.percentage || 0).toFixed(2)),
                             contributions: c.contributions
                           }))}
                           cx="50%"
@@ -496,7 +496,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-2 group"
-                            title={`${contributor.login}: ${contributor.contributions} ${t('project.commits')} (${contributor.percentage.toFixed(1)}%)`}
+                            title={`${contributor.login}: ${contributor.contributions} ${t('project.commits')} (${(contributor.percentage || 0).toFixed(1)}%)`}
                           >
                             {/* 颜色指示器 */}
                             <div 
