@@ -504,8 +504,11 @@
     "mainNavigation": "メインナビゲーション",
     "actionToolbar": "アクションツールバー",
     "openMobileMenu": "モバイルメニューを開く",
+    "closeMobileMenu": "モバイルメニューを閉じる",
     "search": "検索",
-    "toggleLanguage": "言語を切り替え"
+    "toggleLanguage": "言語を切り替え",
+    "mobileNavigation": "モバイルナビゲーション",
+    "navigationMenu": "ナビゲーションメニュー"
   },
   "NotFound": {
     "title": "404",

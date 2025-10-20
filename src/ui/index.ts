@@ -15,6 +15,13 @@ export type {
   DividerOrientation,
   DividerThickness
 } from './Divider'
+export { Drawer } from './Drawer'
+export type { 
+  DrawerProps, 
+  DrawerRef,
+  DrawerPlacement,
+  DrawerSize
+} from './Drawer'
 export { Card } from './Card'
 export type { 
   CardProps, 

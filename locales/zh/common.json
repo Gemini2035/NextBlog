@@ -372,8 +372,11 @@
     "mainNavigation": "主导航",
     "actionToolbar": "操作工具栏",
     "openMobileMenu": "打开移动端菜单",
+    "closeMobileMenu": "关闭移动端菜单",
     "search": "搜索",
-    "toggleLanguage": "切换语言"
+    "toggleLanguage": "切换语言",
+    "mobileNavigation": "移动端导航",
+    "navigationMenu": "导航菜单"
   },
   "NotFound": {
     "title": "404",

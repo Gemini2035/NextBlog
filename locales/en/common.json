@@ -372,8 +372,11 @@
     "mainNavigation": "Main navigation",
     "actionToolbar": "Action toolbar",
     "openMobileMenu": "Open mobile menu",
+    "closeMobileMenu": "Close mobile menu",
     "search": "Search",
-    "toggleLanguage": "Toggle language"
+    "toggleLanguage": "Toggle language",
+    "mobileNavigation": "Mobile navigation",
+    "navigationMenu": "Navigation menu"
   },
   "NotFound": {
     "title": "404",
