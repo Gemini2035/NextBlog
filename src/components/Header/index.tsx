@@ -344,24 +344,22 @@ export default function Header() {
 
       </div>
 
-      {/* 移动端 Drawer（仅在打开时挂载，避免隐藏态影响布局） */}
-      {mobileDrawerOpen && (
-        <Drawer
-          open
-          onClose={handleMobileMenuClose}
-          placement="right"
-          size="full"
-          title={SITE_CONFIG.title}
-          className="lg:hidden"
-          bodyClassName="px-6 py-4"
-          destroyOnClose
-        >
-          <MobileNav 
-            navigationItems={navigationItems}
-            onItemClick={handleMobileMenuClose}
-          />
-        </Drawer>
-      )}
+      {/* 移动端 Drawer */}
+      <Drawer
+        open={mobileDrawerOpen}
+        onClose={handleMobileMenuClose}
+        placement="right"
+        size="full"
+        title={SITE_CONFIG.title}
+        className="lg:hidden"
+        bodyClassName="px-6 py-4"
+        destroyOnClose
+      >
+        <MobileNav 
+          navigationItems={navigationItems}
+          onItemClick={handleMobileMenuClose}
+        />
+      </Drawer>
       
       {/* 统一的submenu */}
       {activeSubmenu && (

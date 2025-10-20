@@ -44,7 +44,7 @@ export const getDrawerTransformStyles = (
   
   const transforms = {
     top: '-translate-y-full',
-    right: 'translate-x-full',
+    right: 'translate-x-full', // 关闭时从右向左滑出
     bottom: 'translate-y-full',
     left: '-translate-x-full',
   }
@@ -61,7 +61,7 @@ export const getDrawerStyles = (
   open: boolean,
   customClassName?: string
 ): string => {
-  const baseStyles = 'fixed bg-white shadow-xl transition-transform duration-300 ease-in-out z-50 flex flex-col will-change-transform'
+  const baseStyles = 'fixed bg-white shadow-xl transition-transform duration-300 ease-out z-50 flex flex-col will-change-transform'
   const placementStyles = getDrawerPlacementStyles(placement)
   const sizeStyles = getDrawerSizeStyles(size, placement)
   const transformStyles = getDrawerTransformStyles(placement, open)
@@ -85,7 +85,7 @@ export const getDrawerStyles = (
  * 获取遮罩层样式
  */
 export const getMaskStyles = (open: boolean, customClassName?: string): string => {
-  const baseStyles = 'fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-40'
+  const baseStyles = 'fixed inset-0 h-screen bg-black/50 transition-opacity duration-300 ease-out z-40'
   const opacityStyles = open ? 'opacity-100' : 'opacity-0'
   const pointerStyles = open ? 'pointer-events-auto' : 'pointer-events-none'
   

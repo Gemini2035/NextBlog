@@ -21,10 +21,14 @@ function TreeItem({ node, level, expanded, toggle, onSelect, collapsible, indica
 
   return (
     <motion.li
-      initial={{ opacity: 0, y: -4 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -4 }}
-      transition={{ duration: 0.12, ease: 'easeInOut' }}
+      variants={{
+        hidden: { opacity: 0, x: 30 },
+        visible: { 
+          opacity: 1, 
+          x: 0,
+          transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+        }
+      }}
     >
       <div
         className={clsx('flex items-center select-none')}
@@ -62,10 +66,22 @@ function TreeItem({ node, level, expanded, toggle, onSelect, collapsible, indica
       <AnimatePresence initial={false}>
         {hasChildren && isExpanded && (
           <motion.ul
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            initial="hidden"
+            animate="visible"
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.18, ease: 'easeInOut' }}
+            variants={{
+              hidden: { opacity: 0, height: 0 },
+              visible: { 
+                opacity: 1, 
+                height: 'auto',
+                transition: { 
+                  height: { duration: 0.18, ease: 'easeInOut' },
+                  opacity: { duration: 0.18, ease: 'easeInOut' },
+                  staggerChildren: 0.05,
+                  delayChildren: 0.05
+                }
+              }
+            }}
             className={indicator !== false ? 'pl-4 border-l border-gray-100' : ''}
           >
             {node.children!.map(child => (
@@ -114,7 +130,7 @@ export default function Tree({ data, expandedKeys, defaultExpandedKeys, onExpand
       animate="visible"
       variants={{
         hidden: {},
-        visible: { transition: { staggerChildren: 0.04 } }
+        visible: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } }
       }}
     >
       {data.map(node => (

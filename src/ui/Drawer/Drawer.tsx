@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useEffect, useCallback } from 'react'
+import { forwardRef, useEffect, useCallback, useState } from 'react'
 import { DrawerProps, DrawerRef } from './types'
 import {
   getDrawerStyles,
@@ -79,6 +79,32 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
     },
     ref
   ) => {
+    // 内部状态：用于延迟卸载 DOM，让关闭动画完成
+    const [shouldRender, setShouldRender] = useState(open)
+    const [isAnimating, setIsAnimating] = useState(false)
+
+    // 当 open 变化时，处理渲染状态和动画
+    useEffect(() => {
+      if (open) {
+        // 打开时：先渲染 DOM，然后在下一帧触发动画
+        setShouldRender(true)
+        // 使用 requestAnimationFrame 确保 DOM 已渲染，再触发动画
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setIsAnimating(true)
+          })
+        })
+      } else {
+        // 关闭时：立即触发关闭动画
+        setIsAnimating(false)
+        // 延迟卸载，等待动画完成（300ms）
+        const timer = setTimeout(() => {
+          setShouldRender(false)
+        }, 300)
+        return () => clearTimeout(timer)
+      }
+    }, [open])
+
     // 处理 ESC 键关闭
     useEffect(() => {
       if (!open) return
@@ -153,9 +179,14 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
       }
     }, [open])
 
-    // 未打开时不渲染任何DOM（避免布局占位），或选择在关闭时销毁
-    if (!open) {
-      return destroyOnClose ? null : null
+    // 未打开且动画已完成时不渲染（destroyOnClose 或 shouldRender 为 false）
+    if (!shouldRender && destroyOnClose) {
+      return null
+    }
+
+    // 非 destroyOnClose 模式下，也要等待动画完成再卸载
+    if (!shouldRender) {
+      return null
     }
 
     return (
@@ -163,7 +194,7 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
         {/* 遮罩层 */}
         {mask && (
           <div
-            className={cn(getMaskStyles(open, maskClassName))}
+            className={cn(getMaskStyles(isAnimating, maskClassName))}
             style={{ zIndex: zIndex - 1 }}
             onClick={handleMaskClick}
             aria-hidden="true"
@@ -173,7 +204,7 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
         {/* 抽屉主体 */}
         <div
           ref={ref}
-          className={cn(getDrawerStyles(placement, size, open, className))}
+          className={cn(getDrawerStyles(placement, size, isAnimating, className))}
           style={{ zIndex, height: size === 'full' && (placement === 'left' || placement === 'right') ? '100vh' : undefined }}
           role="dialog"
           aria-modal="true"
