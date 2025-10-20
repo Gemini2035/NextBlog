@@ -263,6 +263,9 @@ export default function Header() {
 
   // 处理移动端菜单打开
   const handleMobileMenuOpen = useCallback(() => {
+    // 打开移动端 Drawer 时，关闭任何已打开的 submenu（搜索/语言）
+    setActiveSubmenu(null)
+    setIsExiting(false)
     setMobileDrawerOpen(true)
   }, [])
 
@@ -275,7 +278,7 @@ export default function Header() {
   return (
     <header 
       ref={navRef}
-      className="sticky top-0 z-50 bg-white/95  backdrop-blur-sm shadow-sm border-b border-gray-200 "
+      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200 w-full"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 主要内容区域 */}
@@ -311,8 +314,11 @@ export default function Header() {
 
             {/* Action Bar */}
             <ul className="flex items-center space-x-2" role="toolbar" aria-label={t('actionToolbar')}>
-              {/* 搜索功能 - 桌面端显示 */}
-              <li className="hidden md:block">
+              {/* 搜索功能 - 桌面端显示完整搜索栏，移动端显示图标 */}
+              <li className="hidden md:block lg:block">
+                <SearchBar onSearchClick={handleSearchClick} />
+              </li>
+              <li className="md:hidden">
                 <SearchBar onSearchClick={handleSearchClick} />
               </li>
 
@@ -336,37 +342,26 @@ export default function Header() {
           </div>
         </div>
 
-        {/* 移动端搜索栏 - 仅在移动端显示 */}
-        <div className="md:hidden pb-4">
-          <SearchBar onSearchClick={handleSearchClick} />
-        </div>
       </div>
 
-      {/* 移动端 Drawer */}
-      <Drawer
-        open={mobileDrawerOpen}
-        onClose={handleMobileMenuClose}
-        placement="right"
-        size="full"
-        title={SITE_CONFIG.title}
-        className="lg:hidden"
-      >
-        <div className="space-y-6">
-          {/* Drawer 中的搜索栏 */}
-          <div className="pb-4 border-b border-gray-200">
-            <SearchBar onSearchClick={() => {
-              handleSearchClick()
-              handleMobileMenuClose()
-            }} />
-          </div>
-          
-          {/* 导航菜单 */}
+      {/* 移动端 Drawer（仅在打开时挂载，避免隐藏态影响布局） */}
+      {mobileDrawerOpen && (
+        <Drawer
+          open
+          onClose={handleMobileMenuClose}
+          placement="right"
+          size="full"
+          title={SITE_CONFIG.title}
+          className="lg:hidden"
+          bodyClassName="px-6 py-4"
+          destroyOnClose
+        >
           <MobileNav 
             navigationItems={navigationItems}
             onItemClick={handleMobileMenuClose}
           />
-        </div>
-      </Drawer>
+        </Drawer>
+      )}
       
       {/* 统一的submenu */}
       {activeSubmenu && (

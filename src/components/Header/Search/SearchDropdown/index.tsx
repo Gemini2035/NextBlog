@@ -67,25 +67,25 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
     <>
       {/* 搜索框区域 */}
       <motion.div 
-        className="w-full mb-8" 
+        className="w-full mb-4 md:mb-8" 
         variants={itemVariants}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div className="flex items-center bg-transparent px-6 py-4 w-full">
-          <SearchIcon className="h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
+        <div className="flex items-center bg-transparent px-0 py-2 md:px-6 md:py-4 w-full">
+          <SearchIcon className="hidden md:block h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
           <input
             ref={inputRef}
             type="text"
             placeholder={t('searchPlaceholder')}
             value={query}
             onChange={handleInputChange}
-            className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-lg"
+            className="flex-1 bg-transparent text-gray-900 placeholder-gray-500 focus:outline-none text-base md:text-lg"
             autoFocus
           />
           {query && (
             <button
               onClick={clearSearch}
-              className="ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
+              className="ml-2 md:ml-4 p-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
               aria-label={t('clearSearch')}
             >
               <CloseIcon className="h-5 w-5 text-gray-500" />

@@ -20,7 +20,8 @@ export const getDrawerSizeStyles = (size: DrawerSize, placement: DrawerPlacement
   const isHorizontal = placement === 'left' || placement === 'right'
   
   if (size === 'full') {
-    return 'w-full h-full'
+    // 使用视口单位，避免在关闭时造成布局占位或导致白屏区域
+    return 'w-screen h-screen'
   }
   
   const sizes = {
@@ -60,16 +61,18 @@ export const getDrawerStyles = (
   open: boolean,
   customClassName?: string
 ): string => {
-  const baseStyles = 'fixed bg-white shadow-xl transition-transform duration-300 ease-in-out z-50 flex flex-col'
+  const baseStyles = 'fixed bg-white shadow-xl transition-transform duration-300 ease-in-out z-50 flex flex-col will-change-transform'
   const placementStyles = getDrawerPlacementStyles(placement)
   const sizeStyles = getDrawerSizeStyles(size, placement)
   const transformStyles = getDrawerTransformStyles(placement, open)
+  const pointerStyles = open ? 'pointer-events-auto' : 'pointer-events-none'
   
   return [
     baseStyles,
     placementStyles,
     sizeStyles,
     transformStyles,
+    pointerStyles,
     customClassName,
   ]
     .filter(Boolean)
@@ -84,10 +87,12 @@ export const getDrawerStyles = (
 export const getMaskStyles = (open: boolean, customClassName?: string): string => {
   const baseStyles = 'fixed inset-0 bg-black/50 transition-opacity duration-300 ease-in-out z-40'
   const opacityStyles = open ? 'opacity-100' : 'opacity-0'
+  const pointerStyles = open ? 'pointer-events-auto' : 'pointer-events-none'
   
   return [
     baseStyles,
     opacityStyles,
+    pointerStyles,
     customClassName,
   ]
     .filter(Boolean)
@@ -116,7 +121,7 @@ export const getHeaderStyles = (customClassName?: string): string => {
  * 获取内容区域样式
  */
 export const getBodyStyles = (customClassName?: string): string => {
-  const baseStyles = 'flex-1 px-6 py-4 overflow-y-auto'
+  const baseStyles = 'min-h-0 flex-1 overflow-y-auto'
   
   return [
     baseStyles,

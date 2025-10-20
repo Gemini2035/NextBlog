@@ -96,3 +96,5 @@ export type {
 } from './Timeline'
 export { toast, ToastContainer } from './Toast'
 export type { ToastOptions, ToastType, ToastInstance } from './Toast'
+export { Tree } from './Tree'
+export type { TreeNode, TreeProps } from './Tree'

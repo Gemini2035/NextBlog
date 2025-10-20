@@ -114,41 +114,48 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
       }
     }, [open, afterOpenChange])
 
-    // 阻止滚动穿透
+    // 阻止滚动穿透（桌面与移动端都生效）
     useEffect(() => {
-      if (open) {
-        document.body.style.overflow = 'hidden'
-        return () => {
-          document.body.style.overflow = ''
-        }
+      if (!open) return
+
+      const scrollY = window.scrollY || 0
+      const { style: bodyStyle } = document.body
+      const { style: htmlStyle } = document.documentElement
+
+      // 锁定滚动：固定 body，记录并维持当前位置
+      bodyStyle.position = 'fixed'
+      bodyStyle.top = `-${scrollY}px`
+      bodyStyle.left = '0'
+      bodyStyle.right = '0'
+      bodyStyle.width = '100%'
+      bodyStyle.overflow = 'hidden'
+      htmlStyle.overflow = 'hidden'
+      htmlStyle.overscrollBehavior = 'none'
+
+      // 防止页面其他容器滚动（触摸与滚轮）
+      const preventDefault = (e: Event) => e.preventDefault()
+      window.addEventListener('touchmove', preventDefault, { passive: false })
+      window.addEventListener('wheel', preventDefault, { passive: false })
+
+      return () => {
+        // 恢复滚动状态
+        window.removeEventListener('touchmove', preventDefault as EventListener)
+        window.removeEventListener('wheel', preventDefault as EventListener)
+        bodyStyle.position = ''
+        bodyStyle.top = ''
+        bodyStyle.left = ''
+        bodyStyle.right = ''
+        bodyStyle.width = ''
+        bodyStyle.overflow = ''
+        htmlStyle.overflow = ''
+        htmlStyle.overscrollBehavior = ''
+        window.scrollTo(0, scrollY)
       }
     }, [open])
 
-    // 如果未打开且设置了销毁，则不渲染
-    if (!open && destroyOnClose) {
-      return null
-    }
-
-    // 如果未打开，只渲染隐藏状态
+    // 未打开时不渲染任何DOM（避免布局占位），或选择在关闭时销毁
     if (!open) {
-      return (
-        <>
-          {mask && (
-            <div
-              className={cn(getMaskStyles(false, maskClassName), 'pointer-events-none')}
-              style={{ zIndex: zIndex - 1 }}
-              aria-hidden="true"
-            />
-          )}
-          <div
-            ref={ref}
-            className={cn(getDrawerStyles(placement, size, false, className))}
-            style={{ zIndex }}
-            aria-hidden="true"
-            {...props}
-          />
-        </>
-      )
+      return destroyOnClose ? null : null
     }
 
     return (
@@ -167,7 +174,7 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
         <div
           ref={ref}
           className={cn(getDrawerStyles(placement, size, open, className))}
-          style={{ zIndex }}
+          style={{ zIndex, height: size === 'full' && (placement === 'left' || placement === 'right') ? '100vh' : undefined }}
           role="dialog"
           aria-modal="true"
           aria-labelledby={title ? 'drawer-title' : undefined}
@@ -200,8 +207,15 @@ export const Drawer = forwardRef<DrawerRef, DrawerProps>(
             </div>
           )}
 
-          {/* 内容区域 */}
-          <div className={cn(getBodyStyles(bodyClassName))}>{children}</div>
+          {/* 内容区域 - 保证占满剩余高度并可滚动 */}
+          <div
+            className={cn(getBodyStyles(bodyClassName), 'min-h-0 flex-1 overflow-y-auto')}
+            style={{ overscrollBehavior: 'contain' }}
+            onWheel={(e) => { e.stopPropagation() }}
+            onTouchMove={(e) => { e.stopPropagation() }}
+          >
+            {children}
+          </div>
 
           {/* 底部 */}
           {footer && (

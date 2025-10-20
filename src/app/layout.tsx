@@ -52,8 +52,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className="antialiased">
+    <html lang="zh-CN" className="w-full overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden w-full">
         {children}
         <ToastContainer />
       </body>

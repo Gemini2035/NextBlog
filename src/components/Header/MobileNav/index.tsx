@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import { NavigationItem, SubmenuItem } from '@/constants'
-import { Link } from '@/ui'
+import { Link, Tree } from '@/ui'
+import type { TreeNode } from '@/ui'
 import { ChevronRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
@@ -112,7 +113,7 @@ export default function MobileNav({ navigationItems, onItemClick }: MobileNavPro
                 )}
               />
             </button>
-            {isExpanded && navItem.submenu.items && (
+            {isExpanded && navItem?.submenu?.items && (
               <div className="mt-2 space-y-1 pl-2">
                 {navItem.submenu.items.map(item => renderSubmenuItem(item))}
               </div>
@@ -131,9 +132,46 @@ export default function MobileNav({ navigationItems, onItemClick }: MobileNavPro
     )
   }
 
+  // 转换为 Tree 数据结构
+  const { treeData, allKeys } = useMemo((): { treeData: TreeNode[]; allKeys: string[] } => {
+    const collected: string[] = []
+    const collect = (k: string) => collected.push(k)
+
+    const mapSub = (item: SubmenuItem, parentIsFeatured: boolean = false): TreeNode => {
+      const hasChildren = Array.isArray(item.items) && item.items.length > 0
+      const isFeaturedGroup = item.label === 'Featured Articles'
+      const isLeaf = !hasChildren
+      const node: TreeNode = {
+        key: item.href,
+        // 仅当“父级”为 Featured Articles 时，叶子节点不翻译，直接展示原标题
+        title: isLeaf
+          ? (parentIsFeatured ? item.label : t(item.label, { defaultMessage: item.label }))
+          : t(item.label, { defaultMessage: item.label }),
+        href: item.href,
+        children: hasChildren ? item.items!.map(child => mapSub(child, isFeaturedGroup || parentIsFeatured)) : undefined,
+      }
+      collect(node.key)
+      if (node.children) (node.children as TreeNode[]).forEach((c) => collect(c.key))
+      return node
+    }
+    const data: TreeNode[] = navigationItems.map(nav => {
+      const children = nav.submenu?.items?.map(item => mapSub(item, false))
+      const node: TreeNode = {
+        key: nav.type,
+        title: t(nav.label, { defaultMessage: nav.label }),
+        href: nav.href,
+        children
+      }
+      collect(node.key)
+      if (children) (children as TreeNode[]).forEach((c) => collect(c.key))
+      return node
+    })
+    return { treeData: data, allKeys: Array.from(new Set(collected)) }
+  }, [navigationItems, t])
+
   return (
     <nav className="space-y-2">
-      {navigationItems.map(navItem => renderNavigationItem(navItem))}
+      <Tree data={treeData} defaultExpandedKeys={allKeys} onSelect={onItemClick} collapsible />
     </nav>
   )
 }
