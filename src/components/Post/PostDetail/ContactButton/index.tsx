@@ -4,11 +4,26 @@ import { useState } from 'react'
 import { QuestionIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import { Button, Link } from '@/ui'
+import { useWindowSize } from '@/hooks'
+import { MobileInlineContact } from './mobile'
 
+/**
+ * 联系按钮组件
+ * 桌面端：固定浮动按钮
+ * 移动端：内联卡片
+ */
 export function ContactButton() {
   const [isVisible, setIsVisible] = useState(false)
   const t = useTranslations('Contact')
+  const { width } = useWindowSize()
+  const isMobile = width < 768
 
+  // 移动端渲染内联组件
+  if (isMobile) {
+    return <MobileInlineContact />
+  }
+
+  // 桌面端渲染固定按钮
   return (
     <>
       {/* 固定按钮 */}
@@ -61,3 +76,4 @@ export function ContactButton() {
     </>
   )
 }
+

@@ -61,18 +61,18 @@ export default async function PostPage({ params }: PostPageProps) {
         <PostInfoCard post={post} />
         
         {/* 文章内容 */}
-        <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mt-8">
+        <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8 mt-8">
           <div className="prose prose-lg max-w-none">
             <MDXContent />
           </div>
         </article>
         
+        {/* 联系按钮 - 移动端显示在这里，桌面端固定显示 */}
+        <ContactButton />
+        
         {/* 相关文章 */}
         <RelatedPosts post={post} limit={3} />
       </div>
-      
-      {/* 固定联系按钮 */}
-      <ContactButton />
     </>
   )
 }
