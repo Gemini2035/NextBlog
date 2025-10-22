@@ -1,6 +1,7 @@
 'use client'
 
 import { InlineSearch } from './InlineSearch'
+import { cn } from '@/utils'
 
 interface FilterHeaderProps {
   title: string
@@ -23,12 +24,12 @@ export function FilterHeader({
   }
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <h2 className="text-base font-semibold text-gray-900">{title}</h2>
-        <p className="text-xs text-gray-600">{description}</p>
+    <div className={cn('flex flex-col md:flex-row md:items-center md:justify-between gap-3')}>
+      <div className={cn('flex-shrink-0')}>
+        <h2 className={cn('text-sm md:text-base font-semibold text-gray-900')}>{title}</h2>
+        <p className={cn('text-xs text-gray-600 hidden md:block')}>{description}</p>
       </div>
-      <div onClick={handleSearchAreaClick}>
+      <div onClick={handleSearchAreaClick} className={cn('w-full md:w-auto')}>
         <InlineSearch
           value={searchValue}
           onChange={onSearchChange}

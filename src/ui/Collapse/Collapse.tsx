@@ -276,7 +276,7 @@ export const CollapsePanel = forwardRef<HTMLDivElement, CollapsePanelProps & {
         <div
           className={cn(
             'overflow-hidden transition-all duration-300 ease-in-out',
-            isActive ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+            isActive ? 'max-h-none opacity-100' : 'max-h-0 opacity-0'
           )}
         >
           <div

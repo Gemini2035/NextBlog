@@ -34,8 +34,8 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="relative">
+    <div className="flex items-center gap-2 w-full">
+      <div className="relative w-full">
         <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
         <input
           ref={inputRef}
@@ -43,7 +43,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
           value={inputValue}
           onChange={handleInputChange}
           placeholder={placeholder}
-          className="w-64 pl-10 pr-10 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
         {inputValue && (
           <Button

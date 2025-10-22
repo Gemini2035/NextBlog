@@ -134,11 +134,11 @@ export default function ProjectsPage() {
   }, [filteredProjects])
 
   return (
-    <div className="relative max-w-6xl mx-auto px-4 py-12 min-h-[calc(100vh-64px)]">
+    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 min-h-[calc(100vh-64px)]">
       {/* 页面标题 */}
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{t('title')}</h1>
-        <p className="text-xl text-gray-600">{t('description')}</p>
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-4xl font-bold mb-2">{t('title')}</h1>
+        <p className="text-base sm:text-xl text-gray-600">{t('description')}</p>
       </div>
 
       {/* 加载状态 */}
@@ -169,12 +169,12 @@ export default function ProjectsPage() {
 
       {/* 统计概览 */}
       {!loading && !error && finalStats && (
-        <StatsOverview stats={finalStats} className="mb-8" />
+        <StatsOverview stats={finalStats} className="mb-6 sm:mb-8" />
       )}
 
       {/* 项目筛选器 */}
       {!loading && !error && (
-        <div id="project-filter" className="mb-8">
+        <div id="project-filter" className="mb-6 sm:mb-8">
           <ProjectFilter
             projects={finalProjects}
             onFilteredProjectsChange={handleFilteredProjectsChange}
@@ -182,17 +182,30 @@ export default function ProjectsPage() {
         </div>
       )}
 
-      {/* 项目瀑布流 */}
+      {/* 项目瀑布流 - 移动端单列，桌面端双列 */}
       {!loading && !error && (
         waterfallItems.length > 0 ? (
-          <ExpandableWaterfall 
-            items={waterfallItems}
-            columns={2}
-            gap={24}
-          />
+          <>
+            {/* 移动端：单列布局 */}
+            <div className="block md:hidden">
+              <ExpandableWaterfall 
+                items={waterfallItems}
+                columns={1}
+                gap={16}
+              />
+            </div>
+            {/* 桌面端：双列布局 */}
+            <div className="hidden md:block">
+              <ExpandableWaterfall 
+                items={waterfallItems}
+                columns={2}
+                gap={24}
+              />
+            </div>
+          </>
         ) : (
           <div className="py-12 text-center">
-            <p className="text-gray-500 text-lg">{t('empty.description')}</p>
+            <p className="text-gray-500 text-base sm:text-lg">{t('empty.description')}</p>
           </div>
         )
       )}
