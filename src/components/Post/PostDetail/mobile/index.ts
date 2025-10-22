@@ -1,0 +1,2 @@
+export { MobileStickyCard } from './MobileStickyCard'
+

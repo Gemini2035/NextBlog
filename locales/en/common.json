@@ -372,8 +372,11 @@
     "mainNavigation": "Main navigation",
     "actionToolbar": "Action toolbar",
     "openMobileMenu": "Open mobile menu",
+    "closeMobileMenu": "Close mobile menu",
     "search": "Search",
-    "toggleLanguage": "Toggle language"
+    "toggleLanguage": "Toggle language",
+    "mobileNavigation": "Mobile navigation",
+    "navigationMenu": "Navigation menu"
   },
   "NotFound": {
     "title": "404",
@@ -817,9 +820,15 @@
       "v210": "v2.1.0 - Internationalization Support",
       "v210Period": "October 2025",
       "v210Description": "Enhanced multi-language support, implemented content display and switching experience for Chinese, English, and Japanese, supporting full-site internationalization.",
+      "v215": "v2.1.5 - Mobile Adaptation",
+      "v215Period": "November 2025",
+      "v215Description": "Comprehensive mobile experience optimization, implementing responsive layout and adapting to various screen sizes, enhancing mobile user experience and interaction fluency.",
       "v220": "v2.2.0 - SEO & Performance Optimization",
       "v220Period": "In Progress",
-      "v220Description": "Comprehensive SEO optimization, improving search engine rankings and website discoverability, continuous performance and user experience improvements."
+      "v220Description": "Comprehensive SEO optimization, improving search engine rankings and website discoverability, continuous performance and user experience improvements.",
+      "v230": "v2.3.0 - Multi-Theme Adaptation",
+      "v230Period": "Planned",
+      "v230Description": "Develop a rich website theme system, including dark theme and various color schemes, providing personalized visual experience options."
     },
     "timeline": {
       "sep2023": "September 2023: Started construction",
@@ -845,9 +854,15 @@
       "firstArticle": "First Article",
       "multilangSupport": "Multi-language Support",
       "fullSiteI18n": "Full-site Internationalization",
+      "responsiveDesign": "Responsive Design",
+      "mobileOptimization": "Mobile Optimization",
+      "tailwindCSS": "Tailwind CSS",
       "seoOptimization": "SEO Optimization",
       "performanceImprovement": "Performance Improvement",
-      "userExperience": "User Experience"
+      "userExperience": "User Experience",
+      "darkTheme": "Dark Theme",
+      "themeSystem": "Theme System",
+      "customization": "Customization"
     }
   }
 }

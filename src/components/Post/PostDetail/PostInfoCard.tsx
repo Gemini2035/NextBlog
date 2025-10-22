@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Card, Button } from "@/ui";
 import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
 import { CollapseIcon } from "@/assets/icons";
 import type { Post } from "../../../../.contentlayer/generated";
-import { useLayoutHeights } from "@/hooks";
+import { useLayoutHeights, useWindowSize } from "@/hooks";
+import { MobileStickyCard } from "./mobile";
 
 interface PostInfoCardProps {
   post: Post;
@@ -15,11 +16,15 @@ interface PostInfoCardProps {
 
 export function PostInfoCard({ post }: PostInfoCardProps) {
   const t = useTranslations('Posts');
-  // 暂时禁用sticky功能
   const [isSticky, setIsSticky] = useState(false);
   const [cardHeight, setCardHeight] = useState<number | null>(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0); // 0-1 表示缩小进度
   const { headerHeight } = useLayoutHeights();
+  const { width } = useWindowSize();
+  const isMobile = width < 768;
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     // 测量卡片高度
@@ -31,62 +36,81 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
       }
     };
 
-    // 使用Intersection Observer检测文章内容区域
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // 当文章内容的上边框距离顶部一个header高度时，卡片变为sticky
-          const isArticleTopAboveThreshold = entry.boundingClientRect.top < headerHeight;
-          setIsSticky(isArticleTopAboveThreshold);
-        });
-      },
-      {
-        root: null, // 使用视窗作为根
-        rootMargin: "0px",
-        threshold: [0, 0.1, 0.5, 1.0], // 多个阈值来更精确地检测
-      }
-    );
+    let ticking = false;
+    const MIN_SCROLL_THRESHOLD = 50; // 最小滚动阈值
+    const SCROLL_STEP = 0.02; // 每次滚动改变的进度步长
 
-    // 初始测量
+    // 添加滚动事件监听器
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          const previousScrollY = lastScrollY.current;
+          
+          // 移动端逻辑
+          if (isMobile) {
+            // 判断是否显示 sticky
+            if (currentScrollY > MIN_SCROLL_THRESHOLD) {
+              setIsScrolled(true);
+              setIsSticky(true);
+              
+              // 判断滚动方向
+              const isScrollingDown = currentScrollY > previousScrollY;
+              const scrollDelta = Math.abs(currentScrollY - previousScrollY);
+              
+              // 根据滚动距离调整步长（滚动越快，变化越大）
+              const dynamicStep = Math.min(SCROLL_STEP * (scrollDelta / 5), 0.08);
+              
+              setScrollProgress(prev => {
+                if (isScrollingDown) {
+                  // 下滑：缩小（progress 增加）
+                  return Math.min(prev + dynamicStep, 1);
+                } else {
+                  // 上滑：放大（progress 减少）
+                  return Math.max(prev - dynamicStep, 0);
+                }
+              });
+            } else {
+              // 滚动位置小于阈值，隐藏 sticky
+              setIsScrolled(false);
+              setIsSticky(false);
+              setScrollProgress(0);
+            }
+          } else {
+            // 桌面端：使用原有逻辑
+            const articleContent = document.querySelector('article') || 
+                                  document.querySelector('main') ||
+                                  document.querySelector('[data-article-content]');
+            
+            if (articleContent) {
+              const rect = articleContent.getBoundingClientRect();
+              const isArticleTopAboveThreshold = rect.top < headerHeight;
+              setIsSticky(isArticleTopAboveThreshold);
+            }
+          }
+          
+          // 更新上次滚动位置
+          lastScrollY.current = currentScrollY;
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
+    };
+
+    // 初始化
+    lastScrollY.current = window.scrollY;
     measureCardHeight();
 
     // 监听窗口大小变化
     window.addEventListener("resize", measureCardHeight);
-    
-    // 添加滚动事件监听器作为备用方案
-    const handleScroll = () => {
-      const articleContent = document.querySelector('article') || 
-                            document.querySelector('main') ||
-                            document.querySelector('[data-article-content]');
-      
-      if (articleContent) {
-        const rect = articleContent.getBoundingClientRect();
-        const isArticleTopAboveThreshold = rect.top < headerHeight;
-        setIsSticky(isArticleTopAboveThreshold);
-      }
-    };
-    
-    window.addEventListener("scroll", handleScroll);
-
-    // 等待DOM更新后设置observer
-    const timer = setTimeout(() => {
-      // 查找文章内容区域（通常是main标签或包含文章内容的容器）
-      const articleContent = document.querySelector('article') || 
-                            document.querySelector('main') ||
-                            document.querySelector('[data-article-content]');
-      
-      if (articleContent) {
-        observer.observe(articleContent);
-      }
-    }, 100);
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       window.removeEventListener("resize", measureCardHeight);
       window.removeEventListener("scroll", handleScroll);
-      clearTimeout(timer);
-      observer.disconnect();
     };
-  }, [headerHeight, isSticky]);
+  }, [headerHeight, isSticky, isMobile]);
 
   useEffect(() => {
     if (!isSticky) {
@@ -96,8 +120,20 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
 
   return (
     <>
-      {/* 占位div - 当卡片变为sticky时保持布局稳定 */}
-      {isSticky && (
+      {/* 移动端 sticky 卡片 - 提取到独立组件 */}
+      {isMobile && isScrolled && (
+        <MobileStickyCard post={post} scrollProgress={scrollProgress} />
+      )}
+
+      {/* 主卡片 - 移动端滚动时隐藏 */}
+      <div
+        className={cn(
+          "transition-opacity duration-500 ease-in-out",
+          isMobile && isScrolled && "opacity-0 pointer-events-none"
+        )}
+      >
+      {/* 桌面端占位div - 当卡片变为sticky时保持布局稳定 */}
+      {!isMobile && isSticky && (
         <div 
           className="w-full"
           style={{ height: cardHeight || 0 }}
@@ -105,8 +141,8 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
         />
       )}
       
-      <div className={cn(isSticky ? "relative" : "")}>
-        <div className={cn(isSticky && "fixed top-60 right-0 z-50")}>
+      <div className={cn(!isMobile && isSticky ? "relative" : "")}>
+        <div className={cn(!isMobile && isSticky && "fixed top-60 right-0 z-50")}>
           <Card
             id="post-info-card"
             shadow="lg"
@@ -114,78 +150,83 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
             rounded
             disabledHover
             className={cn(
-              "liquid-transform transition-all duration-500 ease-in-out relative",
-              isSticky
-                ? "animate-slide-in-right min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-2xl transform -translate-y-1/2"
-                : "w-full mb-8 animate-slide-in-top",
-              isCollapsed && "transform translate-x-full"
+              "liquid-transform transition-all duration-500 ease-in-out",
+              // 桌面端样式
+              !isMobile && !isSticky && "relative w-full mb-8 animate-slide-in-top",
+              !isMobile && isSticky && "relative animate-slide-in-right min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-2xl transform -translate-y-1/2",
+              !isMobile && isCollapsed && "transform translate-x-full",
+              // 移动端样式
+              isMobile && "relative w-full mb-8",
             )}
           >
             <div
               className={cn(
-                "p-6",
-                isSticky && "max-h-[calc(100vh-4rem)] overflow-y-auto"
+                "p-6 transition-all duration-500 ease-in-out",
+                !isMobile && isSticky && "max-h-[calc(100vh-4rem)] overflow-y-auto"
               )}
             >
               {/* 文章标题 */}
               <h1
                 className={cn(
-                  "font-bold text-gray-900 mb-4",
-                  isSticky ? "text-xl" : "text-3xl"
+                  "font-bold text-gray-900 mb-4 transition-all duration-500 ease-in-out",
+                  !isMobile && isSticky ? "text-xl" : "text-3xl"
                 )}
               >
                 {post.title}
               </h1>
 
-              {/* 日期信息 */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
+              {/* 日期、描述、标签 */}
+              <div>
+                {/* 日期信息 */}
+                <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
+                  <time dateTime={post.date}>{formatDate(post.date)}</time>
 
-                {post.updatedAt && post.updatedAt !== post.date && (
-                  <span>更新于 {formatDate(post.updatedAt)}</span>
+                  {post.updatedAt && post.updatedAt !== post.date && (
+                    <span>更新于 {formatDate(post.updatedAt)}</span>
+                  )}
+                </div>
+
+                {/* 文章描述 */}
+                {post.description && (
+                  <div className="mb-6">
+                    <p
+                      className={cn(
+                        "text-gray-700",
+                        !isMobile && isSticky ? "text-sm" : "text-lg"
+                      )}
+                    >
+                      {post.description}
+                    </p>
+                  </div>
+                )}
+
+                {/* 标签 */}
+                {post.tags && post.tags.length > 0 && (
+                  <div>
+                    <h3
+                      className={cn(
+                        "font-semibold text-gray-800 mb-3",
+                        !isMobile && isSticky ? "text-sm" : "text-base"
+                      )}
+                    >
+                      标签
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.map((tag: string) => (
+                        <PostTag
+                          key={tag}
+                          size={!isMobile && isSticky ? "small" : "medium"}
+                          variant="primary"
+                        >
+                          {tag}
+                        </PostTag>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
-
-              {/* 文章描述 */}
-              {post.description && (
-                <div className="mb-6">
-                  <p
-                    className={cn(
-                      "text-gray-700",
-                      isSticky ? "text-sm" : "text-lg"
-                    )}
-                  >
-                    {post.description}
-                  </p>
-                </div>
-              )}
-
-              {/* 标签 */}
-              {post.tags && post.tags.length > 0 && (
-                <div>
-                  <h3
-                    className={cn(
-                      "font-semibold text-gray-800 mb-3",
-                      isSticky ? "text-sm" : "text-base"
-                    )}
-                  >
-                    标签
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.map((tag: string) => (
-                      <PostTag
-                        key={tag}
-                        size={isSticky ? "small" : "medium"}
-                        variant="primary"
-                      >
-                        {tag}
-                      </PostTag>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
-            {isSticky && (
+            {!isMobile && isSticky && (
               <Button
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 type="ghost"
@@ -203,6 +244,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
             )}
           </Card>
         </div>
+      </div>
       </div>
     </>
   );

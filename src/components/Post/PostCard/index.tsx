@@ -273,7 +273,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   }, [post.title, post.description, post.tags])
 
   const isCompact = variant === 'compact'
-  const padding = isCompact ? 'p-4' : 'p-6'
+  const padding = isCompact ? 'p-3 md:p-4' : 'p-4 md:p-6'
   const titleHeight = isCompact ? 'h-8' : 'h-[4rem]'
   const titleSize = isCompact ? 'text-lg' : 'text-xl'
   const titleTag = isCompact ? 'h3' : 'h2'

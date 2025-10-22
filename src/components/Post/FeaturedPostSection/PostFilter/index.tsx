@@ -234,7 +234,7 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
           }
           collapsible="header"
         >
-          <div className="p-4 pt-0">
+          <div className="p-3 md:p-4 pt-0">
             {/* 单列布局的筛选器 */}
             <FilterRow
               featuredValue={filters.featuredFilter}
@@ -251,7 +251,7 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
             />
 
             {/* 清除按钮和统计信息 */}
-            <div className="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div className="mt-4 md:mt-6 pt-3 md:pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="text-xs text-gray-600">
                 {t('filteredCount', { count: filteredPosts.length, total: posts.length })}
               </div>

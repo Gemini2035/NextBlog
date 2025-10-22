@@ -1,7 +1,21 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { ToastContainer } from "@/ui";
 import "./globals.css";
+
+// 移动端视口配置
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  viewportFit: 'cover',
+  // 匹配网站 bg-gray-50 背景色，提供无缝的视觉体验
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f9fafb' },  // Tailwind gray-50
+    { media: '(prefers-color-scheme: dark)', color: '#111827' }    // Tailwind gray-900
+  ],
+};
 
 export const metadata: Metadata = {
   title: "Apodidae",
@@ -11,6 +25,25 @@ export const metadata: Metadata = {
     shortcut: '/logo.svg',
     apple: '/logo.svg',
   },
+  // 移动端 Web App 配置
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Apodidae',
+  },
+  // 格式检测配置
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
+  // 其他移动端优化
+  other: {
+    // 针对 Android Chrome
+    'mobile-web-app-capable': 'yes',
+    // 针对 Windows Phone - 禁用点击高亮
+    'msapplication-tap-highlight': 'no',
+  },
 };
 
 export default function RootLayout({
@@ -19,8 +52,8 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <body className="antialiased">
+    <html lang="zh-CN" className="w-full overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden w-full">
         {children}
         <ToastContainer />
       </body>

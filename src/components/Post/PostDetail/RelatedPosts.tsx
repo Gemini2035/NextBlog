@@ -71,19 +71,19 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
           className="text-blue-600! hover:text-blue-800 hover:bg-blue-50"
         >
           <RefreshIcon isRotating={isRefreshing} />
-          <span className="ml-2">
+          <span className="ml-2 text-sm">
             {isRefreshing ? t('refreshing') : t('refresh')}
           </span>
         </Button>
       </div>
       
-      <div className="flex justify-start">
-        <div className="flex gap-1 max-w-4xl">
+      <div className="flex justify-start overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-4 md:pb-0">
+        <div className="flex gap-4 max-w-4xl">
           {currentPosts.map((relatedPost) => (
             <Link
               key={relatedPost.slug}
               href={`/${relatedPost.locale}/posts/${relatedPost.slug}`}
-              className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 max-w-sm"
+              className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
                 <h4 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">

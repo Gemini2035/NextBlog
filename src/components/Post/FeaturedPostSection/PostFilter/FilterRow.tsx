@@ -6,6 +6,7 @@ import { FeaturedFilter } from './FeaturedFilter'
 import { SortFilter } from './SortFilter'
 import { CollapsibleTagFilter } from './CollapsibleTagFilter'
 import { TagOption } from './types'
+import { cn } from '@/utils'
 
 interface FilterRowProps {
   // Featured filter
@@ -42,7 +43,7 @@ export function FilterRow({
   const t = useTranslations('PostFilter')
   
   return (
-    <div className="space-y-4">
+    <div className={cn('space-y-3 md:space-y-4')}>
       {/* Tag Filter */}
       <CollapsibleTagFilter
         tags={tags}
@@ -50,13 +51,13 @@ export function FilterRow({
         onChange={onTagChange}
       />
 
-      {/* 2x2 网格布局：Featured, 字数排序, 创建排序, 更新排序 */}
-      <div className="grid grid-cols-2 gap-4">
+      {/* 网格布局：移动端单列，桌面端2x2 */}
+      <div className={cn('grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4')}>
         {/* Featured Filter */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <StarIcon className="w-4 h-4 text-yellow-500" />
-            <span className="text-sm font-medium text-gray-700">{t('featuredFilter')}</span>
+        <div className={cn('flex items-center justify-between py-2 md:py-0')}>
+          <div className={cn('flex items-center gap-2')}>
+            <StarIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 flex-shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('featuredFilter')}</span>
           </div>
           <FeaturedFilter
             value={featuredValue}
@@ -65,10 +66,10 @@ export function FilterRow({
         </div>
 
         {/* 字数排序 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <EditIcon className="w-4 h-4 text-blue-500" />
-            <span className="text-sm font-medium text-gray-700">{t('wordCountSort')}</span>
+        <div className={cn('flex items-center justify-between py-2 md:py-0')}>
+          <div className={cn('flex items-center gap-2')}>
+            <EditIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 flex-shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('wordCountSort')}</span>
           </div>
           <SortFilter
             value={wordCountSort}
@@ -77,10 +78,10 @@ export function FilterRow({
         </div>
 
         {/* 创建时间排序 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ClockIcon className="w-4 h-4 text-green-500" />
-            <span className="text-sm font-medium text-gray-700">{t('createTimeSort')}</span>
+        <div className={cn('flex items-center justify-between py-2 md:py-0')}>
+          <div className={cn('flex items-center gap-2')}>
+            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-green-500 flex-shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('createTimeSort')}</span>
           </div>
           <SortFilter
             value={createTimeSort}
@@ -89,10 +90,10 @@ export function FilterRow({
         </div>
 
         {/* 更新时间排序 */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <RefreshIcon className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-medium text-gray-700">{t('updateTimeSort')}</span>
+        <div className={cn('flex items-center justify-between py-2 md:py-0')}>
+          <div className={cn('flex items-center gap-2')}>
+            <RefreshIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 flex-shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('updateTimeSort')}</span>
           </div>
           <SortFilter
             value={updateTimeSort}

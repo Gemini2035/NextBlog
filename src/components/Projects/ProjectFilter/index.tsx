@@ -276,6 +276,7 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
         }}
         variant="bordered"
         size="sm"
+        className="overflow-visible"
       >
         <CollapsePanel
           key="filter"
@@ -290,7 +291,7 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
           }
           collapsible="header"
         >
-          <div className="p-4 pt-0">
+          <div className="p-4 pt-0 pb-6">
             {/* 筛选器行 */}
             <FilterRow
               showPinned={filters.showPinned}
@@ -318,15 +319,17 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
             />
 
             {/* 清除按钮和统计信息 */}
-            <div className="mt-6 pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="text-xs text-gray-600">
-                {t('filteredCount', { count: filteredProjects.length, total: projects.length })}
-              </div>
-              <div className="sm:w-auto w-full">
-                <ClearButton
-                  onClear={clearAllFilters}
-                  label={t('clearAll')}
-                />
+            <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
+                  {t('filteredCount', { count: filteredProjects.length, total: projects.length })}
+                </div>
+                <div className="w-full sm:w-auto">
+                  <ClearButton
+                    onClear={clearAllFilters}
+                    label={t('clearAll')}
+                  />
+                </div>
               </div>
             </div>
           </div>

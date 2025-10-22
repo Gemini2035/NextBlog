@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from '@/ui'
+import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { SITE_CONFIG, HEADER_CONFIG, NavigationItem } from '@/constants'
 import { useNavigation } from '@/hooks'
@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
 import {SearchBar} from './Search'
 import { LanguageBar } from './LanguageToggle'
+import MobileNav from './MobileNav'
 
 interface NavItemProps {
   item: NavigationItem
@@ -52,6 +53,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
 export default function Header() {
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null)
   const [isExiting, setIsExiting] = useState(false)
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
   const navItemsRef = useRef<HTMLElement>(null)
   const lastScrollYRef = useRef<number>(0)
@@ -259,11 +261,24 @@ export default function Header() {
     submenu: languageSubmenu
   }), [languageSubmenu])
 
+  // 处理移动端菜单打开
+  const handleMobileMenuOpen = useCallback(() => {
+    // 打开移动端 Drawer 时，关闭任何已打开的 submenu（搜索/语言）
+    setActiveSubmenu(null)
+    setIsExiting(false)
+    setMobileDrawerOpen(true)
+  }, [])
+
+  // 处理移动端菜单关闭
+  const handleMobileMenuClose = useCallback(() => {
+    setMobileDrawerOpen(false)
+  }, [])
+
 
   return (
     <header 
       ref={navRef}
-      className="sticky top-0 z-50 bg-white/95  backdrop-blur-sm shadow-sm border-b border-gray-200 "
+      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200 w-full"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 主要内容区域 */}
@@ -299,8 +314,11 @@ export default function Header() {
 
             {/* Action Bar */}
             <ul className="flex items-center space-x-2" role="toolbar" aria-label={t('actionToolbar')}>
-              {/* 搜索功能 */}
-              <li className="hidden md:block">
+              {/* 搜索功能 - 桌面端显示完整搜索栏，移动端显示图标 */}
+              <li className="hidden md:block lg:block">
+                <SearchBar onSearchClick={handleSearchClick} />
+              </li>
+              <li className="md:hidden">
                 <SearchBar onSearchClick={handleSearchClick} />
               </li>
 
@@ -312,9 +330,10 @@ export default function Header() {
               {/* 移动端菜单按钮 */}
               <li className="lg:hidden">
                 <button 
+                  onClick={handleMobileMenuOpen}
                   className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
                   aria-label={t('openMobileMenu')}
-                  aria-expanded="false"
+                  aria-expanded={mobileDrawerOpen}
                 >
                   <MenuIcon className="h-6 w-6" />
                 </button>
@@ -323,11 +342,24 @@ export default function Header() {
           </div>
         </div>
 
-        {/* 移动端搜索栏 */}
-        <div className="md:hidden pb-4">
-          <SearchBar onSearchClick={handleSearchClick} />
-        </div>
       </div>
+
+      {/* 移动端 Drawer */}
+      <Drawer
+        open={mobileDrawerOpen}
+        onClose={handleMobileMenuClose}
+        placement="right"
+        size="full"
+        title={SITE_CONFIG.title}
+        className="lg:hidden"
+        bodyClassName="px-6 py-4"
+        destroyOnClose
+      >
+        <MobileNav 
+          navigationItems={navigationItems}
+          onItemClick={handleMobileMenuClose}
+        />
+      </Drawer>
       
       {/* 统一的submenu */}
       {activeSubmenu && (

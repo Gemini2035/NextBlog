@@ -504,8 +504,11 @@
     "mainNavigation": "メインナビゲーション",
     "actionToolbar": "アクションツールバー",
     "openMobileMenu": "モバイルメニューを開く",
+    "closeMobileMenu": "モバイルメニューを閉じる",
     "search": "検索",
-    "toggleLanguage": "言語を切り替え"
+    "toggleLanguage": "言語を切り替え",
+    "mobileNavigation": "モバイルナビゲーション",
+    "navigationMenu": "ナビゲーションメニュー"
   },
   "NotFound": {
     "title": "404",
@@ -822,9 +825,15 @@
       "v210": "v2.1.0 - 国際化サポート",
       "v210Period": "2025年10月",
       "v210Description": "多言語サポートの強化、中国語、英語、日本語の3言語でのコンテンツ表示と切り替え体験を実装、全サイト国際化をサポート。",
+      "v215": "v2.1.5 - モバイル対応",
+      "v215Period": "2025年11月",
+      "v215Description": "モバイル体験の包括的な最適化、レスポンシブレイアウトの実装、様々な画面サイズへの対応、モバイルユーザー体験とインタラクションの流暢性を向上。",
       "v220": "v2.2.0 - SEOとパフォーマンス最適化",
       "v220Period": "進行中",
-      "v220Description": "包括的なSEO最適化、検索エンジンランキングとウェブサイト発見可能性の向上、継続的なパフォーマンスとユーザー体験の改善。"
+      "v220Description": "包括的なSEO最適化、検索エンジンランキングとウェブサイト発見可能性の向上、継続的なパフォーマンスとユーザー体験の改善。",
+      "v230": "v2.3.0 - マルチテーマ対応",
+      "v230Period": "計画中",
+      "v230Description": "ダークテーマを含む豊富な配色スキームを持つウェブサイトテーマシステムの開発、パーソナライズされた視覚体験の選択肢を提供。"
     },
     "timeline": {
       "sep2023": "2023年9月：構築開始",
@@ -850,9 +859,15 @@
       "firstArticle": "最初の記事",
       "multilangSupport": "多言語サポート",
       "fullSiteI18n": "全サイト国際化",
+      "responsiveDesign": "レスポンシブデザイン",
+      "mobileOptimization": "モバイル最適化",
+      "tailwindCSS": "Tailwind CSS",
       "seoOptimization": "SEO最適化",
       "performanceImprovement": "パフォーマンス向上",
-      "userExperience": "ユーザー体験"
+      "userExperience": "ユーザー体験",
+      "darkTheme": "ダークテーマ",
+      "themeSystem": "テーマシステム",
+      "customization": "カスタマイズ"
     }
   }
 }
