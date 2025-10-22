@@ -196,6 +196,29 @@ export default function DevelopmentHistoryDetail({ className }: DevelopmentHisto
                 </div>
               </div>
 
+              {/* v2.1.5 */}
+              <div className="relative flex flex-col sm:flex-row sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
+                <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-green-400 rounded-full flex items-center justify-center mx-auto sm:mx-0">
+                  <span className="text-white text-xs font-bold">2.1</span>
+                </div>
+                <div className="flex-1 bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 space-y-2 sm:space-y-0">
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-900">{t('versions.v215')}</h4>
+                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-green-100 text-green-800 rounded-full text-xs sm:text-sm font-medium text-center sm:text-left">
+                      {t('versions.v215Period')}
+                    </span>
+                  </div>
+                  <p className="text-sm sm:text-base text-gray-600 mb-4">
+                    {t('versions.v215Description')}
+                  </p>
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.responsiveDesign')}</span>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.mobileOptimization')}</span>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.tailwindCSS')}</span>
+                  </div>
+                </div>
+              </div>
+
               {/* v2.2.0 */}
               <div className="relative flex flex-col sm:flex-row sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
                 <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-green-400 rounded-full flex items-center justify-center mx-auto sm:mx-0">
@@ -215,6 +238,29 @@ export default function DevelopmentHistoryDetail({ className }: DevelopmentHisto
                     <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.seoOptimization')}</span>
                     <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.performanceImprovement')}</span>
                     <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.userExperience')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* v2.3.0 */}
+              <div className="relative flex flex-col sm:flex-row sm:items-start space-y-3 sm:space-y-0 sm:space-x-4">
+                <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 bg-purple-400 rounded-full flex items-center justify-center mx-auto sm:mx-0">
+                  <span className="text-white text-xs font-bold">2.3</span>
+                </div>
+                <div className="flex-1 bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-200 opacity-75">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 space-y-2 sm:space-y-0">
+                    <h4 className="text-base sm:text-lg font-semibold text-gray-900">{t('versions.v230')}</h4>
+                    <span className="px-2 py-1 sm:px-3 sm:py-1 bg-purple-100 text-purple-800 rounded-full text-xs sm:text-sm font-medium text-center sm:text-left">
+                      {t('versions.v230Period')}
+                    </span>
+                  </div>
+                  <p className="text-sm sm:text-base text-gray-600 mb-4">
+                    {t('versions.v230Description')}
+                  </p>
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.darkTheme')}</span>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.themeSystem')}</span>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">{t('techTags.customization')}</span>
                   </div>
                 </div>
               </div>

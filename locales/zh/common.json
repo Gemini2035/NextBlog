@@ -825,9 +825,15 @@
       "v210": "v2.1.0 - 国际化支持",
       "v210Period": "2025年10月",
       "v210Description": "完善多语言支持，实现中文、英文、日文三种语言的内容展示和切换体验，支持全站国际化。",
+      "v215": "v2.1.5 - 移动端适配",
+      "v215Period": "2025年11月",
+      "v215Description": "全面优化移动端体验，实现响应式布局，适配各种屏幕尺寸，提升移动端用户体验和交互流畅度。",
       "v220": "v2.2.0 - SEO与性能优化",
       "v220Period": "持续进行中",
-      "v220Description": "全面优化SEO，提升搜索引擎排名和网站可发现性，持续改进性能和用户体验。"
+      "v220Description": "全面优化SEO，提升搜索引擎排名和网站可发现性，持续改进性能和用户体验。",
+      "v230": "v2.3.0 - 多主题适配",
+      "v230Period": "规划中",
+      "v230Description": "开发丰富的网站主题系统，包括暗黑主题在内的多种配色方案，提供个性化的视觉体验选择。"
     },
     "timeline": {
       "sep2023": "2023年9月：开始构建",
@@ -853,9 +859,15 @@
       "firstArticle": "首篇文章",
       "multilangSupport": "多语言支持",
       "fullSiteI18n": "全站国际化",
+      "responsiveDesign": "响应式设计",
+      "mobileOptimization": "移动端优化",
+      "tailwindCSS": "Tailwind CSS",
       "seoOptimization": "SEO优化",
       "performanceImprovement": "性能提升",
-      "userExperience": "用户体验"
+      "userExperience": "用户体验",
+      "darkTheme": "暗黑主题",
+      "themeSystem": "主题系统",
+      "customization": "个性化定制"
     }
   }
 }

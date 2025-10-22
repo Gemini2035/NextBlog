@@ -27,8 +27,8 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
           
           <div className="space-y-3 sm:space-y-4">
             {/* Blog 1.0 粗轴 */}
-            <div className="relative flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center mx-auto sm:mx-0">
+            <div className="relative flex items-start space-x-3">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center">
                 <span className="text-white text-xs font-bold">1.0</span>
               </div>
               <div className="flex-1 bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
@@ -36,7 +36,7 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
                   <h3 className="text-xs sm:text-sm font-semibold text-gray-900">
                     {t('blog1Title')}
                   </h3>
-                  <span className="px-2 py-0.5 bg-gray-400 text-gray-800 text-xs rounded-full text-center sm:text-left">
+                  <span className="px-2 py-0.5 bg-gray-400 text-gray-800 text-xs rounded-full self-start sm:self-auto">
                     {t('blog1Period')}
                   </span>
                 </div>
@@ -52,8 +52,8 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
             </div>
 
             {/* Blog 2.0 粗轴 */}
-            <div className="relative flex flex-col sm:flex-row sm:items-start space-y-2 sm:space-y-0 sm:space-x-3">
-              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center mx-auto sm:mx-0">
+            <div className="relative flex items-start space-x-3">
+              <div className="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 bg-green-500 rounded-full flex items-center justify-center">
                 <span className="text-white text-xs font-bold">2.0</span>
               </div>
               <div className="flex-1 bg-white p-3 sm:p-4 rounded-lg shadow-sm border border-gray-200">
@@ -61,7 +61,7 @@ export default function DevelopmentHistoryBrief({ className }: DevelopmentHistor
                   <h3 className="text-xs sm:text-sm font-semibold text-gray-900">
                     {t('blog2Title')}
                   </h3>
-                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full text-center sm:text-left">
+                  <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs rounded-full self-start sm:self-auto">
                     {t('blog2Period')}
                   </span>
                 </div>
