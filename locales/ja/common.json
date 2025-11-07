@@ -487,6 +487,8 @@
     "postCount": "{count} 記事",
     "morePosts": "あと {count} 記事...",
     "allTags": "すべてのタグ",
+    "tags": "タグ",
+    "updatedAt": "更新日",
     "noPosts": "記事がありません",
     "relatedPosts": "関連記事",
     "refresh": "更新",
