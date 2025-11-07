@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { PostTag } from '../../PostTag'
 import { formatDate, cn } from '@/utils'
 import type { Post } from '../../../../../.contentlayer/generated'
@@ -14,6 +15,8 @@ interface MobileStickyCardProps {
  * 渐进式缩小动画，从完整信息到只显示标题
  */
 export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps) {
+  const t = useTranslations('Posts')
+  
   return (
     <div
       className={cn(
@@ -58,7 +61,7 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
         >
           <time dateTime={post.date}>{formatDate(post.date)}</time>
           {post.updatedAt && post.updatedAt !== post.date && (
-            <span>更新于 {formatDate(post.updatedAt)}</span>
+            <span>{t('updatedAt')} {formatDate(post.updatedAt)}</span>
           )}
         </div>
 
@@ -78,7 +81,7 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
                 marginBottom: scrollProgress < 0.5 ? `${12 - scrollProgress * 24}px` : '0px',
               }}
             >
-              标签
+              {t('tags')}
             </h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.slice(0, 4).map((tag: string) => (
