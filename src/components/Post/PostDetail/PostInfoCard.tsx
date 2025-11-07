@@ -182,7 +182,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                   <time dateTime={post.date}>{formatDate(post.date)}</time>
 
                   {post.updatedAt && post.updatedAt !== post.date && (
-                    <span>更新于 {formatDate(post.updatedAt)}</span>
+                    <span>{t('updatedAt')} {formatDate(post.updatedAt)}</span>
                   )}
                 </div>
 
@@ -209,7 +209,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                         !isMobile && isSticky ? "text-sm" : "text-base"
                       )}
                     >
-                      标签
+                      {t('tags')}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag: string) => (

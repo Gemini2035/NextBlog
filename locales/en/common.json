@@ -355,6 +355,8 @@
     "postCount": "{count} posts",
     "morePosts": "{count} more posts...",
     "allTags": "All Tags",
+    "tags": "Tags",
+    "updatedAt": "Updated at",
     "noPosts": "No posts available",
     "relatedPosts": "Related Posts",
     "refresh": "Refresh",

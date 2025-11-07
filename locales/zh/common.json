@@ -355,6 +355,8 @@
     "postCount": "{count} 篇",
     "morePosts": "还有 {count} 篇文章...",
     "allTags": "所有标签",
+    "tags": "标签",
+    "updatedAt": "更新于",
     "noPosts": "暂无文章",
     "relatedPosts": "推荐文章",
     "refresh": "换一批",
