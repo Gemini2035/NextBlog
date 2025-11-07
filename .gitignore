@@ -26,7 +26,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+.env
+.env.*
 
 # vercel
 .vercel
@@ -37,3 +38,9 @@ next-env.d.ts
 
 # contentlayer
 .contentlayer
+
+# 翻译生成的内容（只保留中文原文）
+# 忽略 content 目录下除了 zh 之外的所有语言文件夹
+content/en/
+content/ja/
+# 注意：content/zh/ 文件夹会被保留在版本控制中

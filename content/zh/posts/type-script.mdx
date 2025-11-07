@@ -1,0 +1,69 @@
+---
+title: "Ts类型检查在Es6下的应用场景一则"
+date: 2025-11-07
+description: "分享一个"
+tags: ["TypeScript", "Es6"]
+published: true
+featured: false
+updatedAt: 2025-11-07
+locale: "zh"
+originalSlug: "type-script"
+---
+
+# Ts类型检查在Es6下的应用场景一则
+
+## 引言
+Es6和Ts类型检查特性已经出现了相当长一段时间了。前者允许了JavaScript以更简便的方式编写代码，后者解决了JavaScript过于随意的类型定义。而两者结合赋予了原先函数实现更多的可能性
+
+## 实战
+闲话少说，直接上代码：
+```js
+function debounce(fn, wait) {
+  let timer = null;
+
+  return function () {
+    let context = this,
+      args = arguments;
+
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, wait);
+  };
+}
+```
+你可能已经发现了，这就是防抖功能最基础版本的Js代码。但是现在，我将使用Es6中箭头函数和Ts的类型检查重新实现一遍。
+首先整体思路还是需要保持一致，即采用闭包写法。在采用箭头函数改写的过程中，需要考虑一个非常重要的问题：this。箭头函数中没有独立的this环境，它依赖于调用时的上下文关系。而apply函数的作用就是改变this指向，这可能在箭头函数中导致意外结果。所以，我倾向于在箭头函数中不适用和this相关的变量和函数。
+```ts
+ const debounce = (fn, delay) => {
+  let timer = null
+  
+  return (...args) => {
+    // Clear previous timer if exists
+    if (timer) clearTimeout(timer)
+    // Set new timer
+    timer = setTimeout(() => fn(...args), delay)
+  }
+}
+```
+但是，这样写有一个严重的问题：如何保证传入的fn是一个函数？或者传入的args就是fn需要使用的参数？这就需要使用Ts的类型检查来保证。
+```ts
+const debounce = <T extends (...args: any[]) => any>(
+  fn: T, 
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let timer: NodeJS.Timeout | null = null
+  
+  return (...args: Parameters<T>) => {
+    // Clear previous timer if exists
+    if (timer) clearTimeout(timer)
+    // Set new timer
+    timer = setTimeout(() => fn(...args), delay)
+  }
+}
+```
+使用泛型约束了fn的类型，并保证了args的类型。这样，我们就保证了传入的fn是一个函数，并且传入的args就是fn需要使用的参数。这样做的好处是，我们可以在调用debounce函数时，传入任何函数和任何参数，而不会出现类型错误。
