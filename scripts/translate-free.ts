@@ -5,6 +5,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { fileURLToPath } from 'url'
 import { execSync } from 'child_process'
+import { createHash } from 'crypto'
 import { HttpsProxyAgent } from 'https-proxy-agent'
 import { config } from 'dotenv'
 
@@ -76,6 +77,8 @@ interface Frontmatter {
   published?: boolean
   featured?: boolean
   updatedAt?: string
+  sourceHash?: string  // 源文件内容的哈希值，用于检测变化
+  translatedAt?: string  // 翻译时间
   _path?: string
   [key: string]: unknown
 }
@@ -90,6 +93,30 @@ function normalizeLangCode(locale: string): string {
     'ja': 'ja'
   }
   return langMap[locale] || locale
+}
+
+/**
+ * 计算文件内容的哈希值（用于检测内容变化）
+ */
+function calculateContentHash(content: string): string {
+  return createHash('md5').update(content).digest('hex')
+}
+
+/**
+ * 获取源文件的内容哈希（不包括 frontmatter 中的某些字段）
+ */
+function getSourceContentHash(filePath: string): string {
+  const content = fs.readFileSync(filePath, 'utf8')
+  const { data: frontmatter, content: body } = matter(content)
+  
+  // 只对标题、描述和正文内容计算哈希，忽略日期等元数据
+  const contentToHash = JSON.stringify({
+    title: frontmatter.title,
+    description: frontmatter.description,
+    body: body.trim()
+  })
+  
+  return calculateContentHash(contentToHash)
 }
 
 /**
@@ -249,6 +276,8 @@ async function translateFrontmatter(
   translated.published = frontmatter.published
   translated.featured = frontmatter.featured
   translated.updatedAt = frontmatter.updatedAt
+  
+  // 注意：sourceHash 和 translatedAt 将在 processPostFile 中设置
 
   return translated
 }
@@ -290,12 +319,45 @@ function getChangedFiles(): string[] {
 }
 
 /**
- * 检查目标文件是否已存在
+ * 检查目标文件是否需要更新
+ * @returns { exists: boolean, needsUpdate: boolean, reason?: string }
  */
-function checkTargetFileExists(filePath: string, toLocale: string): boolean {
+function checkTargetFileStatus(
+  sourceFilePath: string,
+  toLocale: string
+): { exists: boolean; needsUpdate: boolean; reason?: string } {
   const targetDir = path.join(CONTENT_DIR, toLocale, 'posts')
-  const targetPath = path.join(targetDir, path.basename(filePath))
-  return fs.existsSync(targetPath)
+  const targetPath = path.join(targetDir, path.basename(sourceFilePath))
+  
+  // 文件不存在，需要翻译
+  if (!fs.existsSync(targetPath)) {
+    return { exists: false, needsUpdate: true, reason: '文件不存在' }
+  }
+  
+  // 获取源文件的内容哈希
+  const sourceHash = getSourceContentHash(sourceFilePath)
+  
+  // 读取目标文件的 frontmatter
+  try {
+    const targetContent = fs.readFileSync(targetPath, 'utf8')
+    const { data: targetFrontmatter } = matter(targetContent)
+    
+    // 如果目标文件没有 sourceHash，需要更新
+    if (!targetFrontmatter.sourceHash) {
+      return { exists: true, needsUpdate: true, reason: '缺少 sourceHash' }
+    }
+    
+    // 比较哈希值
+    if (targetFrontmatter.sourceHash !== sourceHash) {
+      return { exists: true, needsUpdate: true, reason: '内容已变化' }
+    }
+    
+    // 文件存在且内容未变化
+    return { exists: true, needsUpdate: false }
+  } catch (error) {
+    // 读取失败，需要重新翻译
+    return { exists: true, needsUpdate: true, reason: '读取失败' }
+  }
 }
 
 /**
@@ -312,18 +374,27 @@ async function processPostFile(filePath: string, fromLocale: string): Promise<vo
 
   const content = fs.readFileSync(fullPath, 'utf8')
   const { data: frontmatter, content: body } = matter(content)
+  
+  // 获取源文件的内容哈希
+  const sourceHash = getSourceContentHash(fullPath)
 
   // 为每个目标语言创建翻译版本
   for (const toLocale of TARGET_LOCALES) {
     if (toLocale === fromLocale) continue
 
-    // 检查目标文件是否已存在
-    if (checkTargetFileExists(filePath, toLocale)) {
-      console.log(`  ⏭️  跳过 ${toLocale} - 文件已存在`)
+    // 检查目标文件状态
+    const status = checkTargetFileStatus(filePath, toLocale)
+    
+    if (status.exists && !status.needsUpdate) {
+      console.log(`  ⏭️  跳过 ${toLocale} - 内容未变化`)
       continue
     }
-
-    console.log(`\n  🌐 翻译到 ${toLocale}...`)
+    
+    if (status.exists && status.needsUpdate) {
+      console.log(`\n  🔄 更新 ${toLocale} 翻译 (${status.reason})...`)
+    } else {
+      console.log(`\n  🌐 翻译到 ${toLocale}...`)
+    }
 
     try {
       // 翻译 frontmatter
@@ -332,6 +403,10 @@ async function processPostFile(filePath: string, fromLocale: string): Promise<vo
       // 翻译正文
       console.log(`  📝 翻译正文...`)
       const translatedBody = await translateText(body, fromLocale, toLocale)
+      
+      // 添加源文件哈希和翻译时间
+      translatedFrontmatter.sourceHash = sourceHash
+      translatedFrontmatter.translatedAt = new Date().toISOString()
 
       // 创建目标语言目录
       const targetDir = path.join(CONTENT_DIR, toLocale, 'posts')
@@ -344,7 +419,12 @@ async function processPostFile(filePath: string, fromLocale: string): Promise<vo
       const targetPath = path.join(targetDir, path.basename(filePath))
 
       fs.writeFileSync(targetPath, translatedContent, 'utf8')
-      console.log(`  ✅ 已创建翻译文件: ${targetPath}`)
+      
+      if (status.exists) {
+        console.log(`  ✅ 已更新翻译文件: ${targetPath}`)
+      } else {
+        console.log(`  ✅ 已创建翻译文件: ${targetPath}`)
+      }
 
       // 添加延迟避免 API 限制
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -414,6 +494,8 @@ export {
   translateText,
   translateFrontmatter,
   processPostFile,
-  checkTargetFileExists
+  checkTargetFileStatus,
+  getSourceContentHash,
+  calculateContentHash
 }
 

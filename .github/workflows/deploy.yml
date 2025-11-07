@@ -52,11 +52,13 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  auto-translate:
+  build-and-deploy:
     runs-on: ubuntu-latest
     if: |
-      (github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') &&
-      !(github.event_name == 'workflow_dispatch' && github.event.inputs.redeploy_only == 'true')
+      github.ref == 'refs/heads/main' || 
+      github.ref == 'refs/heads/master' || 
+      github.ref == 'refs/heads/production' ||
+      github.event_name == 'workflow_dispatch'
     
     steps:
     - name: Checkout code
@@ -86,170 +88,33 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Detect new or modified articles
-      id: detect-changes
+    - name: Run translation (generate all language versions)
       run: |
-        if [ "${{ github.event_name }}" = "push" ]; then
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-        else
-          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
-        fi
-        
-        # 只检测实际存在的文件，忽略删除的文件
-        ZH_CHANGES=""
-        EN_CHANGES=""
-        JA_CHANGES=""
-        
-        if [ -n "$CHANGED_FILES" ]; then
-          for file in $CHANGED_FILES; do
-            if [[ "$file" =~ ^content/zh/posts/ ]] && [ -f "$file" ]; then
-              ZH_CHANGES="$ZH_CHANGES $file"
-            elif [[ "$file" =~ ^content/en/posts/ ]] && [ -f "$file" ]; then
-              EN_CHANGES="$EN_CHANGES $file"
-            elif [[ "$file" =~ ^content/ja/posts/ ]] && [ -f "$file" ]; then
-              JA_CHANGES="$JA_CHANGES $file"
-            fi
-          done
-        fi
-        
-        # 去除多余空格
-        ZH_CHANGES=$(echo "$ZH_CHANGES" | xargs)
-        EN_CHANGES=$(echo "$EN_CHANGES" | xargs)
-        JA_CHANGES=$(echo "$JA_CHANGES" | xargs)
-        
-        echo "zh_changes=$ZH_CHANGES" >> $GITHUB_OUTPUT
-        echo "en_changes=$EN_CHANGES" >> $GITHUB_OUTPUT
-        echo "ja_changes=$JA_CHANGES" >> $GITHUB_OUTPUT
-        
-        # 调试信息
-        echo "=== 文件变化检测调试信息 ==="
-        echo "所有变化的文件: $CHANGED_FILES"
-        echo "中文文章变化: $ZH_CHANGES"
-        echo "英文文章变化: $EN_CHANGES"
-        echo "日文文章变化: $JA_CHANGES"
-        
-        if [ -n "$ZH_CHANGES" ]; then
-          echo "translate_from=zh" >> $GITHUB_OUTPUT
-          echo "translate_to=en,ja" >> $GITHUB_OUTPUT
-        elif [ -n "$EN_CHANGES" ]; then
-          echo "translate_from=en" >> $GITHUB_OUTPUT
-          echo "translate_to=zh,ja" >> $GITHUB_OUTPUT
-        elif [ -n "$JA_CHANGES" ]; then
-          echo "translate_from=ja" >> $GITHUB_OUTPUT
-          echo "translate_to=zh,en" >> $GITHUB_OUTPUT
-        fi
+        echo "🌐 Generating translations for all articles..."
+        pnpm run translate:free -- --all
+        echo "✅ Translation completed"
 
-    - name: Run free translation (Google Translate)
-      if: steps.detect-changes.outputs.translate_from != ''
+    - name: Build Contentlayer
+      run: pnpm run contentlayer
+      
+    - name: Build Next.js
+      run: pnpm run build
+
+    - name: Set deployment environment
+      id: set-env
       run: |
-        echo "Detected article changes in ${{ steps.detect-changes.outputs.translate_from }} language"
-        echo "Will translate to: ${{ steps.detect-changes.outputs.translate_to }}"
-        pnpm run translate:free
-
-    - name: Configure Git
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-
-    - name: Check if translation files need to be committed
-      id: check-changes
-      run: |
-        if git diff --quiet; then
-          echo "has_changes=false" >> $GITHUB_OUTPUT
-        else
-          echo "has_changes=true" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Commit translation files
-      if: steps.check-changes.outputs.has_changes == 'true'
-      run: |
-        git add content/en/posts/ content/ja/posts/
-        git commit -m "🤖 Auto translate: from ${{ steps.detect-changes.outputs.translate_from }} to ${{ steps.detect-changes.outputs.translate_to }}"
-        git push
-
-  redeploy-only:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' && github.event.inputs.redeploy_only == 'true'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.18.0'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.17.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Contentlayer
-        run: pnpm run contentlayer
-
-      - name: Set deployment environment
-        id: set-env
-        run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
           echo "environment=${{ github.event.inputs.deployment_environment }}" >> $GITHUB_OUTPUT
+        else
+          echo "environment=production" >> $GITHUB_OUTPUT
+        fi
 
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: >-
-            ${{ steps.set-env.outputs.environment == 'production' && '--prod --confirm' || '--prebuilt --confirm' }}
-          working-directory: ./
+    - name: Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        vercel-args: ${{ steps.set-env.outputs.environment == 'production' && '--prod' || '--prebuilt' }}
+        working-directory: ./
 
-  deploy-to-vercel:
-    runs-on: ubuntu-latest
-    needs: auto-translate
-    if: |
-      github.ref == 'refs/heads/main' || 
-      github.ref == 'refs/heads/master' || 
-      github.ref == 'refs/heads/production' ||
-      github.event_name == 'workflow_dispatch'
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.18.0'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.17.0
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build Contentlayer
-        run: pnpm run contentlayer
-
-      - name: Set deployment environment
-        id: set-env
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "environment=${{ github.event.inputs.deployment_environment }}" >> $GITHUB_OUTPUT
-          else
-            echo "environment=production" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Deploy to Vercel
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: >-
-            ${{ steps.set-env.outputs.environment == 'production' && '--prod --confirm' || '--prebuilt --confirm' }}
-          working-directory: ./
