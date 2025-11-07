@@ -139,12 +139,12 @@ jobs:
           echo "translate_to=zh,en" >> $GITHUB_OUTPUT
         fi
 
-    - name: Run auto translation
+    - name: Run free translation (Google Translate)
       if: steps.detect-changes.outputs.translate_from != ''
       run: |
         echo "Detected article changes in ${{ steps.detect-changes.outputs.translate_from }} language"
         echo "Will translate to: ${{ steps.detect-changes.outputs.translate_to }}"
-        pnpm run translate
+        pnpm run translate:free
 
     - name: Configure Git
       run: |
