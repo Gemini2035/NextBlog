@@ -82,7 +82,7 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
           {currentPosts.map((relatedPost) => (
             <Link
               key={relatedPost.slug}
-              href={`/${relatedPost.locale}/posts/${relatedPost.slug}`}
+              href={`/posts/${relatedPost.slug}`}
               className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
