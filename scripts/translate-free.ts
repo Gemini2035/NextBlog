@@ -170,6 +170,192 @@ function splitTextIntoChunks(text: string, maxLength: number): string[] {
 }
 
 /**
+ * 代码块占位符接口
+ */
+interface CodeBlockPlaceholder {
+  placeholder: string
+  code: string
+  language?: string
+}
+
+/**
+ * 翻译代码块中的注释
+ */
+async function translateCodeComments(code: string, from: string, to: string): Promise<string> {
+  let result = code
+  const commentPlaceholders: Array<{ placeholder: string; original: string }> = []
+  let placeholderIndex = 0
+  
+  // 使用占位符替换所有注释，然后翻译占位符内容，最后替换回去
+  // 这样可以避免索引偏移问题
+  
+  // 1. 处理单行注释 // (JavaScript/TypeScript/Java/C/C++/C#/Go等)
+  result = result.replace(/(\/\/\s*)(.+?)(?=\n|$)/g, (match, prefix, comment) => {
+    // 跳过 URL 和路径
+    if (comment.trim().startsWith('http') || comment.includes('://')) {
+      return match
+    }
+    const placeholder = `__COMMENT_SLASH_${placeholderIndex}__`
+    commentPlaceholders.push({ placeholder, original: prefix + comment })
+    placeholderIndex++
+    return placeholder
+  })
+  
+  // 2. 处理单行注释 # (Python/Shell/Ruby/YAML等)
+  result = result.replace(/^(#\s*)(.+?)(?=\n|$)/gm, (match, prefix, comment) => {
+    // 跳过 shebang 和特殊指令
+    if (comment.trim().startsWith('!') || comment.trim().startsWith(' -*-')) {
+      return match
+    }
+    const placeholder = `__COMMENT_HASH_${placeholderIndex}__`
+    commentPlaceholders.push({ placeholder, original: prefix + comment })
+    placeholderIndex++
+    return placeholder
+  })
+  
+  // 3. 处理多行注释 /* */ (JavaScript/TypeScript/Java/C/C++/C#/CSS等)
+  result = result.replace(/(\/\*\*?)([\s\S]*?)(\*\/)/g, (match, start, content, end) => {
+    // 如果注释中包含代码示例或特殊标记，跳过
+    if (content.includes('```') || content.includes('@')) {
+      return match
+    }
+    const placeholder = `__COMMENT_MULTI_${placeholderIndex}__`
+    commentPlaceholders.push({ placeholder, original: match })
+    placeholderIndex++
+    return placeholder
+  })
+  
+  // 4. 处理 HTML/XML 注释 <!-- -->
+  result = result.replace(/(<!--\s*)([\s\S]*?)(\s*-->)/g, (match) => {
+    const placeholder = `__COMMENT_HTML_${placeholderIndex}__`
+    commentPlaceholders.push({ placeholder, original: match })
+    placeholderIndex++
+    return placeholder
+  })
+  
+  // 翻译所有占位符对应的注释
+  const translatedComments: Map<string, string> = new Map()
+  
+  for (const { placeholder, original } of commentPlaceholders) {
+    try {
+      let commentToTranslate = original
+      
+      // 提取注释内容（去除注释符号）
+      if (original.startsWith('//')) {
+        commentToTranslate = original.replace(/^\/\/\s*/, '')
+      } else if (original.startsWith('#')) {
+        commentToTranslate = original.replace(/^#\s*/, '')
+      } else if (original.startsWith('<!--')) {
+        commentToTranslate = original.replace(/^<!--\s*/, '').replace(/\s*-->$/, '')
+      } else if (original.startsWith('/*')) {
+        // 多行注释需要逐行处理
+        const lines = original.split('\n')
+        const translatedLines: string[] = []
+        
+        for (const line of lines) {
+          // 保留注释符号前的空格和星号
+          const indentMatch = line.match(/^(\s*\*?\s*)/)
+          const indent = indentMatch ? indentMatch[1] : ''
+          const commentText = line.replace(/^\s*\*?\s*/, '').replace(/\*\/$/, '').replace(/^\/\*\*?/, '')
+          
+          if (commentText.trim()) {
+            const translatedCommentText = await translateText(commentText, from, to)
+            translatedLines.push(indent + translatedCommentText)
+          } else {
+            translatedLines.push(line)
+          }
+          
+          await new Promise(resolve => setTimeout(resolve, 200))
+        }
+        
+        // 恢复多行注释格式
+        const firstLine = lines[0]
+        const lastLine = lines[lines.length - 1]
+        const startMatch = firstLine.match(/^(\/\*\*?)/)
+        const endMatch = lastLine.match(/(\*\/)$/)
+        
+        if (startMatch && endMatch) {
+          const start = startMatch[1]
+          const end = endMatch[1]
+          translatedComments.set(placeholder, start + '\n' + translatedLines.join('\n') + '\n' + end)
+        } else {
+          translatedComments.set(placeholder, original)
+        }
+        
+        await new Promise(resolve => setTimeout(resolve, 300))
+        continue
+      }
+      
+      // 翻译注释内容
+      const translatedComment = await translateText(commentToTranslate, from, to)
+      
+      // 恢复注释格式
+      if (original.startsWith('//')) {
+        translatedComments.set(placeholder, `// ${translatedComment}`)
+      } else if (original.startsWith('#')) {
+        translatedComments.set(placeholder, `# ${translatedComment}`)
+      } else if (original.startsWith('<!--')) {
+        translatedComments.set(placeholder, `<!-- ${translatedComment} -->`)
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 300))
+    } catch (error) {
+      console.warn(`    警告: 翻译注释失败，保留原文: ${error instanceof Error ? error.message : '未知错误'}`)
+      translatedComments.set(placeholder, original)
+    }
+  }
+  
+  // 替换所有占位符为翻译后的注释
+  for (const [placeholder, translated] of translatedComments.entries()) {
+    result = result.replace(placeholder, translated)
+  }
+  
+  return result
+}
+
+/**
+ * 提取代码块并替换为占位符
+ */
+function extractCodeBlocks(content: string): { text: string; blocks: CodeBlockPlaceholder[] } {
+  const blocks: CodeBlockPlaceholder[] = []
+  let blockIndex = 0
+  
+  // 提取 Markdown 代码块 ```language\n...\n```
+  // 匹配格式：```language\ncode\n``` 或 ```\ncode\n```
+  const textWithBlockPlaceholders = content.replace(
+    /```(\w+)?([\s\S]*?)```/g,
+    (match, language, code) => {
+      // 移除代码开头和结尾的换行符（如果存在）
+      const trimmedCode = code.replace(/^\n+/, '').replace(/\n+$/, '')
+      const placeholder = `__CODE_BLOCK_${blockIndex}__`
+      blocks.push({
+        placeholder,
+        code: trimmedCode,
+        language: language || undefined
+      })
+      blockIndex++
+      return placeholder
+    }
+  )
+  
+  return { text: textWithBlockPlaceholders, blocks }
+}
+
+/**
+ * 恢复代码块占位符
+ */
+function restoreCodeBlocks(text: string, blocks: CodeBlockPlaceholder[]): string {
+  let result = text
+  
+  blocks.forEach(({ placeholder, code, language }) => {
+    const languageTag = language ? `${language}\n` : ''
+    result = result.replace(placeholder, `\`\`\`${languageTag}${code}\n\`\`\``)
+  })
+  
+  return result
+}
+
+/**
  * 使用免费的 Google 翻译（带重试机制）
  */
 async function translateText(text: string, from: string, to: string, retries = 3): Promise<string> {
@@ -400,9 +586,30 @@ async function processPostFile(filePath: string, fromLocale: string): Promise<vo
       // 翻译 frontmatter
       const translatedFrontmatter = await translateFrontmatter(frontmatter, fromLocale, toLocale)
 
-      // 翻译正文
+      // 翻译正文（特殊处理代码块）
       console.log(`  📝 翻译正文...`)
-      const translatedBody = await translateText(body, fromLocale, toLocale)
+      
+      // 提取代码块
+      const { text: textWithoutCode, blocks } = extractCodeBlocks(body)
+      
+      // 翻译普通文本部分
+      const translatedText = await translateText(textWithoutCode, fromLocale, toLocale)
+      
+      // 翻译代码块中的注释
+      console.log(`  💻 翻译代码块中的注释...`)
+      const translatedBlocks: CodeBlockPlaceholder[] = []
+      for (let i = 0; i < blocks.length; i++) {
+        const block = blocks[i]
+        console.log(`    处理代码块 ${i + 1}/${blocks.length}...`)
+        const translatedCode = await translateCodeComments(block.code, fromLocale, toLocale)
+        translatedBlocks.push({
+          ...block,
+          code: translatedCode
+        })
+      }
+      
+      // 恢复代码块
+      const translatedBody = restoreCodeBlocks(translatedText, translatedBlocks)
       
       // 添加源文件哈希和翻译时间
       translatedFrontmatter.sourceHash = sourceHash

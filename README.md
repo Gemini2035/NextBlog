@@ -128,10 +128,7 @@ pnpm export
 │   ├── en/common.json    # 英文翻译
 │   └── ja/common.json    # 日文翻译
 ├── scripts/              # TypeScript 脚本
-│   ├── translate-posts.ts        # 基础翻译脚本
-│   ├── auto-translate.ts         # 智能自动翻译脚本
-│   ├── translate-with-openai.ts  # OpenAI 翻译脚本
-│   ├── test-translation.ts       # 测试翻译脚本
+│   ├── translate-free.ts # 免费翻译脚本（Google Translate，支持代码块注释翻译）
 │   └── README.md         # 脚本使用说明
 ├── public/               # 静态资源
 ├── src/
@@ -396,9 +393,9 @@ pnpm start
 
 ### 翻译配置
 
-- **关键词映射**: 修改 `scripts/auto-translate.ts` 中的翻译映射
-- **OpenAI 配置**: 设置 `OPENAI_API_KEY` 环境变量
-- **翻译质量**: 调整翻译脚本中的参数和规则
+- **代理配置**: 设置 `TRANSLATE_PROXY`、`HTTP_PROXY` 或 `HTTPS_PROXY` 环境变量（仅本地开发需要）
+- **翻译质量**: 调整翻译脚本中的重试次数和延迟参数
+- **代码块处理**: 脚本会自动识别代码块并只翻译注释，无需额外配置
 
 ## 🔧 故障排除
 
@@ -560,42 +557,35 @@ originalSlug: "article-slug" # 原始 slug（用于跨语言链接）
 
 ## 📝 翻译脚本
 
-### 可用的翻译脚本
+### 免费翻译脚本（Google Translate）
 
-#### 基础翻译
+项目使用 `translate-free.ts` 脚本进行自动翻译，该脚本具有以下特性：
+
+- **免费使用**：基于 Google Translate API，无需 API 密钥
+- **智能检测**：自动检测 Git 变更，只翻译新增或修改的文章
+- **代码块保护**：自动识别代码块，只翻译注释部分，保留代码本身
+- **内容哈希**：使用内容哈希检测文件变化，避免重复翻译
+- **代理支持**：支持配置代理以访问 Google Translate
+
+#### 使用方法
 
 ```bash
+# 翻译所有中文文章
+pnpm run translate -- --all
+
+# 只翻译 Git 变更的文章（默认）
 pnpm run translate
 ```
 
-使用简单的关键词映射进行文章翻译。
+#### 脚本功能
 
-#### 自动翻译
-
-```bash
-pnpm run translate:auto
-```
-
-智能检测 Git 变更并只翻译新增或修改的文章。
-
-#### OpenAI 翻译
-
-```bash
-# 首先设置环境变量
-export OPENAI_API_KEY="your-api-key-here"
-
-# 然后运行脚本
-pnpm run translate:openai
-```
-
-使用 OpenAI GPT-3.5-turbo 模型进行高质量翻译。
-
-### 脚本功能
-
-- **translate-posts.ts** - 基础翻译脚本，使用关键词映射
-- **auto-translate.ts** - 智能自动翻译脚本，检测 Git 变更
-- **translate-with-openai.ts** - OpenAI 翻译脚本，高质量翻译
-- **test-translation.ts** - 测试翻译功能的脚本
+- **代码块处理**：
+  - 自动提取 Markdown 代码块（`language\ncode\n`）
+  - 只翻译代码块中的注释（`//`, `#`, `/* */`, `<!-- -->`）
+  - 保留所有代码语法和结构
+- **智能更新**：通过内容哈希检测源文件变化，只更新需要更新的翻译文件
+- **重试机制**：自动处理 API 限流和网络错误，带重试机制
+- **分段翻译**：长文本自动分段翻译，避免超时
 
 ## 🚀 GitHub Actions 集成
 
@@ -625,17 +615,18 @@ pnpm run translate:openai
    - `pages: write` - 用于部署到 GitHub Pages
    - `id-token: write` - 用于 GitHub Pages 部署
 
-3. **设置环境变量**（可选）：
-   - 进入 **Settings** → **Secrets and variables** → **Actions**
-   - 添加 `OPENAI_API_KEY` 用于高质量翻译
+3. **配置代理**（可选，仅本地开发需要）：
+   - 如果本地无法直接访问 Google Translate，可以设置代理：
+   - 设置环境变量 `TRANSLATE_PROXY`、`HTTP_PROXY` 或 `HTTPS_PROXY`
+   - CI/CD 环境中会自动跳过代理配置
 
 ## 🔧 自定义配置
 
 ### 添加新语言
 
-1. 在 `scripts/auto-translate.ts` 中添加新语言到 `TARGET_LOCALES`
-2. 在翻译配置中添加新语言的映射
-3. 创建对应的内容目录
+1. 在 `scripts/translate-free.ts` 中添加新语言到 `TARGET_LOCALES`
+2. 在 `normalizeLangCode` 函数中添加语言代码映射
+3. 创建对应的内容目录（如 `content/新语言/posts/`）
 4. 更新工作流文件以包含新语言
 
 ### 修改翻译逻辑
