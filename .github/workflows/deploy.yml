@@ -91,7 +91,7 @@ jobs:
     - name: Run translation (generate all language versions)
       run: |
         echo "🌐 Generating translations for all articles..."
-        pnpm run translate:free -- --all
+        pnpm run translate -- --all
         echo "✅ Translation completed"
 
     - name: Build Contentlayer
