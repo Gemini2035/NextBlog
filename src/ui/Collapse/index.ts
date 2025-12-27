@@ -1,10 +1,9 @@
-// Collapse 组件导出
-export { default as Collapse, CollapsePanel } from './Collapse'
-export type { 
-  CollapseProps, 
+import { Collapse } from 'gemini-uis'
+
+const CollapsePanel = Collapse.Panel
+
+export { Collapse, CollapsePanel }
+export type {
+  CollapseProps,
   CollapseRef,
-  CollapsePanelProps,
-  CollapsePanelRef,
-  CollapseSize,
-  CollapseVariant
-} from './types'
+} from 'gemini-uis'
