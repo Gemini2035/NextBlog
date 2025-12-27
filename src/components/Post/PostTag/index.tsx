@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import { Tag } from '@/ui';
-import { TagProps } from '@/ui/Tag';
+import { TagProps } from '@/ui';
 import { cn } from '@/utils';
 
 export interface PostTagProps extends Omit<TagProps, 'color' | 'size'> {

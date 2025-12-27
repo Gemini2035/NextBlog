@@ -91,7 +91,7 @@ export type {
   TimelineItemProps,
   TimelineItemRef
 } from './Timeline'
-export { default as ToastContainer } from './Toast'
+export { default as ToastContainer, toast } from './Toast'
 export type { ToastOptions, ToastType, ToastInstance } from 'gemini-uis'
 export { Tree } from './Tree'
 export type { TreeNode, TreeProps } from './Tree'
