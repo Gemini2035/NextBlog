@@ -1,15 +1,17 @@
 // Timeline 组件导出
-export { Timeline } from './Timeline'
-export { TimelineItem } from './TimelineItem'
+import { Timeline } from 'gemini-uis'
+
+const TimelineItem = Timeline.Item;
+
+export { Timeline, TimelineItem };
+
 export type { 
   TimelineProps, 
   TimelineRef,
   TimelineMode,
   TimelineSize,
   TimelineColor,
-  TimelineStatus
-} from './types'
-export type { 
-  TimelineItemProps, 
+  TimelineStatus,
+  TimelineItemProps,
   TimelineItemRef
-} from './types'
+} from 'gemini-uis'

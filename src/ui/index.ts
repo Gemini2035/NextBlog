@@ -1,100 +1,97 @@
 // UI 组件导出
 export { default as Link } from './Link'
 export type { LinkProps } from './Link'
-export { Button } from './Button'
-export type { 
-  ButtonProps, 
-  ButtonType, 
+export { Button } from 'gemini-uis'
+export type {
+  ButtonProps,
+  ButtonType,
   ButtonSize,
   ButtonRef
-} from './Button'
-export { Divider } from './Divider'
-export type { 
-  DividerProps, 
+} from 'gemini-uis'
+export { Divider } from 'gemini-uis'
+export type {
+  DividerProps,
   DividerRef,
   DividerOrientation,
   DividerThickness
-} from './Divider'
-export { Drawer } from './Drawer'
-export type { 
-  DrawerProps, 
+} from 'gemini-uis'
+export { Drawer } from 'gemini-uis'
+export type {
+  DrawerProps,
   DrawerRef,
   DrawerPlacement,
   DrawerSize
-} from './Drawer'
-export { Card } from './Card'
-export type { 
-  CardProps, 
+} from 'gemini-uis'
+export { Card } from 'gemini-uis'
+export type {
+  CardProps,
   CardRef,
   CardShadow,
   CardBorder
-} from './Card'
-export { Tag } from './Tag'
-export type { TagProps } from './Tag'
-export { Slider } from './Slider'
-export type { 
-  SliderProps, 
+} from 'gemini-uis'
+export { Tag } from 'gemini-uis'
+export type { TagProps } from 'gemini-uis'
+export { Slider } from 'gemini-uis'
+export type {
+  SliderProps,
   SliderRef,
   NavigationDirection,
   NavigationVariant,
   IndicatorVariant
-} from './Slider'
-export { Tooltip } from './Tooltip'
-export { Tab } from './Tab'
-export type { 
-  TooltipProps, 
+} from 'gemini-uis'
+export { Tab } from 'gemini-uis'
+export { Tooltip } from 'gemini-uis'
+export type {
+  TooltipProps,
   TooltipRef,
   TooltipTrigger,
   TooltipPlacement,
   TooltipTheme,
   TooltipState,
   TooltipAnimation
-} from './Tooltip'
-export { Pagination } from './Pagination'
-export type { 
-  PaginationProps, 
-  PaginationSize, 
+} from 'gemini-uis'
+export { Pagination } from 'gemini-uis'
+export type {
+  PaginationProps,
+  PaginationSize,
   PaginationAlign,
   PaginationItemProps,
   PaginationJumpProps,
   PaginationSizeChangerProps,
   PaginationQuickJumperProps
-} from './Pagination'
+} from 'gemini-uis'
+
 export { Collapse, CollapsePanel } from './Collapse'
-export type { 
-  CollapseProps, 
+export type {
+  CollapseProps,
   CollapseRef,
-  CollapsePanelProps,
-  CollapsePanelRef,
-  CollapseSize,
-  CollapseVariant
 } from './Collapse'
-export { EmptyState, EmptyStateIcon } from './EmptyState'
-export type { 
-  EmptyStateProps, 
+export { EmptyState, EmptyStateIcon } from 'gemini-uis'
+export type {
+  EmptyStateProps,
   EmptyStateRef,
   EmptyStateSize,
   EmptyStateVariant,
   EmptyStateIconType
-} from './EmptyState'
-export { Loading } from './Loading'
-export type { 
-  LoadingProps, 
-  LoadingSize, 
+} from 'gemini-uis'
+export { Loading } from 'gemini-uis'
+export type {
+  LoadingProps,
+  LoadingSize,
   LoadingVariant
-} from './Loading'
+} from 'gemini-uis'
 export { Timeline, TimelineItem } from './Timeline'
-export type { 
-  TimelineProps, 
+export type {
+  TimelineProps,
   TimelineRef,
   TimelineMode,
   TimelineSize,
   TimelineColor,
   TimelineStatus,
-  TimelineItemProps, 
+  TimelineItemProps,
   TimelineItemRef
 } from './Timeline'
-export { toast, ToastContainer } from './Toast'
-export type { ToastOptions, ToastType, ToastInstance } from './Toast'
+export { default as ToastContainer } from './Toast'
+export type { ToastOptions, ToastType, ToastInstance } from 'gemini-uis'
 export { Tree } from './Tree'
 export type { TreeNode, TreeProps } from './Tree'
