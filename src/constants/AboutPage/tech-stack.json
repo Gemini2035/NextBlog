@@ -1,0 +1,155 @@
+{
+  "zh": [
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "summary": "React 全栈（App Router）",
+      "description": "Next.js 是一个基于 React 的框架，用于构建服务器端渲染（SSR）和静态站点生成（SSG）的应用程序。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "NextJsIcon"
+    },
+    {
+      "id": "contentlayer",
+      "name": "Contentlayer",
+      "summary": "类型安全内容",
+      "description": "Contentlayer 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "ContentlayerIcon"
+    },
+    {
+      "id": "mdx",
+      "name": "MDX",
+      "summary": "Markdown + JSX",
+      "description": "MDX 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "MdxIcon"
+    },
+    {
+      "id": "tailwind",
+      "name": "Tailwind",
+      "summary": "实用优先 CSS",
+      "description": "Tailwind 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "TailwindIcon"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "summary": "类型安全（严格）",
+      "description": "TypeScript 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "TypeScriptIcon"
+    },
+    {
+      "id": "deployment",
+      "name": "Deployment",
+      "summary": "CI/CD 与部署",
+      "description": "Deployment 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "DeploymentIcon"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "summary": "高效数据查询",
+      "description": "GraphQL 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
+      "icon": "GraphQLIcon"
+    }
+  ],
+  "en": [
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "summary": "React Full-Stack (App Router)",
+      "description": "Next.js is a framework for building server-side rendered (SSR) and static site generation (SSG) applications. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "NextJsIcon"
+    },
+    {
+      "id": "contentlayer",
+      "name": "Contentlayer",
+      "summary": "Type-Safe Content",
+      "description": "Contentlayer is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "ContentlayerIcon"
+    },
+    {
+      "id": "mdx",
+      "name": "MDX",
+      "summary": "Markdown + JSX",
+      "description": "MDX is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "MdxIcon"
+    },
+    {
+      "id": "tailwind",
+      "name": "Tailwind",
+      "summary": "Utility-First CSS",
+      "description": "Tailwind is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "TailwindIcon"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "summary": "Type-Safe (Strict)",
+      "description": "TypeScript is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "TypeScriptIcon"
+    },
+    {
+      "id": "deployment",
+      "name": "Deployment",
+      "summary": "CI/CD & Deployment",
+      "description": "Deployment is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "DeploymentIcon"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "summary": "Efficient Data Query",
+      "description": "GraphQL is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
+      "icon": "GraphQLIcon"
+    }
+  ],
+  "ja": [
+    {
+      "id": "nextjs",
+      "name": "Next.js",
+      "summary": "React フルスタック（App Router）",
+      "description": "Next.js は、サーバーサイドレンダリング（SSR）と静的サイト生成（SSG）アプリケーションを構築するためのフレームワークです。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "NextJsIcon"
+    },
+    {
+      "id": "contentlayer",
+      "name": "Contentlayer",
+      "summary": "静的サイト生成のためのフレームワーク",
+      "description": "Contentlayer は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "ContentlayerIcon"
+    },
+    {
+      "id": "mdx",
+      "name": "MDX",
+      "summary": "Markdown + JSX",
+      "description": "MDX は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "MdxIcon"
+    },
+    {
+      "id": "tailwind",
+      "name": "Tailwind",
+      "summary": "ユーティリティファースト CSS",
+      "description": "Tailwind は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "TailwindIcon"
+    },
+    {
+      "id": "typescript",
+      "name": "TypeScript",
+      "summary": "型安全（厳密）",
+      "description": "TypeScript は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "TypeScriptIcon"
+    },
+    {
+      "id": "deployment",
+      "name": "Deployment",
+      "summary": "CI/CD とデプロイ",
+      "description": "Deployment は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "DeploymentIcon"
+    },
+    {
+      "id": "graphql",
+      "name": "GraphQL",
+      "summary": "効率的なデータクエリ",
+      "description": "GraphQL は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
+      "icon": "GraphQLIcon"
+    }
+  ]
+}

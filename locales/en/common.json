@@ -40,9 +40,19 @@
   "AboutPage": {
     "title": "About Me",
     "welcome": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
-    "techStack": "Tech Stack",
+    "TechStack": {
+      "title": "Tech Stack",
+      "description": "This blog is built with the following modern tech stack:"
+    },
     "techStackDescription": "This blog is built with the following modern tech stack:",
     "contact": "Contact",
+    "DevelopmentProtocols": {
+      "title": "International Standards and Protocols",
+      "description": "This site strictly follows the following international standards and protocols to ensure the accessibility, security, and interoperability of the website",
+      "viewSpec": "View Specifications",
+      "officialSite": "Official Site",
+      "keyFeatures": "Key Features"
+    },
     "OpenSource": {
       "title": "Open Source Libraries",
       "description": "Open source libraries and frameworks used in the project",
@@ -50,127 +60,6 @@
         "contact": "Contact",
         "viewDocs": "View Docs",
         "sourceCode": "Source Code"
-      },
-      "Categories": {
-        "Core Frameworks": "Core Frameworks",
-        "Styling & UI": "Styling & UI",
-        "Content Management": "Content Management",
-        "Internationalization": "Internationalization",
-        "Development Tools": "Development Tools"
-      },
-      "SubCategories": {
-        "UI Library": "UI Library",
-        "Framework": "Framework",
-        "Language": "Programming Language",
-        "Css Framework": "CSS Framework",
-        "Css Processor": "CSS Processor",
-        "Css In Js": "CSS-in-JS",
-        "Animation": "Animation Library",
-        "Cms": "Content Management",
-        "Markdown": "Markdown",
-        "Frontmatter": "Frontmatter",
-        "I18n": "Internationalization",
-        "Search": "Search Engine",
-        "Utility": "Utility Library",
-        "Hooks": "React Hooks",
-        "Linter": "Code Checker",
-        "Formatter": "Code Formatter",
-        "Git Hooks": "Git Hooks",
-        "AI": "AI Tool"
-      },
-      "SourcesDetail": {
-        "Tailwind CSS": {
-          "summary": "Tailwind CSS - Utility-first CSS Framework",
-          "description": "Declarative JavaScript library for building user interfaces, providing efficient interface rendering through component-based development and virtual DOM optimization"
-        },
-        "TypeScript": {
-          "summary": "TypeScript - Type-safe JavaScript",
-          "description": "Super set of JavaScript, adding static type checking to improve development experience and code quality"
-        },
-        "Emotion": {
-          "summary": "Emotion - CSS-in-JS Library",
-          "description": "High-performance CSS-in-JS library, supporting style components and dynamic styles"
-        },
-        "Gray Matter": {
-          "summary": "Gray Matter - Markdown frontmatter parser",
-          "description": "Parse the frontmatter metadata of the Markdown file"
-        },
-        "Framer Motion": {
-          "summary": "Framer Motion - Powerful React Animation Library",
-          "description": "Powerful React animation library, providing declarative animation API and gesture support"
-        },
-        "PostCSS": {
-          "summary": "PostCSS - CSS Post-processor",
-          "description": "CSS post-processor, used to convert and optimize CSS code, supporting plugin extension"
-        },
-        "Tailwind Animate": {
-          "summary": "Tailwind Animate - Tailwind CSS Animation Plugin",
-          "description": "Provide preset animation classes for Tailwind CSS, simplifying animation development"
-        },
-        "@octokit/graphql": {
-          "summary": "@octokit/graphql - GitHub API Client",
-          "description": "GitHub API client, used to access GitHub API"
-        },
-        "SWR": {
-          "summary": "SWR - React Cache Library",
-          "description": "React cache library, used to cache API request results"
-        },
-        "Recharts": {
-          "summary": "Recharts - Data Visualization Library",
-          "description": "Data visualization library, used to create various charts and graphs"
-        },
-        "React": {
-          "summary": "React - JavaScript Library for Building User Interfaces",
-          "description": "JavaScript library for building user interfaces, providing efficient interface rendering through component-based development and virtual DOM optimization"
-        },
-        "NextJs": {
-          "summary": "Next.js - Full-stack Framework Based on React",
-          "description": "Full-stack framework based on React, providing SSR, SSG optimization, supporting file routing and API routing"
-        },
-        "next-intl": {
-          "summary": "next-intl - Internationalization Library",
-          "description": "Internationalization library, used to support multiple languages"
-        },
-        "Contentlayer": {
-          "summary": "Contentlayer - Content Management System",
-          "description": "Content management system, used to manage content and data"
-        },
-        "MDX": {
-          "summary": "MDX - Markdown + JSX Support",
-          "description": "Enhanced version of Markdown, supporting the use of JSX components in Markdown"
-        },
-        "FuseJs": {
-          "summary": "Fuse.js - Fuzzy Search Library",
-          "description": "Fuzzy search library, used to quickly search and rank algorithms"
-        },
-        "clsx": {
-          "summary": "clsx - Conditional Class Name Utility",
-          "description": "Conditional class name utility, used to dynamically combine CSS class names"
-        },
-        "use-debounce": {
-          "summary": "use-debounce - Debounce Hook Library",
-          "description": "Debounce hook library, used to optimize input and search performance"
-        },
-        "ESLint": {
-          "summary": "ESLint - Code Checker",
-          "description": "Extensible JavaScript code checker, used to find and fix code problems"
-        },
-        "Prettier": {
-          "summary": "Prettier - Code Formatter",
-          "description": "Code formatter, ensuring code style consistency"
-        },
-        "Husky": {
-          "summary": "husky - Git Hook Tool",
-          "description": "Git hook tool, used to automatically run scripts before committing"
-        },
-        "lint-staged": {
-          "summary": "lint-staged - Git Staged File Runner",
-          "description": "Run linters on Git staged files, improving commit quality"
-        },
-        "OpenAI": {
-          "summary": "OpenAI - OpenAI SDK",
-          "description": "OpenAI official SDK, used to integrate AI features such as ChatGPT"
-        }
       }
     },
     "visit": "Visit",
@@ -221,134 +110,7 @@
     "learnMore": "Learn More",
     "developmentProtocols": "International Protocols",
     "developmentProtocolsDescription": "International standards and protocol specifications followed by this site",
-    "protocolsBrief": {
-      "wcag": "WCAG 2.1",
-      "ccLicense": "CC BY-NC-SA 4.0",
-      "https": "HTTPS/TLS 1.3",
-      "opengraph": "OpenGraph"
-    },
-    "protocolsDetail": {
-      "title": "Followed International Protocols",
-      "description": "This site strictly adheres to the following international standards and protocols, ensuring website accessibility, security, and interoperability",
-      "viewSpec": "View Specification",
-      "officialSite": "Official Site",
-      "keyFeatures": "Key Features",
-      "categories": {
-        "accessibility": "Accessibility",
-        "licensing": "Content Licensing",
-        "security": "Secure Transport",
-        "metadata": "Metadata Standards",
-        "syndication": "Content Distribution",
-        "markup": "Markup Standards",
-        "api": "API Specifications"
-      },
-      "protocols": {
-        "wcag": {
-          "name": "WCAG 2.1",
-          "fullName": "Web Content Accessibility Guidelines 2.1",
-          "description": "International web accessibility standard by W3C, ensuring website content is accessible to all users, including people with disabilities",
-          "features": [
-            "Semantic HTML structure",
-            "Keyboard navigation support",
-            "Appropriate color contrast",
-            "ARIA label support",
-            "Screen reader compatibility"
-          ],
-          "url": "https://www.w3.org/WAI/WCAG21/quickref/"
-        },
-        "ccLicense": {
-          "name": "CC BY-NC-SA 4.0",
-          "fullName": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0",
-          "description": "Internationally recognized content licensing protocol allowing sharing and modification for non-commercial purposes",
-          "features": [
-            "Attribution (BY) - Credit required",
-            "NonCommercial (NC) - Non-commercial use only",
-            "ShareAlike (SA) - Same license required",
-            "Internationally recognized copyright standard",
-            "Free Culture License"
-          ],
-          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-        },
-        "https": {
-          "name": "HTTPS/TLS 1.3",
-          "fullName": "Hypertext Transfer Protocol Secure / Transport Layer Security",
-          "description": "International standard protocol for secure internet communication, ensuring encrypted and integrity-protected data transmission",
-          "features": [
-            "End-to-end encryption",
-            "Latest TLS 1.3 protocol",
-            "Protection against man-in-the-middle attacks",
-            "Data integrity verification",
-            "Modern cryptographic algorithm support"
-          ],
-          "url": "https://tools.ietf.org/html/rfc8446"
-        },
-        "opengraph": {
-          "name": "Open Graph Protocol",
-          "fullName": "Open Graph Protocol",
-          "description": "Social media metadata standard by Facebook, optimizing content display on social platforms",
-          "features": [
-            "Social media preview optimization",
-            "Unified metadata format",
-            "Multi-platform sharing support",
-            "Rich media content display",
-            "SEO optimization support"
-          ],
-          "url": "https://ogp.me/"
-        },
-        "schema": {
-          "name": "Schema.org",
-          "fullName": "Structured Data Standard",
-          "description": "Structured data standard by Google, Microsoft, Yahoo, and others, improving search engine understanding",
-          "features": [
-            "Semantic data markup",
-            "Search engine optimization",
-            "Rich search results",
-            "JSON-LD format",
-            "Multiple content type support"
-          ],
-          "url": "https://schema.org/"
-        },
-        "rss": {
-          "name": "RSS 2.0 / Atom",
-          "fullName": "Content Syndication Protocols",
-          "description": "Standardized content aggregation and subscription formats, allowing users to subscribe via RSS readers",
-          "features": [
-            "Standardized content format",
-            "RSS and Atom support",
-            "Automatic content updates",
-            "Cross-platform subscription",
-            "Aggregator compatibility"
-          ],
-          "url": "https://www.rssboard.org/rss-specification"
-        },
-        "html5": {
-          "name": "Semantic HTML5",
-          "fullName": "Semantic HTML5 Standard",
-          "description": "Modern web markup standard by W3C, using semantic tags to improve accessibility and SEO",
-          "features": [
-            "Semantic tag structure",
-            "Enhanced accessibility",
-            "SEO friendly",
-            "Modern web standards",
-            "Backward compatibility"
-          ],
-          "url": "https://html.spec.whatwg.org/"
-        },
-        "restful": {
-          "name": "RESTful API",
-          "fullName": "Representational State Transfer API Specification",
-          "description": "HTTP-based API design architectural style, providing standardized web service interface design principles",
-          "features": [
-            "Uniform interface design",
-            "Stateless communication",
-            "Resource-oriented architecture",
-            "Standard HTTP methods",
-            "Cacheability"
-          ],
-          "url": "https://restfulapi.net/"
-        }
-      }
-    },
+
     "codeStandards": "Code Standards",
     "codeStandardsDescription": "Development standards to ensure code quality and consistency",
     "internationalization": "Internationalization",
@@ -360,12 +122,7 @@
     "dependencyManagement": "Dependency Management",
     "securityAudit": "Security Audit",
     "pnpmPackageManager": "pnpm Package Manager",
-    "personalProfile": "Personal Profile",
-    "personalProfileDescription": "A technology enthusiast developer who loves exploring new technologies, enjoys the fun of programming, and is committed to creating interesting projects.",
-    "personalProfileDetailSubtitle": "Detailed personal information and contact details",
     "aboutMe": "About Me",
-    "personalProfileDetail1": "I am a technology enthusiast developer, focusing on frontend technologies and full-stack development. I love exploring new technology stacks including React, Next.js, TypeScript, etc. I am passionate about learning new technologies and enjoy sharing interesting technical discoveries and programming insights through my blog.",
-    "personalProfileDetail2": "I usually enjoy studying new technologies, participating in open source projects, and sharing learning insights through technical blogs. I believe technology can make life better and love using code to solve practical problems and create interesting digital experiences.",
     "clickToViewDetails": "Click to view details"
   },
   "Search": {

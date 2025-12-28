@@ -1,28 +1,39 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { OPEN_SOURCE_LIBRARIES } from "@/constants";
 import { OpenSourceIcon } from "@/assets/icons";
 import { IconMap } from "./constants";
+import { useMemo } from "react";
+import { useRandomSort } from "@/hooks/useRandomSort";
 
 interface OpenSourceLibrariesBriefProps {
   className?: string;
 }
 
+
 const OpenSourceLibrariesBrief = ({
   className,
 }: OpenSourceLibrariesBriefProps) => {
+  const locale = useLocale();
   const t = useTranslations("AboutPage");
 
-  // 随机获取8个开源库
-  const sourcesData = OPEN_SOURCE_LIBRARIES.flatMap(({ sources }) => sources)
-    .flatMap(({ key, version, icon }) => ({
-      key,
-      version,
-      icon,
-    }))
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 8);
+  // 所有数据（固定顺序，用于 SSR）
+  const allSourcesData = useMemo(
+    () =>
+      OPEN_SOURCE_LIBRARIES[locale as keyof typeof OPEN_SOURCE_LIBRARIES].flatMap(({ sources }) =>
+        sources.map(({ key, version, icon, summary }) => ({
+          key,
+          version,
+          icon,
+          summary,
+        }))
+      ),
+    [locale]
+  );
+
+  // 随机获取8个开源库（仅在客户端）
+  const sourcesData = useRandomSort(allSourcesData, 8);
 
   return (
     <div className={className}>
@@ -36,7 +47,7 @@ const OpenSourceLibrariesBrief = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {sourcesData.map(({ key, version, icon }) => {
+        {sourcesData.map(({ key, version, icon, summary }) => {
           const IconComponent = IconMap[icon];
 
           return (
@@ -55,7 +66,7 @@ const OpenSourceLibrariesBrief = ({
                 <div>
                   <h3 className="font-medium text-gray-900 text-sm">{key}</h3>
                   <p className="text-xs text-gray-600">
-                    {t(`OpenSource.SourcesDetail.${key}.summary`)}
+                    {summary}
                   </p>
                 </div>
               </div>

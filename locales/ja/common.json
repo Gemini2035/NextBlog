@@ -171,9 +171,10 @@
   },
   "AboutPage": {
     "title": "私について",
-    "welcome": "{siteTitle}へようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。",
-    "techStack": "技術スタック",
-    "techStackDescription": "このブログは以下のモダンな技術スタックで構築されています：",
+    "TechStack": {
+      "title": "技術スタック",
+      "description": "このブログは以下のモダンな技術スタックで構築されています："
+    },
     "contact": "連絡先",
     "OpenSource": {
       "title": "オープンソースライブラリ",
@@ -182,127 +183,6 @@
         "contact": "連絡先",
         "viewDocs": "ドキュメント",
         "sourceCode": "ソースコード"
-      },
-      "Categories": {
-        "CoreFrameworks": "コアフレームワーク",
-        "Styling & UI": "スタイリングとUI",
-        "Content Management": "コンテンツ管理",
-        "Internationalization": "ユーティリティ",
-        "Development Tools": "開発ツール"
-      },
-      "SubCategories": {
-        "UI Library": "UI ライブラリ",
-        "Framework": "フレームワーク",
-        "Language": "プログラミング言語",
-        "Css Framework": "CSS フレームワーク",
-        "Css Processor": "CSS プロセッサ",
-        "Css In Js": "CSS-in-JS",
-        "Animation": "アニメーションライブラリ",
-        "Cms": "コンテンツ管理",
-        "Markdown": "Markdown",
-        "Frontmatter": "Frontmatter",
-        "I18n": "国際化",
-        "Search": "検索エンジン",
-        "Utility": "ユーティリティ",
-        "Hooks": "React Hooks",
-        "Linter": "リンター",
-        "Formatter": "コードフォーマッタ",
-        "Git Hooks": "Git フック",
-        "AI": "AI ツール"
-      },
-      "SourcesDetail": {
-        "Tailwind CSS": {
-          "summary": "Tailwind CSS - ユーティリティファーストの CSS フレームワーク",
-          "description": "ユーザーインターフェース構築用の宣言的な JavaScript ライブラリ、コンポーネントベースの開発と仮想 DOM 最適化をサポートし、効率的なインターフェースレンダリングを提供"
-        },
-        "TypeScript": {
-          "summary": "TypeScript - 型安全な JavaScript",
-          "description": "JavaScript のスーパーセット、静的型チェックを追加し、より良い開発体験とコード品質を提供"
-        },
-        "Emotion": {
-          "summary": "Emotion - CSS-in-JS ライブラリ",
-          "description": "高性能な CSS-in-JS ライブラリ、スタイルコンポーネントと動的スタイルをサポート"
-        },
-        "Gray Matter": {
-          "summary": "Gray Matter - Markdown の frontmatter 解析器",
-          "description": "Markdown ファイルの frontmatter メタデータを解析"
-        },
-        "Framer Motion": {
-          "summary": "Framer Motion - 強力な React アニメーションライブラリ",
-          "description": "強力な React アニメーションライブラリ、宣言的なアニメーション API とジェスチャーをサポート"
-        },
-        "PostCSS": {
-          "summary": "PostCSS - CSS プロセッサ",
-          "description": "CSS プロセッサ、CSS コードを変換し、最適化し、プラグインをサポート"
-        },
-        "Tailwind Animate": {
-          "summary": "Tailwind Animate - Tailwind CSS のアニメーションプラグイン",
-          "description": "Tailwind CSS のアニメーションプラグイン、アニメーション開発を簡素化"
-        },
-        "@octokit/graphql": {
-          "summary": "@octokit/graphql - GitHub API クライアント",
-          "description": "GitHub API クライアント、GitHub API にアクセス"
-        },
-        "SWR": {
-          "summary": "SWR - React のキャッシュライブラリ",
-          "description": "React のキャッシュライブラリ、API リクエスト結果をキャッシュ"
-        },
-        "Recharts": {
-          "summary": "Recharts - データ可視化ライブラリ",
-          "description": "データ可視化ライブラリ、様々なチャートとグラフを作成"
-        },
-        "React": {
-          "summary": "React - ユーザーインターフェース構築用の JavaScript ライブラリ",
-          "description": "ユーザーインターフェース構築用の JavaScript ライブラリ、コンポーネントベースの開発と仮想 DOM 最適化をサポートし、効率的なインターフェースレンダリングを提供"
-        },
-        "NextJs": {
-          "summary": "Next.js - React ベースのフルスタックフレームワーク",
-          "description": "React ベースのフルスタックフレームワーク、SSR、SSG 最適化を提供し、アプリケーション性能を向上"
-        },
-        "next-intl": {
-          "summary": "next-intl - 国際化ライブラリ",
-          "description": "国際化ライブラリ、多言語をサポート"
-        },
-        "Contentlayer": {
-          "summary": "Contentlayer - コンテンツ管理システム",
-          "description": "コンテンツ管理システム、コンテンツとデータを管理"
-        },
-        "MDX": {
-          "summary": "MDX - Markdown + JSX サポート",
-          "description": "Markdown の拡張版、Markdown で JSX コンポーネントを使用"
-        },
-        "FuseJs": {
-          "summary": "Fuse.js - ファジー・サーチライブラリ",
-          "description": "ファジー・サーチライブラリ、高速検索とランキングアルゴリズムをサポート"
-        },
-        "clsx": {
-          "summary": "clsx - 条件クラス名ユーティリティ",
-          "description": "条件クラス名ユーティリティ、動的に CSS クラス名を組み合わせ"
-        },
-        "use-debounce": {
-          "summary": "use-debounce - デバウンスフックライブラリ",
-          "description": "デバウンスフックライブラリ、入力と検索性能を最適化"
-        },
-        "ESLint": {
-          "summary": "ESLint - コードチェックツール",
-          "description": "拡張可能な JavaScript コードチェックツール、コード問題を検出し、修正"
-        },
-        "Prettier": {
-          "summary": "Prettier - コードフォーマッタ",
-          "description": "コードフォーマッタ、コードスタイルの一貫性を確保"
-        },
-        "Husky": {
-          "summary": "husky - Git フックツール",
-          "description": "Git フックツール、コミット前に自動的にスクリプトを実行"
-        },
-        "lint-staged": {
-          "summary": "lint-staged - Git ステージングファイルで linters を実行",
-          "description": "Git ステージングファイルで linters を実行、コミット品質を向上"
-        },
-        "OpenAI": {
-          "summary": "OpenAI - OpenAI SDK",
-          "description": "OpenAI 公式 SDK、ChatGPT などの AI 機能を統合"
-        }
       }
     },
     "visit": "訪問",
@@ -351,135 +231,12 @@
     "searchConsoleDescription": "Google検索最適化ツール",
     "free": "無料",
     "learnMore": "詳細を見る",
-    "developmentProtocols": "国際プロトコル",
-    "developmentProtocolsDescription": "本サイトが遵守する国際標準とプロトコル仕様",
-    "protocolsBrief": {
-      "wcag": "WCAG 2.1",
-      "ccLicense": "CC BY-NC-SA 4.0",
-      "https": "HTTPS/TLS 1.3",
-      "opengraph": "OpenGraph"
-    },
-    "protocolsDetail": {
-      "title": "遵守する国際プロトコル",
+    "DevelopmentProtocols": {
+      "title": "遵守の国際標準とプロトコル",
       "description": "本サイトは以下の国際標準とプロトコルを厳守し、ウェブサイトのアクセシビリティ、セキュリティ、相互運用性を確保しています",
-      "viewSpec": "仕様を見る",
+      "viewSpec": "仕様を確認",
       "officialSite": "公式サイト",
-      "keyFeatures": "主な特性",
-      "categories": {
-        "accessibility": "アクセシビリティ",
-        "licensing": "コンテンツライセンス",
-        "security": "セキュア転送",
-        "metadata": "メタデータ標準",
-        "syndication": "コンテンツ配信",
-        "markup": "マークアップ標準",
-        "api": "API仕様"
-      },
-      "protocols": {
-        "wcag": {
-          "name": "WCAG 2.1",
-          "fullName": "Webコンテンツアクセシビリティガイドライン 2.1",
-          "description": "W3Cが制定したWebアクセシビリティの国際標準。障害者を含むすべてのユーザーがウェブサイトコンテンツにアクセスできるようにする",
-          "features": [
-            "セマンティックHTML構造",
-            "キーボードナビゲーションサポート",
-            "適切なカラーコントラスト",
-            "ARIAラベルサポート",
-            "スクリーンリーダー互換性"
-          ],
-          "url": "https://www.w3.org/WAI/WCAG21/quickref/"
-        },
-        "ccLicense": {
-          "name": "CC BY-NC-SA 4.0",
-          "fullName": "クリエイティブ・コモンズ 表示-非営利-継承 4.0",
-          "description": "国際的に認められたコンテンツライセンスプロトコル。非営利目的でのコンテンツの共有と改変を許可",
-          "features": [
-            "表示 (BY) - クレジット必須",
-            "非営利 (NC) - 非営利目的のみ",
-            "継承 (SA) - 同じライセンス必須",
-            "国際的に認められた著作権標準",
-            "フリーカルチャーライセンス"
-          ],
-          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-        },
-        "https": {
-          "name": "HTTPS/TLS 1.3",
-          "fullName": "セキュアHTTPプロトコル / トランスポート層セキュリティ",
-          "description": "インターネット安全通信の国際標準プロトコル。データ転送の暗号化と完全性を確保",
-          "features": [
-            "エンドツーエンド暗号化",
-            "最新のTLS 1.3プロトコル",
-            "中間者攻撃の防止",
-            "データ整合性検証",
-            "モダン暗号化アルゴリズムサポート"
-          ],
-          "url": "https://tools.ietf.org/html/rfc8446"
-        },
-        "opengraph": {
-          "name": "Open Graph Protocol",
-          "fullName": "オープングラフプロトコル",
-          "description": "Facebookが制定したソーシャルメディアメタデータ標準。コンテンツのソーシャルプラットフォームでの表示を最適化",
-          "features": [
-            "ソーシャルメディアプレビュー最適化",
-            "統一されたメタデータフォーマット",
-            "マルチプラットフォーム共有サポート",
-            "リッチメディアコンテンツ表示",
-            "SEO最適化サポート"
-          ],
-          "url": "https://ogp.me/"
-        },
-        "schema": {
-          "name": "Schema.org",
-          "fullName": "構造化データ標準",
-          "description": "Google、Microsoft、Yahooなどが制定した構造化データ標準。検索エンジンの理解を向上",
-          "features": [
-            "セマンティックデータマークアップ",
-            "検索エンジン最適化",
-            "リッチ検索結果",
-            "JSON-LD形式",
-            "複数のコンテンツタイプサポート"
-          ],
-          "url": "https://schema.org/"
-        },
-        "rss": {
-          "name": "RSS 2.0 / Atom",
-          "fullName": "コンテンツ配信プロトコル",
-          "description": "標準化されたコンテンツ集約と購読形式。ユーザーがRSSリーダーでコンテンツを購読できる",
-          "features": [
-            "標準化されたコンテンツ形式",
-            "RSSとAtomサポート",
-            "自動コンテンツ更新",
-            "クロスプラットフォーム購読",
-            "アグリゲーター互換性"
-          ],
-          "url": "https://www.rssboard.org/rss-specification"
-        },
-        "html5": {
-          "name": "Semantic HTML5",
-          "fullName": "セマンティックHTML5標準",
-          "description": "W3Cが制定したモダンなWebマークアップ標準。セマンティックタグを使用してアクセシビリティとSEOを向上",
-          "features": [
-            "セマンティックタグ構造",
-            "アクセシビリティ向上",
-            "SEOフレンドリー",
-            "モダンWeb標準",
-            "下位互換性"
-          ],
-          "url": "https://html.spec.whatwg.org/"
-        },
-        "restful": {
-          "name": "RESTful API",
-          "fullName": "RESTful API仕様",
-          "description": "HTTPベースのAPI設計アーキテクチャスタイル。標準化されたWebサービスインターフェース設計原則を提供",
-          "features": [
-            "統一インターフェース設計",
-            "ステートレス通信",
-            "リソース指向アーキテクチャ",
-            "標準HTTPメソッド",
-            "キャッシュ可能性"
-          ],
-          "url": "https://restfulapi.net/"
-        }
-      }
+      "keyFeatures": "主要機能"
     },
     "codeStandards": "コード標準",
     "codeStandardsDescription": "コード品質と一貫性を確保する開発標準",
@@ -492,12 +249,7 @@
     "dependencyManagement": "依存関係管理",
     "securityAudit": "セキュリティ監査",
     "pnpmPackageManager": "pnpmパッケージマネージャー",
-    "personalProfile": "個人プロフィール",
-    "personalProfileDescription": "技術愛好家の開発者で、新しい技術の探索を楽しみ、プログラミングの楽しさを味わい、興味深いプロジェクトの創造に取り組んでいます。",
-    "personalProfileDetailSubtitle": "詳細な個人情報と連絡先",
     "aboutMe": "私について",
-    "personalProfileDetail1": "私は技術愛好家の開発者で、フロントエンド技術とフルスタック開発に専念しています。React、Next.js、TypeScriptなどの新しい技術スタックの探索を楽しんでいます。新しい技術の学習に情熱を注ぎ、ブログを通じて興味深い技術的発見とプログラミングの洞察を共有することを楽しんでいます。",
-    "personalProfileDetail2": "普段は新しい技術の研究、オープンソースプロジェクトへの参加、技術ブログを通じた学習洞察の共有を楽しんでいます。技術が生活をより良くできると信じており、コードを使って実用的な問題を解決し、興味深いデジタル体験を創造することを愛しています。",
     "clickToViewDetails": "クリックして詳細を表示"
   },
   "Search": {

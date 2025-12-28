@@ -39,9 +39,10 @@
   },
   "AboutPage": {
     "title": "关于我",
-    "welcome": "欢迎来到 {siteTitle}！这里是我分享技术见解、开发经验和生活感悟的地方。",
-    "techStack": "技术栈",
-    "techStackDescription": "这个博客使用以下现代技术栈构建：",
+    "TechStack": {
+      "title": "技术栈",
+      "description": "这个博客使用以下现代技术栈构建："
+    },
     "OpenSource": {
       "title": "开源库",
       "description": "项目技术栈中使用过的开源库及其官方文档",
@@ -49,137 +50,7 @@
         "contact": "联系方式",
         "viewDocs": "查看文档",
         "sourceCode": "源码"
-      },
-      "Categories": {
-        "Core Frameworks": "核心框架",
-        "Styling & UI": "样式与UI",
-        "Content Management": "内容管理",
-        "Internationalization": "数据交互与管理",
-        "Utilities": "工具库",
-        "Development Tools": "开发工具"
-      },
-      "SubCategories": {
-        "UI Library": "UI 库",
-        "Framework": "框架",
-        "Language": "编程语言",
-        "Css Framework": "CSS 框架",
-        "Css Processor": "CSS 处理器",
-        "Css In Js": "CSS-in-JS",
-        "Animation": "动画库",
-        "Cms": "内容管理",
-        "Markdown": "Markdown",
-        "Frontmatter": "Frontmatter",
-        "I18n": "国际化",
-        "Search": "搜索引擎",
-        "Utility": "工具库",
-        "Hooks": "React Hooks",
-        "Linter": "代码检查",
-        "Formatter": "代码格式化",
-        "Git Hooks": "Git 钩子",
-        "AI": "AI 工具"
-      },
-      "SourcesDetail": {
-        "Tailwind CSS": {
-          "summary": "Tailwind CSS - 实用优先的 CSS 框架",
-          "description": "用于构建用户界面的声明式 JavaScript 库，通过组件化开发和虚拟 DOM 优化提供高效的界面渲染"
-        },
-        "TypeScript": {
-          "summary": "TypeScript - 类型安全的 JavaScript",
-          "description": "JavaScript 的超集，为代码添加静态类型检查，提升开发体验和代码质量"
-        },
-        "Emotion": {
-          "summary": "Emotion - CSS-in-JS 库",
-          "description": "高性能的 CSS-in-JS 库，支持样式组件和动态样式"
-        },
-        "Gray Matter": {
-          "summary": "Gray Matter - Markdown 的 frontmatter 解析器",
-          "description": "解析 Markdown 文件的 frontmatter 元数据"
-        },
-        "Framer Motion": {
-          "summary": "Framer Motion - 强大的 React 动画库",
-          "description": "强大的 React 动画库，提供声明式动画 API 和手势支持"
-        },
-        "PostCSS": {
-          "summary": "PostCSS - CSS 后处理器",
-          "description": "CSS 后处理器，用于转换和优化 CSS 代码，支持插件扩展"
-        },
-        "Tailwind Animate": {
-          "summary": "Tailwind Animate - Tailwind CSS 的动画插件",
-          "description": "为 Tailwind CSS 提供预设动画类的插件，简化动画开发"
-        },
-        "@octokit/graphql": {
-          "summary": "@octokit/graphql - GitHub API 客户端",
-          "description": "GitHub API 客户端，用于访问 GitHub API"
-        },
-        "SWR": {
-          "summary": "SWR - React 的缓存库",
-          "description": "React 的缓存库，用于缓存 API 请求结果"
-        },
-        "Recharts": {
-          "summary": "Recharts - 数据可视化库",
-          "description": "数据可视化库，用于创建各种图表和图形"
-        },
-        "React": {
-          "summary": "React - 用于构建用户界面的 JavaScript 库",
-          "description": "用于构建用户界面的 JavaScript 库，通过组件化开发和虚拟 DOM 优化提供高效的界面渲染"
-        },
-        "NextJs": {
-          "summary": "Next.js - 基于 React 的全栈框架",
-          "description": "基于 React 的全栈框架，提供 SSR、SSG 等优化功能，支持文件路由和 API 路由"
-        },
-        "next-intl": {
-          "summary": "next-intl - 国际化库",
-          "description": "国际化库，用于支持多语言"
-        },
-        "Contentlayer": {
-          "summary": "Contentlayer - 内容管理系统",
-          "description": "内容管理系统，用于管理内容和数据"
-        },
-        "MDX": {
-          "summary": "MDX - Markdown + JSX 支持",
-          "description": "Markdown 的增强版本，支持在 Markdown 中使用 JSX 组件"
-        },
-        "FuseJs": {
-          "summary": "Fuse.js - 模糊搜索库",
-          "description": "模糊搜索库，用于快速搜索和排名算法"
-        },
-        "clsx": {
-          "summary": "clsx - 条件类名工具",
-          "description": "简洁的条件类名工具，用于动态组合 CSS 类名"
-        },
-        "use-debounce": {
-          "summary": "use-debounce - 防抖钩子库",
-          "description": "防抖钩子库，用于优化输入和搜索性能"
-        },
-        "ESLint": {
-          "summary": "ESLint - 代码检查工具",
-          "description": "可扩展的 JavaScript 代码检查工具，用于发现和修复代码问题"
-        },
-        "Prettier": {
-          "summary": "Prettier - 代码格式化工具",
-          "description": "代码格式化工具，确保代码风格一致性"
-        },
-        "Husky": {
-          "summary": "husky - Git 钩子工具",
-          "description": "Git 钩子工具，用于在提交前自动运行脚本"
-        },
-        "lint-staged": {
-          "summary": "lint-staged - Git 暂存文件运行 linters",
-          "description": "对 Git 暂存文件运行 linters，提升提交质量"
-        },
-        "OpenAI": {
-          "summary": "OpenAI - OpenAI SDK",
-          "description": "OpenAI 官方 SDK，用于集成 ChatGPT 等 AI 功能"
-        }
       }
-    },
-    "techStackBrief": {
-      "nextjsDesc": "React 全栈（App Router）",
-      "contentlayerDesc": "类型安全内容",
-      "mdxDesc": "Markdown + JSX",
-      "tailwindDesc": "实用优先 CSS",
-      "typescriptDesc": "类型安全（严格）",
-      "deploymentDesc": "CI/CD 与部署"
     },
     "reactDescription": "用于构建用户界面的JavaScript库",
     "nextjsDescription": "基于React的生产级框架",
@@ -233,135 +104,12 @@
     "searchConsoleDescription": "Google搜索优化工具",
     "free": "免费",
     "learnMore": "了解更多",
-    "developmentProtocols": "国际协议",
-    "developmentProtocolsDescription": "本站遵循的国际标准和协议规范",
-    "protocolsBrief": {
-      "wcag": "WCAG 2.1",
-      "ccLicense": "CC BY-NC-SA 4.0",
-      "https": "HTTPS/TLS 1.3",
-      "opengraph": "OpenGraph"
-    },
-    "protocolsDetail": {
-      "title": "遵循的国际协议",
+    "DevelopmentProtocols": {
+      "title": "遵循的国际标准和协议",
       "description": "本站严格遵循以下国际标准和协议，确保网站的可访问性、安全性和互操作性",
       "viewSpec": "查看规范",
       "officialSite": "官方网站",
-      "keyFeatures": "主要特性",
-      "categories": {
-        "accessibility": "可访问性",
-        "licensing": "内容许可",
-        "security": "安全传输",
-        "metadata": "元数据标准",
-        "syndication": "内容分发",
-        "markup": "标记规范",
-        "api": "API规范"
-      },
-      "protocols": {
-        "wcag": {
-          "name": "WCAG 2.1",
-          "fullName": "Web内容无障碍指南 2.1",
-          "description": "由W3C制定的Web无障碍国际标准，确保网站内容对所有用户（包括残障人士）都可访问",
-          "features": [
-            "语义化HTML结构",
-            "键盘导航支持",
-            "适当的颜色对比度",
-            "ARIA标签支持",
-            "屏幕阅读器兼容"
-          ],
-          "url": "https://www.w3.org/WAI/WCAG21/quickref/"
-        },
-        "ccLicense": {
-          "name": "CC BY-NC-SA 4.0",
-          "fullName": "知识共享 署名-非商业性使用-相同方式共享 4.0",
-          "description": "国际通用的内容授权协议，允许他人在非商业用途下共享和修改内容",
-          "features": [
-            "署名 (BY) - 必须注明作者",
-            "非商业 (NC) - 仅限非商业用途",
-            "相同方式共享 (SA) - 需使用相同许可",
-            "国际认可的版权标准",
-            "自由文化许可证"
-          ],
-          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-        },
-        "https": {
-          "name": "HTTPS/TLS 1.3",
-          "fullName": "超文本传输安全协议 / 传输层安全协议",
-          "description": "互联网安全通信的国际标准协议，确保数据传输的加密和完整性",
-          "features": [
-            "端到端加密传输",
-            "TLS 1.3 最新协议",
-            "防止中间人攻击",
-            "数据完整性验证",
-            "现代加密算法支持"
-          ],
-          "url": "https://tools.ietf.org/html/rfc8446"
-        },
-        "opengraph": {
-          "name": "Open Graph Protocol",
-          "fullName": "开放图谱协议",
-          "description": "由Facebook制定的社交媒体元数据标准，优化内容在社交平台的展示效果",
-          "features": [
-            "社交媒体预览优化",
-            "统一的元数据格式",
-            "支持多平台分享",
-            "富媒体内容展示",
-            "SEO优化支持"
-          ],
-          "url": "https://ogp.me/"
-        },
-        "schema": {
-          "name": "Schema.org",
-          "fullName": "结构化数据标准",
-          "description": "由Google、Microsoft、Yahoo等制定的结构化数据标准，提升搜索引擎理解",
-          "features": [
-            "语义化数据标记",
-            "搜索引擎优化",
-            "富媒体搜索结果",
-            "JSON-LD格式",
-            "多种内容类型支持"
-          ],
-          "url": "https://schema.org/"
-        },
-        "rss": {
-          "name": "RSS 2.0 / Atom",
-          "fullName": "内容订阅协议",
-          "description": "标准化的内容聚合和订阅格式，支持用户通过RSS阅读器订阅内容",
-          "features": [
-            "标准化内容格式",
-            "支持RSS和Atom",
-            "自动内容更新",
-            "跨平台订阅",
-            "聚合器兼容"
-          ],
-          "url": "https://www.rssboard.org/rss-specification"
-        },
-        "html5": {
-          "name": "Semantic HTML5",
-          "fullName": "语义化HTML5标准",
-          "description": "W3C制定的现代Web标记标准，使用语义化标签提升可访问性和SEO",
-          "features": [
-            "语义化标签结构",
-            "可访问性提升",
-            "SEO友好",
-            "现代Web标准",
-            "向后兼容"
-          ],
-          "url": "https://html.spec.whatwg.org/"
-        },
-        "restful": {
-          "name": "RESTful API",
-          "fullName": "表述性状态转移API规范",
-          "description": "基于HTTP的API设计架构风格，提供标准化的Web服务接口设计原则",
-          "features": [
-            "统一接口设计",
-            "无状态通信",
-            "资源导向架构",
-            "HTTP标准方法",
-            "可缓存性"
-          ],
-          "url": "https://restfulapi.net/"
-        }
-      }
+      "keyFeatures": "主要特性"
     },
     "codeStandards": "代码规范",
     "codeStandardsDescription": "确保代码质量和一致性的开发规范",
@@ -374,12 +122,8 @@
     "dependencyManagement": "依赖管理",
     "securityAudit": "安全审计",
     "pnpmPackageManager": "pnpm包管理器",
-    "personalProfile": "个人简介",
-    "personalProfileDescription": "热爱技术的开发者，喜欢探索新技术，享受编程带来的乐趣，致力于创造有趣的项目。",
-    "personalProfileDetailSubtitle": "详细个人信息与联系方式",
+
     "aboutMe": "关于我",
-    "personalProfileDetail1": "我是一名热爱技术的开发者，专注于前端技术和全栈开发。喜欢探索新的技术栈，包括React、Next.js、TypeScript等。热衷于学习新技术，喜欢通过博客分享有趣的技术发现和编程心得。",
-    "personalProfileDetail2": "平时喜欢研究新技术，参与开源项目，通过技术博客分享学习心得。相信技术可以让生活更美好，喜欢用代码解决实际问题，创造有趣的数字体验。",
     "clickToViewDetails": "点击查看详情"
   },
   "Search": {
