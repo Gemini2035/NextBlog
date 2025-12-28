@@ -1,0 +1,216 @@
+[
+  {
+    "key": "Core Frameworks",
+    "sources": [
+      {
+        "key": "React",
+        "subKey": "UI Library",
+        "documentation": "https://react.dev",
+        "sourceCode": "https://github.com/facebook/react",
+        "icon": "ReactIcon",
+        "version": "19.1.0"
+      },
+      {
+        "key": "NextJs",
+        "subKey": "Framework",
+        "documentation": "https://nextjs.org",
+        "sourceCode": "https://github.com/vercel/next.js",
+        "icon": "NextJsIcon",
+        "version": "15.5.3"
+      },
+      {
+        "key": "TypeScript",
+        "subKey": "Language",
+        "documentation": "https://www.typescriptlang.org",
+        "sourceCode": "https://github.com/microsoft/TypeScript",
+        "icon": "TypeScriptIcon",
+        "version": "5.x"
+      }
+    ]
+  },
+  {
+    "key": "Styling & UI",
+    "sources": [
+      {
+        "key": "Tailwind CSS",
+        "subKey": "Css Framework",
+        "documentation": "https://tailwindcss.com",
+        "sourceCode": "https://github.com/tailwindlabs/tailwindcss",
+        "icon": "TailwindIcon",
+        "version": "3.x"
+      },
+      {
+        "key": "PostCSS",
+        "subKey": "Css Processor",
+        "documentation": "https://postcss.org",
+        "sourceCode": "https://github.com/postcss/postcss",
+        "icon": "PostCSSIcon",
+        "version": "4.x"
+      },
+      {
+        "key": "Tailwind Animate",
+        "subKey": "Animation",
+        "documentation": "https://github.com/jamiebuilds/tailwindcss-animate",
+        "sourceCode": "https://github.com/jamiebuilds/tailwindcss-animate",
+        "icon": "AnimateIcon",
+        "version": "1.0.7"
+      },
+      {
+        "key": "Framer Motion",
+        "subKey": "Animation",
+        "documentation": "https://www.framer.com/motion",
+        "sourceCode": "https://github.com/framer/motion",
+        "icon": "FramerMotionIcon",
+        "version": "12.23.16"
+      },
+      {
+        "key": "Emotion",
+        "subKey": "Css In Js",
+        "documentation": "https://emotion.sh",
+        "sourceCode": "https://github.com/emotion-js/emotion",
+        "icon": "EmotionIcon",
+        "version": "11.13.6"
+      }
+    ]
+  },
+  {
+    "key": "Content Management",
+    "sources": [
+      {
+        "key": "Contentlayer",
+        "subKey": "Cms",
+        "documentation": "https://contentlayer.dev",
+        "sourceCode": "https://github.com/contentlayerdev/contentlayer",
+        "icon": "ContentlayerIcon",
+        "version": "0.5.8"
+      },
+      {
+        "key": "MDX",
+        "subKey": "Markdown",
+        "documentation": "https://mdxjs.com",
+        "sourceCode": "https://github.com/mdx-js/mdx",
+        "icon": "MdxIcon",
+        "version": "3.1.1"
+      },
+      {
+        "key": "Gray Matter",
+        "subKey": "Frontmatter",
+        "documentation": "https://github.com/jonschlinkert/gray-matter",
+        "sourceCode": "https://github.com/jonschlinkert/gray-matter",
+        "icon": "GrayMatterIcon",
+        "version": "4.0.3"
+      }
+    ]
+  },
+  {
+    "key": "Internationalization",
+    "sources": [
+      {
+        "key": "@octokit/graphql",
+        "subKey": "I18n",
+        "documentation": "https://github.com/octokit/graphql.js",
+        "sourceCode": "https://github.com/octokit/graphql.js",
+        "icon": "OctokitIcon",
+        "version": "9.0.2"
+      },
+      {
+        "key": "SWR",
+        "subKey": "Search",
+        "documentation": "https://swr.vercel.app",
+        "sourceCode": "https://github.com/vercel/swr",
+        "icon": "SWRIcon",
+        "version": "2.3.6"
+      },
+      {
+        "key": "Recharts",
+        "subKey": "Utility",
+        "documentation": "https://recharts.org",
+        "sourceCode": "https://github.com/recharts/recharts",
+        "icon": "RechartsIcon",
+        "version": "3.2.1"
+      }
+    ]
+  },
+  {
+    "key": "Utilities",
+    "sources": [
+      {
+        "key": "next-intl",
+        "subKey": "Hooks",
+        "documentation": "https://next-intl-docs.vercel.app",
+        "sourceCode": "https://github.com/amannn/next-intl",
+        "icon": "NextIntlIcon",
+        "version": "4.3.9"
+      },
+      {
+        "key": "FuseJs",
+        "subKey": "Utility",
+        "documentation": "https://fusejs.io",
+        "sourceCode": "https://github.com/krisk/fuse",
+        "icon": "FuseIcon",
+        "version": "7.1.0"
+      },
+      {
+        "key": "clsx",
+        "subKey": "Utility",
+        "documentation": "https://github.com/lukeed/clsx",
+        "sourceCode": "https://github.com/lukeed/clsx",
+        "icon": "ClsxIcon",
+        "version": "2.1.1"
+      },
+      {
+        "key": "use-debounce",
+        "subKey": "Hooks",
+        "documentation": "https://github.com/xnimorz/use-debounce",
+        "sourceCode": "https://github.com/xnimorz/use-debounce",
+        "icon": "DebounceIcon",
+        "version": "10.0.6"
+      }
+    ]
+  },
+  {
+    "key": "Development Tools",
+    "sources": [
+      {
+        "key": "ESLint",
+        "subKey": "Linter",
+        "documentation": "https://eslint.org",
+        "sourceCode": "https://github.com/eslint/eslint",
+        "icon": "ESLintIcon",
+        "version": "9.15.0"
+      },
+      {
+        "key": "Prettier",
+        "subKey": "Formatter",
+        "documentation": "https://prettier.io",
+        "sourceCode": "https://github.com/prettier/prettier",
+        "icon": "PrettierIcon",
+        "version": "3.3.3"
+      },
+      {
+        "key": "Husky",
+        "subKey": "Git Hooks",
+        "documentation": "https://typicode.github.io/husky",
+        "sourceCode": "https://github.com/typicode/husky",
+        "icon": "HuskyIcon",
+        "version": "9.0.11"
+      },
+      {
+        "key": "lint-staged",
+        "subKey": "Git Hooks",
+        "documentation": "https://github.com/lint-staged/lint-staged",
+        "sourceCode": "https://github.com/lint-staged/lint-staged",
+        "icon": "LintStagedIcon",
+        "version": "15.2.10"
+      },
+      {
+        "key": "OpenAI",
+        "subKey": "AI",
+        "documentation": "https://openai.com",
+        "sourceCode": "https://github.com/openai/openai",
+        "icon": "OpenAIIcon",
+        "version": "5.22.1"
+      }
+    ]
+  }
+]
