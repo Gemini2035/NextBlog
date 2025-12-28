@@ -1,16 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import {
-  TechStackIcon,
-  NextJsIcon,
-  ContentlayerIcon,
-  MdxIcon,
-  TailwindIcon,
-  TypeScriptIcon,
-  DeploymentIcon,
-  GraphQLIcon,
-} from "@/assets/icons";
+import { TechStackIcon } from "@/assets/icons";
 import { FC } from "react";
 import { TECH_STACK } from "@/constants";
 import { IconMap } from "./constants";
