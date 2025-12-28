@@ -79,6 +79,10 @@
         "AI": "AI Tool"
       },
       "SourcesDetail": {
+        "Gemini UIS": {
+          "summary": "Gemini UIS - Modern UI Library",
+          "description": "Modern UI library, providing rich components and styles, supporting responsive layout and theme customization, developed and maintained by myself"
+        },
         "Tailwind CSS": {
           "summary": "Tailwind CSS - Utility-first CSS Framework",
           "description": "Declarative JavaScript library for building user interfaces, providing efficient interface rendering through component-based development and virtual DOM optimization"

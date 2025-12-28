@@ -211,6 +211,10 @@
         "AI": "AI ツール"
       },
       "SourcesDetail": {
+        "Gemini UIS": {
+          "summary": "Gemini UIS - 現代的な UI ライブラリ",
+          "description": "現代的な UI ライブラリ、豊富なコンポーネントとスタイルを提供し、レスポンシブレイアウトとテーマカスタマイズをサポート, 本人が全権開発・保守"
+        },
         "Tailwind CSS": {
           "summary": "Tailwind CSS - ユーティリティファーストの CSS フレームワーク",
           "description": "ユーザーインターフェース構築用の宣言的な JavaScript ライブラリ、コンポーネントベースの開発と仮想 DOM 最適化をサポートし、効率的なインターフェースレンダリングを提供"

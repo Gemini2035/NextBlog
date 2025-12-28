@@ -122,7 +122,7 @@ const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
                     }
                     name={key}
                     category={t(`OpenSource.SubCategories.${subKey}`)}
-                    description={t(`OpenSource.SourcesDetail.${key}.summary`)}
+                    description={t(`OpenSource.SourcesDetail.${key}.description`)}
                     version={version}
                     docsUrl={documentation}
                     githubUrl={sourceCode}

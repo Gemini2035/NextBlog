@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { OPEN_SOURCE_LIBRARIES } from "@/constants";
 import { OpenSourceIcon } from "@/assets/icons";
 import { IconMap } from "./constants";
+import { useState, useEffect, useMemo } from "react";
 
 interface OpenSourceLibrariesBriefProps {
   className?: string;
@@ -13,16 +14,37 @@ const OpenSourceLibrariesBrief = ({
   className,
 }: OpenSourceLibrariesBriefProps) => {
   const t = useTranslations("AboutPage");
+  const [isMounted, setIsMounted] = useState(false);
 
-  // 随机获取8个开源库
-  const sourcesData = OPEN_SOURCE_LIBRARIES.flatMap(({ sources }) => sources)
-    .flatMap(({ key, version, icon }) => ({
-      key,
-      version,
-      icon,
-    }))
-    .sort(() => Math.random() - 0.5)
-    .slice(0, 8);
+  // 在客户端挂载后再进行随机排序，避免 hydration 错误
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // 所有数据（固定顺序，用于 SSR）
+  const allSourcesData = useMemo(
+    () =>
+      OPEN_SOURCE_LIBRARIES.flatMap(({ sources }) =>
+        sources.map(({ key, version, icon }) => ({
+          key,
+          version,
+          icon,
+        }))
+      ),
+    []
+  );
+
+  // 随机获取8个开源库（仅在客户端）
+  const sourcesData = useMemo(() => {
+    if (!isMounted) {
+      // SSR 时返回固定的前8个，避免 hydration 错误
+      return allSourcesData.slice(0, 8);
+    }
+    // 客户端时进行随机排序
+    return [...allSourcesData]
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 8);
+  }, [isMounted, allSourcesData]);
 
   return (
     <div className={className}>

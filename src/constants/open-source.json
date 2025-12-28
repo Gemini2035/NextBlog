@@ -32,6 +32,14 @@
     "key": "Styling & UI",
     "sources": [
       {
+        "key": "Gemini UIS",
+        "subKey": "UI Library",
+        "documentation": "https://gemini2035.github.io/UIs/",
+        "sourceCode": "https://github.com/Gemini2035/UIs",
+        "icon": "GeminiUIIcon",
+        "version": "0.13.0"
+      },
+      {
         "key": "Tailwind CSS",
         "subKey": "Css Framework",
         "documentation": "https://tailwindcss.com",
