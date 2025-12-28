@@ -39,8 +39,10 @@
   },
   "AboutPage": {
     "title": "关于我",
-    "techStack": "技术栈",
-    "techStackDescription": "这个博客使用以下现代技术栈构建：",
+    "TechStack": {
+      "title": "技术栈",
+      "description": "这个博客使用以下现代技术栈构建："
+    },
     "OpenSource": {
       "title": "开源库",
       "description": "项目技术栈中使用过的开源库及其官方文档",
@@ -49,14 +51,6 @@
         "viewDocs": "查看文档",
         "sourceCode": "源码"
       }
-    },
-    "techStackBrief": {
-      "nextjsDesc": "React 全栈（App Router）",
-      "contentlayerDesc": "类型安全内容",
-      "mdxDesc": "Markdown + JSX",
-      "tailwindDesc": "实用优先 CSS",
-      "typescriptDesc": "类型安全（严格）",
-      "deploymentDesc": "CI/CD 与部署"
     },
     "reactDescription": "用于构建用户界面的JavaScript库",
     "nextjsDescription": "基于React的生产级框架",

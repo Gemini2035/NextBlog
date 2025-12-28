@@ -4,6 +4,7 @@ import siteConfigData from './site-config.json'
 import openSourceLibrariesData from './AboutPage/open-source.json'
 import developmentProtocolsData from './AboutPage/development-protocols.json'
 import baseInfoData from './AboutPage/base-info.json'
+import techStackData from './AboutPage/tech-stack.json'
 
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
@@ -43,3 +44,4 @@ export const LANGUAGES = siteConfigData.app.languages
 export const OPEN_SOURCE_LIBRARIES = openSourceLibrariesData
 export const DEVELOPMENT_PROTOCOLS = developmentProtocolsData
 export const BASE_INFO = baseInfoData
+export const TECH_STACK = techStackData

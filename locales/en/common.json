@@ -40,7 +40,10 @@
   "AboutPage": {
     "title": "About Me",
     "welcome": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
-    "techStack": "Tech Stack",
+    "TechStack": {
+      "title": "Tech Stack",
+      "description": "This blog is built with the following modern tech stack:"
+    },
     "techStackDescription": "This blog is built with the following modern tech stack:",
     "contact": "Contact",
     "DevelopmentProtocols": {
