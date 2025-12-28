@@ -1,0 +1,14 @@
+{
+  "zh": {
+    "summary": "<p class=\"text-gray-600 leading-relaxed text-sm\">欢迎来到 Apodidae！这里是我分享技术见解、开发经验和生活感悟的地方。</p><p class=\"text-gray-600 leading-relaxed mt-2 text-sm\">热爱技术的开发者，喜欢探索新技术，享受编程带来的乐趣，致力于创造有趣的项目。</p>",
+    "description": "<p class=\"text-gray-700 leading-relaxed mb-4\">欢迎来到 Apodidae！这里是我分享技术见解、开发经验和生活感悟的地方。</p><p class=\"text-gray-700 leading-relaxed mb-4\">我是一名热爱技术的开发者，专注于前端技术和全栈开发。喜欢探索新的技术栈，包括React、Next.js、TypeScript等。热衷于学习新技术，喜欢通过博客分享有趣的技术发现和编程心得。</p><p class=\"text-gray-700 leading-relaxed\">平时喜欢研究新技术，参与开源项目，通过技术博客分享学习心得。相信技术可以让生活更美好，喜欢用代码解决实际问题，创造有趣的数字体验。</p>"
+  },
+  "en": {
+    "summary": "<p class=\"text-gray-600 leading-relaxed text-sm\">Welcome to Apodidae! This is where I share technical insights, development experiences, and life reflections.</p><p class=\"text-gray-600 leading-relaxed mt-2 text-sm\">A technology enthusiast developer who loves exploring new technologies, enjoys the fun of programming, and is committed to creating interesting projects.</p>",
+    "description": "<p class=\"text-gray-700 leading-relaxed mb-4\">Welcome to Apodidae! This is where I share technical insights, development experiences, and life reflections.</p><p class=\"text-gray-700 leading-relaxed mb-4\">I am a technology enthusiast developer, focusing on frontend technologies and full-stack development. I love exploring new technology stacks including React, Next.js, TypeScript, etc. I am passionate about learning new technologies and enjoy sharing interesting technical discoveries and programming insights through my blog.</p><p class=\"text-gray-700 leading-relaxed\">I usually enjoy studying new technologies, participating in open source projects, and sharing learning insights through technical blogs. I believe technology can make life better and love using code to solve practical problems and create interesting digital experiences.</p>"
+  },
+  "ja": {
+    "summary": "<p class=\"text-gray-600 leading-relaxed text-sm\">Apodidaeへようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。</p><p class=\"text-gray-600 leading-relaxed mt-2 text-sm\">技術に情熱を持つ開発者で、新しい技術を探索し、プログラミングの楽しさを享受し、面白いプロジェクトを創造することを目指しています。</p>",
+    "description": "<p class=\"text-gray-700 leading-relaxed mb-4\">Apodidaeへようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。</p><p class=\"text-gray-700 leading-relaxed mb-4\">私は技術に情熱を持つ開発者で、フロントエンド技術とフルスタック開発に専念しています。React、Next.js、TypeScriptなどの新しい技術スタックを探索し、新しい技術を学ぶことに情熱を持っています。ブログで面白い技術発見とプログラミングの洞察を共有しています。</p><p class=\"text-gray-700 leading-relaxed\">通常、新しい技術を研究し、オープンソースプロジェクトに参加し、技術ブログで学習心得を共有しています。技術は生活をより良くすることができると信じており、コードを使用して実際の問題を解決し、面白いデジタル体験を作成することを楽しんでいます。</p>"
+  }
+}

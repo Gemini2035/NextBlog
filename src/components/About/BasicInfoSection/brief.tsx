@@ -1,8 +1,8 @@
 'use client'
 
-import { SITE_CONFIG } from '@/constants'
+import { BASE_INFO } from '@/constants'
 import { GlobeIcon } from '@/assets/icons'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { FC } from 'react'
 
 interface BasicInfoBriefProps {
@@ -10,8 +10,10 @@ interface BasicInfoBriefProps {
 }
 
 const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
-  const t = useTranslations('AboutPage')
+  const locale = useLocale()
   const navT = useTranslations('Navigation')
+
+  const baseInfo = BASE_INFO[locale as keyof typeof BASE_INFO]
 
   return (
     <div className={className}>
@@ -25,14 +27,10 @@ const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
       </div>
       
       {/* 简化的个人简介 */}
-      <div className="mb-6">
-        <p className="text-gray-600 leading-relaxed text-sm">
-          {t('BasicInfo.subTitle', { siteTitle: SITE_CONFIG.title })}
-        </p>
-        <p className="text-gray-600 leading-relaxed mt-2 text-sm">
-          {t('BasicInfo.personalProfileDescription')}
-        </p>
-      </div>
+      <div 
+        className="mb-6"
+        dangerouslySetInnerHTML={{ __html: baseInfo.summary }}
+      />
 
     </div>
   )

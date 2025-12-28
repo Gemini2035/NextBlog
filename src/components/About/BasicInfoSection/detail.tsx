@@ -1,16 +1,19 @@
-'use client'
+"use client";
 
-import { SITE_CONFIG } from '@/constants'
-import { GlobeIcon } from '@/assets/icons'
-import { useTranslations } from 'next-intl'
+import { BASE_INFO } from "@/constants";
+import { GlobeIcon } from "@/assets/icons";
+import { useLocale, useTranslations } from "next-intl";
+import { FC } from "react";
 
 interface BasicInfoDetailProps {
-  className?: string
+  className?: string;
 }
 
-export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
-  const t = useTranslations('AboutPage')
-  const navT = useTranslations('Navigation')
+const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
+  const locale = useLocale();
+  const t = useTranslations("AboutPage");
+  const navT = useTranslations("Navigation");
+  const baseInfo = BASE_INFO[locale as keyof typeof BASE_INFO];
 
   return (
     <div className={className}>
@@ -20,32 +23,26 @@ export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
         </div>
         <div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {navT('Personal Profile')}
+            {navT("Personal Profile")}
           </h2>
           <p className="text-lg text-gray-600">
-            {t('BasicInfo.personalProfileDetailSubtitle')}
-          </p>
-        </div>
-      </div>
-      
-      {/* 完整的个人简介 */}
-      <div className="mb-8" id="basic">
-        <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-          {t('aboutMe')}
-        </h3>
-        <div className="prose prose-lg max-w-none">
-          <p className="text-gray-700 leading-relaxed mb-4">
-            {t('BasicInfo.subTitle', { siteTitle: SITE_CONFIG.title })}
-          </p>
-          <p className="text-gray-700 leading-relaxed mb-4">
-            {t('BasicInfo.personalProfileDetail1')}
-          </p>
-          <p className="text-gray-700 leading-relaxed">
-            {t('BasicInfo.personalProfileDetail2')}
+            {t("BasicInfo.personalProfileDetailSubtitle")}
           </p>
         </div>
       </div>
 
+      {/* 完整的个人简介 */}
+      <div className="mb-8" id="basic">
+        <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+          {t("aboutMe")}
+        </h3>
+        <div
+          className="prose prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: baseInfo.description }}
+        />
+      </div>
     </div>
-  )
+  );
 }
+
+export default BasicInfoDetail;
