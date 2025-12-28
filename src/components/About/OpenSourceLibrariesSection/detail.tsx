@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { OpenSourceIcon, GitHubIcon } from "@/assets/icons";
 import { cn } from "@/utils";
 import { FC } from "react";
@@ -85,6 +85,7 @@ const LibraryCard: FC<LibraryCardProps> = ({
 const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
   className,
 }) => {
+  const locale = useLocale();
   const t = useTranslations("AboutPage");
 
   return (
@@ -101,42 +102,53 @@ const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
         </div>
       </div>
 
-      {OPEN_SOURCE_LIBRARIES.map(({ key, sources }) => (
-        <div className="mb-8" key={key}>
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">
-            {t(`OpenSource.Categories.${key}`)}
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sources.map(
-              ({ key, subKey, version, documentation, sourceCode, icon }) => {
-                const IconComponent = IconMap[icon];
-                return (
-                  <LibraryCard
-                    key={key}
-                    icon={
-                      IconComponent ? (
-                        <IconComponent className="w-5 h-5 text-gray-700" />
-                      ) : (
-                        <OpenSourceIcon className="w-5 h-5 text-gray-700" />
-                      )
-                    }
-                    name={key}
-                    category={t(`OpenSource.SubCategories.${subKey}`)}
-                    description={t(`OpenSource.SourcesDetail.${key}.description`)}
-                    version={version}
-                    docsUrl={documentation}
-                    githubUrl={sourceCode}
-                    interactiveText={{
-                      viewDocs: t(`OpenSource.InteractiveText.viewDocs`),
-                      sourceCode: t(`OpenSource.InteractiveText.sourceCode`),
-                    }}
-                  />
-                );
-              }
-            )}
+      {OPEN_SOURCE_LIBRARIES[locale as keyof typeof OPEN_SOURCE_LIBRARIES].map(
+        ({ key, sources, name }) => (
+          <div className="mb-8" key={key}>
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              {name}
+            </h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {sources.map(
+                ({
+                  key,
+                  name,
+                  version,
+                  documentation,
+                  sourceCode,
+                  icon,
+                  subCategory,
+                  description,
+                }) => {
+                  const IconComponent = IconMap[icon];
+                  return (
+                    <LibraryCard
+                      key={key}
+                      icon={
+                        IconComponent ? (
+                          <IconComponent className="w-5 h-5 text-gray-700" />
+                        ) : (
+                          <OpenSourceIcon className="w-5 h-5 text-gray-700" />
+                        )
+                      }
+                      name={name}
+                      category={subCategory}
+                      description={description}
+                      version={version}
+                      docsUrl={documentation}
+                      githubUrl={sourceCode}
+                      interactiveText={{
+                        viewDocs: t(`OpenSource.InteractiveText.viewDocs`),
+                        sourceCode: t(`OpenSource.InteractiveText.sourceCode`),
+                      }}
+                    />
+                  );
+                }
+              )}
+            </div>
           </div>
-        </div>
-      ))}
+        )
+      )}
     </div>
   );
 };
