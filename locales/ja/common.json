@@ -171,10 +171,17 @@
   },
   "AboutPage": {
     "title": "私について",
-    "welcome": "{siteTitle}へようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。",
     "techStack": "技術スタック",
     "techStackDescription": "このブログは以下のモダンな技術スタックで構築されています：",
     "contact": "連絡先",
+    "BasicInfo": {
+      "subTitle": "{siteTitle}へようこそ！ここは私が技術的な洞察、開発経験、人生の感想を共有する場所です。",
+      "personalProfile": "個人プロフィール",
+      "personalProfileDescription": "技術に情熱を持つ開発者で、新しい技術を探索し、プログラミングの楽しさを享受し、面白いプロジェクトを創造することを目指しています。",
+      "personalProfileDetailSubtitle": "詳細な個人情報と連絡先",
+      "personalProfileDetail1": "私は技術に情熱を持つ開発者で、フロントエンド技術とフルスタック開発に専念しています。React、Next.js、TypeScriptなどの新しい技術スタックを探索し、新しい技術を学ぶことに情熱を持っています。ブログで面白い技術発見とプログラミングの洞察を共有しています。",
+      "personalProfileDetail2": "通常、新しい技術を研究し、オープンソースプロジェクトに参加し、技術ブログで学習心得を共有しています。技術は生活をより良くすることができると信じており、コードを使用して実際の問題を解決し、面白いデジタル体験を作成することを楽しんでいます。"
+    },
     "OpenSource": {
       "title": "オープンソースライブラリ",
       "description": "プロジェクトの技術スタックで使用されたオープンソースライブラリと公式ドキュメント",
@@ -496,12 +503,7 @@
     "dependencyManagement": "依存関係管理",
     "securityAudit": "セキュリティ監査",
     "pnpmPackageManager": "pnpmパッケージマネージャー",
-    "personalProfile": "個人プロフィール",
-    "personalProfileDescription": "技術愛好家の開発者で、新しい技術の探索を楽しみ、プログラミングの楽しさを味わい、興味深いプロジェクトの創造に取り組んでいます。",
-    "personalProfileDetailSubtitle": "詳細な個人情報と連絡先",
     "aboutMe": "私について",
-    "personalProfileDetail1": "私は技術愛好家の開発者で、フロントエンド技術とフルスタック開発に専念しています。React、Next.js、TypeScriptなどの新しい技術スタックの探索を楽しんでいます。新しい技術の学習に情熱を注ぎ、ブログを通じて興味深い技術的発見とプログラミングの洞察を共有することを楽しんでいます。",
-    "personalProfileDetail2": "普段は新しい技術の研究、オープンソースプロジェクトへの参加、技術ブログを通じた学習洞察の共有を楽しんでいます。技術が生活をより良くできると信じており、コードを使って実用的な問題を解決し、興味深いデジタル体験を創造することを愛しています。",
     "clickToViewDetails": "クリックして詳細を表示"
   },
   "Search": {

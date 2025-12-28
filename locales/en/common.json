@@ -43,6 +43,14 @@
     "techStack": "Tech Stack",
     "techStackDescription": "This blog is built with the following modern tech stack:",
     "contact": "Contact",
+    "BasicInfo": {
+      "subTitle": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
+      "personalProfile": "Personal Profile",
+      "personalProfileDescription": "A technology enthusiast developer who loves exploring new technologies, enjoys the fun of programming, and is committed to creating interesting projects.",
+      "personalProfileDetailSubtitle": "Detailed personal information and contact details",
+      "personalProfileDetail1": "I am a technology enthusiast developer, focusing on frontend technologies and full-stack development. I love exploring new technology stacks including React, Next.js, TypeScript, etc. I am passionate about learning new technologies and enjoy sharing interesting technical discoveries and programming insights through my blog.",
+      "personalProfileDetail2": "I usually enjoy studying new technologies, participating in open source projects, and sharing learning insights through technical blogs. I believe technology can make life better and love using code to solve practical problems and create interesting digital experiences."
+    },
     "OpenSource": {
       "title": "Open Source Libraries",
       "description": "Open source libraries and frameworks used in the project",
@@ -364,12 +372,7 @@
     "dependencyManagement": "Dependency Management",
     "securityAudit": "Security Audit",
     "pnpmPackageManager": "pnpm Package Manager",
-    "personalProfile": "Personal Profile",
-    "personalProfileDescription": "A technology enthusiast developer who loves exploring new technologies, enjoys the fun of programming, and is committed to creating interesting projects.",
-    "personalProfileDetailSubtitle": "Detailed personal information and contact details",
     "aboutMe": "About Me",
-    "personalProfileDetail1": "I am a technology enthusiast developer, focusing on frontend technologies and full-stack development. I love exploring new technology stacks including React, Next.js, TypeScript, etc. I am passionate about learning new technologies and enjoy sharing interesting technical discoveries and programming insights through my blog.",
-    "personalProfileDetail2": "I usually enjoy studying new technologies, participating in open source projects, and sharing learning insights through technical blogs. I believe technology can make life better and love using code to solve practical problems and create interesting digital experiences.",
     "clickToViewDetails": "Click to view details"
   },
   "Search": {

@@ -39,7 +39,14 @@
   },
   "AboutPage": {
     "title": "关于我",
-    "welcome": "欢迎来到 {siteTitle}！这里是我分享技术见解、开发经验和生活感悟的地方。",
+    "BasicInfo": {
+      "subTitle": "欢迎来到 {siteTitle}！这里是我分享技术见解、开发经验和生活感悟的地方。",
+      "personalProfile": "个人简介",
+      "personalProfileDescription": "热爱技术的开发者，喜欢探索新技术，享受编程带来的乐趣，致力于创造有趣的项目。",
+      "personalProfileDetailSubtitle": "详细个人信息与联系方式",
+      "personalProfileDetail1": "我是一名热爱技术的开发者，专注于前端技术和全栈开发。喜欢探索新的技术栈，包括React、Next.js、TypeScript等。热衷于学习新技术，喜欢通过博客分享有趣的技术发现和编程心得。",
+      "personalProfileDetail2": "平时喜欢研究新技术，参与开源项目，通过技术博客分享学习心得。相信技术可以让生活更美好，喜欢用代码解决实际问题，创造有趣的数字体验。"
+    },
     "techStack": "技术栈",
     "techStackDescription": "这个博客使用以下现代技术栈构建：",
     "OpenSource": {
@@ -378,12 +385,8 @@
     "dependencyManagement": "依赖管理",
     "securityAudit": "安全审计",
     "pnpmPackageManager": "pnpm包管理器",
-    "personalProfile": "个人简介",
-    "personalProfileDescription": "热爱技术的开发者，喜欢探索新技术，享受编程带来的乐趣，致力于创造有趣的项目。",
-    "personalProfileDetailSubtitle": "详细个人信息与联系方式",
+
     "aboutMe": "关于我",
-    "personalProfileDetail1": "我是一名热爱技术的开发者，专注于前端技术和全栈开发。喜欢探索新的技术栈，包括React、Next.js、TypeScript等。热衷于学习新技术，喜欢通过博客分享有趣的技术发现和编程心得。",
-    "personalProfileDetail2": "平时喜欢研究新技术，参与开源项目，通过技术博客分享学习心得。相信技术可以让生活更美好，喜欢用代码解决实际问题，创造有趣的数字体验。",
     "clickToViewDetails": "点击查看详情"
   },
   "Search": {

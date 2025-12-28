@@ -3,12 +3,13 @@
 import { SITE_CONFIG } from '@/constants'
 import { GlobeIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
+import { FC } from 'react'
 
 interface BasicInfoBriefProps {
   className?: string
 }
 
-export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
+const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
   const t = useTranslations('AboutPage')
   const navT = useTranslations('Navigation')
 
@@ -26,13 +27,15 @@ export default function BasicInfoBrief({ className }: BasicInfoBriefProps) {
       {/* 简化的个人简介 */}
       <div className="mb-6">
         <p className="text-gray-600 leading-relaxed text-sm">
-          {t('welcome', { siteTitle: SITE_CONFIG.title })}
+          {t('BasicInfo.subTitle', { siteTitle: SITE_CONFIG.title })}
         </p>
         <p className="text-gray-600 leading-relaxed mt-2 text-sm">
-          {t('personalProfileDescription')}
+          {t('BasicInfo.personalProfileDescription')}
         </p>
       </div>
 
     </div>
   )
 }
+
+export default BasicInfoBrief;

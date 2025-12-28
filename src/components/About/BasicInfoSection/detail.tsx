@@ -23,7 +23,7 @@ export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
             {navT('Personal Profile')}
           </h2>
           <p className="text-lg text-gray-600">
-            {t('personalProfileDetailSubtitle')}
+            {t('BasicInfo.personalProfileDetailSubtitle')}
           </p>
         </div>
       </div>
@@ -35,13 +35,13 @@ export default function BasicInfoDetail({ className }: BasicInfoDetailProps) {
         </h3>
         <div className="prose prose-lg max-w-none">
           <p className="text-gray-700 leading-relaxed mb-4">
-            {t('welcome', { siteTitle: SITE_CONFIG.title })}
+            {t('BasicInfo.subTitle', { siteTitle: SITE_CONFIG.title })}
           </p>
           <p className="text-gray-700 leading-relaxed mb-4">
-            {t('personalProfileDetail1')}
+            {t('BasicInfo.personalProfileDetail1')}
           </p>
           <p className="text-gray-700 leading-relaxed">
-            {t('personalProfileDetail2')}
+            {t('BasicInfo.personalProfileDetail2')}
           </p>
         </div>
       </div>
