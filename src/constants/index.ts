@@ -1,6 +1,7 @@
 // 应用常量 - 从JSON配置文件加载
 
 import siteConfigData from './site-config.json'
+import openSourceLibrariesData from './open-source.json'
 
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
@@ -35,3 +36,6 @@ export const TAG_COLORS = siteConfigData.app.tagColors
 
 // 语言配置
 export const LANGUAGES = siteConfigData.app.languages
+
+// 开源库数据
+export const OPEN_SOURCE_LIBRARIES = openSourceLibrariesData

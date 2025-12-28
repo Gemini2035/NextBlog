@@ -43,86 +43,136 @@
     "techStack": "Tech Stack",
     "techStackDescription": "This blog is built with the following modern tech stack:",
     "contact": "Contact",
-    "nextjs": "Next.js 15 - React full-stack framework",
-    "contentlayer": "Contentlayer - Content management system",
-    "mdx": "MDX - Markdown + JSX support",
-    "tailwind": "Tailwind CSS - Utility-first CSS framework",
-    "typescript": "TypeScript - Type-safe JavaScript",
-    "githubPages": "GitHub Pages - Static site hosting",
-    "openSourceLibraries": "Open Source Libraries",
-    "openSourceLibrariesDescription": "Main open source libraries and frameworks used in the project",
-    "openSourceLibrariesBrief": {
-      "react": "UI Library",
-      "nextjs": "Framework",
-      "contentlayer": "CMS",
-      "tailwind": "CSS"
-    },
-    "techStackBrief": {
-      "nextjsDesc": "React Full-stack (App Router)",
-      "contentlayerDesc": "Type-safe content",
-      "mdxDesc": "Markdown + JSX",
-      "tailwindDesc": "Utility-first CSS",
-      "typescriptDesc": "Type-safe (strict)",
-      "deploymentDesc": "CI/CD & deployment"
-    },
-    "openSourceLibrariesDetail": {
-      "description": "Open source libraries used in the project tech stack with official documentation",
-      "viewDocs": "View Docs",
-      "sourceCode": "Source",
-      "coreFrameworks": "Core Frameworks",
-      "styling": "Styling & UI",
-      "contentManagement": "Content Management",
-      "utilities": "Utilities",
-      "devTools": "Development Tools",
-      "categories": {
-        "uiLibrary": "UI Library",
-        "framework": "Framework",
-        "language": "Programming Language",
-        "cssFramework": "CSS Framework",
-        "cssProcessor": "CSS Processor",
-        "cssInJs": "CSS-in-JS",
-        "animation": "Animation",
-        "cms": "Content Management",
-        "markdown": "Markdown",
-        "frontmatter": "Frontmatter",
-        "i18n": "Internationalization",
-        "search": "Search Engine",
-        "utility": "Utility",
-        "hooks": "React Hooks",
-        "linter": "Linter",
-        "formatter": "Formatter",
-        "gitHooks": "Git Hooks",
-        "ai": "AI Tool"
+    "OpenSource": {
+      "title": "Open Source Libraries",
+      "description": "Open source libraries and frameworks used in the project",
+      "InteractiveText": {
+        "contact": "Contact",
+        "viewDocs": "View Docs",
+        "sourceCode": "Source Code"
       },
-      "libraries": {
-        "react": "Declarative JavaScript library for building user interfaces with component-based development and virtual DOM optimization",
-        "nextjs": "Full-stack React framework with SSR, SSG optimization, file-based routing and API routes",
-        "typescript": "Superset of JavaScript that adds static type checking for better development experience and code quality",
-        "tailwind": "Utility-first CSS framework for rapidly building modern responsive interfaces with atomic classes",
-        "postcss": "CSS post-processor for transforming and optimizing CSS code with plugin support",
-        "tailwindAnimate": "Plugin that provides preset animation classes for Tailwind CSS to simplify animation development",
-        "framerMotion": "Powerful React animation library with declarative animation API and gesture support",
-        "emotion": "High-performance CSS-in-JS library with support for styled components and dynamic styles",
-        "contentlayer": "Content SDK that transforms Markdown, MDX content into type-safe data layer",
-        "mdx": "Enhanced version of Markdown that supports JSX components in Markdown",
-        "grayMatter": "Parse frontmatter metadata from Markdown files",
-        "nextIntl": "Internationalization solution for Next.js with multi-language routing and translation support",
-        "fuse": "Lightweight fuzzy search library with fast search and ranking algorithms",
-        "clsx": "Concise conditional classname utility for dynamically composing CSS class names",
-        "useDebounce": "React debounce hooks library for optimizing input and search performance",
-        "eslint": "Extensible JavaScript linting tool for finding and fixing code issues",
-        "prettier": "Code formatter that ensures code style consistency",
-        "husky": "Git hooks tool that automatically runs scripts before commits",
-        "lintStaged": "Run linters on Git staged files to improve commit quality",
-        "openai": "Official OpenAI SDK for integrating ChatGPT and other AI features"
+      "Categories": {
+        "Core Frameworks": "Core Frameworks",
+        "Styling & UI": "Styling & UI",
+        "Content Management": "Content Management",
+        "Internationalization": "Internationalization",
+        "Development Tools": "Development Tools"
+      },
+      "SubCategories": {
+        "UI Library": "UI Library",
+        "Framework": "Framework",
+        "Language": "Programming Language",
+        "Css Framework": "CSS Framework",
+        "Css Processor": "CSS Processor",
+        "Css In Js": "CSS-in-JS",
+        "Animation": "Animation Library",
+        "Cms": "Content Management",
+        "Markdown": "Markdown",
+        "Frontmatter": "Frontmatter",
+        "I18n": "Internationalization",
+        "Search": "Search Engine",
+        "Utility": "Utility Library",
+        "Hooks": "React Hooks",
+        "Linter": "Code Checker",
+        "Formatter": "Code Formatter",
+        "Git Hooks": "Git Hooks",
+        "AI": "AI Tool"
+      },
+      "SourcesDetail": {
+        "Tailwind CSS": {
+          "summary": "Tailwind CSS - Utility-first CSS Framework",
+          "description": "Declarative JavaScript library for building user interfaces, providing efficient interface rendering through component-based development and virtual DOM optimization"
+        },
+        "TypeScript": {
+          "summary": "TypeScript - Type-safe JavaScript",
+          "description": "Super set of JavaScript, adding static type checking to improve development experience and code quality"
+        },
+        "Emotion": {
+          "summary": "Emotion - CSS-in-JS Library",
+          "description": "High-performance CSS-in-JS library, supporting style components and dynamic styles"
+        },
+        "Gray Matter": {
+          "summary": "Gray Matter - Markdown frontmatter parser",
+          "description": "Parse the frontmatter metadata of the Markdown file"
+        },
+        "Framer Motion": {
+          "summary": "Framer Motion - Powerful React Animation Library",
+          "description": "Powerful React animation library, providing declarative animation API and gesture support"
+        },
+        "PostCSS": {
+          "summary": "PostCSS - CSS Post-processor",
+          "description": "CSS post-processor, used to convert and optimize CSS code, supporting plugin extension"
+        },
+        "Tailwind Animate": {
+          "summary": "Tailwind Animate - Tailwind CSS Animation Plugin",
+          "description": "Provide preset animation classes for Tailwind CSS, simplifying animation development"
+        },
+        "@octokit/graphql": {
+          "summary": "@octokit/graphql - GitHub API Client",
+          "description": "GitHub API client, used to access GitHub API"
+        },
+        "SWR": {
+          "summary": "SWR - React Cache Library",
+          "description": "React cache library, used to cache API request results"
+        },
+        "Recharts": {
+          "summary": "Recharts - Data Visualization Library",
+          "description": "Data visualization library, used to create various charts and graphs"
+        },
+        "React": {
+          "summary": "React - JavaScript Library for Building User Interfaces",
+          "description": "JavaScript library for building user interfaces, providing efficient interface rendering through component-based development and virtual DOM optimization"
+        },
+        "NextJs": {
+          "summary": "Next.js - Full-stack Framework Based on React",
+          "description": "Full-stack framework based on React, providing SSR, SSG optimization, supporting file routing and API routing"
+        },
+        "next-intl": {
+          "summary": "next-intl - Internationalization Library",
+          "description": "Internationalization library, used to support multiple languages"
+        },
+        "Contentlayer": {
+          "summary": "Contentlayer - Content Management System",
+          "description": "Content management system, used to manage content and data"
+        },
+        "MDX": {
+          "summary": "MDX - Markdown + JSX Support",
+          "description": "Enhanced version of Markdown, supporting the use of JSX components in Markdown"
+        },
+        "FuseJs": {
+          "summary": "Fuse.js - Fuzzy Search Library",
+          "description": "Fuzzy search library, used to quickly search and rank algorithms"
+        },
+        "clsx": {
+          "summary": "clsx - Conditional Class Name Utility",
+          "description": "Conditional class name utility, used to dynamically combine CSS class names"
+        },
+        "use-debounce": {
+          "summary": "use-debounce - Debounce Hook Library",
+          "description": "Debounce hook library, used to optimize input and search performance"
+        },
+        "ESLint": {
+          "summary": "ESLint - Code Checker",
+          "description": "Extensible JavaScript code checker, used to find and fix code problems"
+        },
+        "Prettier": {
+          "summary": "Prettier - Code Formatter",
+          "description": "Code formatter, ensuring code style consistency"
+        },
+        "Husky": {
+          "summary": "husky - Git Hook Tool",
+          "description": "Git hook tool, used to automatically run scripts before committing"
+        },
+        "lint-staged": {
+          "summary": "lint-staged - Git Staged File Runner",
+          "description": "Run linters on Git staged files, improving commit quality"
+        },
+        "OpenAI": {
+          "summary": "OpenAI - OpenAI SDK",
+          "description": "OpenAI official SDK, used to integrate AI features such as ChatGPT"
+        }
       }
     },
-    "reactDescription": "JavaScript library for building user interfaces",
-    "nextjsDescription": "Production-ready React framework",
-    "contentlayerDescription": "Type-safe content management tool",
-    "tailwindDescription": "Utility-first CSS framework",
-    "typescriptDescription": "Language that adds type system to JavaScript",
-    "nextIntlDescription": "Next.js internationalization library",
     "visit": "Visit",
     "onlineServices": "Online Services",
     "onlineServicesDescription": "Online services used for project deployment and maintenance",
