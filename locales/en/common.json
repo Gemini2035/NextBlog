@@ -43,6 +43,13 @@
     "techStack": "Tech Stack",
     "techStackDescription": "This blog is built with the following modern tech stack:",
     "contact": "Contact",
+    "DevelopmentProtocols": {
+      "title": "International Standards and Protocols",
+      "description": "This site strictly follows the following international standards and protocols to ensure the accessibility, security, and interoperability of the website",
+      "viewSpec": "View Specifications",
+      "officialSite": "Official Site",
+      "keyFeatures": "Key Features"
+    },
     "BasicInfo": {
       "subTitle": "Welcome to {siteTitle}! This is where I share technical insights, development experiences, and life reflections.",
       "personalProfile": "Personal Profile",
@@ -233,134 +240,7 @@
     "learnMore": "Learn More",
     "developmentProtocols": "International Protocols",
     "developmentProtocolsDescription": "International standards and protocol specifications followed by this site",
-    "protocolsBrief": {
-      "wcag": "WCAG 2.1",
-      "ccLicense": "CC BY-NC-SA 4.0",
-      "https": "HTTPS/TLS 1.3",
-      "opengraph": "OpenGraph"
-    },
-    "protocolsDetail": {
-      "title": "Followed International Protocols",
-      "description": "This site strictly adheres to the following international standards and protocols, ensuring website accessibility, security, and interoperability",
-      "viewSpec": "View Specification",
-      "officialSite": "Official Site",
-      "keyFeatures": "Key Features",
-      "categories": {
-        "accessibility": "Accessibility",
-        "licensing": "Content Licensing",
-        "security": "Secure Transport",
-        "metadata": "Metadata Standards",
-        "syndication": "Content Distribution",
-        "markup": "Markup Standards",
-        "api": "API Specifications"
-      },
-      "protocols": {
-        "wcag": {
-          "name": "WCAG 2.1",
-          "fullName": "Web Content Accessibility Guidelines 2.1",
-          "description": "International web accessibility standard by W3C, ensuring website content is accessible to all users, including people with disabilities",
-          "features": [
-            "Semantic HTML structure",
-            "Keyboard navigation support",
-            "Appropriate color contrast",
-            "ARIA label support",
-            "Screen reader compatibility"
-          ],
-          "url": "https://www.w3.org/WAI/WCAG21/quickref/"
-        },
-        "ccLicense": {
-          "name": "CC BY-NC-SA 4.0",
-          "fullName": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0",
-          "description": "Internationally recognized content licensing protocol allowing sharing and modification for non-commercial purposes",
-          "features": [
-            "Attribution (BY) - Credit required",
-            "NonCommercial (NC) - Non-commercial use only",
-            "ShareAlike (SA) - Same license required",
-            "Internationally recognized copyright standard",
-            "Free Culture License"
-          ],
-          "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/"
-        },
-        "https": {
-          "name": "HTTPS/TLS 1.3",
-          "fullName": "Hypertext Transfer Protocol Secure / Transport Layer Security",
-          "description": "International standard protocol for secure internet communication, ensuring encrypted and integrity-protected data transmission",
-          "features": [
-            "End-to-end encryption",
-            "Latest TLS 1.3 protocol",
-            "Protection against man-in-the-middle attacks",
-            "Data integrity verification",
-            "Modern cryptographic algorithm support"
-          ],
-          "url": "https://tools.ietf.org/html/rfc8446"
-        },
-        "opengraph": {
-          "name": "Open Graph Protocol",
-          "fullName": "Open Graph Protocol",
-          "description": "Social media metadata standard by Facebook, optimizing content display on social platforms",
-          "features": [
-            "Social media preview optimization",
-            "Unified metadata format",
-            "Multi-platform sharing support",
-            "Rich media content display",
-            "SEO optimization support"
-          ],
-          "url": "https://ogp.me/"
-        },
-        "schema": {
-          "name": "Schema.org",
-          "fullName": "Structured Data Standard",
-          "description": "Structured data standard by Google, Microsoft, Yahoo, and others, improving search engine understanding",
-          "features": [
-            "Semantic data markup",
-            "Search engine optimization",
-            "Rich search results",
-            "JSON-LD format",
-            "Multiple content type support"
-          ],
-          "url": "https://schema.org/"
-        },
-        "rss": {
-          "name": "RSS 2.0 / Atom",
-          "fullName": "Content Syndication Protocols",
-          "description": "Standardized content aggregation and subscription formats, allowing users to subscribe via RSS readers",
-          "features": [
-            "Standardized content format",
-            "RSS and Atom support",
-            "Automatic content updates",
-            "Cross-platform subscription",
-            "Aggregator compatibility"
-          ],
-          "url": "https://www.rssboard.org/rss-specification"
-        },
-        "html5": {
-          "name": "Semantic HTML5",
-          "fullName": "Semantic HTML5 Standard",
-          "description": "Modern web markup standard by W3C, using semantic tags to improve accessibility and SEO",
-          "features": [
-            "Semantic tag structure",
-            "Enhanced accessibility",
-            "SEO friendly",
-            "Modern web standards",
-            "Backward compatibility"
-          ],
-          "url": "https://html.spec.whatwg.org/"
-        },
-        "restful": {
-          "name": "RESTful API",
-          "fullName": "Representational State Transfer API Specification",
-          "description": "HTTP-based API design architectural style, providing standardized web service interface design principles",
-          "features": [
-            "Uniform interface design",
-            "Stateless communication",
-            "Resource-oriented architecture",
-            "Standard HTTP methods",
-            "Cacheability"
-          ],
-          "url": "https://restfulapi.net/"
-        }
-      }
-    },
+
     "codeStandards": "Code Standards",
     "codeStandardsDescription": "Development standards to ensure code quality and consistency",
     "internationalization": "Internationalization",

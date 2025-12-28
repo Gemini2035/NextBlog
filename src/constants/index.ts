@@ -1,7 +1,8 @@
 // 应用常量 - 从JSON配置文件加载
 
 import siteConfigData from './site-config.json'
-import openSourceLibrariesData from './open-source.json'
+import openSourceLibrariesData from './AboutPage/open-source.json'
+import developmentProtocolsData from './AboutPage/development-protocols.json'
 
 export const SITE_CONFIG = siteConfigData.site
 export const APP_CONFIG = siteConfigData.app
@@ -39,3 +40,4 @@ export const LANGUAGES = siteConfigData.app.languages
 
 // 开源库数据
 export const OPEN_SOURCE_LIBRARIES = openSourceLibrariesData
+export const DEVELOPMENT_PROTOCOLS = developmentProtocolsData
