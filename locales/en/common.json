@@ -63,39 +63,20 @@
       }
     },
     "visit": "Visit",
-    "onlineServices": "Online Services",
-    "onlineServicesDescription": "Online services used for project deployment and maintenance",
-    "onlineServicesBrief": {
-      "vercel": "Deployment",
-      "githubActions": "CI/CD",
-      "seo": "SEO",
-      "godaddy": "Analytics"
+    "OnlineServies": {
+      "title": "Online Services",
+      "description": "Online services used for project deployment and maintenance",
+      "InteractiveText": {
+        "visitWebsite": "Visit Website",
+        "viewDocs": "View Docs"
+      }
     },
-    "onlineServicesDetail": {
-      "description": "Online service platforms for project deployment, hosting and monitoring",
-      "visitWebsite": "Visit Website",
-      "viewDocs": "View Docs",
-      "paid": "Paid",
-      "hostingDeployment": "Hosting & Deployment",
-      "domainServices": "Domain Services",
-      "analyticsMonitoring": "Analytics & Monitoring",
-      "versionControlCICD": "Version Control & CI/CD",
-      "categories": {
-        "hosting": "Hosting",
-        "deployment": "Deployment",
-        "domain": "Domain Registration",
-        "analytics": "Analytics",
-        "seo": "SEO Tool",
-        "versionControl": "Version Control",
-        "cicd": "CI/CD"
-      },
-      "services": {
-        "vercel": "Modern frontend deployment platform with automated builds, preview deployments and global CDN acceleration",
-        "godaddyDomain": "Domain registration and management service provided by GoDaddy, offering reliable DNS resolution and domain management features for this website",
-        "searchConsole": "Google search optimization tool to monitor website performance and indexing status in search results",
-        "godaddy": "GoDaddy website analytics tool providing domain management and website traffic monitoring features",
-        "github": "World's largest code hosting platform with version control, collaborative development and CI/CD features",
-        "githubActions": "GitHub's automated CI/CD platform for building, testing and deploying code workflows"
+    "OnlineServices": {
+      "title": "Online Services",
+      "description": "Online services used for project deployment and maintenance",
+      "InteractiveText": {
+        "visitWebsite": "Visit Website",
+        "viewDocs": "View Docs"
       }
     },
     "hosting": "Hosting Service",

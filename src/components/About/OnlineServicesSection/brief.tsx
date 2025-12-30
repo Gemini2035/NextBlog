@@ -1,20 +1,33 @@
-'use client'
+"use client";
 
-import { useTranslations } from 'next-intl'
-import { 
-  OnlineServiceIcon,
-  GitHubActionsIcon,
-  VercelIcon,
-  SearchConsoleIcon,
-  GoDaddyIcon
-} from '@/assets/icons'
+import { useLocale, useTranslations } from "next-intl";
+import { OnlineServiceIcon } from "@/assets/icons";
+import { ONLINE_SERVICES } from "@/constants";
+import { IconMap } from "./constants";
+import { useRandomSort } from "@/hooks";
+import { cn } from "@/utils";
+import { FC } from "react";
 
 interface OnlineServicesBriefProps {
-  className?: string
+  className?: string;
 }
 
-export default function OnlineServicesBrief({ className }: OnlineServicesBriefProps) {
-  const t = useTranslations('AboutPage')
+const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
+  const t = useTranslations("AboutPage");
+  const locale = useLocale();
+  const onlineServices =
+    ONLINE_SERVICES[locale as keyof typeof ONLINE_SERVICES]?.flatMap(
+      ({ services }) =>
+        services.map(({ id, icon, name, category, externalDescription }) => ({
+          id,
+          icon,
+          name,
+          category,
+          externalDescription,
+        }))
+    ) || [];
+
+  const onlineServicesWithRandom = useRandomSort(onlineServices, 4);
 
   return (
     <div className={className}>
@@ -23,63 +36,49 @@ export default function OnlineServicesBrief({ className }: OnlineServicesBriefPr
           <OnlineServiceIcon className="w-5 h-5 text-blue-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">
-          {t('onlineServices')}
+          {t("OnlineServies.title")}
         </h2>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-              <VercelIcon className="w-4 h-4 text-gray-700" />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-900 text-sm">Vercel</h3>
-              <p className="text-xs text-gray-600">{t('onlineServicesBrief.vercel')}</p>
-            </div>
-          </div>
-          <span className="text-xs text-green-600">{t('free')}</span>
-        </div>
+        {onlineServicesWithRandom.map(
+          ({
+            id,
+            icon,
+            name,
+            category,
+            externalDescription: { text, textColor },
+          }) => {
+            const IconComponent = IconMap[icon as keyof typeof IconMap];
 
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-              <GitHubActionsIcon className="w-4 h-4 text-gray-700" />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-900 text-sm">GitHub Actions</h3>
-              <p className="text-xs text-gray-600">{t('onlineServicesBrief.githubActions')}</p>
-            </div>
-          </div>
-          <span className="text-xs text-green-600">{t('free')}</span>
-        </div>
-
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-              <SearchConsoleIcon className="w-4 h-4 text-gray-700" />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-900 text-sm">Search Console</h3>
-              <p className="text-xs text-gray-600">{t('onlineServicesBrief.seo')}</p>
-            </div>
-          </div>
-          <span className="text-xs text-green-600">{t('free')}</span>
-        </div>
-
-        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex items-center mb-2">
-            <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-              <GoDaddyIcon className="w-4 h-4 text-gray-700" />
-            </div>
-            <div>
-              <h3 className="font-medium text-gray-900 text-sm">GoDaddy</h3>
-              <p className="text-xs text-gray-600">{t('onlineServicesBrief.godaddy')}</p>
-            </div>
-          </div>
-          <span className="text-xs text-green-600">{t('free')}</span>
-        </div>
+            return (
+              <div
+                className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                key={id}
+              >
+                <div className="flex items-center mb-2">
+                  <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+                    {IconComponent ? (
+                      <IconComponent className="w-4 h-4 text-gray-700" />
+                    ) : (
+                      <OnlineServiceIcon className="w-4 h-4 text-gray-700" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900 text-sm">
+                      {name}
+                    </h3>
+                    <p className="text-xs text-gray-600">{category}</p>
+                  </div>
+                </div>
+                <span className={cn("text-xs", textColor)}>{text}</span>
+              </div>
+            );
+          }
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default OnlineServicesBrief;
