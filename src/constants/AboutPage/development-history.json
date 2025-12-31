@@ -1,0 +1,276 @@
+{
+  "zh": [
+    {
+      "id": "blog10",
+      "title": "Blog 1.0时代",
+      "version": "1.x",
+      "summary": "初始版本，Vue3 + Vite 纯静态网页，GitHub Pages 部署",
+      "description": "博客的初始版本，采用 Vue3 + Vite 构建，部署在 GitHub Pages，为纯静态网页。2023年9月开始构建，2024年2月正式上线，2024年3月更新第一篇文章。原域名：http://carloss2035.com/，现因域名问题已无法访问，该版本已停止更新维护。",
+      "period": "2023.09 - 2024.03 (已停止)",
+      "tags": ["Vue3", "Vite", "GitHub Pages", "静态网页"],
+      "status": "abandoned"
+    },
+    {
+      "id": "blog20",
+      "title": "Blog 2.0时代",
+      "version": "2.x",
+      "summary": "全面重构，Next.js + TypeScript 现代化架构",
+      "description": "博客的全面重构版本，采用 Next.js + TypeScript + Contentlayer 现代化架构。2025年9月开始构建，2025年10月正式上线，2025年10月更新第一篇文章，后续持续更新维护。相比1.0版本，实现了技术栈升级、支持国际化、高级SEO优化、性能大幅提升等重大改进。",
+      "period": "2025.09 - 至今",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "Contentlayer",
+        "现代化架构",
+        "next-intl"
+      ],
+      "status": "active",
+      "children": [
+        {
+          "id": "blog200",
+          "title": "v2.0 - 架构重构",
+          "summary": "",
+          "version": "2.0",
+          "description": "从 Vue3 完全迁移到 Next.js，使用 TypeScript 重构整个项目，采用现代化的技术栈和开发模式。",
+          "period": "2025年9月",
+          "tags": ["Next.js", "TypeScript", "架构重构"],
+          "status": "active"
+        },
+        {
+          "id": "blog201",
+          "title": "v2.0 - 正式上线",
+          "summary": "",
+          "version": "",
+          "description": "博客正式上线，集成 Contentlayer 内容管理系统，支持 MDX，发布第一篇文章。",
+          "period": "2025年10月",
+          "tags": ["Contentlayer", "MDX", "首篇文章"],
+          "status": "active"
+        },
+        {
+          "id": "blog21",
+          "title": "v2.1 - 国际化支持",
+          "summary": "",
+          "version": "2.1",
+          "description": "完善多语言支持，实现中文、英文、日文三种语言的内容展示和切换体验，支持全站国际化。",
+          "period": "2025年10月",
+          "tags": ["国际化", "多语言", "全站国际化"],
+          "status": "active"
+        },
+        {
+          "id": "blog22",
+          "title": "v2.2 - 移动端适配",
+          "summary": "",
+          "version": "2.2",
+          "description": "全面优化移动端体验，实现响应式布局，适配各种屏幕尺寸，提升移动端用户体验和交互流畅度。",
+          "period": "2025年11月",
+          "tags": ["移动端适配", "响应式布局", "Tailwind CSS"],
+          "status": "active"
+        },
+        {
+          "id": "blog23",
+          "title": "v2.3 - 拆分组件库",
+          "summary": "",
+          "version": "2.3",
+          "description": "将一部分业务代码拆分到组件库中并新建仓库独立维护，实现组件的复用和重用，提升开发效率和代码质量。",
+          "period": "2025年12月",
+          "tags": ["组件库", "代码复用"],
+          "status": "active"
+        },
+        {
+          "id": "blog24",
+          "title": "v2.4 - 节日主题系统",
+          "summary": "",
+          "version": "2.4",
+          "description": "开发节日主题系统，包括元旦、春节、情人节、中秋节、国庆节、圣诞节等节日的主题，提供个性化的视觉体验选择。",
+          "period": "",
+          "tags": ["主题样式"],
+          "status": "planning"
+        }
+      ]
+    }
+  ],
+  "ja": [
+    {
+      "id": "blog10",
+      "title": "Blog 1.0 時代",
+      "version": "1.x",
+      "summary": "初期バージョン、Vue3 + Vite 純粋静的ウェブページ、GitHub Pages にデプロイ",
+      "description": "ブログの初期バージョン、Vue3 + Vite で構築、GitHub Pages に純粋静的ウェブページとしてデプロイ。2023年9月に構築開始、2024年2月に正式公開、2024年3月に最初の記事を更新。原域名：http://carloss2035.com/，現在はドメインの問題によりアクセス不能。このバージョンは終了しました。",
+      "period": "2023.09 - 2024.03 (終了)",
+      "tags": ["Vue3", "Vite", "GitHub Pages", "静态网页"],
+      "status": "abandoned"
+    },
+    {
+      "id": "blog20",
+      "title": "Blog 2.0 時代",
+      "version": "2.x",
+      "summary": "完全リファクタリング、Next.js + TypeScript モダンアーキテクチャ",
+      "description": "ブログの完全リファクタリングバージョン、Next.js + TypeScript + Contentlayer モダンアーキテクチャで構築。2025年9月に構築開始、2025年10月に正式公開、2025年10月に最初の記事を更新、継続的なメンテナンスと更新。1.0バージョンと比較して、技術スタックのアップグレード、国際化サポート、高度なSEO最適化、大幅なパフォーマンス向上などの重要な改善を実現。",
+      "period": "2025.09 - 現在",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "Contentlayer",
+        "モダンアーキテクチャ",
+        "next-intl"
+      ],
+      "status": "active",
+      "children": [
+        {
+          "id": "blog200",
+          "title": "v2.0 - アーキテクチャリファクタリング",
+          "summary": "",
+          "version": "2.0",
+          "description": "Vue3 から Next.js への完全移行、TypeScript でプロジェクト全体をリファクタリング、モダンな技術スタックと開発パターンを採用。",
+          "period": "2025年9月",
+          "tags": ["Next.js", "TypeScript", "アーキテクチャリファクタリング"],
+          "status": "active"
+        },
+        {
+          "id": "blog201",
+          "title": "v2.0 - 正式公開",
+          "summary": "",
+          "version": "",
+          "description": "ブログ正式公開、Contentlayer コンテンツ管理システム統合、MDX サポート、最初の記事を公開。",
+          "period": "2025年10月",
+          "tags": ["Contentlayer", "MDX", "最初の記事"],
+          "status": "active"
+        },
+        {
+          "id": "blog21",
+          "title": "v2.1 - 国際化サポート",
+          "summary": "",
+          "version": "2.1",
+          "description": "多言語サポートの強化、中国語、英語、日本語の3言語でのコンテンツ表示と切り替え体験を実装、全サイト国際化をサポート。",
+          "period": "2025年10月",
+          "tags": ["国際化", "多言語", "全サイト国際化"],
+          "status": "active"
+        },
+        {
+          "id": "blog22",
+          "title": "v2.2 - モバイル対応",
+          "summary": "",
+          "version": "2.2",
+          "description": "モバイル体験の包括的な最適化、レスポンシブレイアウトの実装、様々な画面サイズへの対応、モバイルユーザー体験とインタラクションの流暢性を向上。",
+          "period": "2025年11月",
+          "tags": ["モバイル対応", "レスポンシブレイアウト", "Tailwind CSS"],
+          "status": "active"
+        },
+        {
+          "id": "blog23",
+          "title": "v2.3 - コンポーネントライブラリ分割",
+          "summary": "",
+          "version": "2.3",
+          "description": "一部の業務コードをコンポーネントライブラリに分割し、新しいリポジトリを独立してメンテナンス、コンポーネントの再利用と効率化、開発効率とコード品質を向上。",
+          "period": "2025年12月",
+          "tags": ["コンポーネントライブラリ", "コード再利用"],
+          "status": "active"
+        },
+        {
+          "id": "blog24",
+          "title": "v2.4 - 祝日テーマシステム",
+          "summary": "",
+          "version": "2.4",
+          "description": "祝日テーマシステムの開発、元旦、春節、七夕、中秋、国庆、クリスマスなどの祝日のテーマを含む、パーソナライズされた視覚体験の選択肢を提供。",
+          "period": "",
+          "tags": ["テーマスタイル"],
+          "status": "planning"
+        }
+      ]
+    }
+  ],
+  "en": [
+    {
+      "id": "blog10",
+      "title": "Blog 1.0 Era",
+      "version": "1.x",
+      "summary": "Initial version, Vue3 + Vite pure static webpage, deployed on GitHub Pages",
+      "description": "The initial version of the blog, built with Vue3 + Vite, deployed on GitHub Pages as a pure static webpage. Construction started in September 2023, officially launched in February 2024, and the first article was updated in March 2024. Original domain: http://carloss2035.com/, now inaccessible due to domain issues. This version has been discontinued.",
+      "period": "2023.09 - 2024.03 (Discontinued)",
+      "tags": ["Vue3", "Vite", "GitHub Pages", "Static Webpage"],
+      "status": "abandoned"
+    },
+    {
+      "id": "blog20",
+      "title": "Blog 2.0 Era",
+      "version": "2.x",
+      "summary": "Complete refactoring, Next.js + TypeScript modern architecture",
+      "description": "The complete refactored version of the blog, built with Next.js + TypeScript + Contentlayer modern architecture. Construction started in September 2025, officially launched in October 2025, the first article was updated in October 2025, with ongoing maintenance and updates. Compared to version 1.0, achieved major improvements including tech stack upgrade, internationalization support, advanced SEO optimization, and significant performance improvements.",
+      "period": "2025.09 - Present",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "Contentlayer",
+        "Modern Architecture",
+        "next-intl"
+      ],
+      "status": "active",
+      "children": [
+        {
+          "id": "blog200",
+          "title": "v2.0 - Architecture Refactoring",
+          "summary": "",
+          "version": "2.0",
+          "description": "Complete migration from Vue3 to Next.js, refactoring the entire project with TypeScript and adopting modern tech stack and development patterns.",
+          "period": "2025年9月",
+          "tags": ["Next.js", "TypeScript", "Architecture Refactoring"],
+          "status": "active"
+        },
+        {
+          "id": "blog201",
+          "title": "v2.0 - Official Launch",
+          "summary": "",
+          "version": "",
+          "description": "Blog officially launched, integrated Contentlayer content management system, supported MDX, and published first article.",
+          "period": "2025年10月",
+          "tags": ["Contentlayer", "MDX", "First Article"],
+          "status": "active"
+        },
+        {
+          "id": "blog21",
+          "title": "v2.1 - Internationalization Support",
+          "summary": "",
+          "version": "2.1",
+          "description": "Enhanced multi-language support, implemented content display and switching experience for Chinese, English, and Japanese, supporting full-site internationalization.",
+          "period": "2025年10月",
+          "tags": [
+            "Internationalization",
+            "Multi-language",
+            "Full-site Internationalization"
+          ],
+          "status": "active"
+        },
+        {
+          "id": "blog22",
+          "title": "v2.2 - Mobile Adaptation",
+          "summary": "",
+          "version": "2.2",
+          "description": "Comprehensive optimization of mobile experience, implementation of responsive layout, adaptation to various screen sizes, enhancement of mobile user experience and interaction fluency.",
+          "period": "2025年11月",
+          "tags": ["Mobile Adaptation", "Responsive Layout", "Tailwind CSS"],
+          "status": "active"
+        },
+        {
+          "id": "blog23",
+          "title": "v2.3 - Component Library Split",
+          "summary": "",
+          "version": "2.3",
+          "description": "Split一部分业务代码到组件库中并新建仓库独立维护，实现组件的复用和重用，提升开发效率和代码质量。",
+          "period": "2025年12月",
+          "tags": ["Component Library", "Code Reuse"],
+          "status": "active"
+        },
+        {
+          "id": "blog24",
+          "title": "v2.4 - Holiday Theme System",
+          "summary": "",
+          "version": "2.4",
+          "description": "Develop a holiday theme system, including themes for holidays such as New Year's Day, Spring Festival, Qixi Festival, Mid-Autumn Festival, National Day, and Christmas, providing personalized visual experience options.",
+          "period": "",
+          "tags": ["Theme Style"],
+          "status": "planning"
+        }
+      ]
+    }
+  ]
+}

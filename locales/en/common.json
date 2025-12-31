@@ -53,6 +53,20 @@
       "officialSite": "Official Site",
       "keyFeatures": "Key Features"
     },
+    "DevelopmentHistory": {
+      "title": "Development History",
+      "description": "View the complete development history of the blog from 1.0 to 2.0",
+      "planning": "Planning...",
+      "continuousDevelopment": "Continuous Development",
+      "continuousDevelopmentDesc": "Continuous optimization and feature iteration",
+      "languageSupport": "Language Support",
+      "languageSupportDesc": "Multi-language support configuration and best practices",
+      "majorVersions": "Major Versions",
+      "majorVersionsDesc": "Technology evolution from Vue3 to Next.js",
+      "yearSpan": "Year Span",
+      "yearSpanDesc": "Continuous iteration from 2023 to present",
+      "milestones": "Development Milestones"
+    },
     "OpenSource": {
       "title": "Open Source Libraries",
       "description": "Open source libraries and frameworks used in the project",
@@ -590,16 +604,6 @@
     "blog2DescriptionDetail": "Complete refactored version of the blog, built with Next.js + TypeScript + Contentlayer modern architecture. Construction started in September 2025, officially launched in October 2025, first article updated in October 2025, with ongoing maintenance and updates.",
     "blog2ImprovementNote": "Compared to version 1.0, achieved major improvements including tech stack upgrade, internationalization support, advanced SEO optimization, and significant performance improvements.",
     "coreTechStack": "Core Tech Stack",
-    "developmentHistory": "Development History",
-    "milestones": "Development Milestones",
-    "majorVersions": "Major Versions",
-    "majorVersionsDesc": "Technology evolution from Vue3 to Next.js",
-    "yearSpan": "Year Span",
-    "yearSpanDesc": "Continuous iteration from 2023 to present",
-    "languageSupport": "Language Support",
-    "languageSupportDesc": "Multi-language support for Chinese, English, and Japanese",
-    "continuousDevelopment": "Continuous Development",
-    "continuousDevelopmentDesc": "Continuous optimization and feature iteration",
     "versions": {
       "v200": "v2.0.0 - Architecture Refactoring",
       "v200Period": "September 2025",
