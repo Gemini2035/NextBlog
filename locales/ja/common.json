@@ -185,6 +185,20 @@
         "sourceCode": "ソースコード"
       }
     },
+    "DevelopmentHistory": {
+      "title": "開発履歴",
+      "description": "ブログ1.0から2.0への完全な開発履歴、各バージョンの詳細な機能進化を含む",
+      "planning": "計画中...",
+      "continuousDevelopment": "継続的開発",
+      "continuousDevelopmentDesc": "継続的な最適化と機能反復",
+      "languageSupport": "言語サポート",
+      "languageSupportDesc": "多言語サポート設定とベストプラクティス",
+      "majorVersions": "主要バージョン",
+      "majorVersionsDesc": "技術進化Vue3からNext.js",
+      "yearSpan": "年数スパン",
+      "yearSpanDesc": "2023年から現在までの継続的反復",
+      "milestones": "開発マイルストーン"
+    },
     "visit": "訪問",
     "OnlineServies": {
       "title": "オンラインサービス",
@@ -582,16 +596,6 @@
     "blog2DescriptionDetail": "ブログの完全リファクタリングバージョン、Next.js + TypeScript + Contentlayer モダンアーキテクチャで構築。2025年9月に構築開始、2025年10月に正式公開、2025年10月に最初の記事を更新、継続的なメンテナンスと更新。",
     "blog2ImprovementNote": "1.0バージョンと比較して、技術スタックのアップグレード、国際化サポート、高度なSEO最適化、大幅なパフォーマンス向上などの重要な改善を実現。",
     "coreTechStack": "コア技術スタック",
-    "developmentHistory": "開発履歴",
-    "milestones": "開発マイルストーン",
-    "majorVersions": "主要バージョン",
-    "majorVersionsDesc": "Vue3からNext.jsへの技術進化",
-    "yearSpan": "年数スパン",
-    "yearSpanDesc": "2023年から現在まで継続的な反復",
-    "languageSupport": "言語サポート",
-    "languageSupportDesc": "中国語、英語、日本語の多言語サポート",
-    "continuousDevelopment": "継続的開発",
-    "continuousDevelopmentDesc": "継続的な最適化と機能反復",
     "versions": {
       "v200": "v2.0.0 - アーキテクチャリファクタリング",
       "v200Period": "2025年9月",
