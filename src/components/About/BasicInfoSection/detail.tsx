@@ -26,7 +26,7 @@ const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
             {navT("Personal Profile")}
           </h2>
           <p className="text-lg text-gray-600">
-            {t("BasicInfo.personalProfileDetailSubtitle")}
+            {t("BasicInfo.subtitle")}
           </p>
         </div>
       </div>
