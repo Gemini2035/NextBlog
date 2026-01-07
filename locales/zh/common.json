@@ -43,6 +43,9 @@
       "title": "技术栈",
       "description": "这个博客使用以下现代技术栈构建："
     },
+    "BasicInfo": {
+      "subtitle": "个人简介"
+    },
     "OpenSource": {
       "title": "开源库",
       "description": "项目技术栈中使用过的开源库及其官方文档",

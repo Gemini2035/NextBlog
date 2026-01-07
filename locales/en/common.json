@@ -45,6 +45,9 @@
       "description": "This blog is built with the following modern tech stack:"
     },
     "techStackDescription": "This blog is built with the following modern tech stack:",
+    "BasicInfo": {
+      "subtitle": "Personal Profile"
+    },
     "contact": "Contact",
     "DevelopmentProtocols": {
       "title": "International Standards and Protocols",
