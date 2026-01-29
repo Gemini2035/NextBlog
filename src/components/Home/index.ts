@@ -1,5 +1,7 @@
 export { default as HomeSectionSkeleton } from './HomeSectionSkeleton'
 export type { HomeSectionSkeletonProps } from './HomeSectionSkeleton'
+export { default as HeroMediaBackground } from './HeroMediaBackground'
+export type { HeroMediaBackgroundProps, HeroMediaBackgroundRef } from './HeroMediaBackground'
 export { default as BlogSection } from './BlogSection/index'
 export { default as AboutSection } from './AboutSection/index'
 export { default as ProjectsSection } from './ProjectsSection/index'
