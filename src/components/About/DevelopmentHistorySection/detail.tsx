@@ -39,7 +39,7 @@ const DevelopmentHistoryDetail: FC<DevelopmentHistoryDetailProps> = ({ className
       </div>
 
       <div className="space-y-12">
-        {developmentHistory.map(({ id, title, version, period, tags, status, description, children }) => (
+        {developmentHistory.map(({ id, title, version, period, status, description, children }) => (
           <Fragment key={id}>
             {/* 粗轴 */}
             <div className="relative">
