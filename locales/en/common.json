@@ -328,7 +328,8 @@
     },
     "socialDescription": "Follow my social media and platforms",
     "socialDescriptionDetail": "Follow my social media and platforms for more content",
-    "visitPlatform": "Visit Platform"
+    "visitPlatform": "Visit Platform",
+    "friendLinksTitle": "Friend Links"
   },
   "Contact": {
     "contactButton": "Contact Me",

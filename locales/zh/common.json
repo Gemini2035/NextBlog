@@ -321,7 +321,8 @@
     },
     "socialDescription": "关注我的社交媒体和平台",
     "socialDescriptionDetail": "关注我的社交媒体和平台，获取更多内容",
-    "visitPlatform": "访问平台"
+    "visitPlatform": "访问平台",
+    "friendLinksTitle": "友链"
   },
   "Contact": {
     "contactButton": "联系我",

@@ -43,9 +43,8 @@ export default function Home() {
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroMediaRef = useRef<HeroMediaBackgroundRef>(null);
 
-  // 平滑滚动到博客区域，考虑header高度；首次点击时尝试播放背景音乐
+  // 平滑滚动到博客区域，考虑 header 高度（不在此处播放声音，避免「渐入后立即渐出」）
   const scrollToBlogSection = useCallback(() => {
-    heroMediaRef.current?.playAudio();
     if (blogSectionRef.current) {
       smoothScrollToElement(blogSectionRef.current, headerHeight - 4);
     }
@@ -56,7 +55,7 @@ export default function Home() {
       {/* Hero Section with Parallax Effect */}
       <section
         ref={heroSectionRef}
-        className="relative flex items-center justify-center overflow-hidden will-change-transform cursor-pointer hover:bg-gradient-to-br hover:from-blue-50 hover:via-blue-25 hover:to-blue-100 transition-all duration-300 touch-manipulation"
+        className="relative flex items-center justify-center overflow-hidden will-change-transform cursor-default hover:bg-gradient-to-br hover:from-blue-50 hover:via-blue-25 hover:to-blue-100 transition-all duration-300 touch-manipulation"
         style={{
           height: isClient ? `${currentHeight}px` : "600px",
           minHeight: isClient ? `${currentHeight}px` : "600px",
@@ -66,16 +65,6 @@ export default function Home() {
             ? "height 0.1s ease-out, padding 0.3s ease-out"
             : "none",
         }}
-        onClick={scrollToBlogSection}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            scrollToBlogSection();
-          }
-        }}
-        aria-label={t("scrollToBlog")}
       >
         {/* 视频 + 背景音乐 背景 */}
         <HeroMediaBackground
@@ -110,13 +99,17 @@ export default function Home() {
 
           {/* 点击提示 */}
           <div
-            className="mt-8 sm:mt-12 flex items-center justify-center text-sm text-white/80 will-change-transform transition-[transform,opacity] duration-100 ease-out"
+            className="mt-8 sm:mt-12 cursor-pointer flex items-center justify-center text-sm text-white/80 will-change-transform transition-[transform,opacity] duration-100 ease-out"
             style={{
               transform: isScrolling
                 ? "translateY(0)"
                 : `translateY(${scrollY * 0.1}px)`,
               opacity: opacity * 0.8,
             }}
+            onClick={scrollToBlogSection}
+            role="button"
+            tabIndex={0}
+            aria-label={t("scrollToBlog")}
           >
             <span className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/25 animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]">
               <span>{t("continue")}</span>

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { useLayoutHeights } from '@/hooks'
 import { cn } from '@/utils'
 import { VolumeIcon, MuteIcon } from '@/assets/icons'
+import { SITE_CONFIG } from '@/constants'
 
 export interface HeroMediaBackgroundProps {
   /** 视频封面图 URL */
@@ -24,8 +25,8 @@ export interface HeroMediaBackgroundRef {
   playAudio: () => void
 }
 
-const DEFAULT_POSTER = 'https://jp.enldm.cyou/chou-kaguya/video/poster.avif'
-const DEFAULT_VIDEO_SRC = 'https://jp.enldm.cyou/chou-kaguya/video/master.m3u8'
+const DEFAULT_POSTER = `${SITE_CONFIG.cdnUrl}/chou-kaguya/video/poster.avif`
+const DEFAULT_VIDEO_SRC = `${SITE_CONFIG.cdnUrl}/chou-kaguya/video/master.m3u8`
 
 const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgroundProps>(
   (
@@ -109,14 +110,6 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       setIsMuted(nextMuted)
     }, [fadeInVolume])
 
-    // 避免浏览器显示原生媒体控制层（如 Chrome 的媒体通知/控制弹窗）
-    useEffect(() => {
-      if (typeof navigator !== 'undefined' && 'mediaSession' in navigator) {
-        navigator.mediaSession.playbackState = 'none'
-        navigator.mediaSession.metadata = null
-      }
-    }, [])
-
     useEffect(() => {
       return () => {
         if (volumeFadeTimerRef.current) {
@@ -126,7 +119,7 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       }
     }, [])
 
-    // 欢迎 section 移出视口时淡出音量后暂停，移入时继续播放（若曾取消静音则淡入音量）
+    // 欢迎 section 移出视口时：有声音则渐出后暂停，静音则直接暂停；移入时静音播放
     useEffect(() => {
       const target = portalTargetRef?.current
       if (!target) return
@@ -137,19 +130,23 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
           const video = videoRef.current
           if (!video) return
           if (entry.isIntersecting) {
+            video.muted = true
+            isMutedRef.current = true
+            setIsMuted(true)
             video.play().catch(() => {})
-            if (!isMutedRef.current) {
-              fadeInVolume(video)
-            }
           } else {
-            fadeOutVolume(video)
+            if (isMutedRef.current) {
+              video.pause()
+            } else {
+              fadeOutVolume(video)
+            }
           }
         },
         { threshold: 0, rootMargin: `${-headerHeight}px 0px 0px 0px` }
       )
       observer.observe(target)
       return () => observer.disconnect()
-    }, [portalTargetRef, headerHeight, fadeInVolume, fadeOutVolume])
+    }, [portalTargetRef, headerHeight, fadeOutVolume])
 
     useEffect(() => {
       if (!unmuteOnInteraction) return
@@ -177,7 +174,8 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
         className={cn(
           'absolute top-4 right-4 z-[20] p-2 rounded-full backdrop-blur-sm border border-white/20',
           'pointer-events-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50',
-          'transition-opacity hover:opacity-90'
+          'transition-opacity hover:opacity-90',
+          'cursor-pointer'
         )}
         onClick={toggleMute}
         aria-label={isMuted ? '取消静音' : '静音'}

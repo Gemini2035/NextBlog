@@ -1,8 +1,10 @@
 'use client'
 
-            import { ComponentType } from 'react'
+import { ComponentType } from 'react'
 import { SITE_CONFIG } from '@/constants'
+import { FRIEND_LINKS } from '@/constants'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon } from '@/assets/icons'
+import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
 interface SocialLinksBriefProps {
@@ -62,7 +64,6 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
       <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
         {socialLinks.map((link) => {
           const IconComponent = link.icon
-          
           return (
             <div
               key={link.key}
@@ -74,6 +75,33 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
           )
         })}
       </div>
+
+      {FRIEND_LINKS.length > 0 && (
+        <>
+          <h4 className="text-base font-semibold text-gray-900 mt-6 mb-3 pt-4 border-t border-gray-200">
+            {skillsT('friendLinksTitle')}
+          </h4>
+          <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
+            {FRIEND_LINKS.map((link) => (
+              <Link
+                key={link.name}
+                href={link.url}
+                external
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-gray-300 transition-colors"
+                title={link.name}
+              >
+                {link.icon ? (
+                  <img src={link.icon} alt="" className="w-6 h-6 object-contain" />
+                ) : (
+                  <GlobeIcon className="w-6 h-6 text-gray-700" />
+                )}
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }

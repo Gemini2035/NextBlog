@@ -2,9 +2,10 @@
 
 import { ComponentType } from 'react'
 import { SITE_CONFIG } from '@/constants'
-import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon } from '@/assets/icons'
+import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
+import { FRIEND_LINKS } from '@/constants'
 
 interface SocialLinksDetailProps {
   className?: string
@@ -101,6 +102,38 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
           )
         })}
       </div>
+
+      {FRIEND_LINKS.length > 0 && (
+        <>
+          <h3 className="text-xl font-semibold text-gray-900 mt-10 mb-4 pt-6 border-t border-gray-200">
+            {skillsT('friendLinksTitle')}
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {FRIEND_LINKS.map((link) => (
+              <Link
+                key={link.name}
+                href={link.url}
+                external
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between gap-3 p-5 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all duration-200"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                    {link.icon ? (
+                      <img src={link.icon} alt="" className="w-6 h-6 object-contain" />
+                    ) : (
+                      <GlobeIcon className="w-6 h-6 text-gray-600" />
+                    )}
+                  </span>
+                  <span className="font-medium text-gray-900 truncate">{link.name}</span>
+                </div>
+                <ArrowRightIcon className="w-5 h-5 flex-shrink-0 text-gray-400" strokeWidth={2} />
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
