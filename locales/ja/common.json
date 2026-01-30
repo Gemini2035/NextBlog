@@ -167,7 +167,8 @@
     },
     "socialDescription": "ソーシャルメディアとプラットフォームをフォロー",
     "socialDescriptionDetail": "ソーシャルメディアとプラットフォームをフォローして、より多くのコンテンツを取得",
-    "visitPlatform": "プラットフォームにアクセス"
+    "visitPlatform": "プラットフォームにアクセス",
+    "friendLinksTitle": "友達リンク"
   },
   "AboutPage": {
     "title": "私について",
