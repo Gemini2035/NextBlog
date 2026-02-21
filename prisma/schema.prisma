@@ -1,0 +1,36 @@
+// Prisma 7：连接 URL 仅配置在 prisma.config.ts 的 datasource.url，此处不再写 url。
+// 若 IDE 报 "url is missing"：命令面板执行 "Prisma: Pin to Prisma 7" 可消除（以 CLI 为准）。
+// Define database connection via the `DATABASE_URL` env var
+datasource db {
+  provider = "postgresql"
+}
+
+// Define custom output path for generated Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 博客文章表，字段与 Contentlayer / 接口类型对齐；content 存 MDX body（raw + code）
+
+model Post {
+  id           String    @id @default(cuid())
+  slug         String
+  locale       String    @default("zh")
+  title        String
+  description  String?
+  date         DateTime
+  updatedAt    DateTime?
+  published    Boolean   @default(true)
+  featured     Boolean   @default(false)
+  tags         String[]
+  originalSlug String?
+  /// 与 Contentlayer body(MDX) 一致：{ raw: string, code?: string }，便于迁移与 getMDXComponent
+  content      Json      @db.JsonB
+  createdAt    DateTime  @default(now())
+
+  @@unique([slug, locale])
+  @@index([locale, published])
+  @@index([date(sort: Desc)])
+  @@map("posts")
+}
+

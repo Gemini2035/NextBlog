@@ -3,6 +3,12 @@
  * - GET /api/posts、GET /api/posts/[slug] 的请求/响应与消费端统一使用此定义
  */
 
+/** 与 Contentlayer body(MDX) 一致，Prisma Post.content 使用此结构 */
+export interface PostContentShape {
+  raw: string
+  code?: string
+}
+
 /** 文章列表项（GET /api/posts 单条；也可用于展示用文章元信息） */
 export interface PostListItem {
   id: string
