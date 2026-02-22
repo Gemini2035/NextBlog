@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Post } from "../../../../.contentlayer/generated";
+import type { PostListItem } from "@/app/api/posts/types";
+import type { Post } from "../../../../.contentlayer/generated";
 import { getEnhancedRelatedPosts } from "@/lib/posts";
 import { Button, Link } from "@/ui";
 import { PostTag } from "../PostTag";
@@ -26,12 +27,12 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
 );
 
 interface RelatedPostsProps {
-  post: Post;
+  post: PostListItem;
   limit?: number;
 }
 
-// 获取相关文章数据
-const getRelatedPostsData = (post: Post, limit: number = 6) => {
+// 获取相关文章数据（支持 API 返回的 PostListItem 与 Contentlayer Post）
+const getRelatedPostsData = (post: PostListItem, limit: number = 6): Post[] => {
   return getEnhancedRelatedPosts(post, limit);
 };
 
@@ -81,8 +82,8 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
         <div className="flex gap-4 max-w-4xl">
           {currentPosts.map((relatedPost) => (
             <Link
-              key={relatedPost.slug}
-              href={`/posts/${relatedPost.slug}`}
+              key={(relatedPost as Post).slug}
+              href={`/${post.locale}/posts/${(relatedPost as Post)._id}`}
               className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">

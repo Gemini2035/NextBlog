@@ -1,6 +1,16 @@
 import { allPosts, Post } from '../../.contentlayer/generated'
 import Fuse from 'fuse.js'
 
+/** 相关文章等仅需部分字段，API PostListItem 与 Contentlayer Post 均可传入 */
+export interface PostForRelated {
+  slug: string
+  locale: string
+  title: string
+  tags?: string[] | null
+  originalSlug?: string | null
+  description?: string | null
+}
+
 export function getAllPosts(locale?: string): Post[] {
   let posts = allPosts.filter((post) => post.published !== false)
   
@@ -48,7 +58,7 @@ export function getRelatedPosts(post: Post, limit: number = 3): Post[] {
 }
 
 // 使用 Fuse.js 的智能相关文章推荐
-export function getSmartRelatedPosts(post: Post, limit: number = 3): Post[] {
+export function getSmartRelatedPosts(post: Post | PostForRelated, limit: number = 3): Post[] {
   const sameLocalePosts = allPosts.filter((p) => 
     p.published !== false && 
     p.locale === post.locale && 
@@ -106,7 +116,7 @@ export function getSmartRelatedPosts(post: Post, limit: number = 3): Post[] {
 }
 
 // 增强版相关文章推荐，结合多种策略
-export function getEnhancedRelatedPosts(post: Post, limit: number = 3): Post[] {
+export function getEnhancedRelatedPosts(post: Post | PostForRelated, limit: number = 3): Post[] {
   const sameLocalePosts = allPosts.filter((p) => 
     p.published !== false && 
     p.locale === post.locale && 

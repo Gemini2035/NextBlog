@@ -1,30 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '../../_prisma'
+import type { PostDetail, PostContentShape } from '../types'
 
 /**
- * GET /api/posts
- * 数据来源：Prisma 数据库，通过文章 id 精准定位
- * 查询参数: locale (可选) - zh | en | ja
- * 返回已发布文章列表（不含正文），按日期倒序
+ * GET /api/posts/[id]
+ * 通过文章 id 精准定位（一个 id 唯一对应一篇 post）
+ * 返回单篇详情（含 bodyRaw、bodyCode）
  */
-export async function GET(request: NextRequest) {
+export async function GET(
+  _request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const { searchParams } = new URL(request.url)
-    const locale = searchParams.get('locale') ?? undefined
-    const id = searchParams.get('id') ?? undefined
-    console.log('[api] GET /api/posts?locale=%s&id=%s', locale ?? '', id ?? '')
+    const { id } = await context.params
+    console.log('[api] GET /api/posts/%s', id)
 
-    const post = await prisma.post.findUnique({
-      where: {
-        published: true,
-        locale,
-        id,
-      },
+    const row = await prisma.post.findUnique({
+      where: { id },
     })
+
+    if (!row || !row.published) {
+      return NextResponse.json({ error: '文章未找到' }, { status: 404 })
+    }
+
+    const content = row.content as PostContentShape | null
+    const bodyRaw = content?.raw ?? ''
+    const bodyCode = content?.code
+
+    const post: PostDetail = {
+      id: row.id,
+      slug: row.slug,
+      locale: row.locale,
+      title: row.title,
+      description: row.description ?? null,
+      date: row.date.toISOString(),
+      updatedAt: row.updatedAt?.toISOString() ?? null,
+      published: row.published,
+      featured: row.featured,
+      tags: row.tags ?? [],
+      originalSlug: row.originalSlug ?? null,
+      url: `/${row.locale}/posts/${row.id}`,
+      bodyRaw,
+      ...(bodyCode !== undefined ? { bodyCode } : {}),
+    }
 
     return NextResponse.json(post)
   } catch (error) {
-    console.error('[api/posts]', error)
+    console.error('[api/posts/[id]]', error)
     return NextResponse.json(
       { error: '获取文章失败' },
       { status: 500 }

@@ -1,6 +1,5 @@
 /**
  * GitHub 类型统一导出
- * 重新导出新的 GraphQL 类型，保持向后兼容
  */
 
 // 从新的 services/github 导出所有类型

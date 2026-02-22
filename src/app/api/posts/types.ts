@@ -1,6 +1,6 @@
 /**
  * 文章接口前后端数据契约
- * - GET /api/posts、GET /api/posts/[slug] 的请求/响应与消费端统一使用此定义
+ * - GET /api/posts、GET /api/posts/[id] 的请求/响应与消费端统一使用此定义
  */
 
 /** 与 Contentlayer body(MDX) 一致，Prisma Post.content 使用此结构 */
@@ -25,7 +25,7 @@ export interface PostListItem {
   url: string
 }
 
-/** 单篇文章详情（GET /api/posts/[slug] 返回） */
+/** 单篇文章详情（GET /api/posts/[id] 返回） */
 export interface PostDetail extends PostListItem {
   /** MDX 原文 */
   bodyRaw: string
