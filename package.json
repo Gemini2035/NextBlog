@@ -14,6 +14,7 @@
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
     "translate": "tsx scripts/translate-free.ts",
+    "migrate:posts": "tsx scripts/migrate-posts-to-db.ts",
     "prepare": "husky"
   },
   "dependencies": {
