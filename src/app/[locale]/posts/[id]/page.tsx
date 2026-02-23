@@ -10,29 +10,23 @@ interface PostPageProps {
   }>
 }
 
-export async function generateMetadata({ params }: PostPageProps) {
-  const { id } = await params
-  const post = await getPostById(id)
-  if (!post) {
-    return { title: '文章未找到' }
-  }
-  return {
-    title: post.title,
-    description: post.description ?? undefined,
-  }
-}
-
 export default async function PostPage({ params }: PostPageProps) {
-  const { id } = await params
+  const { id, locale } = await params
   const post = await getPostById(id)
 
   if (!post) {
     notFound()
   }
 
-  const MDXContent = post.bodyCode
-    ? getMDXComponent(post.bodyCode)
-    : () => <pre className="whitespace-pre-wrap">{post.bodyRaw}</pre>
+  const content = post.content as { raw?: string; code?: string } | null
+  const hasCode = content?.code && typeof content.code === 'string'
+  const MDXContent = hasCode
+    ? getMDXComponent(content!.code!)
+    : () => (
+        <pre className="whitespace-pre-wrap font-sans text-inherit">
+          {content?.raw ?? ''}
+        </pre>
+      )
 
   return (
     <>
@@ -47,7 +41,11 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <ContactButton />
 
-        <RelatedPosts post={post} limit={3} />
+        <RelatedPosts
+          postId={post.id}
+          locale={locale}
+          displayCount={3}
+        />
       </div>
     </>
   )

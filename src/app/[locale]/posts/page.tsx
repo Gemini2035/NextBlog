@@ -3,9 +3,10 @@
 import { useEffect, useState, use } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/lib/posts-adapter'
+import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/services/posts'
 import { FeaturedPostSection, RecentUpdatesSection, AllPostsSection } from '@/components/Post'
 import type { Post } from '.contentlayer/generated'
+import { IBlogPost } from '@/types'
 
 interface PostsPageProps {
   params: Promise<{
@@ -18,20 +19,22 @@ export default function PostsPage({ params }: PostsPageProps) {
   const searchParams = useSearchParams()
   const t = useTranslations('Posts')
   
-  const [posts, setPosts] = useState<Post[]>([])
-  const [featuredPosts, setFeaturedPosts] = useState<Post[]>([])
-  const [recentPosts, setRecentPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<IBlogPost[]>([])
+  const [featuredPosts, setFeaturedPosts] = useState<IBlogPost[]>([])
+  const [recentPosts, setRecentPosts] = useState<IBlogPost[]>([])
   const [initialTag, setInitialTag] = useState<string | null>(null)
   
   // 初始化数据
   useEffect(() => {
-    const allPosts = getAllPosts(locale)
-    const featured = getFeaturedPosts(locale)
-    const recent = getRecentPosts(locale)
+    const [allPosts, featuredPosts, recentPosts] = await Promise.all([
+      getAllPosts(locale),
+      getFeaturedPosts(locale),
+      getRecentPosts(locale),
+    ])
     
     setPosts(allPosts)
-    setFeaturedPosts(featured)
-    setRecentPosts(recent)
+    setFeaturedPosts(featuredPosts)
+    setRecentPosts(recentPosts)
     
     // 从URL参数中获取tag
     const tagParam = searchParams.get('tag')

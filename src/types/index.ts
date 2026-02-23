@@ -1,19 +1,15 @@
 // 全局类型定义
-
-export interface BlogPost {
+export interface IBlogPost {
   title: string
-  slug: string
-  date: string
-  description?: string
+  description: string | null
+  featured: boolean
+  id: string
   tags?: string[]
   published: boolean
-  content: string
-}
-
-export interface Tag {
-  name: string
-  count: number
-  slug: string
+  updatedAt: Date | null
+  createdAt: Date | null
+  content: { raw?: string; code?: string } | null
+  locale: "zh" | "en" | "ja"
 }
 
 export interface NavigationItem {

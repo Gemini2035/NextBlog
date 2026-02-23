@@ -1,20 +1,111 @@
-import { getApiBaseUrl } from '@/lib/api-base'
-import type { PostDetail } from '@/app/api/posts/types'
-import { http } from '../http'
+// Posts 适配器 - 为服务器组件提供 posts 功能
+import { IBlogPost } from '@/types'
+import { prisma } from '@/lib/prisma'
 
-/**
- * 服务端：根据文章 id 从 API 获取单篇详情（一个 id 唯一对应一篇 post，无需 locale）
- */
-export async function getPostById(id: string): Promise<PostDetail | null> {
-  const base = getApiBaseUrl()
-  const url = `${base}/api/posts/${encodeURIComponent(id)}`
-  try {
-    const { data } = await http.get<PostDetail>(url, {
-      validateStatus: (status) => status === 200,
-    })
-    return data
-  } catch (err) {
-    if ((err as Error & { is404?: boolean }).is404) return null
-    throw err
-  }
+export async function getAllPosts(locale?: string): Promise<IBlogPost[]> {
+  const rows = await prisma.post.findMany({
+    where: { published: true, locale },
+  })
+  return rows as IBlogPost[]
+}
+
+export async function getPostById(id: string): Promise<IBlogPost | null> {
+  const row = await prisma.post.findUnique({
+    where: { id },
+    include: { tags: true },
+  })
+  const post = {
+    ...row,
+    tags: row?.tags.map((t) => t.name),
+  } as IBlogPost | null
+  return post
+}
+
+export async function getRelatedPosts(
+  post: Pick<IBlogPost, 'locale' | 'id'>,
+  limit: number = 3
+): Promise<IBlogPost[]> {
+  const rows = await prisma.post.findMany({
+    where: { published: true, locale: post.locale, id: { not: post.id } },
+    take: limit,
+    include: { tags: true },
+  })
+  return rows.map((row) => {
+    const post = {
+      ...row,
+      tags: row?.tags.map((t) => t.name),
+    } as IBlogPost
+    return post
+  })
+}
+
+export async function getPostsByTag(tag: string, locale?: string): Promise<IBlogPost[]> {
+  const rows = await prisma.post.findMany({
+    where: {
+      published: true,
+      ...(locale ? { locale } : {}),
+      tags: { some: { name: tag } },
+    },
+    orderBy: { date: 'desc' },
+    include: { tags: true },
+  })
+  return rows.map((row) => {
+    const post = {
+      ...row,
+      tags: row?.tags.map((t) => t.name),
+    } as IBlogPost
+    return post
+  })
+}
+
+export async function getAllTags(): Promise<string[]> {
+  const result = await prisma.postTag.groupBy({
+    by: ['name'],
+    _count: {},
+  })
+  return result.map((r) => r.name).sort()
+}
+
+// 获取置顶文章（单篇，向后兼容）
+export async function getFeaturedPost(locale?: string): Promise<IBlogPost | undefined> {
+  const posts = await getFeaturedPosts(locale)
+  return posts[0]
+}
+
+// 获取所有置顶文章
+export async function getFeaturedPosts(locale?: string): Promise<IBlogPost[]> {
+  const rows = await prisma.post.findMany({
+    where: { published: true, featured: true, locale },
+    include: { tags: true },
+  })
+  return rows.map((row) => {
+    const post = {
+      ...row,
+      tags: row?.tags.map((t) => t.name),
+    } as IBlogPost
+    return post
+  })
+}
+
+// 获取最近一个月更新的文章（最多10篇）
+export async function getRecentPosts(locale?: string): Promise<IBlogPost[]> {
+  const rows = await prisma.post.findMany({
+    where: {
+      published: true,
+      locale,
+      updatedAt: {
+        gte: new Date(new Date().setDate(new Date().getDate() - 30)),
+      },
+    },
+    orderBy: { updatedAt: 'desc' },
+    take: 10,
+    include: { tags: true },
+  })
+  return rows.map((row) => {
+    const post = {
+      ...row,
+      tags: row?.tags.map((t) => t.name),
+    } as IBlogPost
+    return post
+  })
 }

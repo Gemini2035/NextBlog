@@ -1,14 +1,13 @@
 'use client'
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import type { PostListItem } from "@/app/api/posts/types";
-import type { Post } from "../../../../.contentlayer/generated";
-import { getEnhancedRelatedPosts } from "@/lib/posts";
-import { Button, Link } from "@/ui";
-import { PostTag } from "../PostTag";
+import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { Button, Link } from '@/ui'
+import { PostTag } from '../PostTag'
+import type { IBlogPost } from '@/types'
+import { formatDate, toDateISO } from '@/utils'
+import { fetchRelatedPosts } from '@/app/[locale]/posts/[id]/actions'
 
-// 循环图标组件
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
   <svg
     className={`w-4 h-4 ${isRotating ? 'animate-spin' : ''}`}
@@ -24,41 +23,50 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
       d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
     />
   </svg>
-);
+)
 
 interface RelatedPostsProps {
-  post: PostListItem;
-  limit?: number;
+  postId: string
+  locale: string
+  displayCount?: number
 }
 
-// 获取相关文章数据（支持 API 返回的 PostListItem 与 Contentlayer Post）
-const getRelatedPostsData = (post: PostListItem, limit: number = 6): Post[] => {
-  return getEnhancedRelatedPosts(post, limit);
-};
+export function RelatedPosts({
+  postId,
+  locale,
+  displayCount = 3,
+}: RelatedPostsProps) {
+  const t = useTranslations('Posts')
 
-export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
-  const t = useTranslations('Posts');
-  
-  // 获取真实的相关文章数据
-  const allRelatedPosts = getRelatedPostsData(post, limit);
-  const [currentPosts, setCurrentPosts] = useState(allRelatedPosts.slice(0, 3));
-  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [currentPosts, setCurrentPosts] = useState<IBlogPost[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
-  if (allRelatedPosts.length === 0) {
-    return null;
+  const loadPosts = async () => {
+    const data = await fetchRelatedPosts(
+      postId,
+      locale as 'zh' | 'en' | 'ja',
+      displayCount
+    )
+    setCurrentPosts(data)
   }
 
-  // 换一批功能
+  useEffect(() => {
+    loadPosts().finally(() => setIsLoading(false))
+  }, [postId, locale, displayCount])
+
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    
-    // 模拟异步操作
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const shuffled = [...allRelatedPosts].sort(() => Math.random() - 0.5);
-    setCurrentPosts(shuffled.slice(0, 3));
-    setIsRefreshing(false);
-  };
+    setIsRefreshing(true)
+    try {
+      await loadPosts()
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
+
+  if (isLoading || currentPosts.length === 0) {
+    return null
+  }
 
   return (
     <div className="mt-12 pt-8 border-t border-gray-200">
@@ -77,13 +85,13 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
           </span>
         </Button>
       </div>
-      
+
       <div className="flex justify-start overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-4 md:pb-0">
         <div className="flex gap-4 max-w-4xl">
           {currentPosts.map((relatedPost) => (
             <Link
-              key={(relatedPost as Post).slug}
-              href={`/${post.locale}/posts/${(relatedPost as Post)._id}`}
+              key={relatedPost.id}
+              href={`/${relatedPost.locale}/posts/${relatedPost.id}`}
               className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
@@ -107,17 +115,12 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
                       ))}
                     </div>
                   )}
-                  
-                  <time dateTime={relatedPost.date} className="text-sm text-gray-500">
-                    {new Date(relatedPost.date).toLocaleDateString(
-                      relatedPost.locale === 'zh' ? 'zh-CN' : 
-                      relatedPost.locale === 'ja' ? 'ja-JP' : 'en-US', 
-                      {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }
-                    )}
+
+                  <time
+                    dateTime={toDateISO(relatedPost.updatedAt ?? relatedPost.createdAt)}
+                    className="text-sm text-gray-500"
+                  >
+                    {formatDate(relatedPost.updatedAt ?? relatedPost.createdAt ?? new Date())}
                   </time>
                 </div>
               </div>
@@ -126,5 +129,5 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

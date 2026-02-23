@@ -10,11 +10,23 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// 文章-标签关联表
+model PostTag {
+  id        String   @id @default(cuid())
+  name       String
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@unique([postId, name])
+  @@index([postId])
+  @@index([name])
+  @@map("post_tags")
+}
+
 // 博客文章表，字段与 Contentlayer / 接口类型对齐；content 存 MDX body（raw + code）
+// locale 存 string，应用层通过 IBlogPost 约束为 "zh" | "en" | "ja"
 
 model Post {
   id           String    @id @default(cuid())
-  slug         String
   locale       String    @default("zh")
   title        String
   description  String?
@@ -22,13 +34,12 @@ model Post {
   updatedAt    DateTime?
   published    Boolean   @default(true)
   featured     Boolean   @default(false)
-  tags         String[]
-  originalSlug String?
+  tags         PostTag[]
   /// 与 Contentlayer body(MDX) 一致：{ raw: string, code?: string }，便于迁移与 getMDXComponent
   content      Json      @db.JsonB
   createdAt    DateTime  @default(now())
 
-  @@unique([slug, locale])
+  @@unique([id])
   @@index([locale, published])
   @@index([date(sort: Desc)])
   @@map("posts")
