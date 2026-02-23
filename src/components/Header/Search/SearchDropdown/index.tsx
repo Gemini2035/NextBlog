@@ -72,7 +72,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="flex items-center bg-transparent px-0 py-2 md:px-6 md:py-4 w-full">
-          <SearchIcon className="hidden md:block h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
+          <SearchIcon className="hidden md:block h-5 w-5 text-gray-500 mr-4 shrink-0" />
           <input
             ref={inputRef}
             type="text"

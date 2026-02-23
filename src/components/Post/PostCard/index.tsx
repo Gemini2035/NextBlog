@@ -429,7 +429,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     </div>
                   )}
                   
-                  <div className="text-sm text-gray-500 flex-shrink-0">
+                  <div className="text-sm text-gray-500 shrink-0">
                     <time dateTime={post.date}>
                       {formatDate(post.date)}
                     </time>
@@ -456,9 +456,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
             >
               <div className="flex items-center overflow-hidden w-full gap-1">
                 {/* 显示的标签 */}
-                <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center gap-1 shrink-0">
                   {tagLayout.visibleTags.map((tag: string) => (
-                    <PostTag key={tag} size="small" compact className={cn("flex-shrink-0", tagSize)}>
+                    <PostTag key={tag} size="small" compact className={cn("shrink-0", tagSize)}>
                       {tag}
                     </PostTag>
                   ))}
@@ -466,7 +466,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                 
                 {/* 隐藏标签的提示 */}
                 {tagLayout.showOverflowIndicator && (
-                  <div className="flex-shrink-0 flex items-center">
+                  <div className="shrink-0 flex items-center">
                     <Tooltip 
                       title={
                         <div className="space-y-2">

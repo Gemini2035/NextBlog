@@ -189,7 +189,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
                 )}>
                   <Link href={post.url} className="block">
                     <div className="flex items-center gap-2">
-                      <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+                      <div className="shrink-0 w-4 h-4 flex items-center justify-center">
                         <PostIcon className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0 flex items-center">

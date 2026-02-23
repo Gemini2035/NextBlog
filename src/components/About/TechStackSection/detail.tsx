@@ -37,7 +37,7 @@ const TechStackDetail: FC<TechStackDetailProps> = ({ className }) => {
               className="flex items-start p-4 bg-white rounded-xl shadow-sm border border-gray-200"
               key={id}
             >
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 shrink-0">
                 {IconComponent ? (
                   <IconComponent className="w-6 h-6 text-gray-700" />
                 ) : (

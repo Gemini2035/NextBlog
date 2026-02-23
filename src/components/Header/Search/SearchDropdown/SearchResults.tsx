@@ -54,7 +54,7 @@ export default function SearchResults({
                       {result.item.description}
                     </p>
                   )} */}
-                  <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors flex-shrink-0 ml-2" />
+                  <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors shrink-0 ml-2" />
                 </div>
               </div>
             </Link>
@@ -103,7 +103,7 @@ export default function SearchResults({
                         {item.description}
                       </p>
                     )} */}
-                    <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors flex-shrink-0 ml-2" />
+                    <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors shrink-0 ml-2" />
                   </div>
                 </div>
               </Link>

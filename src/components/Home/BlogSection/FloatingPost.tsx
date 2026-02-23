@@ -129,7 +129,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
         <Link href={post.url} className="block">
           <div className="flex items-center gap-2">
             {/* 文章图标 */}
-            <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
+            <div className="shrink-0 w-4 h-4 flex items-center justify-center">
               <PostIcon className="w-4 h-4" />
             </div>
             

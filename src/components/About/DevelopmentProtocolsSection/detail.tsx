@@ -50,7 +50,7 @@ export default function DevelopmentProtocolsDetail({
                   <div className="flex items-start gap-4 mb-4">
                     <div
                       className={cn(
-                        "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center",
+                        "shrink-0 w-12 h-12 rounded-lg flex items-center justify-center",
                         color?.bg
                       )}
                     >
@@ -95,7 +95,7 @@ export default function DevelopmentProtocolsDetail({
                         <div key={index} className="flex items-start gap-2">
                           <span
                             className={cn(
-                              "flex-shrink-0 w-1.5 h-1.5 rounded-full mt-2",
+                              "shrink-0 w-1.5 h-1.5 rounded-full mt-2",
                               color?.icon.replace("text-", "bg-")
                             )}
                           />
@@ -144,7 +144,7 @@ export default function DevelopmentProtocolsDetail({
       {/* 底部说明 */}
       <div className="mt-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
         <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+          <div className="shrink-0 w-10 h-10 bg-white rounded-lg flex items-center justify-center">
             <span className="text-xl">✨</span>
           </div>
           <div>
