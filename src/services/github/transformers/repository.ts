@@ -1,92 +1,178 @@
 /**
- * 数据转换器 - 将 GitHub REST API 响应转换为应用数据格式
+ * 数据转换器 - 将 GraphQL 响应转换为应用数据格式
  */
 
-import type {
-  RestRepoDetail,
-  RestRepoLanguages,
-} from '../types/rest'
-import type { ProcessedRepository, LanguageStat } from '../types/processed'
+import type { GraphQLRepository } from '../types/graphql'
+import type { ProcessedRepository, LanguageStat, ContributorStat } from '../types/processed'
 
-/** 常见语言颜色（REST API 不返回颜色，使用默认） */
-const LANGUAGE_COLORS: Record<string, string> = {
-  JavaScript: '#f1e05a',
-  TypeScript: '#3178c6',
-  Vue: '#41b883',
-  HTML: '#e34c26',
-  CSS: '#563d7c',
-  Python: '#3572A5',
-  Rust: '#dea584',
-  Go: '#00ADD8',
-  Java: '#b07219',
-  Kotlin: '#A97BFF',
-  Swift: '#F05138',
-  C: '#555555',
-  'C++': '#f34b7d',
-  Shell: '#89e051',
-  Ruby: '#701516',
-  PHP: '#4F5D95',
-}
-
-function getLanguageColor(name: string): string {
-  return LANGUAGE_COLORS[name] ?? '#cccccc'
+/**
+ * 生成稳定的数字ID（基于字符串的简单hash）
+ */
+function generateStableId(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return Math.abs(hash)
 }
 
 /**
- * 将 REST 仓库数据转换为 ProcessedRepository
+ * 将 GraphQL 仓库数据转换为 ProcessedRepository
  */
-export function transformRestRepoToProcessed(
-  repo: RestRepoDetail,
-  languages?: RestRepoLanguages | null,
+export function transformRepository(
+  repo: GraphQLRepository,
   isFeatured: boolean = false
 ): ProcessedRepository {
-  const totalBytes = languages
-    ? Object.values(languages).reduce((a, b) => a + b, 0)
-    : 0
-  const languageStats: LanguageStat[] = languages
-    ? Object.entries(languages).map(([name, bytes]) => ({
-        name,
-        color: getLanguageColor(name),
-        percentage: totalBytes > 0 ? (bytes / totalBytes) * 100 : 0,
-        bytes,
-      }))
-    : []
+  // 转换语言数据
+  const languages = transformLanguages(repo.languages)
+  const languageStats = calculateLanguageStats(repo.languages)
 
+  // 转换贡献者数据
+  const contributorStats = transformContributors(repo.collaborators)
+
+  // 提取 topics
+  const topics = repo.repositoryTopics.nodes.map((node) => node.topic.name)
+
+  // 生成稳定的数字ID（使用fullName的hash）
+  const stableId = generateStableId(repo.nameWithOwner)
+  
+  // 调试日志：检查原始数据
+  if (process.env.NODE_ENV === 'development') {
+    console.log(`📊 转换仓库数据: ${repo.nameWithOwner}`, {
+      stargazerCount: repo.stargazerCount,
+      forkCount: repo.forkCount,
+      watchers: repo.watchers.totalCount,
+    })
+  }
+  
   return {
-    id: repo.id,
+    // 基本信息
+    id: stableId,
     name: repo.name,
-    fullName: repo.full_name,
-    description: repo.description ?? '',
-    url: repo.html_url,
-    homepage: repo.homepage ?? null,
+    fullName: repo.nameWithOwner,
+    description: repo.description || '',
+    url: repo.url,
+    homepage: repo.homepageUrl || null,
+
+    // 所有者信息
     owner: {
       login: repo.owner.login,
-      avatarUrl: repo.owner.avatar_url,
-      url: repo.owner.html_url,
+      avatarUrl: repo.owner.avatarUrl,
+      url: repo.owner.url,
     },
-    stars: repo.parent && repo.fork ? repo.parent.stargazers_count : repo.stargazers_count,
-    forks: repo.parent && repo.fork ? repo.parent.forks_count : repo.forks_count,
-    watchers: repo.watchers_count,
-    openIssues: repo.open_issues_count,
-    openPullRequests: undefined,
-    primaryLanguage: repo.language
-      ? { name: repo.language, color: getLanguageColor(repo.language) }
-      : null,
-    languages: languages ?? undefined,
-    languageStats: languageStats.length ? languageStats : undefined,
-    topics: repo.topics ?? [],
-    isFork: repo.fork,
-    isArchived: repo.archived,
-    isTemplate: !!repo.template_repository,
-    isPrivate: repo.private,
+
+    // 状态标志
+    isPrivate: repo.isPrivate,
+    isFork: repo.isFork,
+    isArchived: repo.isArchived,
+    isTemplate: repo.isTemplate,
     isFeatured,
-    isPinned: isFeatured,
-    license: repo.license?.spdx_id ?? repo.license?.name ?? null,
-    defaultBranch: repo.default_branch,
-    createdAt: new Date(repo.created_at),
-    updatedAt: new Date(repo.updated_at),
-    pushedAt: repo.pushed_at ? new Date(repo.pushed_at) : new Date(repo.updated_at),
+    isPinned: isFeatured, // 别名：向后兼容
+
+    // 统计数据
+    // 如果是 fork 项目，显示原仓库的 star 数
+    stars: repo.isFork && repo.parent ? repo.parent.stargazerCount : repo.stargazerCount,
+    forks: repo.isFork && repo.parent ? repo.parent.forkCount : repo.forkCount,
+    watchers: repo.watchers.totalCount,
+    openIssues: repo.issues.totalCount,
+    openPullRequests: repo.pullRequests.totalCount,
+
+    // 语言信息
+    primaryLanguage: repo.primaryLanguage
+      ? {
+          name: repo.primaryLanguage.name,
+          color: repo.primaryLanguage.color || '#cccccc',
+        }
+      : null,
+    languages,
+    languageStats,
+
+    // 贡献者信息
+    contributorStats,
+
+    // 时间信息
+    createdAt: new Date(repo.createdAt),
+    updatedAt: new Date(repo.updatedAt),
+    pushedAt: repo.pushedAt ? new Date(repo.pushedAt) : new Date(repo.updatedAt),
+
+    // 许可证
+    license: repo.licenseInfo?.name || null,
+
+    // 默认分支
+    defaultBranch: repo.defaultBranchRef?.name || 'main',
+
+    // Topics
+    topics,
   }
+}
+
+/**
+ * 批量转换仓库数据
+ */
+export function transformRepositories(
+  repos: GraphQLRepository[],
+  featuredRepos: string[] = []
+): ProcessedRepository[] {
+  return repos.map((repo) => {
+    const isFeatured = featuredRepos.includes(repo.name)
+    return transformRepository(repo, isFeatured)
+  })
+}
+
+/**
+ * 将 GraphQL 语言数据转换为 Record 格式
+ */
+function transformLanguages(
+  languagesConnection: GraphQLRepository['languages']
+): Record<string, number> {
+  const languages: Record<string, number> = {}
+
+  languagesConnection.edges.forEach((edge) => {
+    languages[edge.node.name] = edge.size
+  })
+
+  return languages
+}
+
+/**
+ * 计算语言统计
+ */
+function calculateLanguageStats(
+  languagesConnection: GraphQLRepository['languages']
+): LanguageStat[] {
+  const totalSize = languagesConnection.totalSize
+
+  if (totalSize === 0) {
+    return []
+  }
+
+  return languagesConnection.edges.map((edge) => ({
+    name: edge.node.name,
+    color: edge.node.color || '#cccccc',
+    percentage: (edge.size / totalSize) * 100,
+    bytes: edge.size,
+  }))
+}
+
+/**
+ * 转换贡献者数据
+ */
+function transformContributors(
+  collaboratorsConnection: GraphQLRepository['collaborators']
+): ContributorStat[] {
+  if (!collaboratorsConnection) {
+    return []
+  }
+
+  return collaboratorsConnection.nodes.map((node) => ({
+    login: node.login,
+    name: node.name || node.login,
+    avatarUrl: node.avatarUrl,
+    profileUrl: node.url,
+    contributions: 0, // GraphQL API 不直接提供贡献次数
+  }))
 }
 
 /**
@@ -121,3 +207,4 @@ export function filterRepositories(
 
   return filtered
 }
+

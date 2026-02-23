@@ -1,138 +1,149 @@
 /**
- * GitHub REST API 操作 - 仓库相关
+ * GitHub GraphQL 操作 - 仓库相关
+ * 封装所有仓库相关的 API 调用
  */
 
-import {
-  getRestUserRepos,
-  getRestRepoDetail,
-  getRestRepoLanguages,
-  getRestRateLimit,
-  handleGitHubError,
-  delay,
-} from '../client'
-import { transformRestRepoToProcessed } from '../transformers/repository'
-import type { ProcessedRepository } from '../types/processed'
-
-export type RepositoryAffiliation = 'owner' | 'member' | 'all' | 'public'
+import { githubGraphQLClient, handleGraphQLError, delay } from '../client'
+import { GET_USER_REPOSITORIES } from '../queries/repositories.graphql'
+import { GET_REPOSITORY_DETAIL } from '../queries/repository.graphql'
+import { GET_RATE_LIMIT } from '../queries/rateLimit.graphql'
+import type {
+  UserRepositoriesResponse,
+  RepositoryDetailResponse,
+  RateLimitResponse,
+  GetUserRepositoriesVariables,
+  GetRepositoryDetailVariables,
+  GraphQLRepository,
+  RepositoryAffiliation,
+} from '../types/graphql'
 
 /**
- * 获取用户仓库列表（单页）
+ * 获取用户的仓库列表（支持分页）
  */
 export async function getUserRepositories(
   username: string,
   options: {
-    type?: RepositoryAffiliation
-    sort?: 'created' | 'updated' | 'pushed' | 'full_name'
-    direction?: 'asc' | 'desc'
-    page?: number
-    perPage?: number
+    first?: number
+    after?: string | null
+    orderBy?: 'UPDATED_AT' | 'CREATED_AT' | 'PUSHED_AT' | 'NAME' | 'STARGAZERS'
+    direction?: 'ASC' | 'DESC'
+    affiliations?: RepositoryAffiliation[]
   } = {}
-): Promise<ProcessedRepository[]> {
+): Promise<UserRepositoriesResponse> {
+  const {
+    first = 100,
+    after = null,
+    orderBy = 'UPDATED_AT',
+    direction = 'DESC',
+    affiliations = ['OWNER'],
+  } = options
+
   try {
-    const list = await getRestUserRepos(username, {
-      type: options.type ?? 'owner',
-      sort: options.sort ?? 'updated',
-      direction: options.direction ?? 'desc',
-      page: options.page ?? 1,
-      per_page: options.perPage ?? 100,
-    })
-    const results: ProcessedRepository[] = []
-    for (const item of list) {
-      try {
-        const [detail, languages] = await Promise.all([
-          getRestRepoDetail(item.owner.login, item.name),
-          getRestRepoLanguages(item.owner.login, item.name),
-        ])
-        results.push(transformRestRepoToProcessed(detail, languages, false))
-      } catch {
-        results.push(transformRestRepoToProcessed(item as import('../types/rest').RestRepoDetail, null, false))
-      }
-      await delay(100)
+    const variables: GetUserRepositoriesVariables = {
+      username,
+      first,
+      after,
+      orderBy: {
+        field: orderBy,
+        direction,
+      },
+      ownerAffiliations: affiliations,
     }
-    return results
+
+    const response = await githubGraphQLClient<UserRepositoriesResponse>(
+      GET_USER_REPOSITORIES,
+      variables
+    )
+
+    return response
   } catch (error) {
     console.error('Failed to fetch user repositories:', error)
-    throw handleGitHubError(error)
+    throw handleGraphQLError(error)
   }
 }
 
 /**
- * 获取所有用户仓库（分页，并转为 ProcessedRepository）
+ * 获取所有用户仓库（自动处理分页）
  */
 export async function getAllUserRepositories(
   username: string,
   options: {
     maxPages?: number
-    type?: RepositoryAffiliation
-    sort?: 'created' | 'updated' | 'pushed' | 'full_name'
-    direction?: 'asc' | 'desc'
-    featuredRepos?: string[]
+    orderBy?: 'UPDATED_AT' | 'CREATED_AT' | 'PUSHED_AT' | 'NAME' | 'STARGAZERS'
+    direction?: 'ASC' | 'DESC'
+    affiliations?: RepositoryAffiliation[]
   } = {}
-): Promise<ProcessedRepository[]> {
-  const { maxPages = 10, featuredRepos = [] } = options
-  const all: ProcessedRepository[] = []
-  let page = 1
+): Promise<GraphQLRepository[]> {
+  const { maxPages = 10, orderBy, direction, affiliations } = options
 
-  while (page <= maxPages) {
-    const { featuredRepos: _fr, ...restOptions } = options
-    const list = await getRestUserRepos(username, {
-      ...restOptions,
-      page,
-      per_page: 100,
+  const allRepositories: GraphQLRepository[] = []
+  let hasNextPage = true
+  let after: string | null = null
+  let currentPage = 0
+
+  while (hasNextPage && currentPage < maxPages) {
+    const response = await getUserRepositories(username, {
+      first: 100,
+      after,
+      orderBy,
+      direction,
+      affiliations,
     })
-    if (list.length === 0) break
 
-    for (const item of list) {
-      try {
-        const [detail, languages] = await Promise.all([
-          getRestRepoDetail(item.owner.login, item.name),
-          getRestRepoLanguages(item.owner.login, item.name),
-        ])
-        const isFeatured = featuredRepos.includes(item.name) || featuredRepos.includes(item.full_name)
-        all.push(transformRestRepoToProcessed(detail, languages, isFeatured))
-      } catch {
-        const isFeatured = featuredRepos.includes(item.name) || featuredRepos.includes(item.full_name)
-        all.push(transformRestRepoToProcessed(item as import('../types/rest').RestRepoDetail, null, isFeatured))
-      }
-      await delay(80)
+    const repositories = response.user.repositories
+    allRepositories.push(...repositories.nodes)
+
+    hasNextPage = repositories.pageInfo.hasNextPage
+    after = repositories.pageInfo.endCursor
+    currentPage++
+
+    // 如果没有更多页面，退出循环
+    if (!hasNextPage) {
+      break
     }
-    if (list.length < 100) break
-    page++
   }
 
-  return all
+  return allRepositories
 }
 
 /**
- * 获取单个仓库详情（返回 ProcessedRepository）
+ * 获取单个仓库的详细信息
  */
 export async function getRepositoryDetail(
   owner: string,
   name: string
-): Promise<ProcessedRepository> {
+): Promise<RepositoryDetailResponse['repository']> {
   try {
-    const [detail, languages] = await Promise.all([
-      getRestRepoDetail(owner, name),
-      getRestRepoLanguages(owner, name),
-    ])
-    return transformRestRepoToProcessed(detail, languages, false)
+    const variables: GetRepositoryDetailVariables = {
+      owner,
+      name,
+    }
+
+    const response = await githubGraphQLClient<RepositoryDetailResponse>(
+      GET_REPOSITORY_DETAIL,
+      variables
+    )
+
+    return response.repository
   } catch (error) {
     console.error(`Failed to fetch repository ${owner}/${name}:`, error)
-    throw handleGitHubError(error)
+    throw handleGraphQLError(error)
   }
 }
 
 /**
- * 批量获取仓库详情
+ * 批量获取仓库详情（带并发控制）
  */
 export async function batchGetRepositoryDetails(
   repos: Array<{ owner: string; name: string }>,
-  maxConcurrent: number = 3
-): Promise<Map<string, ProcessedRepository>> {
-  const results = new Map<string, ProcessedRepository>()
+  maxConcurrent: number = 5
+): Promise<Map<string, RepositoryDetailResponse['repository']>> {
+  const results = new Map<string, RepositoryDetailResponse['repository']>()
 
+  // 使用并发控制避免一次性发送太多请求
   for (let i = 0; i < repos.length; i += maxConcurrent) {
     const batch = repos.slice(i, i + maxConcurrent)
+
     await Promise.all(
       batch.map(async (repo) => {
         try {
@@ -143,6 +154,8 @@ export async function batchGetRepositoryDetails(
         }
       })
     )
+
+    // 短暂延迟，避免触发速率限制
     if (i + maxConcurrent < repos.length) {
       await delay(200)
     }
@@ -152,18 +165,15 @@ export async function batchGetRepositoryDetails(
 }
 
 /**
- * 获取 API 速率限制
+ * 获取 API 速率限制信息
  */
-export async function getRateLimit(): Promise<{
-  limit: number
-  remaining: number
-  resetAt: string
-  used: number
-}> {
+export async function getRateLimit(): Promise<RateLimitResponse['rateLimit']> {
   try {
-    return await getRestRateLimit()
+    const response = await githubGraphQLClient<RateLimitResponse>(GET_RATE_LIMIT)
+    return response.rateLimit
   } catch (error) {
     console.error('Failed to fetch rate limit:', error)
-    throw handleGitHubError(error)
+    throw handleGraphQLError(error)
   }
 }
+
