@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
-import { getPostById } from '@/services'
+import { getPostById, getRelatedPosts } from '@/services'
 import { getMDXComponent } from 'next-contentlayer2/hooks'
 import { PostInfoCard, RelatedPosts, ContactButton } from '@/components/Post'
+import type { IBlogPost } from '@/types'
 
 interface PostPageProps {
   params: Promise<{
@@ -11,7 +12,7 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { id, locale } = await params
+  const { id } = await params
   const post = await getPostById(id)
 
   if (!post) {
@@ -28,6 +29,11 @@ export default async function PostPage({ params }: PostPageProps) {
         </pre>
       )
 
+  const relatedPosts: IBlogPost[] = await getRelatedPosts(
+    { id: post.id, locale: post.locale },
+    6
+  )
+
   return (
     <>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -42,8 +48,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <ContactButton />
 
         <RelatedPosts
-          postId={post.id}
-          locale={locale}
+          relatedPosts={relatedPosts}
           displayCount={3}
         />
       </div>

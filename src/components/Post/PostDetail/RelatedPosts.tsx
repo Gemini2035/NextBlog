@@ -1,12 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button, Link } from '@/ui'
 import { PostTag } from '../PostTag'
 import type { IBlogPost } from '@/types'
 import { formatDate, toDateISO } from '@/utils'
-import { fetchRelatedPosts } from '@/app/[locale]/posts/[id]/actions'
 
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
   <svg
@@ -26,46 +25,26 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
 )
 
 interface RelatedPostsProps {
-  postId: string
-  locale: string
+  relatedPosts: IBlogPost[]
   displayCount?: number
 }
 
-export function RelatedPosts({
-  postId,
-  locale,
-  displayCount = 3,
-}: RelatedPostsProps) {
+export function RelatedPosts({ relatedPosts, displayCount = 3 }: RelatedPostsProps) {
   const t = useTranslations('Posts')
 
-  const [currentPosts, setCurrentPosts] = useState<IBlogPost[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [currentPosts, setCurrentPosts] = useState<IBlogPost[]>(relatedPosts.slice(0, displayCount))
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  const loadPosts = async () => {
-    const data = await fetchRelatedPosts(
-      postId,
-      locale as 'zh' | 'en' | 'ja',
-      displayCount
-    )
-    setCurrentPosts(data)
+  if (relatedPosts.length === 0) {
+    return null
   }
-
-  useEffect(() => {
-    loadPosts().finally(() => setIsLoading(false))
-  }, [postId, locale, displayCount])
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    try {
-      await loadPosts()
-    } finally {
-      setIsRefreshing(false)
-    }
-  }
-
-  if (isLoading || currentPosts.length === 0) {
-    return null
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    const shuffled = [...relatedPosts].sort(() => Math.random() - 0.5)
+    setCurrentPosts(shuffled.slice(0, displayCount))
+    setIsRefreshing(false)
   }
 
   return (
