@@ -7,7 +7,7 @@
 
 import useSWR from 'swr'
 import { getGitHubRepositoriesWithRetry, type GetReposParams } from '@/actions/github'
-import type { ProcessedRepository, ProjectStats } from '@/services/github'
+import type { ProcessedRepository, ProjectStats } from '@/server/github'
 
 /**
  * Hook 返回类型

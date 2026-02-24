@@ -32,7 +32,7 @@ import {
   ArchiveIcon,
   StarFilledIcon
 } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/services/github'
+import type { ProcessedRepository, ProjectCategory } from '@/server/github'
 
 interface DetailProjectCardProps {
   project: ProcessedRepository

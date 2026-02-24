@@ -1,8 +1,16 @@
 import { notFound } from 'next/navigation'
-import { getPostById, getRelatedPosts } from '@/services'
 import { getMDXComponent } from 'next-contentlayer2/hooks'
 import { PostInfoCard, RelatedPosts, ContactButton } from '@/components/Post'
 import type { IBlogPost } from '@/types'
+import { graphqlRequest } from '@/graphql/client'
+import {
+  POST_DETAIL_QUERY,
+  RELATED_POSTS_QUERY,
+  mapGqlPostToBlogPost,
+  mapGqlRelatedPostToBlogPost,
+  type PostDetailResult,
+  type RelatedPostsResult,
+} from '@/graphql/operations'
 
 interface PostPageProps {
   params: Promise<{
@@ -12,27 +20,35 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { id } = await params
-  const post = await getPostById(id)
+  const { id, locale } = await params
+
+  const [detailResult, relatedResult] = await Promise.all([
+    graphqlRequest<PostDetailResult>(POST_DETAIL_QUERY, { id }),
+    graphqlRequest<RelatedPostsResult>(RELATED_POSTS_QUERY, {
+      id,
+      locale,
+      limit: 6,
+    }),
+  ])
+
+  const post = detailResult.post ? mapGqlPostToBlogPost(detailResult.post) : null
 
   if (!post) {
     notFound()
   }
 
-  const content = post.content as { raw?: string; code?: string } | null
-  const hasCode = content?.code && typeof content.code === 'string'
+  const content = post.content
+  const code = content?.code
+  const hasCode = typeof code === 'string'
   const MDXContent = hasCode
-    ? getMDXComponent(content!.code!)
+    ? getMDXComponent(code)
     : () => (
         <pre className="whitespace-pre-wrap font-sans text-inherit">
           {content?.raw ?? ''}
         </pre>
       )
 
-  const relatedPosts: IBlogPost[] = await getRelatedPosts(
-    { id: post.id, locale: post.locale },
-    6
-  )
+  const relatedPosts: IBlogPost[] = relatedResult.relatedPosts.map(mapGqlRelatedPostToBlogPost)
 
   return (
     <>

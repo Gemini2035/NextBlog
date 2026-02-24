@@ -11,9 +11,9 @@ import {
   getRateLimit,
   filterRepositoriesByOptions,
   generateProjectStats,
-} from '@/services/github'
+} from '@/server/github'
 import { cache } from 'react'
-import type { ProcessedRepository, ProjectStats } from '@/services/github'
+import type { ProcessedRepository, ProjectStats } from '@/server/github'
 
 /**
  * 仓库列表响应

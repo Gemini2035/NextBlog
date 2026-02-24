@@ -3,7 +3,7 @@
 import { useEffect, useState, use } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/services/posts'
+import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/server/posts'
 import { FeaturedPostSection, RecentUpdatesSection, AllPostsSection } from '@/components/Post'
 import type { Post } from '.contentlayer/generated'
 import { IBlogPost } from '@/types'

@@ -1,25 +1,32 @@
-# Services 服务层
+# Server 服务层
 
 ## 📋 概述
 
-`services` 文件夹用于存放所有的业务服务逻辑，提供统一的数据访问接口。
+`server` 文件夹统一存放服务端业务逻辑：对外请求（如 GitHub GraphQL）、以及 BFF 的 GraphQL 能力（博客 Post 等），通过 `index.ts` 统一导出。
 
 ---
 
 ## 📁 目录结构
 
 ```
-services/
-├── github/               # GitHub 相关服务
-│   ├── api.ts           # GitHub API 调用
-│   ├── processor.ts     # 数据处理逻辑
-│   ├── types.ts         # 类型定义重新导出
-│   └── index.ts         # 统一导出
+server/
+├── github/                  # GitHub GraphQL 服务
+│   ├── client.ts            # GitHub GraphQL 客户端
+│   ├── queries/             # GraphQL 查询定义
+│   ├── operations/          # 封装好的操作（仓库列表、详情、RateLimit）
+│   ├── transformers/        # 数据转换（仓库、统计）
+│   ├── types/               # GraphQL 与业务类型
+│   └── index.ts             # 统一导出
 │
-├── (其他服务)/
-│   └── ...
+├── graphql/                  # BFF GraphQL（博客等）
+│   ├── schema.ts            # 类型定义（Post、Query）
+│   ├── resolvers/           # 解析器
+│   │   ├── posts.ts         # post、relatedPosts
+│   │   └── index.ts
+│   └── index.ts             # 导出 schema 供 /api/graphql 使用
 │
-└── README.md            # 本文件
+├── index.ts                  # 统一导出：export * from github; export { schema } from graphql
+└── README.md
 ```
 
 ---

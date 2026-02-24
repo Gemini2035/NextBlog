@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/services/github'
+import type { ProcessedRepository, ProjectCategory } from '@/server/github'
 
 interface BriefProjectCardProps {
   project: ProcessedRepository

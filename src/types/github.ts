@@ -11,7 +11,7 @@ export type {
   ProjectFilters,
   ProjectSortOption,
   ProjectStats,
-} from '@/services/github'
+} from '@/server/github'
 
 // 保留一些旧的类型用于向后兼容
 export interface GitHubRepository {
