@@ -12,6 +12,16 @@ export interface IBlogPost {
   locale: "zh" | "en" | "ja"
 }
 
+/** 列表/卡片用文章项：兼容 contentlayer Post（含 url、_id）与 GraphQL IBlogPost（用 id+locale 拼链接） */
+export type IPostCardItem = Pick<
+  IBlogPost,
+  'id' | 'locale' | 'title' | 'description' | 'featured' | 'tags' | 'published' | 'updatedAt' | 'createdAt'
+> & {
+  date?: Date | string
+  url?: string
+  _id?: string
+}
+
 export interface NavigationItem {
   label: string
   href: string

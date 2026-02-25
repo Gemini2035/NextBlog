@@ -2,60 +2,104 @@
 
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
-import { useTranslations } from 'next-intl'
-import { usePosts } from '@/hooks/usePosts'
+import { useTranslations, useLocale } from 'next-intl'
 import { NAVIGATION_ITEMS } from '@/constants'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils'
 import { FloatingPost } from './FloatingPost'
 import { StarFilledIcon, ClockIcon, FileTextIcon, TagIcon, ArrowRightIcon } from '@/assets/icons'
 import { PostIcon } from '@/assets/icons/PostIcon'
-import type { Post } from '.contentlayer/generated'
+import {
+  FEATURED_POSTS_QUERY,
+  RECENT_POSTS_QUERY,
+  POST_LIST_QUERY,
+  mapGqlListPostToBlogPost,
+  type FeaturedPostsResult,
+  type RecentPostsResult,
+  type PostListResult,
+} from '@/graphql/operations'
+import type { IBlogPost } from '@/types'
 
 interface BlogSectionProps {
   index: number
   href: string
 }
 
+async function fetchGraphQL<T>(query: string, variables: Record<string, unknown>): Promise<T> {
+  const res = await fetch('/api/graphql', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ query, variables }),
+  })
+  if (!res.ok) throw new Error(`GraphQL 请求失败: ${res.status}`)
+  const json = (await res.json()) as { data?: T; errors?: { message: string }[] }
+  if (json.errors?.length) throw new Error(json.errors.map((e) => e.message).join('; '))
+  if (!json.data) throw new Error('GraphQL 响应缺少 data')
+  return json.data
+}
+
 export default function BlogSection({ index, href }: BlogSectionProps) {
   const t = useTranslations('HomePage')
   const navT = useTranslations('Navigation')
-  const { getRecentPosts, getAllPosts, getAllTags } = usePosts()
-  
-  // 获取blog section的导航配置
-  const blogNav = NAVIGATION_ITEMS.find(item => item.type === '__blog')
-  const blogDescription = blogNav?.submenu?.description || 'Explore my latest technical insights and development experience'
-  const [floatingPosts, setFloatingPosts] = useState<Post[]>([])
+  const locale = useLocale()
+  const blogNav = NAVIGATION_ITEMS.find((item) => item.type === '__blog')
+  const blogDescription =
+    blogNav?.submenu?.description ||
+    'Explore my latest technical insights and development experience'
+  const [floatingPosts, setFloatingPosts] = useState<IBlogPost[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [popularTags, setPopularTags] = useState<string[]>([])
 
   useEffect(() => {
-    const recentPosts = getRecentPosts()
-    const allPosts = getAllPosts()
-    const allTags = getAllTags()
-    
-    // 优先显示最近更新的文章，如果不足6篇则补充最新的文章
-    let postsToShow = recentPosts.slice(0, 6)
-    
-    if (postsToShow.length < 6) {
-      const remainingCount = 6 - postsToShow.length
-      const usedSlugs = new Set(postsToShow.map(post => post.slug))
-      const additionalPosts = allPosts
-        .filter(post => !usedSlugs.has(post.slug))
-        .slice(0, remainingCount)
-      postsToShow = [...postsToShow, ...additionalPosts]
+    let cancelled = false
+    async function load() {
+      try {
+        const [featuredRes, recentRes, listRes] = await Promise.all([
+          fetchGraphQL<FeaturedPostsResult>(FEATURED_POSTS_QUERY, { locale }),
+          fetchGraphQL<RecentPostsResult>(RECENT_POSTS_QUERY, { locale, limit: 10 }),
+          fetchGraphQL<PostListResult>(POST_LIST_QUERY, {
+            locale,
+            page: 1,
+            pageSize: 15,
+          }),
+        ])
+        if (cancelled) return
+        const featured = featuredRes.featuredPosts.map(mapGqlListPostToBlogPost)
+        const recent = recentRes.recentPosts.map(mapGqlListPostToBlogPost)
+        const list = listRes.postsList.list.map(mapGqlListPostToBlogPost)
+        const seen = new Set<string>()
+        const merged: IBlogPost[] = []
+        for (const p of [...featured, ...recent]) {
+          if (seen.has(p.id)) continue
+          seen.add(p.id)
+          merged.push(p)
+        }
+        if (merged.length < 6) {
+          for (const p of list) {
+            if (merged.length >= 6) break
+            if (seen.has(p.id)) continue
+            seen.add(p.id)
+            merged.push(p)
+          }
+        }
+        const postsToShow = merged.slice(0, 6)
+        setFloatingPosts(postsToShow)
+        const tags = Array.from(
+          new Set(postsToShow.flatMap((p) => p.tags ?? []))
+        ).slice(0, 5)
+        setPopularTags(tags)
+      } catch {
+        if (!cancelled) {
+          setFloatingPosts([])
+          setPopularTags([])
+        }
+      }
     }
-    
-    // 确保总是显示6篇文章（如果总文章数足够的话）
-    if (postsToShow.length < 6 && allPosts.length >= 6) {
-      postsToShow = allPosts.slice(0, 6)
+    load()
+    return () => {
+      cancelled = true
     }
-    
-    setFloatingPosts(postsToShow)
-    
-    // 获取热门标签（最多显示5个）
-    setPopularTags(allTags.slice(0, 5))
-  }, [getRecentPosts, getAllPosts, getAllTags])
+  }, [locale])
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -67,7 +111,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           <div className="relative w-full h-full">
             {floatingPosts.map((post, idx) => (
               <FloatingPost
-                key={post.slug}
+                key={post.id}
                 post={post}
                 index={idx}
                 total={floatingPosts.length}
@@ -183,11 +227,11 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
               'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2'
             )}>
               {floatingPosts.slice(0, 6).map((post) => (
-                <div key={post.slug} className={cn(
+                <div key={post.id} className={cn(
                   'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-lg',
                   'border border-blue-200/60 p-2.5'
                 )}>
-                  <Link href={post.url} className="block">
+                  <Link href={`/posts/${post.id}`} className="block">
                     <div className="flex items-center gap-2">
                       <div className="shrink-0 w-4 h-4 flex items-center justify-center">
                         <PostIcon className="w-4 h-4" />
