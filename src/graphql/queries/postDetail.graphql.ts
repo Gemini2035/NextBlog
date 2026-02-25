@@ -2,6 +2,8 @@
  * BFF GraphQL 查询 - 文章详情
  */
 
+import type { IBlogPost } from '@/types'
+
 export const POST_DETAIL_QUERY = /* GraphQL */ `
   query PostDetail($id: ID!) {
     post(id: $id) {
@@ -9,7 +11,6 @@ export const POST_DETAIL_QUERY = /* GraphQL */ `
       locale
       title
       description
-      date
       updatedAt
       published
       featured
@@ -20,18 +21,12 @@ export const POST_DETAIL_QUERY = /* GraphQL */ `
   }
 `
 
+type PostDetailGqlPost = Omit<IBlogPost, 'updatedAt' | 'createdAt' | 'content'> & {
+  updatedAt: string | null
+  createdAt: string | null
+  content: string | null
+}
+
 export interface PostDetailResult {
-  post: {
-    id: string
-    locale: string
-    title: string
-    description: string | null
-    date: string
-    updatedAt: string | null
-    published: boolean
-    featured: boolean
-    tags: string[]
-    content: string | null
-    createdAt: string
-  } | null
+  post: PostDetailGqlPost | null
 }

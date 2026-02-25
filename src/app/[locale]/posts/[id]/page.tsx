@@ -31,7 +31,7 @@ export default async function PostPage({ params }: PostPageProps) {
     }),
   ])
 
-  const post = detailResult.post ? mapGqlPostToBlogPost(detailResult.post) : null
+  const post: IBlogPost | null = detailResult.post ? mapGqlPostToBlogPost(detailResult.post) : null
 
   if (!post) {
     notFound()
