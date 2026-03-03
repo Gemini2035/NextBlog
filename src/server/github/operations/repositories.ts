@@ -3,10 +3,11 @@
  * 封装所有仓库相关的 API 调用
  */
 
-import { githubGraphQLClient, handleGraphQLError, delay } from '../client'
+import { createGraphQLClient, handleGraphQLError, delay } from '../client'
 import { GET_USER_REPOSITORIES } from '../queries/repositories.graphql'
 import { GET_REPOSITORY_DETAIL } from '../queries/repository.graphql'
 import { GET_RATE_LIMIT } from '../queries/rateLimit.graphql'
+import { getGithubThirdPartyConfig } from '../config'
 import type {
   UserRepositoriesResponse,
   RepositoryDetailResponse,
@@ -21,7 +22,6 @@ import type {
  * 获取用户的仓库列表（支持分页）
  */
 export async function getUserRepositories(
-  username: string,
   options: {
     first?: number
     after?: string | null
@@ -39,8 +39,11 @@ export async function getUserRepositories(
   } = options
 
   try {
+    const thirdPartyConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+
     const variables: GetUserRepositoriesVariables = {
-      username,
+      username: thirdPartyConfig.username,
       first,
       after,
       orderBy: {
@@ -50,7 +53,7 @@ export async function getUserRepositories(
       ownerAffiliations: affiliations,
     }
 
-    const response = await githubGraphQLClient<UserRepositoriesResponse>(
+    const response = await githubClient<UserRepositoriesResponse>(
       GET_USER_REPOSITORIES,
       variables
     )
@@ -66,7 +69,6 @@ export async function getUserRepositories(
  * 获取所有用户仓库（自动处理分页）
  */
 export async function getAllUserRepositories(
-  username: string,
   options: {
     maxPages?: number
     orderBy?: 'UPDATED_AT' | 'CREATED_AT' | 'PUSHED_AT' | 'NAME' | 'STARGAZERS'
@@ -82,7 +84,7 @@ export async function getAllUserRepositories(
   let currentPage = 0
 
   while (hasNextPage && currentPage < maxPages) {
-    const response = await getUserRepositories(username, {
+    const response = await getUserRepositories({
       first: 100,
       after,
       orderBy,
@@ -114,12 +116,15 @@ export async function getRepositoryDetail(
   name: string
 ): Promise<RepositoryDetailResponse['repository']> {
   try {
+    const thirdPartyConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+
     const variables: GetRepositoryDetailVariables = {
       owner,
       name,
     }
 
-    const response = await githubGraphQLClient<RepositoryDetailResponse>(
+    const response = await githubClient<RepositoryDetailResponse>(
       GET_REPOSITORY_DETAIL,
       variables
     )
@@ -169,7 +174,9 @@ export async function batchGetRepositoryDetails(
  */
 export async function getRateLimit(): Promise<RateLimitResponse['rateLimit']> {
   try {
-    const response = await githubGraphQLClient<RateLimitResponse>(GET_RATE_LIMIT)
+    const thirdPartyConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+    const response = await githubClient<RateLimitResponse>(GET_RATE_LIMIT)
     return response.rateLimit
   } catch (error) {
     console.error('Failed to fetch rate limit:', error)
