@@ -75,7 +75,7 @@ export default function Header() {
     // 如果有submenu打开，检查滚动条件
     if (activeSubmenu) {
       // 如果是向下滚动且超过配置的阈值，立即关闭submenu
-      if (scrollDirection === 'down' && scrollDelta > HEADER_CONFIG.downwardScrollThreshold) {
+      if (scrollDirection === 'down' && scrollDelta > 5) {
         setActiveSubmenu(null)
       }
     }

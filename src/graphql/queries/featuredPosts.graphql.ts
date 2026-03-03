@@ -3,8 +3,8 @@
  */
 
 export const FEATURED_POSTS_QUERY = /* GraphQL */ `
-  query FeaturedPosts($locale: String!) {
-    featuredPosts(locale: $locale) {
+  query FeaturedPosts {
+    featuredPosts {
       id
       locale
       title

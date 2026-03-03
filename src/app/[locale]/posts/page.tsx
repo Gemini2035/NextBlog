@@ -18,13 +18,16 @@ export default async function PostsPage({ params }: PostsPageProps) {
   const { locale } = await params
 
   const [listResult, featuredResult, recentResult] = await Promise.all([
-    graphqlRequest<PostListResult>(POST_LIST_QUERY, {
-      locale,
-      page: 1,
-      pageSize: 500,
-    }),
-    graphqlRequest<FeaturedPostsResult>(FEATURED_POSTS_QUERY, { locale }),
-    graphqlRequest<RecentPostsResult>(RECENT_POSTS_QUERY, { locale, limit: 10 }),
+    graphqlRequest<PostListResult>(
+      POST_LIST_QUERY,
+      {
+        page: 1,
+        pageSize: 500,
+      },
+      { locale }
+    ),
+    graphqlRequest<FeaturedPostsResult>(FEATURED_POSTS_QUERY, undefined, { locale }),
+    graphqlRequest<RecentPostsResult>(RECENT_POSTS_QUERY, { limit: 10 }, { locale }),
   ])
 
   const posts = listResult.postsList.list.map(mapGqlListPostToBlogPost)

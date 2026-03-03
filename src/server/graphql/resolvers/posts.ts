@@ -1,23 +1,24 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/server/prisma'
 
-function mapRowToPost(row: {
-  id: string
+type GraphQLContext = {
   locale: string
-  title: string
-  description: string | null
-  date: Date
-  updatedAt: Date | null
-  published: boolean
-  featured: boolean
-  tags: { name: string }[]
-  content: unknown
-  createdAt: Date
-}) {
+}
+
+function mapRowToPost(
+  row: Prisma.PostGetPayload<{
+    include: { tags: true }
+  }>
+) {
   return {
-    ...row,
+    id: row.id,
+    locale: row.localeCode,
+    title: row.title,
+    description: row.description ?? null,
     date: row.date.toISOString(),
     updatedAt: row.updatedAt?.toISOString() ?? null,
+    published: row.published,
+    featured: row.featured,
     createdAt: row.createdAt.toISOString(),
     tags: row.tags.map((t) => t.name),
     content: row.content ? JSON.stringify(row.content) : null,
@@ -39,13 +40,13 @@ async function fullTextSearchIds(
     WITH matches AS (
       SELECT p.id, ts_rank(p.search_vector, plainto_tsquery('simple', ${keyword})) AS rank
       FROM posts p
-      WHERE p.published = true AND p.locale = ${locale}
+      WHERE p.published = true AND p."localeCode" = ${locale}
         AND p.search_vector @@ plainto_tsquery('simple', ${keyword})
       UNION
       SELECT p.id, ts_rank(to_tsvector('simple', pt.name), plainto_tsquery('simple', ${keyword})) AS rank
       FROM posts p
       JOIN post_tags pt ON pt."postId" = p.id
-      WHERE p.published = true AND p.locale = ${locale}
+      WHERE p.published = true AND p."localeCode" = ${locale}
         AND to_tsvector('simple', pt.name) @@ plainto_tsquery('simple', ${keyword})
     ),
     ranked AS (
@@ -78,32 +79,52 @@ export const postResolvers = {
   },
   async relatedPosts(
     _: unknown,
-    { id, locale, limit }: { id: string; locale: string; limit: number }
+    { id, limit }: { id: string; limit: number },
+    context: GraphQLContext
   ) {
     const rows = await prisma.post.findMany({
-      where: { published: true, locale, id: { not: id } },
+      where: {
+        published: true,
+        locale: {
+          code: context.locale,
+        },
+        id: { not: id },
+      },
       take: limit,
       include: { tags: true },
     })
     return rows.map(mapRowToPost)
   },
-  async featuredPosts(_: unknown, { locale }: { locale: string }) {
+  async featuredPosts(
+    _: unknown,
+    _args: Record<string, never>,
+    context: GraphQLContext
+  ) {
     const rows = await prisma.post.findMany({
-      where: { published: true, featured: true, locale },
+      where: {
+        published: true,
+        featured: true,
+        locale: {
+          code: context.locale,
+        },
+      },
       include: { tags: true },
     })
     return rows.map(mapRowToPost)
   },
   async recentPosts(
     _: unknown,
-    { locale, limit = 10 }: { locale: string; limit?: number }
+    { limit = 10 }: { limit?: number },
+    context: GraphQLContext
   ) {
     const since = new Date()
     since.setDate(since.getDate() - 30)
     const rows = await prisma.post.findMany({
       where: {
         published: true,
-        locale,
+        locale: {
+          code: context.locale,
+        },
         updatedAt: { gte: since },
       },
       orderBy: { updatedAt: 'desc' },
@@ -115,16 +136,15 @@ export const postResolvers = {
   async postsList(
     _: unknown,
     args: {
-      locale: string
       page?: number
       pageSize?: number
       keyword?: string | null
       sortBy?: string | null
       sortOrder?: string | null
-    }
+    },
+    context: GraphQLContext
   ) {
     const {
-      locale,
       page = 1,
       pageSize = 10,
       keyword,
@@ -137,7 +157,7 @@ export const postResolvers = {
 
     if (keywordTrimmed) {
       const { ids, total } = await fullTextSearchIds(
-        locale,
+        context.locale,
         keywordTrimmed,
         sortBy ?? 'date',
         sortOrder ?? 'desc',
@@ -184,7 +204,9 @@ export const postResolvers = {
 
     const where: Prisma.PostWhereInput = {
       published: true,
-      locale,
+      locale: {
+        code: context.locale,
+      },
     }
     const orderBy =
       sortBy === 'updatedAt'

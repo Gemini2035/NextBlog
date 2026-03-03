@@ -3,8 +3,8 @@
  */
 
 export const RECENT_POSTS_QUERY = /* GraphQL */ `
-  query RecentPosts($locale: String!, $limit: Int) {
-    recentPosts(locale: $locale, limit: $limit) {
+  query RecentPosts($limit: Int) {
+    recentPosts(limit: $limit) {
       id
       locale
       title

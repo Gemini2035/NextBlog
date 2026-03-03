@@ -26,9 +26,8 @@ export default async function PostPage({ params }: PostPageProps) {
     graphqlRequest<PostDetailResult>(POST_DETAIL_QUERY, { id }),
     graphqlRequest<RelatedPostsResult>(RELATED_POSTS_QUERY, {
       id,
-      locale,
       limit: 6,
-    }),
+    }, { locale }),
   ])
 
   const post: IBlogPost | null = detailResult.post ? mapGqlPostToBlogPost(detailResult.post) : null

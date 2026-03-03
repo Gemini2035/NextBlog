@@ -33,11 +33,10 @@ export const typeDefs = /* GraphQL */ `
 
   type Query {
     post(id: ID!): Post
-    relatedPosts(id: ID!, locale: String!, limit: Int!): [Post!]!
-    featuredPosts(locale: String!): [Post!]!
-    recentPosts(locale: String!, limit: Int): [Post!]!
+    relatedPosts(id: ID!, limit: Int!): [Post!]!
+    featuredPosts: [Post!]!
+    recentPosts(limit: Int): [Post!]!
     postsList(
-      locale: String!
       page: Int
       pageSize: Int
       keyword: String

@@ -4,7 +4,6 @@
 
 export const POST_LIST_QUERY = /* GraphQL */ `
   query PostList(
-    $locale: String!
     $page: Int
     $pageSize: Int
     $keyword: String
@@ -12,7 +11,6 @@ export const POST_LIST_QUERY = /* GraphQL */ `
     $sortOrder: String
   ) {
     postsList(
-      locale: $locale
       page: $page
       pageSize: $pageSize
       keyword: $keyword

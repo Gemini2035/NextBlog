@@ -1,24 +1,42 @@
 import 'server-only'
+import { getLocale } from 'next-intl/server'
 
-const GRAPHQL_ENDPOINT =
-  process.env.BACKEND_GRAPHQL_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/api/graphql`
-    : 'http://localhost:3000/api/graphql')
+
+const BACKEND_GRAPHQL_URL = process.env.BACKEND_GRAPHQL_URL
+const GRAPHQL_ENDPOINT = BACKEND_GRAPHQL_URL ? `${BACKEND_GRAPHQL_URL}/api/graphql` : 'http://localhost:3000/api/graphql'
 
 interface GraphQLResponse<T> {
   data?: T
   errors?: { message: string }[]
 }
 
-export async function graphqlRequest<TData, TVariables extends Record<string, unknown> = Record<string, unknown>>(
+interface GraphqlRequestOptions {
+  locale?: string
+}
+
+export async function graphqlRequest<
+  TData,
+  TVariables extends Record<string, unknown> = Record<string, unknown>,
+>(
   query: string,
-  variables?: TVariables
+  variables?: TVariables,
+  options?: GraphqlRequestOptions,
 ): Promise<TData> {
+  let headerLocale = options?.locale
+
+  if (!headerLocale) {
+    try {
+      headerLocale = await getLocale()
+    } catch {
+      headerLocale = 'zh'
+    }
+  }
+
   const response = await fetch(GRAPHQL_ENDPOINT, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
+      'x-locale': headerLocale ?? 'zh',
     },
     body: JSON.stringify({
       query,

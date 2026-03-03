@@ -5,8 +5,8 @@
 import type { IBlogPost } from '@/types'
 
 export const RELATED_POSTS_QUERY = /* GraphQL */ `
-  query RelatedPosts($id: ID!, $locale: String!, $limit: Int!) {
-    relatedPosts(id: $id, locale: $locale, limit: $limit) {
+  query RelatedPosts($id: ID!, $limit: Int!) {
+    relatedPosts(id: $id, limit: $limit) {
       id
       locale
       title

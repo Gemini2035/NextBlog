@@ -1,16 +1,21 @@
-import { config } from "dotenv";
-config({ path: ".env.local" });
-config({ path: ".env" });
+import { config } from 'dotenv'
+import { defineConfig, env } from 'prisma/config'
+
+config({ path: '.env.local' })
+config({ path: '.env' })
+
 if (!process.env.DATABASE_URL) {
   process.env.DATABASE_URL =
-    process.env.Preview_DATABASE_URL ?? process.env.Production_DATABASE_URL ?? "";
+    process.env.Preview_DATABASE_URL ?? process.env.Production_DATABASE_URL ?? ''
 }
-import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
-  migrations: { path: "prisma/migrations" },
-  datasource: {
-    url: env("DATABASE_URL"),
+  schema: 'prisma/schema.prisma',
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'tsx prisma/seed.ts',
   },
-});
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+})
