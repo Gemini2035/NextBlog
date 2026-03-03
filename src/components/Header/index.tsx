@@ -2,6 +2,7 @@
 
 import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { usePathname } from 'next/navigation'
 import { SITE_CONFIG, HEADER_CONFIG, NavigationItem } from '@/constants'
 import { useNavigation } from '@/hooks'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
@@ -58,6 +59,7 @@ export default function Header() {
   const navItemsRef = useRef<HTMLElement>(null)
   const lastScrollYRef = useRef<number>(0)
   const t = useTranslations('Navigation')
+  const pathname = usePathname()
   
   // 获取带有动态子菜单的导航项
   const { navigationItems } = useNavigation()
@@ -182,6 +184,13 @@ export default function Header() {
       document.removeEventListener('mousemove', handleMouseMove)
     }
   }, [handleMouseMove])
+
+  // 路由变更时关闭所有导航相关 UI（移动端抽屉、桌面端下拉等）
+  useEffect(() => {
+    setActiveSubmenu(null)
+    setIsExiting(false)
+    setMobileDrawerOpen(false)
+  }, [pathname])
 
   // 切换到新的导航项（不带动画）
   const switchToNavigationItem = useCallback((newNavigationItem: NavigationItem) => {
