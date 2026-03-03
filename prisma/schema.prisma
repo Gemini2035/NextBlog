@@ -22,8 +22,6 @@ model PostTag {
   /// 多对多：一个标签可对应多篇文章
   posts      Post[]
 
-  bgColor    String?
-  textColor  String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
