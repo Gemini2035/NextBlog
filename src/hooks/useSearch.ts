@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useMemo, useCallback } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useLocale, useTranslations } from 'next-intl'
 import { NAVIGATION_ITEMS } from '@/constants'
@@ -20,6 +20,7 @@ interface UseSearchReturn {
   setQuery: (query: string) => void
   debouncedQuery: string
   isSearching: boolean
+  suspensePromise: Promise<void> | null
   
   // 搜索结果
   searchResults: SearchResultsGroup[]
@@ -73,6 +74,8 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const [debouncedQuery] = useDebounce(query, debounceMs)
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResultsGroup[]>([])
+  const [suspensePromise, setSuspensePromise] = useState<Promise<void> | null>(null)
+  const suspenseResolveRef = useRef<(() => void) | null>(null)
   
   // 基础数据
   const locale = useLocale()
@@ -231,10 +234,15 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       if (!debouncedQuery.trim()) {
         setSearchResults([])
         setIsSearching(false)
+        setSuspensePromise(null)
         return
       }
 
       setIsSearching(true)
+      const promise = new Promise<void>((resolve) => {
+        suspenseResolveRef.current = resolve
+      })
+      setSuspensePromise(promise)
       handleSetLoading({
         id: 'header-search',
         loadingSelector: ['#header-submenu-container'],
@@ -272,6 +280,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         setSearchResults([])
       } finally {
         setIsSearching(false)
+        suspenseResolveRef.current?.()
+        suspenseResolveRef.current = null
+        setSuspensePromise(null)
         handleSetLoading({
           id: 'header-search',
           loadingSelector: ['#header-submenu-container'],
@@ -322,6 +333,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     currentContent,
     
     // 清空搜索
-    clearSearch
+    clearSearch,
+    suspensePromise,
   }
 }

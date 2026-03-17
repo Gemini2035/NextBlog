@@ -81,7 +81,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       </div>
 
       {/* 项目描述 */}
-      <p className="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">
+      <p className="text-sm text-gray-600 line-clamp-2 min-h-10">
         {project.description || t('project.noDescription')}
       </p>
 

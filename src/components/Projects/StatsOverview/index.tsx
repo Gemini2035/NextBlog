@@ -47,7 +47,7 @@ export function StatsOverview({ stats, className }: StatsOverviewProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 我创建的 */}
         {stats.ownedStats && (
-          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-linear-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ProjectIcon className="w-5 h-5" />
               {t('myProjects')}
@@ -79,7 +79,7 @@ export function StatsOverview({ stats, className }: StatsOverviewProps) {
 
         {/* 我参与的 */}
         {stats.contributedStats && (
-          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-linear-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <ProjectIcon className="w-5 h-5" />
               {t('contributedProjects')}

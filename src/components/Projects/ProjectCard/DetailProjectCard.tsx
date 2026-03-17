@@ -87,12 +87,12 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           <ProjectIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 shrink-0 mt-1 sm:mt-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-start sm:items-center gap-2 flex-wrap mb-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-6 break-words">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-6 wrap-break-word">
                 {project.name}
               </h2>
               {/* 置顶标签 */}
               {project.isPinned && (
-                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium bg-gradient-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
+                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium bg-linear-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
                   <StarFilledIcon className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500" />
                   {t('project.pinned')}
                 </span>
@@ -144,7 +144,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
 
       {/* 项目统计 - 移动端2列，桌面端4列 */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-yellow-50 to-white rounded-lg border border-yellow-100">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-yellow-50 to-white rounded-lg border border-yellow-100">
           <StarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.stars')}</div>
@@ -152,7 +152,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-blue-50 to-white rounded-lg border border-blue-100">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-blue-50 to-white rounded-lg border border-blue-100">
           <ForkIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.forks')}</div>
@@ -160,7 +160,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-green-50 to-white rounded-lg border border-green-100">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-green-50 to-white rounded-lg border border-green-100">
           <WatchersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.watchers')}</div>
@@ -168,7 +168,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-red-50 to-white rounded-lg border border-red-100">
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-red-50 to-white rounded-lg border border-red-100">
           <IssuesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.openIssues')}</div>
@@ -178,7 +178,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       </div>
 
       {/* 活跃度和权重信息 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-linear-to-br from-purple-50 to-white rounded-lg border border-purple-100">
         {project.activityScore !== undefined && (
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.activityScore')}</div>
