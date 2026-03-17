@@ -16,7 +16,7 @@ import {
   ProjectFilter 
 } from '@/components/Projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
-import { Loading } from '@/ui'
+import { PageLoading } from '@/components/PageLoading'
 
 /**
  * Projects Page - 项目展示页面
@@ -144,13 +144,7 @@ export default function ProjectsPage() {
 
       {/* 加载状态 */}
       {loading && (
-        <Loading 
-          fullscreen 
-          size="lg"
-          variant="spinner"
-          text={t('loadingProjects')}
-          showText
-        />
+        <PageLoading text={t('loadingProjects')} />
       )}
 
       {/* 错误状态 - Toast已经显示，这里只显示简化版 */}

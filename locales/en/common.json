@@ -541,6 +541,9 @@
       "activeProjects": "Active Projects"
     }
   },
+  "Common": {
+    "loading": "Loading..."
+  },
   "ProjectFilter": {
     "title": "Project Filter",
     "description": "Filter and sort projects by criteria",
