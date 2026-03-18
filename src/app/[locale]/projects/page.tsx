@@ -2,7 +2,7 @@ import { ProcessedRepository, ProjectStats } from '@/server'
 import { graphqlRequest } from '@/graphql'
 import { GithubProjectsResultDto, GITHUB_PROJECTS_QUERY } from '@/graphql/queries/githubProjects.graphql'
 import ServerComponent from '@/components/ServerComponent'
-import ProjectsPageClient from '@/components/Projects'
+import ProjectsClient from '@/components/Projects'
 
 async function fetchProjectsOnServer() {
   const data = await graphqlRequest<GithubProjectsResultDto>(GITHUB_PROJECTS_QUERY)
@@ -89,7 +89,7 @@ async function fetchProjectsOnServer() {
 }
 
 export default async function ProjectsPage() {
-  return <ServerComponent fetchServerData={fetchProjectsOnServer} ClientComponent={ProjectsPageClient} />
+  return <ServerComponent fetchServerData={fetchProjectsOnServer} ClientComponent={ProjectsClient} />
 }
 
 

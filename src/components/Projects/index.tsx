@@ -10,15 +10,15 @@ import { BriefProjectCard, DetailProjectCard } from './ProjectCard'
 import { ProjectFilter } from './ProjectFilter'
 import { StatsOverview } from './StatsOverview'
 
-interface ProjectsSectionClientProps {
+interface ProjectsClientProps {
   projects: ProcessedRepository[]
   stats: ProjectStats | null
 }
 
-export default function ProjectsSectionClient({
+export default function ProjectsClient({
   projects,
   stats,
-}: ProjectsSectionClientProps) {
+}: ProjectsClientProps) {
   const t = useTranslations('Projects')
   const searchParams = useSearchParams()
 
