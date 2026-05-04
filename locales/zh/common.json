@@ -559,9 +559,6 @@
       "activeProjects": "活跃项目"
     }
   },
-  "Common": {
-    "loading": "加载中..."
-  },
   "ProjectFilter": {
     "title": "项目筛选器",
     "description": "根据条件筛选和排序项目",

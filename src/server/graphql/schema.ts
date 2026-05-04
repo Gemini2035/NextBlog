@@ -1,36 +1,4 @@
 export const typeDefs = /* GraphQL */ `
-  type Post {
-    id: ID!
-    locale: String!
-    title: String!
-    description: String
-    date: String!
-    updatedAt: String
-    published: Boolean!
-    featured: Boolean!
-    tags: [String!]!
-    content: String
-    createdAt: String!
-  }
-
-  type PostListPagination {
-    total: Int!
-    page: Int!
-    pageSize: Int!
-    totalPages: Int!
-    hasNextPage: Boolean!
-    hasPrevPage: Boolean!
-  }
-
-  type PostListMetaData {
-    pagination: PostListPagination!
-  }
-
-  type PostListResult {
-    list: [Post!]!
-    metaData: PostListMetaData!
-  }
-
   """
   GitHub 项目主要语言
   """
@@ -134,20 +102,8 @@ export const typeDefs = /* GraphQL */ `
   }
 
   type Query {
-    post(id: ID!): Post
-    relatedPosts(id: ID!, limit: Int!): [Post!]!
-    featuredPosts: [Post!]!
-    recentPosts(limit: Int): [Post!]!
-    postsList(
-      page: Int
-      pageSize: Int
-      keyword: String
-      sortBy: String
-      sortOrder: String
-    ): PostListResult!
-
     """
-    GitHub 项目列表（参数全部由后端配置与数据库控制）
+    GitHub 项目列表（参数由站点配置控制）
     """
     githubProjects: GithubProjectsResult!
   }

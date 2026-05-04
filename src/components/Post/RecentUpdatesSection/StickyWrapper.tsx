@@ -4,10 +4,10 @@ import { PostCard } from '../PostCard'
 import { Slider } from '@/ui'
 import { useAnchorScroll } from '@/hooks'
 import { useTranslations } from 'next-intl'
-import type { IBlogPost } from '@/types'
+import type { Post } from '../../../../.contentlayer/generated'
 
 interface StickyWrapperProps {
-  recentPosts: IBlogPost[]
+  recentPosts: Post[]
   title: string
 }
 
@@ -24,7 +24,7 @@ export function StickyWrapper({ recentPosts, title }: StickyWrapperProps) {
       <div className="relative">
           <Slider
             items={recentPosts.map((post) => (
-              <PostCard key={post.id} post={post} />
+              <PostCard key={post._id} post={post} />
             ))}
             itemsPerPage={3}
             slidePerPage={1}

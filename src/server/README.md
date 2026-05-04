@@ -2,7 +2,7 @@
 
 ## 📋 概述
 
-`server` 文件夹统一存放服务端业务逻辑：对外请求（如 GitHub GraphQL）、以及 BFF 的 GraphQL 能力（博客 Post 等），通过 `index.ts` 统一导出。
+`server` 文件夹统一存放服务端业务逻辑：对外请求（如 GitHub GraphQL）、以及 BFF 的 GraphQL 能力，通过 `index.ts` 统一导出。
 
 ---
 
@@ -18,10 +18,10 @@ server/
 │   ├── types/               # GraphQL 与业务类型
 │   └── index.ts             # 统一导出
 │
-├── graphql/                  # BFF GraphQL（博客等）
-│   ├── schema.ts            # 类型定义（Post、Query）
+├── graphql/                  # BFF GraphQL
+│   ├── schema.ts            # 类型定义（GitHub Query）
 │   ├── resolvers/           # 解析器
-│   │   ├── posts.ts         # post、relatedPosts
+│   │   ├── github.ts        # githubProjects
 │   │   └── index.ts
 │   └── index.ts             # 导出 schema 供 /api/graphql 使用
 │

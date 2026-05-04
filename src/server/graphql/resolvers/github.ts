@@ -79,8 +79,8 @@ function createEmptyStats(): ProjectStats {
 export const githubResolvers = {
   async githubProjects() {
     try {
-      const thirdPartyConfig = await getGithubThirdPartyConfig()
-      const fetchOptions = thirdPartyConfig.fetchOptions
+      const githubConfig = await getGithubThirdPartyConfig()
+      const fetchOptions = githubConfig.fetchOptions
 
       // 1. 先检查 API 速率限制
       let currentRateLimit = null
@@ -100,7 +100,7 @@ export const githubResolvers = {
         console.warn('无法获取速率限制信息，继续执行:', rateLimitError)
       }
 
-      // 2. 获取所有仓库（通过 GitHub GraphQL，用户名与访问配置来自数据库）
+      // 2. 获取所有仓库（通过 GitHub GraphQL，用户名与访问配置来自站点配置）
       const repoType = fetchOptions?.repoType ?? 'owner'
       const includeForked = fetchOptions?.includeForked ?? false
       const includeArchived = fetchOptions?.includeArchived ?? false
@@ -134,7 +134,7 @@ export const githubResolvers = {
       })
 
       // 4. 生成统计数据
-      const stats = generateProjectStats(projects, thirdPartyConfig.username)
+      const stats = generateProjectStats(projects, githubConfig.username)
 
       // 5. 获取速率限制信息
       let rateLimit = currentRateLimit
@@ -176,4 +176,3 @@ export const githubResolvers = {
     }
   },
 }
-

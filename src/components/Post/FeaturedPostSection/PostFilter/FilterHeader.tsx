@@ -25,7 +25,7 @@ export function FilterHeader({
 
   return (
     <div className={cn('flex flex-col md:flex-row md:items-center md:justify-between gap-3')}>
-      <div className={cn('shrink-0')}>
+      <div className={cn('flex-shrink-0')}>
         <h2 className={cn('text-sm md:text-base font-semibold text-gray-900')}>{title}</h2>
         <p className={cn('text-xs text-gray-600 hidden md:block')}>{description}</p>
       </div>

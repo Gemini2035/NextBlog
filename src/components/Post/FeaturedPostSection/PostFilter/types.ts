@@ -1,4 +1,4 @@
-import type { IBlogPost } from '@/types'
+import type { Post } from '../../../../../.contentlayer/generated'
 import { ReactNode } from 'react'
 
 export interface FilterState {
@@ -11,8 +11,8 @@ export interface FilterState {
 }
 
 export interface PostFilterProps {
-  posts: IBlogPost[]
-  onFilteredPostsChange: (filteredPosts: IBlogPost[]) => void
+  posts: Post[]
+  onFilteredPostsChange: (filteredPosts: Post[]) => void
   locale?: string
   initialTag?: string | null
 }

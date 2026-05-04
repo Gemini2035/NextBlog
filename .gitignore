@@ -45,6 +45,3 @@ next-env.d.ts
 content/en/
 content/ja/
 # 注意：content/zh/ 文件夹会被保留在版本控制中
-.env*.local
-
-/generated/prisma

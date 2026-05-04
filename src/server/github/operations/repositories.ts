@@ -39,11 +39,11 @@ export async function getUserRepositories(
   } = options
 
   try {
-    const thirdPartyConfig = await getGithubThirdPartyConfig()
-    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+    const githubConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: githubConfig.token })
 
     const variables: GetUserRepositoriesVariables = {
-      username: thirdPartyConfig.username,
+      username: githubConfig.username,
       first,
       after,
       orderBy: {
@@ -116,8 +116,8 @@ export async function getRepositoryDetail(
   name: string
 ): Promise<RepositoryDetailResponse['repository']> {
   try {
-    const thirdPartyConfig = await getGithubThirdPartyConfig()
-    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+    const githubConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: githubConfig.token })
 
     const variables: GetRepositoryDetailVariables = {
       owner,
@@ -174,8 +174,8 @@ export async function batchGetRepositoryDetails(
  */
 export async function getRateLimit(): Promise<RateLimitResponse['rateLimit']> {
   try {
-    const thirdPartyConfig = await getGithubThirdPartyConfig()
-    const githubClient = createGraphQLClient({ token: thirdPartyConfig.token })
+    const githubConfig = await getGithubThirdPartyConfig()
+    const githubClient = createGraphQLClient({ token: githubConfig.token })
     const response = await githubClient<RateLimitResponse>(GET_RATE_LIMIT)
     return response.rateLimit
   } catch (error) {
@@ -183,4 +183,3 @@ export async function getRateLimit(): Promise<RateLimitResponse['rateLimit']> {
     throw handleGraphQLError(error)
   }
 }
-

@@ -6,10 +6,10 @@ import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
 import { Pagination, EmptyState } from '@/ui'
 import { useLayoutHeights, useAnchorScroll } from '@/hooks'
-import type { IBlogPost } from '@/types'
+import type { Post } from '.contentlayer/generated'
 
 interface StickyWrapperProps {
-  posts: IBlogPost[]
+  posts: Post[]
   title: string
   prevText?: string
   nextText?: string
@@ -17,9 +17,10 @@ interface StickyWrapperProps {
   initialTag?: string | null
 }
 
+
 export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrapperProps) {
   const [currentPage, setCurrentPage] = useState(1)
-  const [filteredPosts, setFilteredPosts] = useState<IBlogPost[]>(posts ?? [])
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>(posts || [])
   const pageSize = 9 // 3x3网格，每页显示9篇文章
   
   // 国际化翻译
@@ -27,7 +28,7 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
   const { headerHeight } = useLayoutHeights()
 
   // 使用useCallback包装setFilteredPosts函数
-  const handleFilteredPostsChange = useCallback((newFilteredPosts: IBlogPost[]) => {
+  const handleFilteredPostsChange = useCallback((newFilteredPosts: Post[]) => {
     setFilteredPosts(newFilteredPosts)
   }, [])
 
@@ -123,7 +124,7 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
       ) : (
         <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
           {paginationData.currentPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard key={post._id} post={post} />
           ))}
         </div>
       )}

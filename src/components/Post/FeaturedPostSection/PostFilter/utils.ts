@@ -1,65 +1,73 @@
 import Fuse from 'fuse.js'
-import type { IBlogPost } from '@/types'
+import type { Post } from '../../../../../.contentlayer/generated'
 import type { FilterState } from './types'
 
-type PostWithDate = IBlogPost & { date?: Date | string }
-
-function getRawContent(post: IBlogPost): string {
-  const c = post.content
-  return (c && typeof c === 'object' && 'raw' in c && typeof (c as { raw?: string }).raw === 'string')
-    ? (c as { raw: string }).raw
-    : ''
+// 计算文章字数
+export function getWordCount(post: Post): number {
+  if (!post.body?.raw) return 0
+  return post.body.raw.split(/\s+/).length
 }
 
-export function getWordCount(post: IBlogPost): number {
-  const raw = getRawContent(post)
-  if (!raw) return 0
-  return raw.split(/\s+/).length
-}
-
-export function getAllTagsWithCount(posts: IBlogPost[]): Array<{ value: string; label: string; count: number }> {
+// 获取所有标签及其计数
+export function getAllTagsWithCount(posts: Post[]): Array<{ value: string; label: string; count: number }> {
   const tagCounts: Record<string, number> = {}
-  posts.forEach((post) => {
+  
+  posts.forEach(post => {
     if (post.tags) {
-      post.tags.forEach((tag) => {
+      post.tags.forEach(tag => {
         tagCounts[tag] = (tagCounts[tag] || 0) + 1
       })
     }
   })
+  
   return Object.entries(tagCounts)
-    .map(([tag, count]) => ({ value: tag, label: tag, count }))
+    .map(([tag, count]) => ({
+      value: tag,
+      label: tag,
+      count
+    }))
     .sort((a, b) => b.count - a.count)
 }
 
-export function searchPosts(posts: IBlogPost[], keyword: string): IBlogPost[] {
+// 使用Fuse.js进行模糊搜索
+export function searchPosts(posts: Post[], keyword: string): Post[] {
   if (!keyword.trim()) return posts
-  const withRaw = posts.map((post) => ({ post, bodyRaw: getRawContent(post) }))
-  const fuse = new Fuse(withRaw, {
+  
+  const fuse = new Fuse(posts, {
     keys: [
-      { name: 'post.title', weight: 0.4 },
-      { name: 'post.description', weight: 0.3 },
-      { name: 'post.tags', weight: 0.2 },
-      { name: 'bodyRaw', weight: 0.1 },
+      { name: 'title', weight: 0.4 },
+      { name: 'description', weight: 0.3 },
+      { name: 'tags', weight: 0.2 },
+      { name: 'body.raw', weight: 0.1 }
     ],
     threshold: 0.6,
-    includeScore: true,
+    includeScore: true
   })
+  
   const results = fuse.search(keyword)
-  return results.map((r) => r.item.post)
+  return results.map(result => result.item)
 }
 
-export function filterByTags(posts: IBlogPost[], selectedTags: string[]): IBlogPost[] {
+// 按标签筛选
+export function filterByTags(posts: Post[], selectedTags: string[]): Post[] {
   if (selectedTags.length === 0) return posts
-  return posts.filter((post) => post.tags && selectedTags.some((tag) => post.tags!.includes(tag)))
+  
+  return posts.filter(post => 
+    post.tags && selectedTags.some(tag => post.tags!.includes(tag))
+  )
 }
 
-export function filterByFeatured(posts: IBlogPost[], featuredFilter: boolean | null): IBlogPost[] {
+// 按featured筛选
+export function filterByFeatured(posts: Post[], featuredFilter: boolean | null): Post[] {
   if (featuredFilter === null) return posts
-  return posts.filter((post) => post.featured === featuredFilter)
+  
+  return posts.filter(post => post.featured === featuredFilter)
 }
 
-export function sortByWordCount(posts: IBlogPost[], direction: 'asc' | 'desc' | null): IBlogPost[] {
+// 按字数排序
+export function sortByWordCount(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
   if (!direction) return posts
+  
   return [...posts].sort((a, b) => {
     const countA = getWordCount(a)
     const countB = getWordCount(b)
@@ -67,40 +75,48 @@ export function sortByWordCount(posts: IBlogPost[], direction: 'asc' | 'desc' | 
   })
 }
 
-function getDate(post: PostWithDate): number {
-  const d = post.date ?? post.createdAt
-  return d ? new Date(d).getTime() : 0
-}
-
-export function sortByCreateTime(posts: IBlogPost[], direction: 'asc' | 'desc' | null): IBlogPost[] {
+// 按创建时间排序
+export function sortByCreateTime(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
   if (!direction) return posts
+  
   return [...posts].sort((a, b) => {
-    const dateA = getDate(a as PostWithDate)
-    const dateB = getDate(b as PostWithDate)
+    const dateA = new Date(a.date).getTime()
+    const dateB = new Date(b.date).getTime()
     return direction === 'asc' ? dateA - dateB : dateB - dateA
   })
 }
 
-export function sortByUpdateTime(posts: IBlogPost[], direction: 'asc' | 'desc' | null): IBlogPost[] {
+// 按更新时间排序
+export function sortByUpdateTime(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
   if (!direction) return posts
+  
   return [...posts].sort((a, b) => {
-    const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : getDate(a as PostWithDate)
-    const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : getDate(b as PostWithDate)
+    const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : new Date(a.date).getTime()
+    const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : new Date(b.date).getTime()
     return direction === 'asc' ? dateA - dateB : dateB - dateA
   })
 }
 
-export function applyFilters(posts: IBlogPost[], filters: FilterState): IBlogPost[] {
+// 应用所有筛选条件
+export function applyFilters(posts: Post[], filters: FilterState): Post[] {
   let filteredPosts = [...posts]
+  
+  // 1. 关键字搜索
   if (filters.keyword.trim()) {
     filteredPosts = searchPosts(filteredPosts, filters.keyword)
   }
+  
+  // 2. 标签筛选
   if (filters.selectedTags.length > 0) {
     filteredPosts = filterByTags(filteredPosts, filters.selectedTags)
   }
+  
+  // 3. Featured筛选
   if (filters.featuredFilter !== null) {
     filteredPosts = filterByFeatured(filteredPosts, filters.featuredFilter)
   }
+  
+  // 4. 排序（按优先级：更新时间 > 创建时间 > 字数）
   if (filters.updateTimeSort) {
     filteredPosts = sortByUpdateTime(filteredPosts, filters.updateTimeSort)
   } else if (filters.createTimeSort) {
@@ -108,5 +124,6 @@ export function applyFilters(posts: IBlogPost[], filters: FilterState): IBlogPos
   } else if (filters.wordCountSort) {
     filteredPosts = sortByWordCount(filteredPosts, filters.wordCountSort)
   }
+  
   return filteredPosts
 }

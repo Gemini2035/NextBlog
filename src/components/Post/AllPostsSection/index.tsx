@@ -1,8 +1,8 @@
 import { StickyWrapper } from './StickyWrapper'
-import type { IBlogPost } from '@/types'
+import type { Post } from '.contentlayer/generated'
 
 interface AllPostsSectionProps {
-  posts: IBlogPost[] | null | undefined
+  posts: Post[] | null | undefined
   title: string
   prevText?: string
   nextText?: string
@@ -11,7 +11,7 @@ interface AllPostsSectionProps {
 }
 
 export function AllPostsSection({ posts, title, prevText, nextText, locale, initialTag }: AllPostsSectionProps) {
-  if (!posts?.length) {
+  if (!posts || posts.length === 0) {
     return null
   }
 

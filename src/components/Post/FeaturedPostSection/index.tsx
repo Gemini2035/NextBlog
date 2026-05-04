@@ -1,13 +1,15 @@
+
+
 import { StickyWrapper } from './StickyWrapper'
-import type { IBlogPost } from '@/types'
+import type { Post } from '.contentlayer/generated'
 
 interface FeaturedPostSectionProps {
-  featuredPosts: IBlogPost[] | null | undefined
+  featuredPosts: Post[] | null | undefined
   title: string
 }
 
 export function FeaturedPostSection({ featuredPosts, title }: FeaturedPostSectionProps) {
-  if (!featuredPosts?.length) {
+  if (!featuredPosts || featuredPosts.length === 0) {
     return null
   }
 

@@ -3,10 +3,10 @@
 import { useTranslations } from 'next-intl'
 import { PostTag } from '../../PostTag'
 import { formatDate, cn } from '@/utils'
-import type { PostListItem } from '@/app/api/posts/types'
+import type { Post } from '../../../../../.contentlayer/generated'
 
 interface MobileStickyCardProps {
-  post: PostListItem
+  post: Post
   scrollProgress: number
 }
 

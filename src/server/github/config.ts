@@ -1,4 +1,4 @@
-import { prisma } from '@/server/prisma'
+import { GITHUB_CONFIG } from '@/constants'
 
 export type GithubRepoType = 'all' | 'owner' | 'member' | 'public'
 
@@ -18,25 +18,43 @@ export interface GithubFetchOptions {
 
 export interface GithubThirdPartyConfig {
   username: string
-  token: string
+  token?: string
   fetchOptions?: GithubFetchOptions
 }
 
-export async function getGithubThirdPartyConfig(): Promise<GithubThirdPartyConfig> {
-  const record = await prisma.thirdPartyConfig.findFirst({
-    where: { name: 'github' },
-  })
+const REPO_TYPES: readonly GithubRepoType[] = ['all', 'owner', 'member', 'public']
+const SORT_BY_OPTIONS: readonly NonNullable<GithubFetchOptions['sortBy']>[] = [
+  'updated',
+  'created',
+  'pushed',
+  'stars',
+  'name',
+]
 
-  if (!record) {
-    throw new Error('未找到 GitHub 第三方配置（ThirdPartyConfig.name = "github"）')
+export function getGithubThirdPartyConfig(): GithubThirdPartyConfig {
+  const username = GITHUB_CONFIG?.username
+
+  if (!username) {
+    throw new Error('GitHub 配置中缺少 username')
   }
 
-  const value = record.value as GithubThirdPartyConfig | null
+  const fetchOptions = GITHUB_CONFIG.fetchOptions
+  const repoType = REPO_TYPES.includes(fetchOptions.repoType as GithubRepoType)
+    ? (fetchOptions.repoType as GithubRepoType)
+    : 'owner'
+  const sortBy = SORT_BY_OPTIONS.includes(fetchOptions.sortBy as NonNullable<GithubFetchOptions['sortBy']>)
+    ? (fetchOptions.sortBy as NonNullable<GithubFetchOptions['sortBy']>)
+    : 'updated'
 
-  if (!value || !value.username || !value.token) {
-    throw new Error('GitHub 第三方配置中缺少 username 或 token')
+  return {
+    username,
+    token: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
+    fetchOptions: {
+      ...fetchOptions,
+      repoType,
+      sortBy,
+      featuredRepos: GITHUB_CONFIG.featuredRepos,
+      excludeRepos: GITHUB_CONFIG.excludeRepos,
+    },
   }
-
-  return value
 }
-

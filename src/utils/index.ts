@@ -13,15 +13,6 @@ export function formatDate(date: string | Date): string {
 }
 
 /**
- * 将日期转为 ISO 字符串，用于 <time dateTime> 等需服务端/客户端一致的场景，避免水合错误
- */
-export function toDateISO(value: string | Date | null | undefined): string {
-  if (value == null) return ''
-  const d = typeof value === 'string' ? new Date(value) : value
-  return Number.isNaN(d.getTime()) ? '' : d.toISOString()
-}
-
-/**
  * 生成 slug
  */
 export function generateSlug(text: string): string {

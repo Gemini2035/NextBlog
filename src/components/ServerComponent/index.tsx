@@ -20,7 +20,7 @@ export default async function ServerComponent<T extends object>({
   fetchServerData,
   ClientComponent,
 }: ServerComponentProps<T>) {
-  const t = await getTranslations('Common')
+  const t = await getTranslations('EmptyState')
 
   return (
     <Suspense fallback={<PageLoading text={t('loading')} />}>

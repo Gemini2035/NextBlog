@@ -1,13 +1,13 @@
 import { StickyWrapper } from './StickyWrapper'
-import type { IBlogPost } from '@/types'
+import type { Post } from '../../../../.contentlayer/generated'
 
 interface RecentUpdatesSectionProps {
-  recentPosts: IBlogPost[] | null | undefined
+  recentPosts: Post[] | null | undefined
   title: string
 }
 
 export function RecentUpdatesSection({ recentPosts, title }: RecentUpdatesSectionProps) {
-  if (!recentPosts?.length) {
+  if (!recentPosts || recentPosts.length === 0) {
     return null
   }
 
