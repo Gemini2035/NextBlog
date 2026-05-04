@@ -90,7 +90,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
                     </code>
                   </div>
                 </div>
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <Link
                     href={href}
                     target={contact.isEmail ? undefined : "_blank"}

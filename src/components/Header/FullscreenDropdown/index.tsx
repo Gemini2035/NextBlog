@@ -211,6 +211,7 @@ export default function FullscreenDropdown({
             onMouseLeave={handleSubmenuMouseLeave}
           >
             <motion.div 
+              id="header-submenu-container"
               className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6"
               variants={contentVariants}
               initial="hidden"

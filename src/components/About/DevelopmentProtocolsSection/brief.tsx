@@ -45,7 +45,7 @@ const DevelopmentProtocolsBrief: FC<DevelopmentProtocolsBriefProps> = ({
               <div className="flex items-center gap-2 mb-2">
                 <div
                   className={cn(
-                    "flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center",
+                    "shrink-0 w-8 h-8 rounded-lg flex items-center justify-center",
                     color?.bg
                   )}
                 >

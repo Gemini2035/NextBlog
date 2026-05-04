@@ -7,6 +7,7 @@ import { useAnchorScroll } from '@/hooks/useAnchorScroll';
 import { Collapse, CollapsePanel } from '@/ui/Collapse';
 import Link from '@/ui/Link';
 import { ChevronRightIcon } from '@/assets/icons';
+import { PageLoading } from '@/components/PageLoading';
 import { useState, useEffect, useCallback } from 'react';
 
 interface PoliciesPageProps {
@@ -72,7 +73,7 @@ export default function PoliciesPage({ params }: PoliciesPageProps) {
   }, [params]);
   
   if (isLoading) {
-    return <div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>;
+    return <PageLoading />;
   }
   
   if (!routing.locales.includes(locale as 'zh' | 'en' | 'ja')) {

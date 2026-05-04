@@ -56,7 +56,7 @@ export function FilterRow({
         {/* Featured Filter */}
         <div className={cn('flex items-center justify-between py-2 md:py-0')}>
           <div className={cn('flex items-center gap-2')}>
-            <StarIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 flex-shrink-0')} />
+            <StarIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('featuredFilter')}</span>
           </div>
           <FeaturedFilter
@@ -68,7 +68,7 @@ export function FilterRow({
         {/* 字数排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0')}>
           <div className={cn('flex items-center gap-2')}>
-            <EditIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 flex-shrink-0')} />
+            <EditIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('wordCountSort')}</span>
           </div>
           <SortFilter
@@ -80,7 +80,7 @@ export function FilterRow({
         {/* 创建时间排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0')}>
           <div className={cn('flex items-center gap-2')}>
-            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-green-500 flex-shrink-0')} />
+            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-green-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('createTimeSort')}</span>
           </div>
           <SortFilter
@@ -92,7 +92,7 @@ export function FilterRow({
         {/* 更新时间排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0')}>
           <div className={cn('flex items-center gap-2')}>
-            <RefreshIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 flex-shrink-0')} />
+            <RefreshIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700')}>{t('updateTimeSort')}</span>
           </div>
           <SortFilter

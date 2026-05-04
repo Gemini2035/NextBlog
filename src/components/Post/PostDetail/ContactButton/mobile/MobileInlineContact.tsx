@@ -15,7 +15,7 @@ export function MobileInlineContact() {
   return (
     <div className={cn('mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg')}>
       <div className="flex items-start gap-3">
-        <div className={cn('flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center')}>
+        <div className={cn('shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center')}>
           <QuestionIcon 
             size={20} 
             className="text-white" 

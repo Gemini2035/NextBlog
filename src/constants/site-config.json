@@ -89,7 +89,6 @@
       }
     ],
     "header": {
-      "downwardScrollThreshold": 5,
       "navigation": [
         {
           "type": "__blog",

@@ -80,10 +80,10 @@ export function FilterRow({
         {/* 置顶项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 flex-shrink-0')} />
+            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showPinned')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <PinnedFilter
               value={showPinned}
               onChange={onShowPinnedChange}
@@ -94,10 +94,10 @@ export function FilterRow({
         {/* 我创建的项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ProjectIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 flex-shrink-0')} />
+            <ProjectIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showOwned')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <OwnedFilter
               value={showOwned}
               onChange={onShowOwnedChange}
@@ -108,10 +108,10 @@ export function FilterRow({
         {/* 我参与的项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ContributorIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 flex-shrink-0')} />
+            <ContributorIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showContributed')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <ContributedFilter
               value={showContributed}
               onChange={onShowContributedChange}
@@ -122,10 +122,10 @@ export function FilterRow({
         {/* Fork项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-orange-500 flex-shrink-0')} />
+            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-orange-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showFork')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <ForkFilter
               value={showFork}
               onChange={onShowForkChange}
@@ -136,10 +136,10 @@ export function FilterRow({
         {/* 归档项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ArchiveIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500 flex-shrink-0')} />
+            <ArchiveIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showArchived')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <ArchivedFilter
               value={showArchived}
               onChange={onShowArchivedChange}
@@ -150,10 +150,10 @@ export function FilterRow({
         {/* Star排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <StarIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-amber-500 flex-shrink-0')} />
+            <StarIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-amber-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('starSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={starSort}
               onChange={onStarSortChange}
@@ -164,10 +164,10 @@ export function FilterRow({
         {/* Fork排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-indigo-500 flex-shrink-0')} />
+            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-indigo-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('forkSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={forkSort}
               onChange={onForkSortChange}
@@ -178,10 +178,10 @@ export function FilterRow({
         {/* 推荐度排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-pink-500 flex-shrink-0')} />
+            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-pink-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('weightSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={weightSort}
               onChange={onWeightSortChange}
@@ -192,10 +192,10 @@ export function FilterRow({
         {/* 创建时间排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-green-500 flex-shrink-0')} />
+            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-green-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('createTimeSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={createTimeSort}
               onChange={onCreateTimeSortChange}
@@ -206,10 +206,10 @@ export function FilterRow({
         {/* 更新时间排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <RefreshIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-teal-500 flex-shrink-0')} />
+            <RefreshIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-teal-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('updateTimeSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={updateTimeSort}
               onChange={onUpdateTimeSortChange}
@@ -220,10 +220,10 @@ export function FilterRow({
         {/* 推送时间排序 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-500 flex-shrink-0')} />
+            <ClockIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-500 shrink-0')} />
             <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('pushTimeSort')}</span>
           </div>
-          <div className={cn('flex-shrink-0 ml-2')}>
+          <div className={cn('shrink-0 ml-2')}>
             <SortFilter
               value={pushTimeSort}
               onChange={onPushTimeSortChange}

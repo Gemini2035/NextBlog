@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/services/github'
+import type { ProcessedRepository, ProjectCategory } from '@/server/github'
 
 interface BriefProjectCardProps {
   project: ProcessedRepository
@@ -51,7 +51,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       {/* 项目头部 - 名称和状态 */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <ProjectIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+          <ProjectIcon className="w-5 h-5 text-gray-600 shrink-0" />
           <h3 className="text-lg font-bold text-gray-900 truncate leading-5">
             {project.name}
           </h3>
@@ -81,7 +81,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       </div>
 
       {/* 项目描述 */}
-      <p className="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">
+      <p className="text-sm text-gray-600 line-clamp-2 min-h-10">
         {project.description || t('project.noDescription')}
       </p>
 
@@ -102,7 +102,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       {/* 时间信息 */}
       <div className="pt-2 border-t border-gray-100">
         <div className="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
-          <ClockIcon className="w-3.5 h-3.5 flex-shrink-0" />
+          <ClockIcon className="w-3.5 h-3.5 shrink-0" />
           <span className="whitespace-nowrap">{t('project.created')}: {formatDate(project.createdAt)}</span>
           <span className="text-gray-300">|</span>
           <span className="whitespace-nowrap">{t('project.updated')}: {formatDate(project.updatedAt)}</span>

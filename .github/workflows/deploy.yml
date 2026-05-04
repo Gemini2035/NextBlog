@@ -8,6 +8,8 @@ on:
       - 'content/en/posts/**'
       - 'content/ja/posts/**'
       - 'src/**'
+      - 'prisma/**'
+      - 'prisma.config.ts'
       - 'package.json'
       - 'next.config.ts'
       - 'contentlayer.config.ts'
@@ -18,6 +20,8 @@ on:
       - 'content/en/posts/**'
       - 'content/ja/posts/**'
       - 'src/**'
+      - 'prisma/**'
+      - 'prisma.config.ts'
       - 'package.json'
       - 'next.config.ts'
       - 'contentlayer.config.ts'
@@ -96,7 +100,7 @@ jobs:
 
     - name: Build Contentlayer
       run: pnpm run contentlayer
-      
+
     - name: Build Next.js
       run: pnpm run build
 

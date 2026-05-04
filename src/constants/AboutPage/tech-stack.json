@@ -48,6 +48,20 @@
       "summary": "高效数据查询",
       "description": "GraphQL 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
       "icon": "GraphQLIcon"
+    },
+    {
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "summary": "关系型数据库",
+      "description": "PostgreSQL 是项目当前的核心数据存储，用于承载文章、标签、语言配置以及第三方服务配置，提供稳定的关系型数据建模和查询能力。",
+      "icon": "PostgresIcon"
+    },
+    {
+      "id": "prisma",
+      "name": "Prisma",
+      "summary": "ORM 与类型安全",
+      "description": "Prisma 负责连接 PostgreSQL，并提供 schema、迁移、类型安全查询与客户端生成能力，让 GraphQL Resolver 和服务端数据访问更清晰可靠。",
+      "icon": "PrismaIcon"
     }
   ],
   "en": [
@@ -99,6 +113,20 @@
       "summary": "Efficient Data Query",
       "description": "GraphQL is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
       "icon": "GraphQLIcon"
+    },
+    {
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "summary": "Relational Database",
+      "description": "PostgreSQL is the project's primary data store, used to persist posts, tags, locale settings, and third-party configuration with reliable relational modeling and querying.",
+      "icon": "PostgresIcon"
+    },
+    {
+      "id": "prisma",
+      "name": "Prisma",
+      "summary": "ORM & Type Safety",
+      "description": "Prisma connects the app to PostgreSQL and provides schema management, migrations, generated client APIs, and type-safe queries for the GraphQL and server layers.",
+      "icon": "PrismaIcon"
     }
   ],
   "ja": [
@@ -150,6 +178,20 @@
       "summary": "効率的なデータクエリ",
       "description": "GraphQL は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
       "icon": "GraphQLIcon"
+    },
+    {
+      "id": "postgres",
+      "name": "PostgreSQL",
+      "summary": "リレーショナルデータベース",
+      "description": "PostgreSQL は現在の中核データストアであり、記事、タグ、言語設定、外部サービス設定を保持し、安定したリレーショナルデータモデリングと検索基盤を提供します。",
+      "icon": "PostgresIcon"
+    },
+    {
+      "id": "prisma",
+      "name": "Prisma",
+      "summary": "ORM と型安全",
+      "description": "Prisma は PostgreSQL との接続を担い、schema、migration、型安全なクエリ、クライアント生成を提供することで、GraphQL とサーバー側のデータアクセスを整理します。",
+      "icon": "PrismaIcon"
     }
   ]
 }

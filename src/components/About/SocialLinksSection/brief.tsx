@@ -67,7 +67,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
           return (
             <div
               key={link.key}
-              className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0"
+              className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
               title={link.name}
             >
               <IconComponent className="w-6 h-6 text-gray-700" />
@@ -89,7 +89,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
                 external
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0 hover:bg-gray-300 transition-colors"
+                className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0 hover:bg-gray-300 transition-colors"
                 title={link.name}
               >
                 {link.icon ? (

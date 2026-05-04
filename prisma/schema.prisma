@@ -1,0 +1,85 @@
+// Prisma 7：连接 URL 仅配置在 prisma.config.ts 的 datasource.url，此处不再写 url。
+// 若 IDE 报 "url is missing"：命令面板执行 "Prisma: Pin to Prisma 7" 可消除（以 CLI 为准）。
+// Define database connection via the `DATABASE_URL` env var
+datasource db {
+  provider = "postgresql"
+}
+
+// Define custom output path for generated Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 文章标签表：每个标签属于一个 Locale，一个标签可对应多篇文章
+model PostTag {
+  id         String   @id @default(cuid())
+  name       String
+
+  /// 语言代码：一个标签只能对应一个 Locale
+  localeCode String
+  locale     Locale   @relation(fields: [localeCode], references: [code], onDelete: Cascade)
+
+  /// 多对多：一个标签可对应多篇文章
+  posts      Post[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([localeCode, name])
+  @@index([localeCode, name])
+  @@index([name])
+  @@map("post_tags")
+}
+
+// 博客文章表，字段与 Contentlayer / 接口类型对齐；content 存 MDX body（raw + code）
+// locale 存 string，应用层通过 IBlogPost 约束为 "zh" | "en" | "ja"
+
+model Post {
+  id           String    @id @default(cuid())
+  title        String
+  description  String?
+  date         DateTime
+  updatedAt    DateTime?
+  published    Boolean   @default(true)
+  featured     Boolean   @default(false)
+  /// 语言代码：一篇文章只能对应一个 Locale
+  localeCode   String
+  locale       Locale    @relation(fields: [localeCode], references: [code], onDelete: Cascade)
+
+  /// 多对多：一篇文章可以有多个标签
+  tags         PostTag[]
+  /// 与 Contentlayer body(MDX) 一致：{ raw: string, code?: string }，便于迁移与 getMDXComponent
+  content      Json      @db.JsonB
+  createdAt    DateTime  @default(now())
+
+  @@unique([id, localeCode])
+  @@index([localeCode, published])
+  @@index([date(sort: Desc)])
+  @@map("posts")
+}
+
+model ThirdPartyConfig {
+  id        String   @id @default(cuid())
+  name      String
+  value     Json     @db.JsonB
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  @@unique([id])
+  @@index([name])
+  @@map("third_party_configs")
+}
+
+model Locale {
+  id        String   @id @default(cuid())
+  code      String
+  name      String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isDefault   Boolean   @default(false)
+  posts       Post[]
+  postTags    PostTag[]
+  @@unique([code])
+  @@index([code])
+  @@index([isDefault, code])
+  @@map("locales")
+}

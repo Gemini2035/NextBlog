@@ -1,17 +1,21 @@
-"use client";
+'use client'
 
-import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
-import { Card, Button } from "@/ui";
-import { PostTag } from "../PostTag";
-import { formatDate, cn } from "@/utils";
-import { CollapseIcon } from "@/assets/icons";
-import type { Post } from "../../../../.contentlayer/generated";
-import { useLayoutHeights, useWindowSize } from "@/hooks";
-import { MobileStickyCard } from "./mobile";
+import { useState, useEffect, useRef } from 'react'
+import { useTranslations } from 'next-intl'
+import { Card, Button } from '@/ui'
+import { PostTag } from '../PostTag'
+import { formatDate, toDateISO, cn } from '@/utils'
+import { CollapseIcon } from '@/assets/icons'
+import type { IBlogPost } from '@/types'
+import { useLayoutHeights, useWindowSize } from '@/hooks'
+import { MobileStickyCard } from './mobile'
+
+type PostInfoCardPost = Pick<IBlogPost, 'title' | 'description' | 'updatedAt' | 'createdAt' | 'tags'> & {
+  date?: Date | string
+}
 
 interface PostInfoCardProps {
-  post: Post;
+  post: PostInfoCardPost
 }
 
 export function PostInfoCard({ post }: PostInfoCardProps) {
@@ -177,11 +181,17 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
 
               {/* 日期、描述、标签 */}
               <div>
-                {/* 日期信息 */}
+                {/* 日期信息：统一转成 ISO 字符串，避免服务端 Date 与客户端序列化结果不一致导致水合错误 */}
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  {(() => {
+                    const pubDate = post.date ?? post.createdAt
+                    if (pubDate == null) return null
+                    return (
+                      <time dateTime={toDateISO(pubDate)}>{formatDate(pubDate)}</time>
+                    )
+                  })()}
 
-                  {post.updatedAt && post.updatedAt !== post.date && (
+                  {post.updatedAt && toDateISO(post.updatedAt) !== toDateISO(post.date ?? post.createdAt) && (
                     <span>{t('updatedAt')} {formatDate(post.updatedAt)}</span>
                   )}
                 </div>
@@ -231,7 +241,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
                 onClick={() => setIsCollapsed(!isCollapsed)}
                 type="ghost"
                 size="sm"
-                className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm min-h-[3rem] w-8 flex items-center justify-center"
+                className="absolute right-full top-1/2 -translate-y-1/2 px-2 py-4 rounded-full transition-all duration-300 z-50 bg-white border border-gray-200 shadow-sm min-h-12 w-8 flex items-center justify-center"
                 aria-label={isCollapsed ? t('expandInfo') : t('collapseInfo')}
               >
                 <CollapseIcon 

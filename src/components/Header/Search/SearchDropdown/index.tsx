@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useCallback } from 'react'
+import { useRef, useEffect, useCallback, Suspense } from 'react'
 import { motion, Variants } from 'framer-motion'
 // 移除未使用的导入
 import { SearchIcon, CloseIcon } from '@/assets/icons'
@@ -25,8 +25,8 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
     searchResults,
     recommendedContent,
     isShowingRecommendations,
-    isSearching,
-    clearSearch
+    clearSearch,
+    suspensePromise,
   } = useSearch()
 
   // 处理输入变化
@@ -72,7 +72,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <div className="flex items-center bg-transparent px-0 py-2 md:px-6 md:py-4 w-full">
-          <SearchIcon className="hidden md:block h-5 w-5 text-gray-500 mr-4 flex-shrink-0" />
+          <SearchIcon className="hidden md:block h-5 w-5 text-gray-500 mr-4 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -94,15 +94,50 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
         </div>
       </motion.div>
 
-      {/* 搜索结果区域 */}
-      <SearchResults
-        searchResults={searchResults}
-        recommendedContent={recommendedContent}
-        isShowingRecommendations={isShowingRecommendations}
-        isSearching={isSearching}
-        onItemClick={handleItemClick}
-        itemVariants={itemVariants}
-      />
+      {/* 搜索结果区域 - 使用 Suspense 包裹 */}
+      <Suspense fallback={<div className="py-8 text-center text-sm text-gray-500">搜索中...</div>}>
+        <SearchResultsSuspender
+          searchResults={searchResults}
+          recommendedContent={recommendedContent}
+          isShowingRecommendations={isShowingRecommendations}
+          onItemClick={handleItemClick}
+          itemVariants={itemVariants}
+          suspensePromise={suspensePromise}
+        />
+      </Suspense>
     </>
+  )
+}
+
+interface SearchResultsSuspenderProps {
+  searchResults: ReturnType<typeof useSearch>['searchResults']
+  recommendedContent: ReturnType<typeof useSearch>['recommendedContent']
+  isShowingRecommendations: boolean
+  onItemClick: (href: string) => void
+  itemVariants: Variants
+  suspensePromise: Promise<void> | null
+}
+
+function SearchResultsSuspender({
+  searchResults,
+  recommendedContent,
+  isShowingRecommendations,
+  onItemClick,
+  itemVariants,
+  suspensePromise,
+}: SearchResultsSuspenderProps) {
+  if (suspensePromise) {
+    throw suspensePromise
+  }
+
+  return (
+    <SearchResults
+      searchResults={searchResults}
+      recommendedContent={recommendedContent}
+      isShowingRecommendations={isShowingRecommendations}
+      isSearching={false}
+      onItemClick={onItemClick}
+      itemVariants={itemVariants}
+    />
   )
 }

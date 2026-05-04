@@ -3,7 +3,7 @@
  * 用于开发调试，避免频繁调用 GitHub API
  */
 
-import type { ProcessedRepository, ProjectStats } from '@/services/github'
+import type { ProcessedRepository, ProjectStats } from '@/server/github'
 
 export const MOCK_PROJECTS: ProcessedRepository[] = [
   {

@@ -7,10 +7,10 @@ import { useLayoutHeights, useAnchorScroll } from '@/hooks'
 import { PostCard } from '../PostCard'
 import { Slider, Button } from '@/ui'
 import { CollapseIcon } from '@/assets/icons'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { IBlogPost } from '@/types'
 
 interface StickyWrapperProps {
-  featuredPosts: Post[]
+  featuredPosts: IBlogPost[]
   title: string
 }
 
@@ -148,7 +148,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
             // Sticky状态下的左右布局
             <div className="flex items-center gap-16 px-16">
               {/* 左侧标题 */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <h2 className="text-xl font-bold text-gray-900 whitespace-nowrap">
                   {title}
                 </h2>
@@ -159,7 +159,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                 <div ref={cardListRef}>
                   <Slider
                     items={featuredPosts.map((post) => (
-                      <PostCard key={post._id} post={post} variant="compact" showDescription={false} />
+                      <PostCard key={post.id} post={post} variant="compact" showDescription={false} />
                     ))}
                     itemsPerPage={3.2}
                     slidePerPage={1}
@@ -188,7 +188,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                   <div ref={cardListRef}>
                     <Slider
                       items={featuredPosts.map((post) => (
-                        <PostCard key={post._id} post={post} />
+                        <PostCard key={post.id} post={post} />
                       ))}
                       itemsPerPage={3}
                       slidePerPage={1}

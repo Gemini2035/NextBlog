@@ -32,7 +32,7 @@ import {
   ArchiveIcon,
   StarFilledIcon
 } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/services/github'
+import type { ProcessedRepository, ProjectCategory } from '@/server/github'
 
 interface DetailProjectCardProps {
   project: ProcessedRepository
@@ -84,15 +84,15 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {/* 项目头部 */}
       <div className="space-y-3">
         <div className="flex items-start sm:items-center gap-2 sm:gap-3">
-          <ProjectIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 flex-shrink-0 mt-1 sm:mt-0" />
+          <ProjectIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 shrink-0 mt-1 sm:mt-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-start sm:items-center gap-2 flex-wrap mb-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-6 break-words">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-6 wrap-break-word">
                 {project.name}
               </h2>
               {/* 置顶标签 */}
               {project.isPinned && (
-                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium bg-gradient-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
+                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium bg-linear-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
                   <StarFilledIcon className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500" />
                   {t('project.pinned')}
                 </span>
@@ -144,32 +144,32 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
 
       {/* 项目统计 - 移动端2列，桌面端4列 */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-yellow-50 to-white rounded-lg border border-yellow-100">
-          <StarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-yellow-50 to-white rounded-lg border border-yellow-100">
+          <StarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.stars')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.stars}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-blue-50 to-white rounded-lg border border-blue-100">
-          <ForkIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-blue-50 to-white rounded-lg border border-blue-100">
+          <ForkIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.forks')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.forks}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-green-50 to-white rounded-lg border border-green-100">
-          <WatchersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-green-50 to-white rounded-lg border border-green-100">
+          <WatchersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.watchers')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.watchers}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gradient-to-br from-red-50 to-white rounded-lg border border-red-100">
-          <IssuesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 flex-shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-red-50 to-white rounded-lg border border-red-100">
+          <IssuesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.openIssues')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.openIssues}</div>
@@ -178,7 +178,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       </div>
 
       {/* 活跃度和权重信息 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-br from-purple-50 to-white rounded-lg border border-purple-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-linear-to-br from-purple-50 to-white rounded-lg border border-purple-100">
         {project.activityScore !== undefined && (
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.activityScore')}</div>
@@ -216,7 +216,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.languageStats && project.languageStats.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <LanguageIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+            <LanguageIcon className="w-5 h-5 text-gray-600 shrink-0" />
             <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.languages')}
             </h3>
@@ -390,7 +390,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.contributors && project.contributors.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <ContributorIcon className="w-5 h-5 text-gray-600 flex-shrink-0" />
+            <ContributorIcon className="w-5 h-5 text-gray-600 shrink-0" />
             <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.contributors')} ({project.contributors.length})
             </h3>
@@ -519,7 +519,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                           >
                             {/* 颜色指示器 */}
                             <div 
-                              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                              className="w-2.5 h-2.5 rounded-full shrink-0"
                               style={{ backgroundColor: color }}
                             />
                             
@@ -555,7 +555,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.topics.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 flex-shrink-0" />
+            <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
             <h3 className="text-sm font-semibold text-gray-900 leading-5">
               {t('project.topics')}
             </h3>
@@ -590,19 +590,19 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           {/* 第一行：创建时间和更新时间 */}
           <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
             <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-              <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+              <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span className="font-medium">{t('project.created')}:</span>
               <span className="truncate">{formatDate(project.createdAt)}</span>
             </div>
             <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-              <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+              <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
               <span className="font-medium">{t('project.updated')}:</span>
               <span className="truncate">{formatDate(project.updatedAt)}</span>
             </div>
           </div>
           {/* 第二行：推送时间 */}
           <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-            <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+            <ClockIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
             <span className="font-medium">{t('project.lastPush')}:</span>
             <span className="truncate">{formatDate(project.pushedAt)}</span>
           </div>

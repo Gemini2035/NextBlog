@@ -55,7 +55,7 @@ const DevelopmentHistoryDetail: FC<DevelopmentHistoryDetailProps> = ({ className
                 <div className="relative flex flex-col sm:flex-row sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
                   <div className={
                     cn(
-                      "flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-lg mx-auto sm:mx-0",
+                      "shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-lg mx-auto sm:mx-0",
                       TagColorMap[status as keyof typeof TagColorMap]
                     )
                   }>
@@ -96,7 +96,7 @@ const DevelopmentHistoryDetail: FC<DevelopmentHistoryDetailProps> = ({ className
                       <div className="relative flex flex-col sm:flex-row sm:items-start space-y-3 sm:space-y-0 sm:space-x-4 gap-1" key={id}>
                         <div className={
                           cn(
-                            "flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8  rounded-full flex items-center justify-center mx-auto sm:mx-0",
+                            "shrink-0 w-6 h-6 sm:w-8 sm:h-8  rounded-full flex items-center justify-center mx-auto sm:mx-0",
                             !!version && TagColorMap[status as keyof typeof TagColorMap],
                           )
                         }>

@@ -72,7 +72,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
               className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
             >
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
                   <IconComponent className="w-6 h-6 text-gray-700" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -85,7 +85,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                     </code>
                   </div>
                 </div>
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <Link
                     href={link.value}
                     external
@@ -119,7 +119,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                 className="flex items-center justify-between gap-3 p-5 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all duration-200"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="flex-shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
+                  <span className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
                     {link.icon ? (
                       <img src={link.icon} alt="" className="w-6 h-6 object-contain" />
                     ) : (
@@ -128,7 +128,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                   </span>
                   <span className="font-medium text-gray-900 truncate">{link.name}</span>
                 </div>
-                <ArrowRightIcon className="w-5 h-5 flex-shrink-0 text-gray-400" strokeWidth={2} />
+                <ArrowRightIcon className="w-5 h-5 shrink-0 text-gray-400" strokeWidth={2} />
               </Link>
             ))}
           </div>
