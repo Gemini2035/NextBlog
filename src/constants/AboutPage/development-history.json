@@ -78,12 +78,22 @@
         },
         {
           "id": "blog24",
-          "title": "v2.4 - 节日主题系统",
+          "title": "v2.4 - 接入后端系统",
           "summary": "",
           "version": "2.4",
-          "description": "开发节日主题系统，包括元旦、春节、情人节、中秋节、国庆节、圣诞节等节日的主题，提供个性化的视觉体验选择。",
+          "description": "接入后端系统，采用 PostgreSQL + Prisma 技术栈，统一管理文章、标签、语言配置和第三方数据，增强内容与数据层能力。",
+          "period": "2026年4月",
+          "tags": ["PostgreSQL", "Prisma", "后端系统"],
+          "status": "active"
+        },
+        {
+          "id": "blog25",
+          "title": "v2.5 - 后台管理系统",
+          "summary": "",
+          "version": "2.5",
+          "description": "计划接入后台管理系统，用于上传和管理文章内容，提升内容发布效率，并为后续内容运营与维护提供统一入口。",
           "period": "",
-          "tags": ["主题样式"],
+          "tags": ["后台管理", "文章上传", "内容管理"],
           "status": "planning"
         }
       ]
@@ -168,12 +178,22 @@
         },
         {
           "id": "blog24",
-          "title": "v2.4 - 祝日テーマシステム",
+          "title": "v2.4 - バックエンドシステム導入",
           "summary": "",
           "version": "2.4",
-          "description": "祝日テーマシステムの開発、元旦、春節、七夕、中秋、国庆、クリスマスなどの祝日のテーマを含む、パーソナライズされた視覚体験の選択肢を提供。",
+          "description": "バックエンドシステムを導入し、PostgreSQL + Prisma スタックで記事、タグ、言語設定、外部データを一元管理するように更新。",
+          "period": "2026年4月",
+          "tags": ["PostgreSQL", "Prisma", "バックエンド"],
+          "status": "active"
+        },
+        {
+          "id": "blog25",
+          "title": "v2.5 - 管理画面システム",
+          "summary": "",
+          "version": "2.5",
+          "description": "記事のアップロードと管理を行うための管理画面システムを導入予定。コンテンツ公開の効率を高め、今後の運用と保守のための統一された入口を提供します。",
           "period": "",
-          "tags": ["テーマスタイル"],
+          "tags": ["管理画面", "記事アップロード", "コンテンツ管理"],
           "status": "planning"
         }
       ]
@@ -262,12 +282,22 @@
         },
         {
           "id": "blog24",
-          "title": "v2.4 - Holiday Theme System",
+          "title": "v2.4 - Backend Integration",
           "summary": "",
           "version": "2.4",
-          "description": "Develop a holiday theme system, including themes for holidays such as New Year's Day, Spring Festival, Qixi Festival, Mid-Autumn Festival, National Day, and Christmas, providing personalized visual experience options.",
+          "description": "Integrated the backend system with a PostgreSQL + Prisma stack to centrally manage posts, tags, locale settings, and third-party data.",
+          "period": "2026年4月",
+          "tags": ["PostgreSQL", "Prisma", "Backend"],
+          "status": "active"
+        },
+        {
+          "id": "blog25",
+          "title": "v2.5 - Admin Management System",
+          "summary": "",
+          "version": "2.5",
+          "description": "Planned integration of an admin management system for uploading and managing articles, improving publishing efficiency and providing a unified entry for future content operations.",
           "period": "",
-          "tags": ["Theme Style"],
+          "tags": ["Admin Panel", "Article Upload", "Content Management"],
           "status": "planning"
         }
       ]
