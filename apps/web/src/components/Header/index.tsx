@@ -3,7 +3,7 @@
 import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { SITE_CONFIG, HEADER_CONFIG, NavigationItem } from '@/constants'
+import { SITE_CONFIG, NavigationItem } from '@/constants'
 import { useNavigation } from '@/hooks'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'

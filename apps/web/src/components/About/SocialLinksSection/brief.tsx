@@ -1,6 +1,7 @@
 'use client'
 
 import { ComponentType } from 'react'
+import Image from 'next/image'
 import { SITE_CONFIG } from '@/constants'
 import { FRIEND_LINKS } from '@/constants'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon } from '@/assets/icons'
@@ -93,7 +94,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
                 title={link.name}
               >
                 {link.icon ? (
-                  <img src={link.icon} alt="" className="w-6 h-6 object-contain" />
+                  <Image src={link.icon} alt="" width={24} height={24} className="object-contain" unoptimized />
                 ) : (
                   <GlobeIcon className="w-6 h-6 text-gray-700" />
                 )}

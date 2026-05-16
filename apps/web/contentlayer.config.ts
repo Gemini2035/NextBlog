@@ -16,6 +16,8 @@ export const Post = defineDocumentType(() => ({
     updatedAt: { type: 'date' },
     locale: { type: 'string', default: 'zh' },
     originalSlug: { type: 'string' },
+    sourceHash: { type: 'string' },
+    translatedAt: { type: 'date' },
   },
   computedFields: {
     slug: {
