@@ -19,7 +19,6 @@ import {
   Cell
 } from 'recharts'
 import type { PieLabelRenderProps } from 'recharts'
-import type { NameType, ValueType } from 'recharts/types/component/DefaultTooltipContent'
 import { 
   ClockIcon, 
   ProjectIcon, 
@@ -290,7 +289,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                                 borderRadius: '8px',
                                 padding: '12px'
                               }}
-                              formatter={(value: ValueType | undefined, name: NameType) => {
+                              formatter={(value, name) => {
                                 if (name === 'percentage') {
                                   return [`${value ?? 0}%`, t('project.percentage')]
                                 }
@@ -298,7 +297,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                                   const bytes = typeof value === 'number' ? value : Number(value ?? 0)
                                   return [`${bytes.toLocaleString()} bytes`, t('project.bytes')]
                                 }
-                                return [value ?? '', name]
+                                return [value ?? '', name ?? '']
                               }}
                               labelStyle={{ fontWeight: 'bold', marginBottom: '8px', color: '#1f2937' }}
                             />
