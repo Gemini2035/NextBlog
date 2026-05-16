@@ -12,6 +12,7 @@ on:
       - 'apps/web/next.config.ts'
       - 'apps/web/postcss.config.mjs'
       - 'apps/web/contentlayer.config.ts'
+      - 'apps/web/vercel.json'
       - 'apps/web/src/app/globals.css'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -28,6 +29,7 @@ on:
       - 'apps/web/next.config.ts'
       - 'apps/web/postcss.config.mjs'
       - 'apps/web/contentlayer.config.ts'
+      - 'apps/web/vercel.json'
       - 'apps/web/src/app/globals.css'
       - 'package.json'
       - 'pnpm-lock.yaml'
@@ -132,9 +134,9 @@ jobs:
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       run: |
         if [ "${{ steps.set-env.outputs.environment }}" = "production" ]; then
-          vercel pull --cwd apps/web --yes --environment=production --token="$VERCEL_TOKEN"
+          vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
         else
-          vercel pull --cwd apps/web --yes --environment=preview --token="$VERCEL_TOKEN"
+          vercel pull --yes --environment=preview --token="$VERCEL_TOKEN"
         fi
 
     - name: Build Vercel output
@@ -144,9 +146,9 @@ jobs:
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       run: |
         if [ "${{ steps.set-env.outputs.environment }}" = "production" ]; then
-          vercel build --cwd apps/web --prod --token="$VERCEL_TOKEN"
+          vercel build --prod --token="$VERCEL_TOKEN"
         else
-          vercel build --cwd apps/web --token="$VERCEL_TOKEN"
+          vercel build --token="$VERCEL_TOKEN"
         fi
 
     - name: Deploy to Vercel
@@ -156,7 +158,7 @@ jobs:
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
       run: |
         if [ "${{ steps.set-env.outputs.environment }}" = "production" ]; then
-          vercel deploy --cwd apps/web --prebuilt --prod --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN"
         else
-          vercel deploy --cwd apps/web --prebuilt --token="$VERCEL_TOKEN"
+          vercel deploy --prebuilt --token="$VERCEL_TOKEN"
         fi
