@@ -1,0 +1,458 @@
+@import "tailwindcss";
+@source "../";
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #ffffff;
+  color: #171717;
+}
+
+/* Prose styles for MDX content */
+.prose {
+  max-width: none;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: #1f2937;
+  font-weight: 600;
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.prose h2 {
+  font-size: 1.875rem;
+}
+
+.prose h3 {
+  font-size: 1.5rem;
+}
+
+.prose p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.75;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
+}
+
+.prose code {
+  background-color: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  font-weight: 600;
+}
+
+.prose pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  font-weight: 400;
+}
+
+.prose blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.prose ul,
+.prose ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin: 0.5rem 0;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+
+/* 文本截断样式 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 液体动画样式 */
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-100%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20%) scale(0.9);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-10%) scale(0.9);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-top {
+  animation: slide-in-top 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 液体变形效果 */
+.liquid-transform {
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+}
+
+.liquid-transform:hover {
+  transform: scale(1.02);
+}
+
+/* 标题滚动动画 */
+@keyframes title-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-1 * var(--scroll-distance, 100px)));
+  }
+}
+
+/* 描述滚动动画 */
+@keyframes description-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(calc(-1 * var(--scroll-distance, 100px)));
+  }
+}
+
+.animate-marquee {
+  animation: title-scroll 4s ease-out forwards;
+  display: inline-block;
+  white-space: nowrap;
+  width: max-content;
+}
+
+/* 自定义滚动条样式 */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.scrollbar-thumb-gray-300::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+
+.scrollbar-track-gray-100::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+/* 漂浮动画样式 - 突破容器限制的大范围飘动 */
+@keyframes float-1 {
+  0%, 100% {
+    transform: translateX(8%) translateY(2%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(2%) translateY(1%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(1%) translateY(0.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(5%) translateY(1.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(12%) translateY(3%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(9%) translateY(3.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(6%) translateY(2.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(4%) translateY(1.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-2 {
+  0%, 100% {
+    transform: translateX(4%) translateY(4%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(1%) translateY(3%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(0.5%) translateY(2.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(3%) translateY(3.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(8%) translateY(5%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(7%) translateY(5.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(5%) translateY(4.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(2.5%) translateY(3.5%) rotate(0.8deg);
+  }
+}
+
+@keyframes float-3 {
+  0%, 100% {
+    transform: translateX(10%) translateY(6%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(6%) translateY(5%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(5%) translateY(4.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(7.5%) translateY(5.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(14%) translateY(7%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(12%) translateY(7.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(9.5%) translateY(6.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(7%) translateY(5.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-4 {
+  0%, 100% {
+    transform: translateX(2%) translateY(8%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(0.5%) translateY(7%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(0%) translateY(6.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(2.5%) translateY(7.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(7%) translateY(9%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(5.5%) translateY(9.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(3.5%) translateY(8.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(1.5%) translateY(7.5%) rotate(0.8deg);
+  }
+}
+
+@keyframes float-5 {
+  0%, 100% {
+    transform: translateX(9%) translateY(10%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(5%) translateY(9%) rotate(1deg);
+  }
+  25% {
+    transform: translateX(4%) translateY(8.5%) rotate(0.8deg);
+  }
+  37.5% {
+    transform: translateX(7%) translateY(9.5%) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateX(12.5%) translateY(11%) rotate(-1.2deg);
+  }
+  62.5% {
+    transform: translateX(10.5%) translateY(11.5%) rotate(0.3deg);
+  }
+  75% {
+    transform: translateX(8%) translateY(10.5%) rotate(0.6deg);
+  }
+  87.5% {
+    transform: translateX(5.5%) translateY(9.8%) rotate(-0.8deg);
+  }
+}
+
+@keyframes float-6 {
+  0%, 100% {
+    transform: translateX(6%) translateY(12%) rotate(0deg);
+  }
+  12.5% {
+    transform: translateX(2.5%) translateY(11%) rotate(-1deg);
+  }
+  25% {
+    transform: translateX(1.5%) translateY(10.5%) rotate(-0.8deg);
+  }
+  37.5% {
+    transform: translateX(4.5%) translateY(11.5%) rotate(0.5deg);
+  }
+  50% {
+    transform: translateX(10%) translateY(13%) rotate(1.2deg);
+  }
+  62.5% {
+    transform: translateX(8%) translateY(13.5%) rotate(-0.3deg);
+  }
+  75% {
+    transform: translateX(5.5%) translateY(12.5%) rotate(-0.6deg);
+  }
+  87.5% {
+    transform: translateX(3%) translateY(11.5%) rotate(0.8deg);
+  }
+}
+
+.animate-float-1 {
+  animation: float-1 15s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float-2 18s ease-in-out infinite;
+}
+
+.animate-float-3 {
+  animation: float-3 20s ease-in-out infinite;
+}
+
+.animate-float-4 {
+  animation: float-4 16s ease-in-out infinite;
+}
+
+.animate-float-5 {
+  animation: float-5 22s ease-in-out infinite;
+}
+
+.animate-float-6 {
+  animation: float-6 19s ease-in-out infinite;
+}
+
+/* 瀑布流动画 */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation: none;
+  }
+}
+
+/* 超大屏幕优化 */
+@media (min-width: 1536px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation-duration: 12s;
+  }
+}
+
+/* 中等屏幕优化 */
+@media (max-width: 1280px) and (min-width: 1024px) {
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3,
+  .animate-float-4,
+  .animate-float-5,
+  .animate-float-6 {
+    animation-duration: 10s;
+  }
+}

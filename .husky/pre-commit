@@ -1,6 +1,6 @@
 # 运行 lint-staged 检查
 echo "Running code quality checks..."
-npx lint-staged
+cd apps/web && pnpm exec lint-staged
 
 # 如果检查失败，阻止提交
 if [ $? -ne 0 ]; then

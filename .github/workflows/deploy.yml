@@ -4,23 +4,35 @@ on:
   push:
     branches: [ main, master, production ]
     paths:
-      - 'content/zh/posts/**'
-      - 'content/en/posts/**'
-      - 'content/ja/posts/**'
-      - 'src/**'
+      - 'apps/web/content/zh/posts/**'
+      - 'apps/web/content/en/posts/**'
+      - 'apps/web/content/ja/posts/**'
+      - 'apps/web/src/**'
+      - 'apps/web/package.json'
+      - 'apps/web/next.config.ts'
+      - 'apps/web/postcss.config.mjs'
+      - 'apps/web/contentlayer.config.ts'
+      - 'apps/web/src/app/globals.css'
       - 'package.json'
-      - 'next.config.ts'
-      - 'contentlayer.config.ts'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy.yml'
   pull_request:
     branches: [ main, master, production ]
     paths:
-      - 'content/zh/posts/**'
-      - 'content/en/posts/**'
-      - 'content/ja/posts/**'
-      - 'src/**'
+      - 'apps/web/content/zh/posts/**'
+      - 'apps/web/content/en/posts/**'
+      - 'apps/web/content/ja/posts/**'
+      - 'apps/web/src/**'
+      - 'apps/web/package.json'
+      - 'apps/web/next.config.ts'
+      - 'apps/web/postcss.config.mjs'
+      - 'apps/web/contentlayer.config.ts'
+      - 'apps/web/src/app/globals.css'
       - 'package.json'
-      - 'next.config.ts'
-      - 'contentlayer.config.ts'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
     inputs:
       force_build:
@@ -89,16 +101,17 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Run translation (generate all language versions)
+      working-directory: apps/web
       run: |
         echo "🌐 Generating translations for all articles..."
         pnpm run translate -- --all
         echo "✅ Translation completed"
 
     - name: Build Contentlayer
-      run: pnpm run contentlayer
+      run: pnpm --filter @nextblog/web contentlayer
       
     - name: Build Next.js
-      run: pnpm run build
+      run: pnpm --filter @nextblog/web build
 
     - name: Set deployment environment
       id: set-env
@@ -113,6 +126,7 @@ jobs:
       run: npm install --global vercel@latest
 
     - name: Pull Vercel environment
+      working-directory: apps/web
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -125,6 +139,7 @@ jobs:
         fi
 
     - name: Build with Vercel
+      working-directory: apps/web
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -137,6 +152,7 @@ jobs:
         fi
 
     - name: Deploy to Vercel
+      working-directory: apps/web
       env:
         VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
