@@ -1,6 +1,7 @@
 'use client'
 
 import { ComponentType } from 'react'
+import Image from 'next/image'
 import { SITE_CONFIG } from '@/constants'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
 import { Link } from '@/ui'
@@ -121,7 +122,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
                     {link.icon ? (
-                      <img src={link.icon} alt="" className="w-6 h-6 object-contain" />
+                      <Image src={link.icon} alt="" width={24} height={24} className="object-contain" unoptimized />
                     ) : (
                       <GlobeIcon className="w-6 h-6 text-gray-600" />
                     )}

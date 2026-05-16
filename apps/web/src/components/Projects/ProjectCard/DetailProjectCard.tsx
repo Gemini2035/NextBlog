@@ -290,14 +290,15 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                                 borderRadius: '8px',
                                 padding: '12px'
                               }}
-                              formatter={(value: ValueType, name: NameType) => {
+                              formatter={(value: ValueType | undefined, name: NameType) => {
                                 if (name === 'percentage') {
-                                  return [`${value}%`, t('project.percentage')]
+                                  return [`${value ?? 0}%`, t('project.percentage')]
                                 }
                                 if (name === 'bytes') {
-                                  return [`${(value as number).toLocaleString()} bytes`, t('project.bytes')]
+                                  const bytes = typeof value === 'number' ? value : Number(value ?? 0)
+                                  return [`${bytes.toLocaleString()} bytes`, t('project.bytes')]
                                 }
-                                return [value, name]
+                                return [value ?? '', name]
                               }}
                               labelStyle={{ fontWeight: 'bold', marginBottom: '8px', color: '#1f2937' }}
                             />

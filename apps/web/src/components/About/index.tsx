@@ -200,7 +200,7 @@ export default function AboutPageClient() {
           height: 'medium',
           cardClassName: 'bg-gray-50'
         }
-      ], [navT, OpenSourceLibrariesBrief, OnlineServicesBrief, DevelopmentProtocolsBrief])
+      ], [navT])
 
     return (
       <div className="min-h-screen bg-gray-50">
