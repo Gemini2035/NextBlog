@@ -73,6 +73,13 @@ const LoadingContext = createContext<LoadingContextValue | null>(null);
 const LOADING_OVERLAY_CLASS = 'loading-provider-overlay';
 const SPINNER_PORTAL_ID = 'loading-spinner-portal';
 const FADE_DURATION_MS = 600;
+const LOADING_CLASS_NAMES = [
+  'pointer-events-none',
+  'select-none',
+  'opacity-60',
+  'transition-opacity',
+  'duration-600',
+];
 
 function getOrCreateSpinnerPortalContainer(): HTMLElement {
   if (typeof document === 'undefined') {
@@ -124,19 +131,11 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
     return result;
   }, [loading]);
 
-  const loadingClassNames = [
-    'pointer-events-none',
-    'select-none',
-    'opacity-60',
-    'transition-opacity',
-    'duration-600',
-  ];
-
   useEffect(() => {
     if (typeof document === 'undefined') return;
     const allContainers = document.querySelectorAll('[data-loading-container]');
     allContainers.forEach((el) => {
-      el.classList.remove(...loadingClassNames);
+      el.classList.remove(...LOADING_CLASS_NAMES);
       const overlay = el.querySelector(`.${LOADING_OVERLAY_CLASS}`);
       if (overlay?.parentNode) {
         ;(overlay as HTMLElement).remove();
@@ -147,7 +146,7 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
       const elements = document.querySelectorAll(selector);
       elements.forEach((el) => {
         if (!(el instanceof HTMLElement)) return;
-        el.classList.add(...loadingClassNames);
+        el.classList.add(...LOADING_CLASS_NAMES);
         el.setAttribute('data-loading-container', selector);
         el.style.position = el.style.position || 'relative';
 
