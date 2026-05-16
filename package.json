@@ -14,5 +14,10 @@
     "api:dev": "cd apps/api && uvicorn app.main:app --reload",
     "api:lint": "cd apps/api && ruff check .",
     "api:test": "cd apps/api && pytest"
+  },
+  "dependencies": {
+    "next": "15.5.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   }
 }

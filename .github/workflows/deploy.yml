@@ -17,6 +17,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
+      - 'vercel.json'
       - '.github/workflows/deploy.yml'
   pull_request:
     branches: [ main, master, production ]
@@ -34,6 +35,7 @@ on:
       - 'package.json'
       - 'pnpm-lock.yaml'
       - 'pnpm-workspace.yaml'
+      - 'vercel.json'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
     inputs:
