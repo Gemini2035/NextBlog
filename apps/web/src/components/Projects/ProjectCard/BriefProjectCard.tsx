@@ -1,10 +1,11 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
 import { ClockIcon, ProjectIcon, StarIcon, ForkIcon, StarFilledIcon } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/server/github'
+import type { ProjectListItem } from '@/types/api'
+import type { ProjectCategory } from '@/types/projects'
 
 interface BriefProjectCardProps {
-  project: ProcessedRepository
+  project: ProjectListItem
   category?: ProjectCategory
 }
 
@@ -16,12 +17,12 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
   const t = useTranslations('Projects')
   
   // 格式化日期
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     return new Intl.DateTimeFormat('zh-CN', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit'
-    }).format(date)
+    }).format(new Date(date))
   }
 
   // 获取分类样式
@@ -127,4 +128,3 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
     </div>
   )
 }
-

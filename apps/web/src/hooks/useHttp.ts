@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { AxiosRequestConfig } from 'axios'
-import { httpRequest, normalizeHttpError, type ApiResponse, type HttpError } from '@/lib/http'
+import { httpRequest, normalizeHttpError, type ApiResponse, type HttpError } from '@/apis/http'
 
 export interface UseHttpOptions<TData, TBody = unknown> {
   config?: AxiosRequestConfig<TBody>

@@ -52,7 +52,7 @@ export const normalizeHttpError = (error: unknown): HttpError => {
 }
 
 export const http = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? '',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -72,3 +72,13 @@ export async function httpRequest<TData = unknown, TBody = unknown>(
 }
 
 export default http
+
+export const getBackendApiBaseUrl = () => {
+  const baseUrl =
+    process.env.BACKEND_REST_URL ??
+    process.env.NEXT_PUBLIC_API_BASE_URL ??
+    (process.env.BACKEND_GRAPHQL_URL ? `${process.env.BACKEND_GRAPHQL_URL}/api` : undefined) ??
+    'http://localhost:8000/api'
+
+  return baseUrl.replace(/\/$/, '')
+}

@@ -19,7 +19,7 @@ import {
   Cell
 } from 'recharts'
 import type { PieLabelRenderProps } from 'recharts'
-import { 
+import {
   ClockIcon, 
   ProjectIcon, 
   StarIcon, 
@@ -33,10 +33,11 @@ import {
   ArchiveIcon,
   StarFilledIcon
 } from '@/assets/icons'
-import type { ProcessedRepository, ProjectCategory } from '@/server/github'
+import type { ProjectDetail } from '@/types/api'
+import type { ProjectCategory } from '@/types/projects'
 
 interface DetailProjectCardProps {
-  project: ProcessedRepository
+  project: ProjectDetail
   category?: ProjectCategory
 }
 
@@ -48,14 +49,14 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
   const t = useTranslations('Projects')
   
   // 格式化日期
-  const formatDate = (date: Date) => {
+  const formatDate = (date: string) => {
     return new Intl.DateTimeFormat('zh-CN', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit'
-    }).format(date)
+    }).format(new Date(date))
   }
 
   // 获取分类样式
@@ -180,7 +181,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
 
       {/* 活跃度和权重信息 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-linear-to-br from-purple-50 to-white rounded-lg border border-purple-100">
-        {project.activityScore !== undefined && (
+        {project.activityScore != null && (
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.activityScore')}</div>
             <div className="flex items-baseline gap-2">
@@ -198,7 +199,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           </div>
         )}
         
-        {project.displayWeight !== undefined && (
+        {project.displayWeight != null && (
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.displayWeight')}</div>
             <div className="flex items-baseline gap-2">
