@@ -1,1 +1,0 @@
-export { graphqlRequest } from './client'

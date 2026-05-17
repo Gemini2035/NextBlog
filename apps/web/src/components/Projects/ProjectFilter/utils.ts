@@ -1,14 +1,14 @@
 import Fuse from 'fuse.js'
-import type { ProcessedRepository } from '@/types/github'
+import type { ProjectListItem } from '@/types/api'
 import type { ProjectFilterState } from './types'
 
 /**
  * 使用Fuse.js进行模糊搜索
  */
 export function searchProjects(
-  projects: ProcessedRepository[],
+  projects: ProjectListItem[],
   keyword: string
-): ProcessedRepository[] {
+): ProjectListItem[] {
   if (!keyword.trim()) return projects
 
   const fuse = new Fuse(projects, {
@@ -16,7 +16,7 @@ export function searchProjects(
       { name: 'name', weight: 0.4 },
       { name: 'description', weight: 0.3 },
       { name: 'topics', weight: 0.2 },
-      { name: 'language', weight: 0.1 }
+      { name: 'primaryLanguage.name', weight: 0.1 }
     ],
     threshold: 0.4,
     includeScore: true,
@@ -31,9 +31,9 @@ export function searchProjects(
  * 应用筛选条件
  */
 export function applyFilters(
-  projects: ProcessedRepository[],
+  projects: ProjectListItem[],
   filters: ProjectFilterState
-): ProcessedRepository[] {
+): ProjectListItem[] {
   let result = [...projects]
 
   // 1. 关键词搜索（使用Fuse.js模糊搜索）
@@ -54,7 +54,7 @@ export function applyFilters(
   // 4. 我参与的项目筛选（Fork项目或有多个贡献者）
   if (filters.showContributed !== null) {
     result = result.filter((project) => {
-      const isContributed = project.isFork || (project.contributors && project.contributors.length > 1)
+      const isContributed = project.isFork || project.contributorCount > 1
       return isContributed === filters.showContributed
     })
   }
@@ -73,7 +73,7 @@ export function applyFilters(
 
   // 7. 排序（只应用一个排序，优先级从上到下）
   // 使用通用排序函数，始终保证置顶项目在前
-  const sortWithPinned = (a: ProcessedRepository, b: ProcessedRepository, getValue: (item: ProcessedRepository) => number, ascending: boolean) => {
+  const sortWithPinned = (a: ProjectListItem, b: ProjectListItem, getValue: (item: ProjectListItem) => number, ascending: boolean) => {
     // 置顶项目始终排在前面
     if (a.isPinned && !b.isPinned) return -1
     if (!a.isPinned && b.isPinned) return 1
@@ -90,11 +90,11 @@ export function applyFilters(
   } else if (filters.weightSort) {
     result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight || 0, filters.weightSort === 'asc'))
   } else if (filters.createTimeSort) {
-    result.sort((a, b) => sortWithPinned(a, b, (item) => item.createdAt.getTime(), filters.createTimeSort === 'asc'))
+    result.sort((a, b) => sortWithPinned(a, b, (item) => Date.parse(item.createdAt), filters.createTimeSort === 'asc'))
   } else if (filters.updateTimeSort) {
-    result.sort((a, b) => sortWithPinned(a, b, (item) => item.updatedAt.getTime(), filters.updateTimeSort === 'asc'))
+    result.sort((a, b) => sortWithPinned(a, b, (item) => Date.parse(item.updatedAt), filters.updateTimeSort === 'asc'))
   } else if (filters.pushTimeSort) {
-    result.sort((a, b) => sortWithPinned(a, b, (item) => item.pushedAt.getTime(), filters.pushTimeSort === 'asc'))
+    result.sort((a, b) => sortWithPinned(a, b, (item) => Date.parse(item.pushedAt), filters.pushTimeSort === 'asc'))
   } else {
     // 默认按权重降序排序（置顶项目优先）
     result.sort((a, b) => sortWithPinned(a, b, (item) => item.weight || 0, false))
@@ -102,4 +102,3 @@ export function applyFilters(
 
   return result
 }
-

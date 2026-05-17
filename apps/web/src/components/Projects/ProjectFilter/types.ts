@@ -1,4 +1,4 @@
-import type { ProcessedRepository } from '@/types/github'
+import type { ProjectListItem } from '@/types/api'
 
 export interface ProjectFilterState {
   keyword: string
@@ -16,12 +16,11 @@ export interface ProjectFilterState {
 }
 
 export interface ProjectFilterProps {
-  projects: ProcessedRepository[]
-  onFilteredProjectsChange: (filteredProjects: ProcessedRepository[]) => void
+  projects: ProjectListItem[]
+  onFilteredProjectsChange: (filteredProjects: ProjectListItem[]) => void
 }
 
 export interface SortOption {
   value: string
   label: string
 }
-
