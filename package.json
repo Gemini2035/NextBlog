@@ -11,9 +11,9 @@
     "web:build": "pnpm --filter @nextblog/web build",
     "web:start": "pnpm --filter @nextblog/web start",
     "web:lint": "pnpm --filter @nextblog/web lint",
-    "api:dev": "cd apps/api && uvicorn app.main:app --reload",
-    "api:lint": "cd apps/api && ruff check .",
-    "api:test": "cd apps/api && pytest"
+    "api:dev": "cd apps/backend && uvicorn app.main:app --reload",
+    "api:lint": "cd apps/backend && ruff check .",
+    "api:test": "cd apps/backend && pytest"
   },
   "dependencies": {
     "next": "15.5.9",
