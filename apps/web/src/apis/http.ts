@@ -82,5 +82,6 @@ export const getBackendApiBaseUrl = () => {
     vercelApiBaseUrl ??
     'http://localhost:8000/api'
 
+  console.log('test', baseUrl)
   return baseUrl.replace(/\/$/, '')
 }
