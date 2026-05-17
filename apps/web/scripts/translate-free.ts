@@ -60,7 +60,7 @@ function getProxyAgent() {
   
   try {
     return new HttpsProxyAgent(proxyUrl)
-  } catch {
+  } catch (error) {
     console.warn('⚠️  代理配置失败，将不使用代理:', error)
     return undefined
   }
@@ -497,7 +497,7 @@ function getChangedFiles(): string[] {
     }
     
     return files
-  } catch {
+  } catch (error) {
     console.log('⚠️  无法获取 Git 变更，将处理所有中文文章')
     console.log('   错误信息:', error instanceof Error ? error.message : '未知错误')
     return getAllZhPosts()
