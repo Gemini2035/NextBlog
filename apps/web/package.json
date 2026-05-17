@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "api:types": "openapi-typescript http://localhost:8000/openapi.json -o src/types/api.generated.ts",
     "contentlayer": "contentlayer2 build",
     "translate": "tsx scripts/translate-free.ts",
     "prepare": "cd ../.. && husky"
@@ -21,6 +22,7 @@
     "@octokit/graphql-schema": "^15.26.0",
     "@types/mdx": "^2.0.13",
     "@vitalets/google-translate-api": "^9.2.1",
+    "axios": "^1.13.2",
     "clsx": "^2.1.1",
     "contentlayer2": "^0.5.8",
     "framer-motion": "^12.23.16",
@@ -50,6 +52,7 @@
     "gray-matter": "^4.0.3",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.10",
+    "openapi-typescript": "^7.10.1",
     "openai": "^5.22.1",
     "prettier": "^3.3.3",
     "tailwindcss": "^4",

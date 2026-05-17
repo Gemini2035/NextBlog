@@ -4,16 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @nextblog/web dev",
-    "build": "pnpm --filter @nextblog/web build",
+    "build": "pnpm check && pnpm web:build",
     "start": "pnpm --filter @nextblog/web start",
-    "lint": "pnpm --filter @nextblog/web lint",
+    "lint": "pnpm web:lint && pnpm api:lint",
+    "check": "pnpm web:check && pnpm api:check",
     "web:dev": "pnpm --filter @nextblog/web dev",
     "web:build": "pnpm --filter @nextblog/web build",
     "web:start": "pnpm --filter @nextblog/web start",
     "web:lint": "pnpm --filter @nextblog/web lint",
-    "api:dev": "cd apps/api && uvicorn app.main:app --reload",
-    "api:lint": "cd apps/api && ruff check .",
-    "api:test": "cd apps/api && pytest"
+    "web:check": "pnpm --filter @nextblog/web lint && pnpm --filter @nextblog/web exec tsc --noEmit",
+    "api:setup": "python -m pip install -e \"apps/backend[dev]\"",
+    "api:dev": "cd apps/backend && python -m uvicorn app.main:app --reload",
+    "api:lint": "cd apps/backend && python -m ruff check .",
+    "api:test": "cd apps/backend && python -m pytest",
+    "api:check": "pnpm api:lint && pnpm api:test"
   },
   "dependencies": {
     "next": "15.5.9",

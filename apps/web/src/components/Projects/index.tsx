@@ -3,15 +3,15 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { categorizeProject } from '@/server/github/transformers/stats'
-import type { ProcessedRepository, ProjectStats } from '@/server/github'
+import type { ProjectListItem, ProjectStats } from '@/types/api'
+import { categorizeProject } from '@/types/projects'
 import { ExpandableWaterfall } from '@/components/Waterfall'
-import { BriefProjectCard, DetailProjectCard } from './ProjectCard'
+import { BriefProjectCard, ProjectDetailPanel } from './ProjectCard'
 import { ProjectFilter } from './ProjectFilter'
 import { StatsOverview } from './StatsOverview'
 
 interface ProjectsClientProps {
-  projects: ProcessedRepository[]
+  projects: ProjectListItem[]
   stats: ProjectStats | null
 }
 
@@ -22,7 +22,7 @@ export default function ProjectsClient({
   const t = useTranslations('Projects')
   const searchParams = useSearchParams()
 
-  const [filteredProjects, setFilteredProjects] = useState<ProcessedRepository[]>(projects)
+  const [filteredProjects, setFilteredProjects] = useState<ProjectListItem[]>(projects)
 
   useEffect(() => {
     setFilteredProjects(projects)
@@ -42,24 +42,18 @@ export default function ProjectsClient({
     }
   }, [searchParams])
 
-  const handleFilteredProjectsChange = useCallback((nextProjects: ProcessedRepository[]) => {
+  const handleFilteredProjectsChange = useCallback((nextProjects: ProjectListItem[]) => {
     setFilteredProjects(nextProjects)
   }, [])
 
   const waterfallItems = useMemo(() => {
     return filteredProjects.map((project) => {
-      const category = categorizeProject({
-        archived: project.isArchived,
-        fork: project.isFork,
-        updated_at: project.updatedAt.toISOString(),
-        name: project.name,
-        description: project.description,
-      })
+      const category = categorizeProject(project)
 
       return {
         id: project.id.toString(),
         content: <BriefProjectCard project={project} category={category} />,
-        expandedContent: <DetailProjectCard project={project} category={category} />,
+        expandedContent: <ProjectDetailPanel projectId={project.id} category={category} />,
         height: 'medium' as const,
         anchorId: `project-${project.id}`,
       }
@@ -101,5 +95,3 @@ export default function ProjectsClient({
     </div>
   )
 }
-
-

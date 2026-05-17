@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import type { ProjectStats } from '@/types/github'
+import type { ProjectStats } from '@/types/api'
 import { ProjectIcon, StarIcon, ForkIcon, LanguageIcon, type IconProps } from '@/assets/icons'
 import { cn } from '@/utils'
 
@@ -112,4 +112,3 @@ export function StatsOverview({ stats, className }: StatsOverviewProps) {
     </div>
   )
 }
-
