@@ -60,7 +60,7 @@ function getProxyAgent() {
   
   try {
     return new HttpsProxyAgent(proxyUrl)
-  } catch (error) {
+  } catch {
     console.warn('⚠️  代理配置失败，将不使用代理:', error)
     return undefined
   }
@@ -214,7 +214,7 @@ async function translateCodeComments(code: string, from: string, to: string): Pr
   })
   
   // 3. 处理多行注释 /* */ (JavaScript/TypeScript/Java/C/C++/C#/CSS等)
-  result = result.replace(/(\/\*\*?)([\s\S]*?)(\*\/)/g, (match, start, content, end) => {
+  result = result.replace(/(\/\*\*?)([\s\S]*?)(\*\/)/g, (match, _start, content) => {
     // 如果注释中包含代码示例或特殊标记，跳过
     if (content.includes('```') || content.includes('@')) {
       return match
@@ -497,7 +497,7 @@ function getChangedFiles(): string[] {
     }
     
     return files
-  } catch (error) {
+  } catch {
     console.log('⚠️  无法获取 Git 变更，将处理所有中文文章')
     console.log('   错误信息:', error instanceof Error ? error.message : '未知错误')
     return getAllZhPosts()
@@ -540,7 +540,7 @@ function checkTargetFileStatus(
     
     // 文件存在且内容未变化
     return { exists: true, needsUpdate: false }
-  } catch (error) {
+  } catch {
     // 读取失败，需要重新翻译
     return { exists: true, needsUpdate: true, reason: '读取失败' }
   }
@@ -705,4 +705,3 @@ export {
   getSourceContentHash,
   calculateContentHash
 }
-

@@ -17,11 +17,7 @@ export interface HttpError {
 const DEFAULT_ERROR_MESSAGE = '请求失败，请稍后重试'
 
 const getConfiguredApiBaseUrl = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-
-  if (!baseUrl) {
-    throw new Error('NEXT_PUBLIC_API_BASE_URL is not configured')
-  }
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api'
 
   return baseUrl.replace(/\/$/, '')
 }
