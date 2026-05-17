@@ -80,11 +80,17 @@ export default makeSource({
   disableImportAliasWarning: true,
 
   async onSuccess(getData) {
-    const { allPosts } = await getData()
+    const { allDocuments } = await getData()
+    const allPosts = allDocuments.filter((document) => document.type === 'Post')
     const tags = new Set<string>()
 
     // 收集所有标签
-    allPosts.flatMap((post) => (post.formattedTags as string[]) || []).forEach((t) => tags.add(t))
+    allPosts
+      .flatMap((post) => {
+        const formattedTags = post.formattedTags
+        return Array.isArray(formattedTags) ? formattedTags : []
+      })
+      .forEach((tag) => tags.add(tag))
 
     const tagArray = Array.from(tags).filter(tag => !!tag).sort()
 
