@@ -52,7 +52,7 @@ export const normalizeHttpError = (error: unknown): HttpError => {
 }
 
 export const http = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -74,10 +74,12 @@ export async function httpRequest<TData = unknown, TBody = unknown>(
 export default http
 
 export const getBackendApiBaseUrl = () => {
+  const vercelApiBaseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}/api` : undefined
   const baseUrl =
     process.env.BACKEND_REST_URL ??
     process.env.NEXT_PUBLIC_API_BASE_URL ??
     (process.env.BACKEND_GRAPHQL_URL ? `${process.env.BACKEND_GRAPHQL_URL}/api` : undefined) ??
+    vercelApiBaseUrl ??
     'http://localhost:8000/api'
 
   return baseUrl.replace(/\/$/, '')

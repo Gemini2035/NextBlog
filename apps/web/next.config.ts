@@ -11,6 +11,18 @@ const isWindows = process.platform === 'win32';
 const nextConfig: NextConfig = {
   trailingSlash: true,
   outputFileTracingRoot: path.join(__dirname, '../..'),
+  async rewrites() {
+    if (process.env.NODE_ENV !== 'development') {
+      return []
+    }
+
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:8000/api/:path*',
+      },
+    ]
+  },
   images: {
     unoptimized: true,
   },
