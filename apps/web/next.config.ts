@@ -10,6 +10,7 @@ const isWindows = process.platform === 'win32';
 
 const nextConfig: NextConfig = {
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   outputFileTracingRoot: path.join(__dirname, '../..'),
   async rewrites() {
     if (process.env.NODE_ENV !== 'development') {
