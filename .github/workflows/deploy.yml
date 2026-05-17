@@ -114,6 +114,9 @@ jobs:
     - name: Install backend dependencies
       run: pnpm api:setup
 
+    - name: Install uv for Vercel Python build
+      run: python -m pip install uv
+
     - name: Check backend
       run: pnpm api:check
 
@@ -168,6 +171,9 @@ jobs:
 
     - name: Install backend dependencies
       run: pnpm api:setup
+
+    - name: Install uv for Vercel Python build
+      run: python -m pip install uv
 
     - name: Check backend
       run: pnpm api:check
