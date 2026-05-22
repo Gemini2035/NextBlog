@@ -17,7 +17,9 @@
     "api:dev": "cd apps/backend && python -m uvicorn app.main:app --reload",
     "api:lint": "cd apps/backend && python -m ruff check .",
     "api:test": "cd apps/backend && python -m pytest",
-    "api:check": "pnpm api:lint && pnpm api:test"
+    "api:check": "pnpm api:lint && pnpm api:test",
+    "api:migration": "cd apps/backend && alembic revision --autogenerate",
+    "api:migrate": "cd apps/backend && alembic upgrade head"
   },
   "dependencies": {
     "next": "15.5.9",
