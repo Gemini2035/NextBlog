@@ -20,12 +20,12 @@
         {
           "id": "cdnServices",
           "name": "CDN服务",
-          "description": "好homi提供的CDN服务器，目前仅支持ipv6网络访问",
+          "description": "家里云服务器提供的自建 CDN 静态资源服务，用于站点媒体资源分发",
           "icon": "CDNIcon",
-          "url": "https://enldm.cyou/",
-          "documentation": "https://enldm.cyou/2025/12/Ubuntu%20VPS%20%E6%89%8B%E5%8A%A8%E5%88%86%E9%85%8D%20iPv6%20%E5%B9%B6%E5%90%AF%E7%94%A8/",
+          "url": "https://46.30.191.86/",
+          "documentation": "https://46.30.191.86/",
           "externalDescription": {
-            "text": "好友云方案",
+            "text": "家里云方案",
             "textColor": "text-yellow-600"
           },
           "category": "CDN服务"
@@ -137,12 +137,12 @@
         {
           "id": "cdnServices",
           "name": "CDN Services",
-          "description": "CDN services provided by homi, currently only supports ipv6 network access",
+          "description": "Self-hosted CDN static asset service on a home cloud server for site media delivery",
           "icon": "CDNIcon",
-          "url": "https://enldm.cyou/",
-          "documentation": "https://enldm.cyou/2025/12/Ubuntu%20VPS%20%E6%89%8B%E5%8A%A8%E5%88%86%E9%85%8D%20iPv6%20%E5%B9%B6%E5%90%AF%E7%94%A8/",
+          "url": "https://46.30.191.86/",
+          "documentation": "https://46.30.191.86/",
           "externalDescription": {
-            "text": "Friend Cloud Solution",
+            "text": "Home Cloud Solution",
             "textColor": "text-yellow-600"
           },
           "category": "CDN Services"
@@ -254,12 +254,12 @@
         {
           "id": "cdnServices",
           "name": "CDNサービス",
-          "description": "homiが提供するCDNサービス、現在はipv6ネットワークアクセスのみサポート",
+          "description": "ホームクラウドサーバー上のセルフホストCDN静的アセットサービス、サイトメディア配信用",
           "icon": "CDNIcon",
-          "url": "https://enldm.cyou/",
-          "documentation": "https://enldm.cyou/2025/12/Ubuntu%20VPS%20%E6%89%8B%E5%8A%A8%E5%88%86%E9%85%8D%20iPv6%20%E5%B9%B6%E5%90%AF%E7%94%A8/",
+          "url": "https://46.30.191.86/",
+          "documentation": "https://46.30.191.86/",
           "externalDescription": {
-            "text": "友達雲ソリューション",
+            "text": "ホームクラウド方案",
             "textColor": "text-yellow-600"
           },
           "category": "CDNサービス"
