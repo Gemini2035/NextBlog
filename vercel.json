@@ -9,5 +9,11 @@
       "source": "/api/(.*)",
       "destination": "/api/index"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/sync-github-projects",
+      "schedule": "0 18 * * *"
+    }
   ]
 }

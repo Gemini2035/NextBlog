@@ -19,7 +19,8 @@
     "api:test": "cd apps/backend && python -m pytest",
     "api:check": "pnpm api:lint && pnpm api:test",
     "api:migration": "cd apps/backend && alembic revision --autogenerate",
-    "api:migrate": "cd apps/backend && alembic upgrade head"
+    "api:migrate": "cd apps/backend && alembic upgrade head",
+    "api:sync-github-projects": "cd apps/backend && python -m app.tasks.sync_github_projects"
   },
   "dependencies": {
     "next": "15.5.9",

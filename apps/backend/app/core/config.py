@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     next_database_url: str | None = None
     next_database_url_unpooled: str | None = None
 
+    github_username: str = "Gemini2035"
+    github_token: str | None = None
+    cron_secret: str | None = None
+
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.local", ".env.development.local"),
         env_file_encoding="utf-8",
