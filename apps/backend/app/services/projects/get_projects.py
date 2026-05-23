@@ -1,7 +1,10 @@
-from copy import deepcopy
+from datetime import datetime
 from typing import Any, Literal, TypedDict
 
-from .mock import MOCK_PROJECTS, MOCK_STATS, MockProject, MockStats
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from app.models.project import Project
 
 
 class ProjectListItem(TypedDict):
@@ -10,7 +13,7 @@ class ProjectListItem(TypedDict):
     description: str
     stars: int
     forks: int
-    primaryLanguage: dict[str, Any] | None
+    primaryLanguage: dict[str, str] | None
     topics: list[str]
     isFork: bool
     isArchived: bool
@@ -18,41 +21,161 @@ class ProjectListItem(TypedDict):
     createdAt: str
     updatedAt: str
     pushedAt: str
-    weight: float | int | None
+    weight: float | None
     contributorCount: int
+
+
+class ProjectStatsGroup(TypedDict):
+    count: int
+    stars: int
+    forks: int
+    languages: int
+
+
+class ProjectStats(TypedDict):
+    totalProjects: int
+    totalStars: int
+    totalForks: int
+    languageDistribution: list[dict[str, Any]]
+    categoryDistribution: dict[str, int]
+    activeProjects: int
+    archivedProjects: int
+    ownedStats: ProjectStatsGroup
+    contributedStats: ProjectStatsGroup
 
 
 class ProjectsPayload(TypedDict):
     projects: list[ProjectListItem]
-    stats: MockStats
+    stats: ProjectStats
     rateLimit: None
-    source: Literal["mock"]
+    source: Literal["database"]
 
 
-def _to_project_list_item(project: MockProject) -> ProjectListItem:
+def _format_datetime(value: datetime) -> str:
+    return value.isoformat()
+
+
+def _to_primary_language(project: Project) -> dict[str, str] | None:
+    if not project.primary_language_name:
+        return None
+
     return {
-        "id": int(project["id"]),
-        "name": str(project["name"]),
-        "description": str(project["description"]),
-        "stars": int(project["stars"]),
-        "forks": int(project["forks"]),
-        "primaryLanguage": deepcopy(project.get("primaryLanguage")),
-        "topics": list(project["topics"]),
-        "isFork": bool(project["isFork"]),
-        "isArchived": bool(project["isArchived"]),
-        "isPinned": bool(project["isPinned"]),
-        "createdAt": str(project["createdAt"]),
-        "updatedAt": str(project["updatedAt"]),
-        "pushedAt": str(project["pushedAt"]),
-        "weight": project.get("weight"),
-        "contributorCount": len(project.get("contributors") or []),
+        "name": project.primary_language_name,
+        "color": project.primary_language_color or "",
     }
 
 
-def get_projects() -> ProjectsPayload:
+def _to_project_list_item(project: Project) -> ProjectListItem:
     return {
-        "projects": [_to_project_list_item(project) for project in MOCK_PROJECTS],
-        "stats": deepcopy(MOCK_STATS),
+        "id": project.id,
+        "name": project.name,
+        "description": project.description,
+        "stars": project.stars,
+        "forks": project.forks,
+        "primaryLanguage": _to_primary_language(project),
+        "topics": project.topics,
+        "isFork": project.is_fork,
+        "isArchived": project.is_archived,
+        "isPinned": project.is_pinned,
+        "createdAt": _format_datetime(project.github_created_at),
+        "updatedAt": _format_datetime(project.github_updated_at),
+        "pushedAt": _format_datetime(project.github_pushed_at),
+        "weight": project.weight,
+        "contributorCount": len(project.contributors),
+    }
+
+
+def _get_language_distribution(projects: list[Project]) -> list[dict[str, Any]]:
+    language_totals: dict[str, dict[str, Any]] = {}
+    total_bytes = 0
+
+    for project in projects:
+        for language in project.language_stats:
+            name = str(language.get("name") or "")
+            if not name:
+                continue
+
+            bytes_count = int(language.get("bytes") or 0)
+            total_bytes += bytes_count
+            current = language_totals.setdefault(
+                name,
+                {
+                    "name": name,
+                    "bytes": 0,
+                    "percentage": 0,
+                    "color": str(language.get("color") or ""),
+                },
+            )
+            current["bytes"] += bytes_count
+
+    if total_bytes == 0:
+        return []
+
+    return [
+        {
+            **language,
+            "percentage": round(int(language["bytes"]) / total_bytes * 100, 1),
+        }
+        for language in sorted(
+            language_totals.values(),
+            key=lambda item: int(item["bytes"]),
+            reverse=True,
+        )
+    ]
+
+
+def _get_language_count(projects: list[Project]) -> int:
+    return len(
+        {
+            project.primary_language_name
+            for project in projects
+            if project.primary_language_name
+        }
+    )
+
+
+def _to_stats(projects: list[Project]) -> ProjectStats:
+    owned_projects = [project for project in projects if not project.is_fork]
+    contributed_projects = [project for project in projects if project.is_fork]
+
+    return {
+        "totalProjects": len(projects),
+        "totalStars": sum(project.stars for project in projects),
+        "totalForks": sum(project.forks for project in projects),
+        "languageDistribution": _get_language_distribution(projects),
+        "categoryDistribution": {
+            "featured": sum(1 for project in projects if project.is_pinned),
+            "active": sum(1 for project in projects if not project.is_archived),
+            "stable": 0,
+            "completed": 0,
+            "archived": sum(1 for project in projects if project.is_archived),
+            "fork": sum(1 for project in projects if project.is_fork),
+            "learning": 0,
+        },
+        "activeProjects": sum(1 for project in projects if not project.is_archived),
+        "archivedProjects": sum(1 for project in projects if project.is_archived),
+        "ownedStats": {
+            "count": len(owned_projects),
+            "stars": sum(project.stars for project in owned_projects),
+            "forks": sum(project.forks for project in owned_projects),
+            "languages": _get_language_count(owned_projects),
+        },
+        "contributedStats": {
+            "count": len(contributed_projects),
+            "stars": sum(project.stars for project in contributed_projects),
+            "forks": sum(project.forks for project in contributed_projects),
+            "languages": _get_language_count(contributed_projects),
+        },
+    }
+
+
+def get_projects(db: Session) -> ProjectsPayload:
+    statement = select(Project).order_by(Project.weight.desc().nullslast(), Project.github_updated_at.desc())
+    projects = list(db.scalars(statement))
+
+    return {
+        "projects": [_to_project_list_item(project) for project in projects],
+        "stats": _to_stats(projects),
         "rateLimit": None,
-        "source": "mock",
+        "source": "database",
     }
