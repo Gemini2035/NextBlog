@@ -222,7 +222,28 @@ jobs:
         fi
 
     - name: Run database migrations
-      run: pnpm api:migrate
+      env:
+        VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      run: |
+        if [ "${{ steps.set-env.outputs.environment }}" = "production" ]; then
+          vercel env pull apps/backend/.env.local --yes --environment=production --token="$VERCEL_TOKEN"
+        else
+          vercel env pull apps/backend/.env.local --yes --environment=preview --token="$VERCEL_TOKEN"
+        fi
+
+        echo "Checking database environment for migrations..."
+        cd apps/backend
+        python - <<'PY'
+        from app.core.config import settings
+        if not settings.sqlalchemy_migration_database_url:
+            raise SystemExit(
+                "Database migration URL is not configured after pulling Vercel env."
+            )
+        print("Database migration URL is configured.")
+        PY
+        alembic upgrade head
 
     - name: Build Vercel output
       env:
