@@ -13,7 +13,7 @@
   "crons": [
     {
       "path": "/api/cron/sync-github-projects",
-      "schedule": "25 9 * * *"
+      "schedule": "40 9 * * *"
     }
   ]
 }
