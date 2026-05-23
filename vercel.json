@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "python -m pip install -e \"apps/backend\" && pnpm api:migrate && pnpm --filter @nextblog/web build",
+  "buildCommand": "uv pip install --system -e \"apps/backend\" && pnpm api:migrate && pnpm --filter @nextblog/web build",
   "outputDirectory": "apps/web/.next",
   "rewrites": [
     {
