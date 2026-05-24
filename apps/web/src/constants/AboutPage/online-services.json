@@ -21,10 +21,14 @@
           "id": "cdnServices",
           "name": "CDN服务",
           "description": "家里云服务器提供的自建 CDN 静态资源服务，用于站点媒体资源分发",
+          "description": "家里云服务器提供的自建 CDN 静态资源服务，用于站点媒体资源分发",
           "icon": "CDNIcon",
+          "url": "https://cdn.apodidae2035.com/",
+          "documentation": "https://cdn.apodidae2035.com/",
           "url": "https://46.30.191.86/",
           "documentation": "https://46.30.191.86/",
           "externalDescription": {
+            "text": "家里云方案",
             "text": "家里云方案",
             "textColor": "text-yellow-600"
           },
@@ -138,10 +142,12 @@
           "id": "cdnServices",
           "name": "CDN Services",
           "description": "Self-hosted CDN static asset service on a home cloud server for site media delivery",
+          "description": "Self-hosted CDN static asset service on a home cloud server for site media delivery",
           "icon": "CDNIcon",
-          "url": "https://46.30.191.86/",
-          "documentation": "https://46.30.191.86/",
+          "url": "https://cdn.apodidae2035.com/",
+          "documentation": "https://cdn.apodidae2035.com/",
           "externalDescription": {
+            "text": "Home Cloud Solution",
             "text": "Home Cloud Solution",
             "textColor": "text-yellow-600"
           },
@@ -255,10 +261,12 @@
           "id": "cdnServices",
           "name": "CDNサービス",
           "description": "ホームクラウドサーバー上のセルフホストCDN静的アセットサービス、サイトメディア配信用",
+          "description": "ホームクラウドサーバー上のセルフホストCDN静的アセットサービス、サイトメディア配信用",
           "icon": "CDNIcon",
-          "url": "https://46.30.191.86/",
-          "documentation": "https://46.30.191.86/",
+          "url": "https://cdn.apodidae2035.com/",
+          "documentation": "https://cdn.apodidae2035.com/",
           "externalDescription": {
+            "text": "ホームクラウド方案",
             "text": "ホームクラウド方案",
             "textColor": "text-yellow-600"
           },

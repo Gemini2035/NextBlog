@@ -1,6 +1,6 @@
 import ServerComponent from '@/components/ServerComponent'
 import ProjectsClient from '@/components/Projects'
-import { getProjectsOnServer } from '@/apis/projects'
+import { getProjectsOnServer } from '@/apis/projects/server'
 
 async function fetchProjectsOnServer() {
   const payload = await getProjectsOnServer()
