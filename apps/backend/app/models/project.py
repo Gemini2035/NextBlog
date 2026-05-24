@@ -1,12 +1,16 @@
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import BigInteger, Boolean, DateTime, Float, Integer, String, Text
+from sqlalchemy import BigInteger, Boolean, DateTime, Float, Integer, String, Text, and_, cast
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
 
 from app.database.base import Base
+from app.models.embedding import Embedding
 from app.models.mixins import TimestampMixin
+
+
+PROJECT_EMBEDDING_SOURCE_TYPE = "project"
 
 
 class Project(TimestampMixin, Base):
@@ -50,3 +54,12 @@ class Project(TimestampMixin, Base):
     activity_score: Mapped[float | None] = mapped_column(Float, nullable=True)
     display_weight: Mapped[float | None] = mapped_column(Float, nullable=True)
     weight: Mapped[float | None] = mapped_column(Float, nullable=True, index=True)
+
+    embeddings: Mapped[list[Embedding]] = relationship(
+        "Embedding",
+        primaryjoin=lambda: and_(
+            Embedding.source_type == PROJECT_EMBEDDING_SOURCE_TYPE,
+            foreign(Embedding.source_id) == cast(Project.id, String),
+        ),
+        viewonly=True,
+    )
