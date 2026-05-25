@@ -1,33 +1,62 @@
 from datetime import datetime
+from typing import Any
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 
-class SiteLanguageCreateRequest(BaseModel):
+class _SiteLanguageBaseSchema(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class SiteLanguageCreateRequest(_SiteLanguageBaseSchema):
     code: str = Field(min_length=1, max_length=16)
     name: str = Field(min_length=1, max_length=100)
-    native_name: str = Field(min_length=1, max_length=100)
+    native_name: str = Field(
+        validation_alias=AliasChoices("native_name", "nativeName"),
+        min_length=1,
+        max_length=100,
+    )
+    trans_key: str = Field(
+        validation_alias=AliasChoices("trans_key", "transKey"),
+        min_length=1,
+        max_length=255,
+    )
+    translations: dict[str, str]
     is_default: bool = False
     is_enabled: bool = True
     sort_order: int = 0
 
 
-class SiteLanguageUpdateRequest(BaseModel):
+class SiteLanguageUpdateRequest(_SiteLanguageBaseSchema):
     code: str | None = Field(default=None, min_length=1, max_length=16)
     name: str | None = Field(default=None, min_length=1, max_length=100)
-    native_name: str | None = Field(default=None, min_length=1, max_length=100)
+    native_name: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("native_name", "nativeName"),
+        min_length=1,
+        max_length=100,
+    )
+    trans_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("trans_key", "transKey"),
+        min_length=1,
+        max_length=255,
+    )
+    translations: dict[str, str] | None = None
     is_default: bool | None = None
     is_enabled: bool | None = None
     sort_order: int | None = None
 
 
 class SiteLanguagePayload(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
     id: int
     code: str
     name: str
-    native_name: str
+    native_name: str = Field(serialization_alias="nativeName")
+    trans_key: str | None = Field(serialization_alias="transKey")
+    translations: dict[str, Any]
     is_default: bool
     is_enabled: bool
     sort_order: int

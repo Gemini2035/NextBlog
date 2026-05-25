@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.models.site_language import SiteLanguage
 from app.schemas.site_languages import SiteLanguageCreateRequest
+from app.services.dictionaries import upsert_dictionary
 
 
 class SiteLanguageAlreadyExistsError(RuntimeError):
@@ -10,10 +11,14 @@ class SiteLanguageAlreadyExistsError(RuntimeError):
 
 
 def create_site_language(db: Session, payload: SiteLanguageCreateRequest) -> SiteLanguage:
+    trans_key = payload.trans_key.strip()
+    upsert_dictionary(db, trans_key, payload.translations)
+
     language = SiteLanguage(
         code=payload.code.strip(),
         name=payload.name.strip(),
         native_name=payload.native_name.strip(),
+        trans_key=trans_key,
         is_default=payload.is_default,
         is_enabled=payload.is_enabled,
         sort_order=payload.sort_order,
