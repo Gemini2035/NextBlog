@@ -5,8 +5,6 @@ export type { IconProps } from './types'
 
 // 导出所有图标组件
 export { GitHubIcon } from './GitHubIcon'
-export { GraphQLIcon } from './GraphQLIcon'
-export { OctokitIcon } from './OctokitIcon'
 export { RechartsIcon } from './RechartsIcon'
 export { SWRIcon } from './SWRIcon'
 export { TwitterIcon } from './TwitterIcon'

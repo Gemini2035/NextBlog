@@ -17,7 +17,6 @@ def normalize_database_url(url: str | None) -> str | None:
 class Settings(BaseSettings):
     project_name: str = "NextBlog API"
     api_prefix_restful: str = "/api"
-    api_prefix_graphql: str = "/api/graphql"
 
     database_url: str | None = None
     database_url_unpooled: str | None = None

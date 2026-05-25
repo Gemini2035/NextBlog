@@ -155,17 +155,6 @@
       "name": "数据交互与管理",
       "sources": [
         {
-          "key": "@octokit/graphql",
-          "name": "@octokit/graphql",
-          "summary": "@octokit/graphql - GitHub API 客户端",
-          "description": "GitHub API 客户端，用于访问 GitHub API",
-          "documentation": "https://github.com/octokit/graphql.js",
-          "sourceCode": "https://github.com/octokit/graphql.js",
-          "icon": "OctokitIcon",
-          "version": "9.0.2",
-          "subCategory": "数据交互与管理"
-        },
-        {
           "key": "SWR",
           "name": "SWR",
           "summary": "SWR - React 的缓存库",
@@ -457,17 +446,6 @@
       "name": "Internationalization",
       "sources": [
         {
-          "key": "@octokit/graphql",
-          "name": "@octokit/graphql",
-          "summary": "@octokit/graphql - GitHub API Client",
-          "description": "GitHub API client, used to access GitHub API, developed and maintained by myself",
-          "documentation": "https://github.com/octokit/graphql.js",
-          "sourceCode": "https://github.com/octokit/graphql.js",
-          "icon": "OctokitIcon",
-          "version": "9.0.2",
-          "subCategory": "Internationalization"
-        },
-        {
           "key": "SWR",
           "name": "SWR",
           "summary": "SWR - React Cache Library",
@@ -758,17 +736,6 @@
       "key": "Internationalizations",
       "name": "データ相互作用と管理",
       "sources": [
-        {
-          "key": "@octokit/graphql",
-          "name": "@octokit/graphql",
-          "summary": "@octokit/graphql - GitHub API クライアント",
-          "description": "GitHub API クライアント, GitHub API にアクセス, 本人が全権開発・保守",
-          "documentation": "https://github.com/octokit/graphql.js",
-          "sourceCode": "https://github.com/octokit/graphql.js",
-          "icon": "OctokitIcon",
-          "version": "9.0.2",
-          "subCategory": "データ相互作用と管理"
-        },
         {
           "key": "SWR",
           "name": "SWR",

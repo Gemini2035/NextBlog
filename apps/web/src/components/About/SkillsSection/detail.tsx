@@ -91,7 +91,6 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
                 <TechTag name="Node.js" color="text-green-800" isSelected={selectedTech === 'NodeJS'} onClick={() => handleTechClick('NodeJS')} />
                 <TechTag name="PostgreSQL" color="text-green-800" isSelected={selectedTech === 'PostgreSQL'} onClick={() => handleTechClick('PostgreSQL')} />
                 <TechTag name="RESTful" color="text-green-800" isSelected={selectedTech === 'RESTful'} onClick={() => handleTechClick('RESTful')} />
-                <TechTag name="GraphQL" color="text-green-800" isSelected={selectedTech === 'GraphQL'} onClick={() => handleTechClick('GraphQL')} />
               </div>
             </div>
             <div>

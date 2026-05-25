@@ -41,13 +41,6 @@
       "summary": "CI/CD 与部署",
       "description": "Deployment 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
       "icon": "DeploymentIcon"
-    },
-    {
-      "id": "graphql",
-      "name": "GraphQL",
-      "summary": "高效数据查询",
-      "description": "GraphQL 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
-      "icon": "GraphQLIcon"
     }
   ],
   "en": [
@@ -92,13 +85,6 @@
       "summary": "CI/CD & Deployment",
       "description": "Deployment is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
       "icon": "DeploymentIcon"
-    },
-    {
-      "id": "graphql",
-      "name": "GraphQL",
-      "summary": "Efficient Data Query",
-      "description": "GraphQL is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
-      "icon": "GraphQLIcon"
     }
   ],
   "ja": [
@@ -143,13 +129,6 @@
       "summary": "CI/CD とデプロイ",
       "description": "Deployment は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
       "icon": "DeploymentIcon"
-    },
-    {
-      "id": "graphql",
-      "name": "GraphQL",
-      "summary": "効率的なデータクエリ",
-      "description": "GraphQL は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
-      "icon": "GraphQLIcon"
     }
   ]
 }
