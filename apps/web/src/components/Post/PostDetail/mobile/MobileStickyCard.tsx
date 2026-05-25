@@ -3,10 +3,10 @@
 import { useTranslations } from 'next-intl'
 import { PostTag } from '../../PostTag'
 import { formatDate, cn } from '@/utils'
-import type { Post } from '../../../../../.contentlayer/generated'
+import type { BlogPostDetail } from '@/types/blog'
 
 interface MobileStickyCardProps {
-  post: Post
+  post: BlogPostDetail
   scrollProgress: number
 }
 
@@ -59,8 +59,8 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
             marginBottom: scrollProgress < 1 ? `${16 - scrollProgress * 16}px` : '0px',
           }}
         >
-          <time dateTime={post.date}>{formatDate(post.date)}</time>
-          {post.updatedAt && post.updatedAt !== post.date && (
+          <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
+          {post.updatedAt && post.updatedAt !== post.createdAt && (
             <span>{t('updatedAt')} {formatDate(post.updatedAt)}</span>
           )}
         </div>
@@ -99,4 +99,3 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
     </div>
   )
 }
-

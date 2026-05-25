@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useLocale, useTranslations } from 'next-intl'
-import { allPosts, Post } from '../../.contentlayer/generated'
+import { useTranslations } from 'next-intl'
 import { NAVIGATION_ITEMS } from '@/constants'
 import { useRecommendedContent, RecommendedContent } from './useRecommendedContent'
+import { usePosts } from './usePosts'
 import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
 import { SearchableItem, SearchResult, SearchResultsGroup } from '@/types/search'
 
@@ -48,9 +48,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const suspenseResolveRef = useRef<(() => void) | null>(null)
   
   // 基础数据
-  const locale = useLocale()
   const t = useTranslations('Navigation')
   const tSearch = useTranslations('Search')
+  const posts = usePosts()
   
   // 推荐内容
   const { recommendedContent } = useRecommendedContent()
@@ -60,19 +60,15 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     const items: SearchableItem[] = []
 
     // 1. 添加博客文章
-    const publishedPosts = allPosts.filter((post: Post) => 
-      post.published !== false && post.locale === locale
-    )
-    
-    publishedPosts.forEach((post: Post) => {
+    posts.getAllPosts().forEach((post) => {
       items.push({
-        id: `post-${post.slug}-${post.locale || 'default'}`,
+        id: `post-${post.id}-${post.locale || 'default'}`,
         type: 'post',
         title: post.title,
-        description: post.description,
-        href: `/posts/${post.slug}`,
+        description: post.description ?? undefined,
+        href: `/posts/${post.id}`,
         tags: post.tags,
-        content: post.body?.raw || '',
+        content: post.description || '',
         priority: post.featured ? 10 : 5,
         category: '博客文章'
       })
@@ -126,7 +122,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     })
 
     return items
-  }, [locale, t]) // 添加 t 依赖
+  }, [posts, t])
 
   // 搜索引擎 - 使用 useMemo 缓存
   const fuse = useMemo(() => {

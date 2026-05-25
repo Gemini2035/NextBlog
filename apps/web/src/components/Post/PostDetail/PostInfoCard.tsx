@@ -6,12 +6,12 @@ import { Card, Button } from "@/ui";
 import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
 import { CollapseIcon } from "@/assets/icons";
-import type { Post } from "../../../../.contentlayer/generated";
+import type { BlogPostDetail } from "@/types/blog";
 import { useLayoutHeights, useWindowSize } from "@/hooks";
 import { MobileStickyCard } from "./mobile";
 
 interface PostInfoCardProps {
-  post: Post;
+  post: BlogPostDetail;
 }
 
 export function PostInfoCard({ post }: PostInfoCardProps) {
@@ -179,9 +179,9 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
               <div>
                 {/* 日期信息 */}
                 <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 mb-4">
-                  <time dateTime={post.date}>{formatDate(post.date)}</time>
+                  <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
 
-                  {post.updatedAt && post.updatedAt !== post.date && (
+                  {post.updatedAt && post.updatedAt !== post.createdAt && (
                     <span>{t('updatedAt')} {formatDate(post.updatedAt)}</span>
                   )}
                 </div>

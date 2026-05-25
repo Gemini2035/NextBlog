@@ -24,7 +24,7 @@ export function useNavigation() {
               href: '/posts#featured',
               items: [{
                 label: featuredPost.title,
-                href: `/posts/${featuredPost.slug}`,
+                href: `/posts/${featuredPost.id}`,
               }]
             })
           }
@@ -35,7 +35,7 @@ export function useNavigation() {
             href: '/posts#recent',
             items: recentPosts.slice(0, 10).map(post => ({
               label: post.title,
-              href: `/posts/${post.slug}`,
+              href: `/posts/${post.id}`,
             }))
           })
           

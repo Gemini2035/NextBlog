@@ -1,14 +1,8 @@
 // 全局类型定义
+import type { BlogPostDetail, BlogPostListItem } from './blog'
 
-export interface BlogPost {
-  title: string
-  slug: string
-  date: string
-  description?: string
-  tags?: string[]
-  published: boolean
-  content: string
-}
+export type BlogPost = BlogPostListItem
+export type BlogPostContent = BlogPostDetail
 
 export interface Tag {
   name: string

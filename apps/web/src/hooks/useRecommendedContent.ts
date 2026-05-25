@@ -33,11 +33,11 @@ export function useRecommendedContent() {
 
     // 置顶文章
     const featuredPosts: SearchableItem[] = featuredPost ? [{
-      id: `featured-post-${featuredPost.slug}-${featuredPost.locale || 'default'}`,
+      id: `featured-post-${featuredPost.id}-${featuredPost.locale || 'default'}`,
       type: 'post',
       title: featuredPost.title,
-      description: featuredPost.description,
-      href: `/posts/${featuredPost.slug}`,
+      description: featuredPost.description ?? undefined,
+      href: `/posts/${featuredPost.id}`,
       tags: featuredPost.tags,
       priority: 10,
       category: '博客文章'
@@ -45,14 +45,14 @@ export function useRecommendedContent() {
 
     // 最新文章（排除置顶文章以避免重复）
     const recentPostsItems: SearchableItem[] = recentPosts
-      .filter(post => !featuredPost || post.slug !== featuredPost.slug || post.locale !== featuredPost.locale)
+      .filter(post => !featuredPost || post.id !== featuredPost.id)
       .slice(0, 5)
       .map(post => ({
-        id: `recent-post-${post.slug}-${post.locale || 'default'}`,
+        id: `recent-post-${post.id}-${post.locale || 'default'}`,
         type: 'post',
         title: post.title,
-        description: post.description,
-        href: `/posts/${post.slug}`,
+        description: post.description ?? undefined,
+        href: `/posts/${post.id}`,
         tags: post.tags,
         priority: 7,
         category: '博客文章'

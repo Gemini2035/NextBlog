@@ -1,58 +1,41 @@
 import { notFound } from 'next/navigation'
-import { getPostBySlugAndLocale, getAllPosts } from '@/lib/posts-adapter'
-import { getMDXComponent } from 'next-contentlayer2/hooks'
+import { serverHttpData } from '@/apis/server-http'
 import { PostInfoCard, RelatedPosts, ContactButton } from '@/components/Post'
+import type { BlogPostDetailPayload } from '@/types/blog'
 
 interface PostPageProps {
   params: Promise<{
     locale: string
-    slug: string
+    id: string
   }>
 }
 
-export async function generateStaticParams() {
-  const posts = getAllPosts()
-  
-  const params = []
-  const locales = ['zh', 'en', 'ja']
-  
-  for (const locale of locales) {
-    for (const post of posts) {
-      params.push({
-        locale,
-        slug: post.slug,
-      })
-    }
-  }
-  
-  return params
-}
-
 export async function generateMetadata({ params }: PostPageProps) {
-  const { locale, slug } = await params
-  const post = getPostBySlugAndLocale(slug, locale)
-  
-  if (!post) {
+  const { id } = await params
+
+  try {
+    const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`)
+    const post = payload.post
+
+    return {
+      title: post.title,
+      description: post.description,
+    }
+  } catch {
     return {
       title: '文章未找到',
     }
   }
-
-  return {
-    title: post.title,
-    description: post.description,
-  }
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { locale, slug } = await params
-  const post = getPostBySlugAndLocale(slug, locale)
+  const { id } = await params
+  const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`).catch(() => null)
+  const post = payload?.post
   
   if (!post) {
     notFound()
   }
-
-  const MDXContent = getMDXComponent(post.body.code)
 
   return (
     <>
@@ -62,9 +45,10 @@ export default async function PostPage({ params }: PostPageProps) {
         
         {/* 文章内容 */}
         <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8 mt-8">
-          <div className="prose prose-lg max-w-none">
-            <MDXContent />
-          </div>
+          <div
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
         </article>
         
         {/* 联系按钮 - 移动端显示在这里，桌面端固定显示 */}

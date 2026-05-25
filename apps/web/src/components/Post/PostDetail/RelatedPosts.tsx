@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Post } from "../../../../.contentlayer/generated";
-import { getEnhancedRelatedPosts } from "@/lib/posts";
+import { getBlogPosts } from "@/apis/blog";
 import { Button, Link } from "@/ui";
 import { PostTag } from "../PostTag";
+import type { BlogPostDetail, BlogPostListItem } from "@/types/blog";
 
 // 循环图标组件
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
@@ -26,22 +26,59 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
 );
 
 interface RelatedPostsProps {
-  post: Post;
+  post: BlogPostDetail;
   limit?: number;
 }
 
-// 获取相关文章数据
-const getRelatedPostsData = (post: Post, limit: number = 6) => {
-  return getEnhancedRelatedPosts(post, limit);
+const getRelatedPostsData = (
+  post: BlogPostDetail,
+  posts: BlogPostListItem[],
+  limit: number = 6
+) => {
+  const sameLocalePosts = posts.filter((candidate) => candidate.id !== post.id)
+  const relatedByTags = sameLocalePosts.filter((candidate) =>
+    candidate.tags.some((tag) => post.tags.includes(tag))
+  )
+  const otherPosts = sameLocalePosts.filter((candidate) => !relatedByTags.includes(candidate))
+
+  return [...relatedByTags, ...otherPosts].slice(0, limit)
 };
 
 export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
   const t = useTranslations('Posts');
-  
-  // 获取真实的相关文章数据
-  const allRelatedPosts = getRelatedPostsData(post, limit);
-  const [currentPosts, setCurrentPosts] = useState(allRelatedPosts.slice(0, 3));
+  const [posts, setPosts] = useState<BlogPostListItem[]>([])
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    let ignore = false
+
+    const fetchRelatedPosts = async () => {
+      const response = await getBlogPosts({
+        siteLanguage: post.locale || post.language?.code,
+        pageSize: 100,
+      })
+
+      if (!ignore) {
+        setPosts(response.data.posts)
+      }
+    }
+
+    void fetchRelatedPosts()
+
+    return () => {
+      ignore = true
+    }
+  }, [post.language?.code, post.locale])
+
+  const allRelatedPosts = useMemo(
+    () => getRelatedPostsData(post, posts, limit),
+    [post, posts, limit]
+  )
+  const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>([]);
+
+  useEffect(() => {
+    setCurrentPosts(allRelatedPosts.slice(0, 3))
+  }, [allRelatedPosts])
 
   if (allRelatedPosts.length === 0) {
     return null;
@@ -81,8 +118,8 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
         <div className="flex gap-4 max-w-4xl">
           {currentPosts.map((relatedPost) => (
             <Link
-              key={relatedPost.slug}
-              href={`/posts/${relatedPost.slug}`}
+              key={relatedPost.id}
+              href={`/posts/${relatedPost.id}`}
               className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
@@ -107,8 +144,8 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
                     </div>
                   )}
                   
-                  <time dateTime={relatedPost.date} className="text-sm text-gray-500">
-                    {new Date(relatedPost.date).toLocaleDateString(
+                  <time dateTime={relatedPost.createdAt} className="text-sm text-gray-500">
+                    {new Date(relatedPost.createdAt).toLocaleDateString(
                       relatedPost.locale === 'zh' ? 'zh-CN' : 
                       relatedPost.locale === 'ja' ? 'ja-JP' : 'en-US', 
                       {

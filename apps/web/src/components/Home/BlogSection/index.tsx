@@ -10,7 +10,7 @@ import { cn } from '@/utils'
 import { FloatingPost } from './FloatingPost'
 import { StarFilledIcon, ClockIcon, FileTextIcon, TagIcon, ArrowRightIcon } from '@/assets/icons'
 import { PostIcon } from '@/assets/icons/PostIcon'
-import type { Post } from '.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 
 interface BlogSectionProps {
   index: number
@@ -25,7 +25,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
   // 获取blog section的导航配置
   const blogNav = NAVIGATION_ITEMS.find(item => item.type === '__blog')
   const blogDescription = blogNav?.submenu?.description || 'Explore my latest technical insights and development experience'
-  const [floatingPosts, setFloatingPosts] = useState<Post[]>([])
+  const [floatingPosts, setFloatingPosts] = useState<BlogPostListItem[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [popularTags, setPopularTags] = useState<string[]>([])
 
@@ -39,9 +39,9 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
     
     if (postsToShow.length < 6) {
       const remainingCount = 6 - postsToShow.length
-      const usedSlugs = new Set(postsToShow.map(post => post.slug))
+      const usedIds = new Set(postsToShow.map(post => post.id))
       const additionalPosts = allPosts
-        .filter(post => !usedSlugs.has(post.slug))
+        .filter(post => !usedIds.has(post.id))
         .slice(0, remainingCount)
       postsToShow = [...postsToShow, ...additionalPosts]
     }
@@ -67,7 +67,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           <div className="relative w-full h-full">
             {floatingPosts.map((post, idx) => (
               <FloatingPost
-                key={post.slug}
+                key={post.id}
                 post={post}
                 index={idx}
                 total={floatingPosts.length}
@@ -183,11 +183,11 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
               'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2'
             )}>
               {floatingPosts.slice(0, 6).map((post) => (
-                <div key={post.slug} className={cn(
+                <div key={post.id} className={cn(
                   'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-lg',
                   'border border-blue-200/60 p-2.5'
                 )}>
-                  <Link href={post.url} className="block">
+                  <Link href={`/posts/${post.id}`} className="block">
                     <div className="flex items-center gap-2">
                       <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                         <PostIcon className="w-4 h-4" />

@@ -3,9 +3,9 @@
 import { useEffect, useState, use } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { getAllPosts, getFeaturedPosts, getRecentPosts } from '@/lib/posts-adapter'
+import { getBlogPosts } from '@/apis/blog'
 import { FeaturedPostSection, RecentUpdatesSection, AllPostsSection } from '@/components/Post'
-import type { Post } from '.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 
 interface PostsPageProps {
   params: Promise<{
@@ -18,25 +18,41 @@ export default function PostsPage({ params }: PostsPageProps) {
   const searchParams = useSearchParams()
   const t = useTranslations('Posts')
   
-  const [posts, setPosts] = useState<Post[]>([])
-  const [featuredPosts, setFeaturedPosts] = useState<Post[]>([])
-  const [recentPosts, setRecentPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<BlogPostListItem[]>([])
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPostListItem[]>([])
+  const [recentPosts, setRecentPosts] = useState<BlogPostListItem[]>([])
   const [initialTag, setInitialTag] = useState<string | null>(null)
   
   // 初始化数据
   useEffect(() => {
-    const allPosts = getAllPosts(locale)
-    const featured = getFeaturedPosts(locale)
-    const recent = getRecentPosts(locale)
-    
-    setPosts(allPosts)
-    setFeaturedPosts(featured)
-    setRecentPosts(recent)
+    let ignore = false
+
+    const fetchPosts = async () => {
+      const response = await getBlogPosts({ siteLanguage: locale, pageSize: 100 })
+      if (ignore) return
+
+      const nextPosts = response.data.posts
+      const oneMonthAgo = new Date()
+      oneMonthAgo.setDate(oneMonthAgo.getDate() - 30)
+
+      setPosts(nextPosts)
+      setFeaturedPosts(nextPosts.filter((post) => post.featured))
+      setRecentPosts(
+        nextPosts
+          .filter((post) => new Date(post.updatedAt || post.createdAt) >= oneMonthAgo)
+          .slice(0, 10)
+      )
+    }
+
+    void fetchPosts()
     
     // 从URL参数中获取tag
     const tagParam = searchParams.get('tag')
     if (tagParam) {
       setInitialTag(tagParam) // Next.js的useSearchParams已经自动解码
+    }
+    return () => {
+      ignore = true
     }
   }, [locale, searchParams])
 
