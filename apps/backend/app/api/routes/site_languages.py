@@ -27,7 +27,6 @@ def build_site_language_payload(language: object, db: Session) -> SiteLanguagePa
         "id": getattr(language, "id"),
         "code": getattr(language, "code"),
         "name": getattr(language, "name"),
-        "native_name": getattr(language, "native_name"),
         "trans_key": getattr(language, "trans_key"),
         "translations": dictionary.values if dictionary else {},
         "is_default": getattr(language, "is_default"),

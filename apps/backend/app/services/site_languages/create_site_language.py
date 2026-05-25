@@ -17,7 +17,6 @@ def create_site_language(db: Session, payload: SiteLanguageCreateRequest) -> Sit
     language = SiteLanguage(
         code=payload.code.strip(),
         name=payload.name.strip(),
-        native_name=payload.native_name.strip(),
         trans_key=trans_key,
         is_default=payload.is_default,
         is_enabled=payload.is_enabled,

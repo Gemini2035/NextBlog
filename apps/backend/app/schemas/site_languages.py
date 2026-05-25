@@ -11,11 +11,6 @@ class _SiteLanguageBaseSchema(BaseModel):
 class SiteLanguageCreateRequest(_SiteLanguageBaseSchema):
     code: str = Field(min_length=1, max_length=16)
     name: str = Field(min_length=1, max_length=100)
-    native_name: str = Field(
-        validation_alias=AliasChoices("native_name", "nativeName"),
-        min_length=1,
-        max_length=100,
-    )
     trans_key: str = Field(
         validation_alias=AliasChoices("trans_key", "transKey"),
         min_length=1,
@@ -30,12 +25,6 @@ class SiteLanguageCreateRequest(_SiteLanguageBaseSchema):
 class SiteLanguageUpdateRequest(_SiteLanguageBaseSchema):
     code: str | None = Field(default=None, min_length=1, max_length=16)
     name: str | None = Field(default=None, min_length=1, max_length=100)
-    native_name: str | None = Field(
-        default=None,
-        validation_alias=AliasChoices("native_name", "nativeName"),
-        min_length=1,
-        max_length=100,
-    )
     trans_key: str | None = Field(
         default=None,
         validation_alias=AliasChoices("trans_key", "transKey"),
@@ -54,7 +43,6 @@ class SiteLanguagePayload(BaseModel):
     id: int
     code: str
     name: str
-    native_name: str = Field(serialization_alias="nativeName")
     trans_key: str | None = Field(serialization_alias="transKey")
     translations: dict[str, Any]
     is_default: bool

@@ -12,7 +12,6 @@ class SiteLanguage(TimestampMixin, Base):
 
     code: Mapped[str] = mapped_column(String(16), nullable=False, unique=True, index=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
-    native_name: Mapped[str] = mapped_column(String(100), nullable=False)
     trans_key: Mapped[str | None] = mapped_column(String(255), nullable=True, index=True)
 
     is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
