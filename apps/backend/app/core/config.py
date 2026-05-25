@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     github_username: str = "Gemini2035"
     github_token: str | None = None
     cron_secret: str | None = None
+    admin_api_secret: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.local", ".env.development.local"),
