@@ -5,7 +5,7 @@ export interface BlogLanguage {
 }
 
 export interface BlogPostListItem {
-  id: number
+  id: string
   url: string
   title: string
   description?: string | null

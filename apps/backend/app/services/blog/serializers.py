@@ -1,5 +1,6 @@
 from app.models.blog import BlogPost, BlogTag
 from app.models.site_language import SiteLanguage
+from app.services.blog.public_ids import encode_blog_post_id
 
 
 def serialize_language(language: SiteLanguage | None) -> dict[str, object] | None:
@@ -25,8 +26,8 @@ def serialize_post_list_item(post: BlogPost) -> dict[str, object]:
     locale = post.language.code if post.language else None
 
     return {
-        "id": post.id,
-        "url": f"/posts/{post.id}",
+        "id": encode_blog_post_id(post.id),
+        "url": f"/posts/{encode_blog_post_id(post.id)}",
         "title": post.title,
         "description": post.description,
         "is_featured": post.is_featured,
