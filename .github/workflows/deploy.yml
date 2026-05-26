@@ -1,17 +1,13 @@
-name: Auto Translate and Deploy
+name: Deploy
 
 on:
   push:
     branches: [ main, master, production ]
     paths:
-      - 'apps/web/content/zh/posts/**'
-      - 'apps/web/content/en/posts/**'
-      - 'apps/web/content/ja/posts/**'
       - 'apps/web/src/**'
       - 'apps/web/package.json'
       - 'apps/web/next.config.ts'
       - 'apps/web/postcss.config.mjs'
-      - 'apps/web/contentlayer.config.ts'
       - 'apps/web/vercel.json'
       - 'apps/web/src/app/globals.css'
       - 'apps/backend/**'
@@ -26,14 +22,10 @@ on:
   pull_request:
     branches: [ main, master, production ]
     paths:
-      - 'apps/web/content/zh/posts/**'
-      - 'apps/web/content/en/posts/**'
-      - 'apps/web/content/ja/posts/**'
       - 'apps/web/src/**'
       - 'apps/web/package.json'
       - 'apps/web/next.config.ts'
       - 'apps/web/postcss.config.mjs'
-      - 'apps/web/contentlayer.config.ts'
       - 'apps/web/vercel.json'
       - 'apps/web/src/app/globals.css'
       - 'apps/backend/**'
@@ -49,11 +41,6 @@ on:
     inputs:
       force_build:
         description: 'Force build (ignore file change detection)'
-        required: false
-        default: false
-        type: boolean
-      redeploy_only:
-        description: 'Redeploy only (skip auto-translation)'
         required: false
         default: false
         type: boolean
@@ -185,16 +172,6 @@ jobs:
 
     - name: Check frontend
       run: pnpm web:check
-
-    - name: Run translation (generate all language versions)
-      working-directory: apps/web
-      run: |
-        echo "🌐 Generating translations for all articles..."
-        pnpm run translate -- --all
-        echo "✅ Translation completed"
-
-    - name: Build Contentlayer
-      run: pnpm --filter @nextblog/web contentlayer
       
     - name: Build Next.js
       run: pnpm --filter @nextblog/web build

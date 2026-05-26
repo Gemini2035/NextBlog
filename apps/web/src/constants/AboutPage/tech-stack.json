@@ -8,18 +8,18 @@
       "icon": "NextJsIcon"
     },
     {
-      "id": "contentlayer",
-      "name": "Contentlayer",
-      "summary": "类型安全内容",
-      "description": "Contentlayer 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
-      "icon": "ContentlayerIcon"
+      "id": "backend-api",
+      "name": "Backend API",
+      "summary": "服务端内容接口",
+      "description": "博客文章、站点配置和标签数据已经迁移到后端，由 API 提供统一的数据读取与管理能力。前端通过服务端请求获取首屏数据，后续管理页面可以在同一套接口上扩展增删改查能力。",
+      "icon": "RESTfulIcon"
     },
     {
-      "id": "mdx",
-      "name": "MDX",
-      "summary": "Markdown + JSX",
-      "description": "MDX 是一个用于构建静态网站的框架，它允许你使用 Markdown 文件作为内容源，并生成静态站点。它提供了许多有用的功能，如自动代码分割、静态优化、图片优化、路由系统等。",
-      "icon": "MdxIcon"
+      "id": "database",
+      "name": "PostgreSQL",
+      "summary": "结构化内容存储",
+      "description": "站点配置、博客文章、多语言字典和向量记录以数据库为中心进行建模。内容通过稳定的数据表结构支撑查询、翻译、禁用规则和后续 CMS 管理。",
+      "icon": "ArchiveIcon"
     },
     {
       "id": "tailwind",
@@ -52,18 +52,18 @@
       "icon": "NextJsIcon"
     },
     {
-      "id": "contentlayer",
-      "name": "Contentlayer",
-      "summary": "Type-Safe Content",
-      "description": "Contentlayer is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
-      "icon": "ContentlayerIcon"
+      "id": "backend-api",
+      "name": "Backend API",
+      "summary": "Server-Side Content API",
+      "description": "Blog posts, site configuration, and tag data have moved to the backend, where APIs provide a single read and management layer. The frontend now fetches initial page data on the server, while future admin pages can build create, update, and delete workflows on the same API surface.",
+      "icon": "RESTfulIcon"
     },
     {
-      "id": "mdx",
-      "name": "MDX",
-      "summary": "Markdown + JSX",
-      "description": "MDX is a framework for building static websites. It allows you to use Markdown files as content source and generate static sites. It provides many useful features, such as automatic code splitting, static optimization, image optimization, routing system, etc.",
-      "icon": "MdxIcon"
+      "id": "database",
+      "name": "PostgreSQL",
+      "summary": "Structured Content Storage",
+      "description": "Site configuration, blog posts, multilingual dictionaries, and vector records are modeled around the database. Stable tables now support querying, translations, disable rules, and future CMS editing.",
+      "icon": "ArchiveIcon"
     },
     {
       "id": "tailwind",
@@ -96,18 +96,18 @@
       "icon": "NextJsIcon"
     },
     {
-      "id": "contentlayer",
-      "name": "Contentlayer",
-      "summary": "静的サイト生成のためのフレームワーク",
-      "description": "Contentlayer は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
-      "icon": "ContentlayerIcon"
+      "id": "backend-api",
+      "name": "Backend API",
+      "summary": "サーバー側コンテンツ API",
+      "description": "ブログ記事、サイト設定、タグデータはバックエンドへ移行し、API が読み取りと管理の共通レイヤーを提供します。フロントエンドは初期表示データをサーバー側で取得し、今後の管理画面は同じ API 上で作成、更新、削除を拡張できます。",
+      "icon": "RESTfulIcon"
     },
     {
-      "id": "mdx",
-      "name": "MDX",
-      "summary": "Markdown + JSX",
-      "description": "MDX は、静的サイトを構築するためのフレームワークです。Markdown ファイルをコンテンツソースとして使用し、静的サイトを生成することができます。自動コード分割、静的最適化、画像最適化、ルーティングシステムなどの便利な機能を提供します。",
-      "icon": "MdxIcon"
+      "id": "database",
+      "name": "PostgreSQL",
+      "summary": "構造化コンテンツ保存",
+      "description": "サイト設定、ブログ記事、多言語辞書、ベクトル記録はデータベースを中心にモデル化されています。安定したテーブル構造で検索、翻訳、非表示ルール、今後の CMS 編集を支えます。",
+      "icon": "ArchiveIcon"
     },
     {
       "id": "tailwind",
