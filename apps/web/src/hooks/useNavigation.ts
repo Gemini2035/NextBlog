@@ -57,6 +57,5 @@ export function useNavigation() {
   
   return {
     navigationItems,
-    currentLocale: posts.currentLocale
   }
 }

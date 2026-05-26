@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { getBlogPosts } from "@/apis/blog";
 import { Button, Link } from "@/ui";
 import { PostTag } from "../PostTag";
@@ -46,6 +46,7 @@ const getRelatedPostsData = (
 
 export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
   const t = useTranslations('Posts');
+  const locale = useLocale()
   const [posts, setPosts] = useState<BlogPostListItem[]>([])
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -53,10 +54,7 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
     let ignore = false
 
     const fetchRelatedPosts = async () => {
-      const response = await getBlogPosts({
-        siteLanguage: post.locale || post.language?.code,
-        pageSize: 100,
-      })
+      const response = await getBlogPosts({ siteLanguage: locale, pageSize: 100 })
 
       if (!ignore) {
         setPosts(response.data.posts)
@@ -68,7 +66,7 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
     return () => {
       ignore = true
     }
-  }, [post.language?.code, post.locale])
+  }, [locale])
 
   const allRelatedPosts = useMemo(
     () => getRelatedPostsData(post, posts, limit),
@@ -145,15 +143,11 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
                   )}
                   
                   <time dateTime={relatedPost.createdAt} className="text-sm text-gray-500">
-                    {new Date(relatedPost.createdAt).toLocaleDateString(
-                      relatedPost.locale === 'zh' ? 'zh-CN' : 
-                      relatedPost.locale === 'ja' ? 'ja-JP' : 'en-US', 
-                      {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }
-                    )}
+                    {new Date(relatedPost.createdAt).toLocaleDateString(undefined, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </time>
                 </div>
               </div>

@@ -62,7 +62,7 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     // 1. 添加博客文章
     posts.getAllPosts().forEach((post) => {
       items.push({
-        id: `post-${post.id}-${post.locale || 'default'}`,
+        id: `post-${post.id}`,
         type: 'post',
         title: post.title,
         description: post.description ?? undefined,

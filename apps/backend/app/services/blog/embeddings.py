@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.integrations.llm import OpenAIClient
 from app.models.blog import BLOG_POST_EMBEDDING_SOURCE_TYPE, BlogPost
 from app.models.embedding import Embedding
+from app.services.blog_tags import get_blog_tag_dictionary_key
+from app.services.blog.translations import resolve_dictionary_value
 
 
 class _HTMLTextExtractor(HTMLParser):
@@ -28,14 +30,14 @@ def extract_html_text(html: str) -> str:
     return parser.get_text()
 
 
-def get_blog_post_embedding_text(post: BlogPost) -> str:
-    tags = ", ".join(tag.display_name or tag.name for tag in post.tags)
+def get_blog_post_embedding_text(db: Session, post: BlogPost) -> str:
+    tags = ", ".join(get_blog_tag_dictionary_key(tag.key) for tag in post.tags)
     content_text = extract_html_text(post.content)
 
     return "\n".join(
         [
-            f"Title: {post.title}",
-            f"Description: {post.description or ''}",
+            f"Title: {resolve_dictionary_value(db, post.title_key, 'zh') or ''}",
+            f"Description: {resolve_dictionary_value(db, post.description_key, 'zh') or ''}",
             f"Tags: {tags}",
             "Content:",
             content_text,
@@ -48,7 +50,7 @@ def upsert_blog_post_embedding(
     post: BlogPost,
     llm_client: OpenAIClient,
 ) -> bool:
-    embedding_text = get_blog_post_embedding_text(post)
+    embedding_text = get_blog_post_embedding_text(db, post)
     existing_embedding = db.scalar(
         select(Embedding).where(
             Embedding.source_type == BLOG_POST_EMBEDDING_SOURCE_TYPE,

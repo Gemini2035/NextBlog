@@ -7,6 +7,7 @@ from app.schemas.blog import BlogPostWriteRequest
 from app.services.blog.create_blog_post import BlogPostWriteError
 from app.services.blog.embeddings import upsert_blog_post_embedding
 from app.services.blog.tags import get_blog_tags_by_ids
+from app.services.blog.translations import ensure_blog_translation
 
 
 def update_blog_post(
@@ -18,15 +19,36 @@ def update_blog_post(
     if post is None:
         return None
 
-    data = payload.basic_info.model_dump(exclude_unset=True)
+    data = payload.model_dump(exclude_unset=True)
+    content = data.pop("content", None)
     tag_ids = data.pop("tag_ids", None)
 
-    if payload.content is not None:
-        post.content = payload.content.strip()
+    if content is not None:
+        post.content = content.strip()
+
+    if "title" in data:
+        title_payload = data.pop("title")
+        if title_payload is not None:
+            post.title_key = ensure_blog_translation(
+                db,
+                key=title_payload["key"],
+                translations=title_payload["value"],
+            )
+
+    if "description" in data:
+        description_payload = data.pop("description")
+        if description_payload is not None:
+            post.description_key = ensure_blog_translation(
+                db,
+                key=description_payload["key"],
+                translations=description_payload["value"],
+            )
 
     for key, value in data.items():
         if isinstance(value, str):
             value = value.strip()
+        if key == "disable" and isinstance(value, list):
+            value = [language.strip() for language in value if isinstance(language, str) and language.strip()]
         setattr(post, key, value)
 
     if tag_ids is not None:

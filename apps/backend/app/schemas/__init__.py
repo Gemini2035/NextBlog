@@ -1,6 +1,5 @@
 from app.schemas.common import ApiResponse
 from app.schemas.blog import (
-    BlogPostBasicInfoUpdate,
     BlogPostCreateRequest,
     BlogPostDeletePayload,
     BlogPostDeleteRequest,
@@ -10,6 +9,7 @@ from app.schemas.blog import (
     BlogPostWriteRequest,
 )
 from app.schemas.blog_tags import (
+    BlogTagDuplicatePayload,
     BlogTagDeletePayload,
     BlogTagDeleteRequest,
     BlogTagPayload,
@@ -26,7 +26,6 @@ from app.schemas.site_languages import (
 
 __all__ = [
     "ApiResponse",
-    "BlogPostBasicInfoUpdate",
     "BlogPostCreateRequest",
     "BlogPostDeletePayload",
     "BlogPostDeleteRequest",
@@ -36,6 +35,7 @@ __all__ = [
     "BlogPostWriteRequest",
     "BlogTagDeletePayload",
     "BlogTagDeleteRequest",
+    "BlogTagDuplicatePayload",
     "BlogTagPayload",
     "BlogTagsPayload",
     "BlogTagUpdateRequest",

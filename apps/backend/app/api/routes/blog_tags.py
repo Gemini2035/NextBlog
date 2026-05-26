@@ -7,6 +7,7 @@ from app.api.dependencies import verify_admin_request
 from app.database.session import get_db
 from app.schemas import ApiResponse
 from app.schemas.blog_tags import (
+    BlogTagDuplicatePayload,
     BlogTagDeletePayload,
     BlogTagDeleteRequest,
     BlogTagPayload,
@@ -45,7 +46,12 @@ def upsert_tags(
     try:
         tags = upsert_blog_tags(db, payload.tags)
     except BlogTagAlreadyExistsError as error:
-        raise HTTPException(status_code=409, detail="Blog tag already exists") from error
+        raise HTTPException(
+            status_code=409,
+            detail=BlogTagDuplicatePayload.model_validate(
+                {"tags": error.duplicated_tags}
+            ).model_dump(by_alias=True),
+        ) from error
 
     return ApiResponse[BlogTagsPayload](
         data=BlogTagsPayload.model_validate({"tags": tags}),

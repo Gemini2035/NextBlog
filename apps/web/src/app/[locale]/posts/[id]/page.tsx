@@ -11,10 +11,12 @@ interface PostPageProps {
 }
 
 export async function generateMetadata({ params }: PostPageProps) {
-  const { id } = await params
+  const { id, locale } = await params
 
   try {
-    const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`)
+    const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
+      headers: { 'X-Site-Language': locale },
+    })
     const post = payload.post
 
     return {
@@ -29,8 +31,10 @@ export async function generateMetadata({ params }: PostPageProps) {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { id } = await params
-  const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`).catch(() => null)
+  const { id, locale } = await params
+  const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
+    headers: { 'X-Site-Language': locale },
+  }).catch(() => null)
   const post = payload?.post
   
   if (!post) {

@@ -33,7 +33,7 @@ export function useRecommendedContent() {
 
     // 置顶文章
     const featuredPosts: SearchableItem[] = featuredPost ? [{
-      id: `featured-post-${featuredPost.id}-${featuredPost.locale || 'default'}`,
+      id: `featured-post-${featuredPost.id}`,
       type: 'post',
       title: featuredPost.title,
       description: featuredPost.description ?? undefined,
@@ -48,7 +48,7 @@ export function useRecommendedContent() {
       .filter(post => !featuredPost || post.id !== featuredPost.id)
       .slice(0, 5)
       .map(post => ({
-        id: `recent-post-${post.id}-${post.locale || 'default'}`,
+        id: `recent-post-${post.id}`,
         type: 'post',
         title: post.title,
         description: post.description ?? undefined,

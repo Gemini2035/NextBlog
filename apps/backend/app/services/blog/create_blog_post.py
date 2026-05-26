@@ -6,6 +6,7 @@ from app.models.blog import BlogPost
 from app.schemas.blog import BlogPostCreateRequest
 from app.services.blog.embeddings import upsert_blog_post_embedding
 from app.services.blog.tags import get_blog_tags_by_ids
+from app.services.blog.translations import ensure_blog_translation
 
 
 class BlogPostWriteError(RuntimeError):
@@ -13,15 +14,25 @@ class BlogPostWriteError(RuntimeError):
 
 
 def create_blog_post(db: Session, payload: BlogPostCreateRequest) -> tuple[BlogPost, bool]:
-    basic_info = payload.basic_info
-    post = BlogPost(
-        language_id=basic_info.language_id,
-        title=basic_info.title.strip(),
-        description=basic_info.description.strip() if basic_info.description else None,
-        content=payload.content.strip(),
-        is_featured=basic_info.is_featured,
+    title_key = ensure_blog_translation(
+        db,
+        key=payload.title.key,
+        translations=payload.title.value,
     )
-    post.tags = get_blog_tags_by_ids(db, basic_info.tag_ids)
+    description_key = ensure_blog_translation(
+        db,
+        key=payload.description.key,
+        translations=payload.description.value,
+    ) if payload.description else None
+
+    post = BlogPost(
+        title_key=title_key,
+        description_key=description_key,
+        content=payload.content.strip(),
+        is_featured=payload.is_featured,
+        disable=[language.strip() for language in payload.disable if language.strip()],
+    )
+    post.tags = get_blog_tags_by_ids(db, payload.tag_ids)
     db.add(post)
 
     llm_client = OpenAIClient()

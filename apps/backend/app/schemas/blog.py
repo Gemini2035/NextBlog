@@ -1,29 +1,25 @@
 from datetime import datetime
 
-from pydantic import AliasChoices, BaseModel, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 
-class BlogTagPayload(BaseModel):
+class _BlogBaseSchema(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class BlogTagPayload(_BlogBaseSchema):
     id: int
-    name: str
-    display_name: str | None = Field(default=None, serialization_alias="displayName")
+    dictionary_key: str = Field(serialization_alias="dictionaryKey")
 
 
-class BlogLanguagePayload(BaseModel):
-    id: int
-    code: str
-    name: str
-
-
-class BlogPostListItem(BaseModel):
+class BlogPostListItem(_BlogBaseSchema):
     id: str
     url: str
     title: str
     description: str | None = None
     is_featured: bool = Field(serialization_alias="isFeatured")
     featured: bool
-    locale: str | None = None
-    language: BlogLanguagePayload | None = None
+    disable: list[str]
     tags: list[str]
     created_at: datetime = Field(serialization_alias="createdAt")
     updated_at: datetime = Field(serialization_alias="updatedAt")
@@ -33,43 +29,24 @@ class BlogPostDetail(BlogPostListItem):
     content: str
 
 
-class BlogPostWriteRequest(BaseModel):
+class BlogPostDictionaryField(_BlogBaseSchema):
+    key: str = Field(min_length=1, max_length=255)
+    value: dict[str, str] = Field(
+        min_length=1,
+        validation_alias=AliasChoices("value", "values"),
+    )
+
+
+class BlogPostWriteRequest(_BlogBaseSchema):
     content: str | None = Field(default=None, min_length=1)
-    basic_info: "BlogPostBasicInfoUpdate" = Field(
-        default_factory=lambda: BlogPostBasicInfoUpdate(),
-        validation_alias=AliasChoices("basic_info", "basicInfo"),
-        serialization_alias="basicInfo",
+    title: BlogPostDictionaryField | None = None
+    description: BlogPostDictionaryField | None = None
+    is_featured: bool | None = Field(
+        default=None,
+        validation_alias=AliasChoices("is_featured", "isFeatured"),
+        serialization_alias="isFeatured",
     )
-    options: "BlogPostWriteOptions | None" = None
-
-    def to_create_request(self) -> "BlogPostCreateRequest":
-        create_basic_info = BlogPostBasicInfoCreate.model_validate(
-            self.basic_info.model_dump()
-        )
-        if self.content is None:
-            raise ValueError("content is required")
-
-        return BlogPostCreateRequest(
-            content=self.content,
-            basic_info=create_basic_info,
-            options=self.options,
-        )
-
-
-class BlogPostCreateRequest(BaseModel):
-    content: str = Field(min_length=1)
-    basic_info: "BlogPostBasicInfoCreate" = Field(
-        validation_alias=AliasChoices("basic_info", "basicInfo"),
-        serialization_alias="basicInfo",
-    )
-    options: "BlogPostWriteOptions | None" = None
-
-
-class BlogPostBasicInfoUpdate(BaseModel):
-    language_id: int | None = None
-    title: str | None = Field(default=None, min_length=1, max_length=255)
-    description: str | None = None
-    is_featured: bool | None = None
+    disable: list[str] | None = None
     tag_ids: list[int] | None = Field(
         default=None,
         validation_alias=AliasChoices("tag_ids", "tagIds"),
@@ -77,11 +54,16 @@ class BlogPostBasicInfoUpdate(BaseModel):
     )
 
 
-class BlogPostBasicInfoCreate(BaseModel):
-    language_id: int | None = None
-    title: str = Field(min_length=1, max_length=255)
-    description: str | None = None
-    is_featured: bool = False
+class BlogPostCreateRequest(_BlogBaseSchema):
+    content: str = Field(min_length=1)
+    title: BlogPostDictionaryField
+    description: BlogPostDictionaryField | None = None
+    is_featured: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("is_featured", "isFeatured"),
+        serialization_alias="isFeatured",
+    )
+    disable: list[str] = Field(default_factory=list)
     tag_ids: list[int] = Field(
         default_factory=list,
         validation_alias=AliasChoices("tag_ids", "tagIds"),
@@ -89,21 +71,7 @@ class BlogPostBasicInfoCreate(BaseModel):
     )
 
 
-class BlogPostTranslationOption(BaseModel):
-    language: str = Field(min_length=1)
-    post_id: str | None = Field(
-        default=None,
-        validation_alias=AliasChoices("post_id", "postId"),
-        serialization_alias="postId",
-    )
-
-
-class BlogPostWriteOptions(BaseModel):
-    language: str | None = Field(default=None, min_length=1)
-    translations: list[BlogPostTranslationOption] = Field(default_factory=list)
-
-
-class BlogPostDeleteRequest(BaseModel):
+class BlogPostDeleteRequest(_BlogBaseSchema):
     post_ids: list[str] = Field(
         min_length=1,
         validation_alias=AliasChoices("post_ids", "postIds"),
@@ -111,7 +79,7 @@ class BlogPostDeleteRequest(BaseModel):
     )
 
 
-class BlogPostsPayload(BaseModel):
+class BlogPostsPayload(_BlogBaseSchema):
     posts: list[BlogPostListItem]
     total: int
     page: int
@@ -119,16 +87,15 @@ class BlogPostsPayload(BaseModel):
     total_pages: int = Field(serialization_alias="totalPages")
 
 
-class BlogPostDetailPayload(BaseModel):
+class BlogPostDetailPayload(_BlogBaseSchema):
     post: BlogPostDetail
 
 
-class BlogPostWritePayload(BaseModel):
-    post: BlogPostDetail
-    translations: list[BlogPostTranslationOption] = Field(default_factory=list)
+class BlogPostWritePayload(_BlogBaseSchema):
+    post: BlogPostListItem
     embedding_updated: bool = Field(serialization_alias="embeddingUpdated")
 
 
-class BlogPostDeletePayload(BaseModel):
+class BlogPostDeletePayload(_BlogBaseSchema):
     deleted: int
     post_ids: list[str] = Field(serialization_alias="postIds")

@@ -10,7 +10,6 @@ export interface UsePostsReturn {
   getAllTags: () => string[]
   getFeaturedPost: () => BlogPostListItem | undefined
   getRecentPosts: () => BlogPostListItem[]
-  currentLocale: string
 }
 
 export function usePosts(): UsePostsReturn {
@@ -97,7 +96,6 @@ export function usePosts(): UsePostsReturn {
       getAllTags,
       getFeaturedPost,
       getRecentPosts,
-      currentLocale: locale,
     }),
     [
       getAllPosts,
@@ -106,7 +104,6 @@ export function usePosts(): UsePostsReturn {
       getAllTags,
       getFeaturedPost,
       getRecentPosts,
-      locale,
     ]
   )
 }

@@ -1,9 +1,3 @@
-export interface BlogLanguage {
-  id: number
-  code: string
-  name: string
-}
-
 export interface BlogPostListItem {
   id: string
   url: string
@@ -11,8 +5,7 @@ export interface BlogPostListItem {
   description?: string | null
   isFeatured: boolean
   featured: boolean
-  locale?: string | null
-  language?: BlogLanguage | null
+  disable: string[]
   tags: string[]
   createdAt: string
   updatedAt: string
@@ -20,6 +13,20 @@ export interface BlogPostListItem {
 
 export interface BlogPostDetail extends BlogPostListItem {
   content: string
+}
+
+export interface BlogPostDictionaryField {
+  key: string
+  value: Record<string, string>
+}
+
+export interface BlogPostWriteRequest {
+  content: string
+  title: BlogPostDictionaryField
+  description?: BlogPostDictionaryField | null
+  isFeatured?: boolean
+  disable?: string[]
+  tagIds?: number[]
 }
 
 export interface BlogPostsPayload {
@@ -32,4 +39,9 @@ export interface BlogPostsPayload {
 
 export interface BlogPostDetailPayload {
   post: BlogPostDetail
+}
+
+export interface BlogPostWritePayload {
+  post: BlogPostListItem
+  embeddingUpdated: boolean
 }

@@ -6,24 +6,17 @@ from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 class BlogTagCreateRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    name: str = Field(min_length=1, max_length=100)
-    display_name: str | None = Field(
-        default=None,
-        validation_alias=AliasChoices("display_name", "displayName"),
-        serialization_alias="displayName",
-        max_length=100,
-    )
+    key: str = Field(min_length=1, max_length=255)
+    translations: dict[str, str] = Field(validation_alias=AliasChoices("translations", "content"))
 
 
 class BlogTagUpdateRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    name: str | None = Field(default=None, min_length=1, max_length=100)
-    display_name: str | None = Field(
+    key: str | None = Field(default=None, min_length=1, max_length=255)
+    translations: dict[str, str] | None = Field(
         default=None,
-        validation_alias=AliasChoices("display_name", "displayName"),
-        serialization_alias="displayName",
-        max_length=100,
+        validation_alias=AliasChoices("translations", "content"),
     )
 
 
@@ -43,14 +36,27 @@ class BlogTagPayload(BaseModel):
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
     id: int
-    name: str
-    display_name: str | None = Field(serialization_alias="displayName")
+    key: str
+    translations: dict[str, str]
     created_at: datetime
     updated_at: datetime
 
 
 class BlogTagsPayload(BaseModel):
     tags: list[BlogTagPayload]
+
+
+class BlogTagDuplicateItem(BaseModel):
+    id: int | None = None
+    key: str
+    translations: dict[str, str]
+    created_at: datetime | None = Field(default=None, serialization_alias="createdAt")
+    updated_at: datetime | None = Field(default=None, serialization_alias="updatedAt")
+
+
+class BlogTagDuplicatePayload(BaseModel):
+    duplicated: bool = True
+    tags: list[BlogTagDuplicateItem]
 
 
 class BlogTagDeletePayload(BaseModel):

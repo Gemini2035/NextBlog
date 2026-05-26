@@ -1,5 +1,10 @@
 import { httpRequest } from '@/apis/http'
-import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
+import type {
+  BlogPostDetailPayload,
+  BlogPostWritePayload,
+  BlogPostsPayload,
+  BlogPostWriteRequest,
+} from '@/types/blog'
 
 export interface GetBlogPostsParams {
   siteLanguage?: string
@@ -20,9 +25,18 @@ export const getBlogPosts = (params?: GetBlogPostsParams) => {
   })
 }
 
-export const getBlogPostDetail = (postId: number | string) => {
+export const getBlogPostDetail = (postId: number | string, siteLanguage?: string) => {
   return httpRequest<BlogPostDetailPayload>({
     url: `/posts/${postId}`,
     method: 'GET',
+    headers: siteLanguage ? { 'X-Site-Language': siteLanguage } : undefined,
+  })
+}
+
+export const createBlogPost = (payload: BlogPostWriteRequest) => {
+  return httpRequest<BlogPostWritePayload, BlogPostWriteRequest>({
+    url: '/posts',
+    method: 'POST',
+    data: payload,
   })
 }
