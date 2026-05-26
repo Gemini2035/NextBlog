@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale } from 'next-intl'
 import { getBlogPosts } from '@/apis/blog'
+import { POSTS_PER_PAGE } from '@/constants'
 import type { BlogPostListItem } from '@/types/blog'
 
 export interface UsePostsReturn {
@@ -20,7 +21,7 @@ export function usePosts(): UsePostsReturn {
     let ignore = false
 
     const fetchPosts = async () => {
-      const response = await getBlogPosts({ siteLanguage: locale, pageSize: 100 })
+      const response = await getBlogPosts({ siteLanguage: locale, pageSize: POSTS_PER_PAGE })
       if (!ignore) {
         setPosts(response.data.posts)
       }

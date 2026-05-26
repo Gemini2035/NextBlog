@@ -1,13 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
-import { getBlogPosts } from "@/apis/blog";
-import { Button, Link } from "@/ui";
-import { PostTag } from "../PostTag";
-import type { BlogPostDetail, BlogPostListItem } from "@/types/blog";
+import { useMemo, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { Button, Link } from '@/ui'
+import { PostTag } from '../PostTag'
+import type { BlogPostDetail, BlogPostListItem } from '@/types/blog'
 
-// 循环图标组件
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
   <svg
     className={`w-4 h-4 ${isRotating ? 'animate-spin' : ''}`}
@@ -23,11 +21,12 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
       d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
     />
   </svg>
-);
+)
 
-interface RelatedPostsProps {
-  post: BlogPostDetail;
-  limit?: number;
+interface RelatedPostsClientProps {
+  post: BlogPostDetail
+  posts: BlogPostListItem[]
+  limit?: number
 }
 
 const getRelatedPostsData = (
@@ -42,57 +41,25 @@ const getRelatedPostsData = (
   const otherPosts = sameLocalePosts.filter((candidate) => !relatedByTags.includes(candidate))
 
   return [...relatedByTags, ...otherPosts].slice(0, limit)
-};
+}
 
-export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
-  const t = useTranslations('Posts');
-  const locale = useLocale()
-  const [posts, setPosts] = useState<BlogPostListItem[]>([])
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  useEffect(() => {
-    let ignore = false
-
-    const fetchRelatedPosts = async () => {
-      const response = await getBlogPosts({ siteLanguage: locale, pageSize: 100 })
-
-      if (!ignore) {
-        setPosts(response.data.posts)
-      }
-    }
-
-    void fetchRelatedPosts()
-
-    return () => {
-      ignore = true
-    }
-  }, [locale])
-
-  const allRelatedPosts = useMemo(
-    () => getRelatedPostsData(post, posts, limit),
-    [post, posts, limit]
-  )
-  const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>([]);
-
-  useEffect(() => {
-    setCurrentPosts(allRelatedPosts.slice(0, 3))
-  }, [allRelatedPosts])
+export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClientProps) {
+  const t = useTranslations('Posts')
+  const allRelatedPosts = useMemo(() => getRelatedPostsData(post, posts, limit), [post, posts, limit])
+  const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>(allRelatedPosts.slice(0, 3))
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   if (allRelatedPosts.length === 0) {
-    return null;
+    return null
   }
 
-  // 换一批功能
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    
-    // 模拟异步操作
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const shuffled = [...allRelatedPosts].sort(() => Math.random() - 0.5);
-    setCurrentPosts(shuffled.slice(0, 3));
-    setIsRefreshing(false);
-  };
+    setIsRefreshing(true)
+    await new Promise((resolve) => setTimeout(resolve, 500))
+    const shuffled = [...allRelatedPosts].sort(() => Math.random() - 0.5)
+    setCurrentPosts(shuffled.slice(0, 3))
+    setIsRefreshing(false)
+  }
 
   return (
     <div className="mt-12 pt-8 border-t border-gray-200">
@@ -111,7 +78,7 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
           </span>
         </Button>
       </div>
-      
+
       <div className="flex justify-start overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-4 md:pb-0">
         <div className="flex gap-4 max-w-4xl">
           {currentPosts.map((relatedPost) => (
@@ -141,12 +108,12 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
                       ))}
                     </div>
                   )}
-                  
+
                   <time dateTime={relatedPost.createdAt} className="text-sm text-gray-500">
                     {new Date(relatedPost.createdAt).toLocaleDateString(undefined, {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
                     })}
                   </time>
                 </div>
@@ -156,5 +123,5 @@ export function RelatedPosts({ post, limit = 6 }: RelatedPostsProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/server-http'
-import { PostInfoCard, RelatedPosts, ContactButton } from '@/components/Post'
-import type { BlogPostDetailPayload } from '@/types/blog'
+import { PostInfoCard, RelatedPostsClient, ContactButton } from '@/components/Post'
+import { POSTS_PER_PAGE } from '@/constants'
+import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
 
 interface PostPageProps {
   params: Promise<{
@@ -32,9 +33,15 @@ export async function generateMetadata({ params }: PostPageProps) {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { id, locale } = await params
-  const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
-    headers: { 'X-Site-Language': locale },
-  }).catch(() => null)
+  const [payload, postsPayload] = await Promise.all([
+    serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
+      headers: { 'X-Site-Language': locale },
+    }).catch(() => null),
+    serverHttpData<BlogPostsPayload>('/posts', {
+      headers: { 'X-Site-Language': locale },
+      params: { pageSize: POSTS_PER_PAGE },
+    }).catch(() => null),
+  ])
   const post = payload?.post
   
   if (!post) {
@@ -59,7 +66,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <ContactButton />
         
         {/* 相关文章 */}
-        <RelatedPosts post={post} limit={3} />
+        <RelatedPostsClient post={post} posts={postsPayload?.posts ?? []} limit={3} />
       </div>
     </>
   )
