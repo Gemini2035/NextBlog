@@ -1,0 +1,29 @@
+{
+  "basic": [
+    {
+      "key": "site_config",
+      "value": {
+        "title": "Apodidae",
+        "description": "Sharing technical insights, development experience and life insights",
+        "author": "Apodidae",
+        "url": "https://gemini2035.github.io",
+        "baseYear": 2025,
+        "cdnUrl": "https://cdn.apodidae2035.com"
+      }
+    },
+    {
+      "key": "admin_config",
+      "value": {
+        "adminapisecret": "ADMIN_API_SECRET"
+      }
+    }
+  ],
+  "thirdPartyConfig": [
+    {
+      "key": "github",
+      "value": {
+        "token": "...."
+      }
+    }
+  ]
+}

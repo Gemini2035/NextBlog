@@ -15,6 +15,7 @@ from app.integrations.llm import LLMClientError, OpenAIClient
 from app.models.embedding import Embedding
 from app.models.project import Project
 from app.models.project import PROJECT_EMBEDDING_SOURCE_TYPE
+from app.services.site_settings import GitHubFetchOptions
 
 LANGUAGE_COLORS = {
     "CSS": "#563d7c",
@@ -213,15 +214,53 @@ def _upsert_project(
     return project
 
 
-def sync_github_projects(db: Session, username: str, token: str | None = None) -> SyncResult:
+def _should_sync_repo(
+    repo: GitHubRepository,
+    *,
+    fetch_options: GitHubFetchOptions,
+    exclude_repos: set[str],
+) -> bool:
+    repo_name = repo["name"]
+    full_name = repo["full_name"]
+    if repo_name in exclude_repos or full_name in exclude_repos:
+        return False
+
+    if not fetch_options.get("include_forked", True) and repo["fork"]:
+        return False
+
+    if not fetch_options.get("include_archived", True) and repo["archived"]:
+        return False
+
+    if repo["stargazers_count"] < fetch_options.get("min_stars", 0):
+        return False
+
+    return True
+
+
+def sync_github_projects(
+    db: Session,
+    username: str,
+    token: str | None = None,
+    fetch_options: GitHubFetchOptions | None = None,
+    featured_repos: list[str] | None = None,
+    exclude_repos: list[str] | None = None,
+) -> SyncResult:
     synced = 0
     skipped = 0
     warnings: list[str] = []
     llm_client = OpenAIClient()
+    normalized_fetch_options = fetch_options or {}
+    excluded_repo_names = set(exclude_repos or [])
+    featured_repo_names = set(featured_repos or [])
 
     with GitHubClient(token=token) as github:
         try:
-            repositories = github.get_user_repositories(username)
+            repositories = github.get_user_repositories(
+                username,
+                repo_type=normalized_fetch_options.get("repo_type", "all"),
+                sort_by=normalized_fetch_options.get("sort_by", "updated"),
+                max_pages=normalized_fetch_options.get("max_pages", 10),
+            )
 
             for repo in repositories:
                 full_name = repo["full_name"]
@@ -229,19 +268,40 @@ def sync_github_projects(db: Session, username: str, token: str | None = None) -
                     skipped += 1
                     continue
 
+                if not _should_sync_repo(
+                    repo,
+                    fetch_options=normalized_fetch_options,
+                    exclude_repos=excluded_repo_names,
+                ):
+                    skipped += 1
+                    continue
+
                 try:
-                    languages = github.get_repository_languages(full_name)
+                    languages = (
+                        github.get_repository_languages(full_name)
+                        if normalized_fetch_options.get("include_languages", True)
+                        else {}
+                    )
                 except (GitHubRateLimitError, GitHubRequestError) as error:
                     languages = {}
                     warnings.append(f"{full_name}: languages unavailable: {error}")
 
                 try:
-                    contributors = github.get_repository_contributors(full_name)
+                    contributors = (
+                        github.get_repository_contributors(full_name)
+                        if normalized_fetch_options.get("include_contributors", True)
+                        else []
+                    )
                 except (GitHubRateLimitError, GitHubRequestError) as error:
                     contributors = []
                     warnings.append(f"{full_name}: contributors unavailable: {error}")
 
                 project = _upsert_project(db, repo, languages, contributors)
+                project.is_pinned = (
+                    repo["name"] in featured_repo_names
+                    or full_name in featured_repo_names
+                )
+                project.weight = (project.activity_score or 0) + (10000 if project.is_pinned else 0)
                 try:
                     _upsert_project_embedding(db, project, llm_client)
                 except LLMClientError as error:

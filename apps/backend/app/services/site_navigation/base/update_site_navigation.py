@@ -5,13 +5,13 @@ from sqlalchemy.orm import Session
 from app.models.dictionary import Dictionary
 from app.models.site_navigation import SiteNavigation
 from app.schemas.site_navigation import SiteNavigationUpdateRequest
-from app.services.site_navigation.exceptions import (
+from app.services.site_navigation.base.exceptions import (
     SiteNavigationAlreadyExistsError,
     SiteNavigationInvalidParentError,
     SiteNavigationParentNotFoundError,
 )
-from app.services.site_navigation.get_site_navigation import get_site_navigations
-from app.services.site_navigation.helpers import (
+from app.services.site_navigation.base.get_site_navigation import get_site_navigations
+from app.services.site_navigation.utils.helpers import (
     get_site_navigation_description_key,
     get_site_navigation_label_key,
     normalize_navigation_key,

@@ -23,8 +23,6 @@ class Settings(BaseSettings):
     next_database_url: str | None = None
     next_database_url_unpooled: str | None = None
 
-    github_username: str = "Gemini2035"
-    github_token: str | None = None
     cron_secret: str | None = None
     admin_api_secret: str | None = None
 

@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.models.site_config_category import SiteConfigCategory
 from app.models.site_setting import SiteSetting
 from app.schemas.site_settings import SiteSettingUpdateByKeyRequest, SiteSettingUpdateRequest
-from app.services.site_settings.create_site_setting import (
+from app.services.site_settings.base.create_site_setting import (
     SiteSettingAlreadyExistsError,
     SiteSettingCategoryNotFoundError,
 )

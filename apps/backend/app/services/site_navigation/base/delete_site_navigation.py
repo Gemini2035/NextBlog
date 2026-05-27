@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.models.dictionary import Dictionary
 from app.models.site_navigation import SiteNavigation
-from app.services.site_navigation.exceptions import (
+from app.services.site_navigation.base.exceptions import (
     SiteNavigationDeleteFailedError,
     SiteNavigationIdsNotFoundError,
 )

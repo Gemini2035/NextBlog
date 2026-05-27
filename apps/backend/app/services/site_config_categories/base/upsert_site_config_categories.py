@@ -4,26 +4,10 @@ from sqlalchemy.orm import Session
 
 from app.models.site_config_category import SiteConfigCategory
 from app.schemas.site_config_categories import SiteConfigCategoryCreateRequest
-
-
-class SiteConfigCategoryAlreadyExistsError(RuntimeError):
-    pass
-
-
-class SiteConfigCategoryParentNotFoundError(RuntimeError):
-    pass
-
-
-def get_site_config_categories(db: Session) -> list[SiteConfigCategory]:
-    return list(
-        db.scalars(
-            select(SiteConfigCategory).order_by(
-                SiteConfigCategory.parent_id.asc().nullsfirst(),
-                SiteConfigCategory.sort_order.asc(),
-                SiteConfigCategory.id.asc(),
-            )
-        ).all()
-    )
+from app.services.site_config_categories.base.exceptions import (
+    SiteConfigCategoryAlreadyExistsError,
+    SiteConfigCategoryParentNotFoundError,
+)
 
 
 def upsert_site_config_categories(

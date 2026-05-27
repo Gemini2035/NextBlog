@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 from fastapi import APIRouter, Depends, Header, HTTPException
@@ -7,10 +8,15 @@ from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.database.session import get_db
 from app.services.projects.sync_github_projects import sync_github_projects
+from app.services.site_settings import (
+    GitHubSiteConfigError,
+    get_github_site_config,
+)
 
 prefix = "/cron"
 tags: list[str | Enum] = ["cron"]
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 class SyncGithubProjectsCronResponse(BaseModel):
@@ -33,10 +39,24 @@ def sync_github_projects_cron(
     db: Session = Depends(get_db),
     _: None = Depends(verify_cron_request),
 ) -> SyncGithubProjectsCronResponse:
+    try:
+        github_config = get_github_site_config(db)
+    except GitHubSiteConfigError as error:
+        logger.warning("GitHub project sync skipped: %s", error)
+        return SyncGithubProjectsCronResponse(
+            status="error",
+            synced=0,
+            skipped=0,
+            warnings=[str(error)],
+        )
+
     result = sync_github_projects(
         db,
-        username=settings.github_username,
-        token=settings.github_token,
+        username=github_config["username"],
+        token=github_config["token"],
+        fetch_options=github_config["fetch_options"],
+        featured_repos=github_config["featured_repos"],
+        exclude_repos=github_config["exclude_repos"],
     )
 
     return SyncGithubProjectsCronResponse(status="ok", **result)
