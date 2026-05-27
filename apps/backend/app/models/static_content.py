@@ -6,12 +6,15 @@ from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
 
 from app.database.base import Base
 from app.models.embedding import Embedding
-from app.models.mixins import TimestampMixin
 from app.models.locale import Locale
+from app.models.mixins import TimestampMixin
 
 
-class SiteContent(TimestampMixin, Base):
-    __tablename__ = "site_content"
+STATIC_CONTENT_EMBEDDING_SOURCE_TYPE = "static_content"
+
+
+class StaticContent(TimestampMixin, Base):
+    __tablename__ = "static_content"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -24,29 +27,32 @@ class SiteContent(TimestampMixin, Base):
     content: Mapped[dict[str, Any] | list[Any]] = mapped_column(JSONB, nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     locale: Mapped[Locale | None] = relationship("Locale")
     embeddings: Mapped[list[Embedding]] = relationship(
         "Embedding",
         primaryjoin=lambda: and_(
-            Embedding.source_type == "site_content",
-            foreign(Embedding.source_id) == cast(SiteContent.id, String),
+            Embedding.source_type == STATIC_CONTENT_EMBEDDING_SOURCE_TYPE,
+            foreign(Embedding.source_id) == cast(StaticContent.id, String),
         ),
         viewonly=True,
     )
 
     __table_args__ = (
-        Index("ix_site_content_key", "key"),
-        Index("ix_site_content_locale_id", "locale_id"),
+        Index("ix_static_content_key", "key"),
+        Index("ix_static_content_locale_id", "locale_id"),
+        Index("ix_static_content_is_enabled", "is_enabled"),
+        Index("ix_static_content_sort_order", "sort_order"),
         Index(
-            "uq_site_content_key_locale",
+            "uq_static_content_key_locale",
             "key",
             "locale_id",
             unique=True,
             postgresql_where=locale_id.isnot(None),
         ),
         Index(
-            "uq_site_content_key_global",
+            "uq_static_content_key_global",
             "key",
             unique=True,
             postgresql_where=locale_id.is_(None),

@@ -5,6 +5,8 @@ from app.api.routes import health
 from app.api.routes import post
 from app.api.routes import projects
 from app.api.routes import locales
+from app.api.routes import site_settings
+from app.api.routes import site_navigation
 
 api_router = APIRouter()
 api_router.include_router(
@@ -24,4 +26,14 @@ api_router.include_router(
     locales.router,
     prefix=locales.prefix,
     tags=locales.tags,
+)
+api_router.include_router(
+    site_settings.router,
+    prefix=site_settings.prefix,
+    tags=site_settings.tags,
+)
+api_router.include_router(
+    site_navigation.router,
+    prefix=site_navigation.prefix,
+    tags=site_navigation.tags,
 )

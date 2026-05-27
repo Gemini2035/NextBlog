@@ -3,7 +3,9 @@ from app.models.embedding import Embedding
 from app.models.locale import Locale
 from app.models.post import Post, PostPostTag, PostTag
 from app.models.project import Project
-from app.models.site_content import SiteContent
+from app.models.site_navigation import SiteNavigation
+from app.models.site_setting import SiteSetting
+from app.models.static_content import StaticContent
 
 __all__ = [
     "Dictionary",
@@ -13,5 +15,7 @@ __all__ = [
     "PostPostTag",
     "PostTag",
     "Project",
-    "SiteContent",
+    "SiteNavigation",
+    "SiteSetting",
+    "StaticContent",
 ]

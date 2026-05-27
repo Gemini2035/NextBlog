@@ -23,6 +23,23 @@ from app.schemas.locales import (
     LocalePayload,
     LocaleUpdateRequest,
 )
+from app.schemas.site_settings import (
+    SiteSettingCreateRequest,
+    SiteSettingDeletePayload,
+    SiteSettingDeleteRequest,
+    SiteSettingPayload,
+    SiteSettingsPayload,
+    SiteSettingUpdateRequest,
+)
+from app.schemas.site_navigation import (
+    SiteNavigationCreateRequest,
+    SiteNavigationDeletePayload,
+    SiteNavigationDeleteRequest,
+    SiteNavigationPayload,
+    SiteNavigationsPayload,
+    SiteNavigationUpdateRequest,
+    SiteNavigationUpsertManyRequest,
+)
 
 __all__ = [
     "ApiResponse",
@@ -45,4 +62,17 @@ __all__ = [
     "LocaleCreateRequest",
     "LocalePayload",
     "LocaleUpdateRequest",
+    "SiteSettingCreateRequest",
+    "SiteSettingDeletePayload",
+    "SiteSettingDeleteRequest",
+    "SiteSettingPayload",
+    "SiteSettingsPayload",
+    "SiteSettingUpdateRequest",
+    "SiteNavigationCreateRequest",
+    "SiteNavigationDeletePayload",
+    "SiteNavigationDeleteRequest",
+    "SiteNavigationPayload",
+    "SiteNavigationsPayload",
+    "SiteNavigationUpdateRequest",
+    "SiteNavigationUpsertManyRequest",
 ]

@@ -69,6 +69,27 @@ def upgrade() -> None:
     op.create_index(op.f("ix_locale_trans_key"), "locale", ["trans_key"], unique=False)
 
     op.create_table(
+        "site-navigation",
+        sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
+        sa.Column("parent_id", sa.BigInteger(), nullable=True),
+        sa.Column("key", sa.String(length=255), nullable=False),
+        sa.Column("label_key", sa.String(length=255), nullable=False),
+        sa.Column("description_key", sa.String(length=255), nullable=True),
+        sa.Column("href", sa.Text(), nullable=False),
+        sa.Column("icon", sa.String(length=100), nullable=True),
+        sa.Column("target", sa.String(length=50), nullable=True),
+        sa.Column("sort_order", sa.Integer(), nullable=False),
+        sa.Column("disable", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
+        *_timestamps(),
+        sa.ForeignKeyConstraint(["parent_id"], ["site-navigation.id"], ondelete="CASCADE"),
+        sa.PrimaryKeyConstraint("id"),
+    )
+    op.create_index("ix_site_navigation_parent_id", "site-navigation", ["parent_id"], unique=False)
+    op.create_index("ix_site_navigation_key", "site-navigation", ["key"], unique=True)
+    op.create_index("ix_site_navigation_label_key", "site-navigation", ["label_key"], unique=False)
+    op.create_index("ix_site_navigation_sort_order", "site-navigation", ["sort_order"], unique=False)
+
+    op.create_table(
         "post",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("title_key", sa.String(length=255), nullable=False),
@@ -145,29 +166,51 @@ def upgrade() -> None:
     )
 
     op.create_table(
-        "site_content",
+        "site_setting",
+        sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
+        sa.Column("parent_id", sa.BigInteger(), nullable=True),
+        sa.Column("key", sa.String(length=255), nullable=False),
+        sa.Column("value", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
+        sa.Column("description", sa.Text(), nullable=True),
+        sa.Column("is_public", sa.Boolean(), nullable=False),
+        sa.Column("is_enabled", sa.Boolean(), nullable=False),
+        *_timestamps(),
+        sa.ForeignKeyConstraint(["parent_id"], ["site_setting.id"], ondelete="SET NULL"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("key"),
+    )
+    op.create_index("ix_site_setting_parent_id", "site_setting", ["parent_id"], unique=False)
+    op.create_index("ix_site_setting_key", "site_setting", ["key"], unique=False)
+    op.create_index("ix_site_setting_is_public", "site_setting", ["is_public"], unique=False)
+    op.create_index("ix_site_setting_is_enabled", "site_setting", ["is_enabled"], unique=False)
+
+    op.create_table(
+        "static_content",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("key", sa.String(length=255), nullable=False),
         sa.Column("locale_id", sa.Integer(), nullable=True),
         sa.Column("content", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("description", sa.Text(), nullable=True),
         sa.Column("is_enabled", sa.Boolean(), nullable=False),
+        sa.Column("sort_order", sa.Integer(), nullable=False),
         *_timestamps(),
         sa.ForeignKeyConstraint(["locale_id"], ["locale.id"], ondelete="SET NULL"),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index("ix_site_content_key", "site_content", ["key"], unique=False)
-    op.create_index("ix_site_content_locale_id", "site_content", ["locale_id"], unique=False)
+    op.create_index("ix_static_content_key", "static_content", ["key"], unique=False)
+    op.create_index("ix_static_content_locale_id", "static_content", ["locale_id"], unique=False)
+    op.create_index("ix_static_content_is_enabled", "static_content", ["is_enabled"], unique=False)
+    op.create_index("ix_static_content_sort_order", "static_content", ["sort_order"], unique=False)
     op.create_index(
-        "uq_site_content_key_locale",
-        "site_content",
+        "uq_static_content_key_locale",
+        "static_content",
         ["key", "locale_id"],
         unique=True,
         postgresql_where=sa.text("locale_id IS NOT NULL"),
     )
     op.create_index(
-        "uq_site_content_key_global",
-        "site_content",
+        "uq_static_content_key_global",
+        "static_content",
         ["key"],
         unique=True,
         postgresql_where=sa.text("locale_id IS NULL"),
@@ -175,15 +218,22 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index("uq_site_content_key_global", table_name="site_content", postgresql_where=sa.text("locale_id IS NULL"))
+    op.drop_index("uq_static_content_key_global", table_name="static_content", postgresql_where=sa.text("locale_id IS NULL"))
     op.drop_index(
-        "uq_site_content_key_locale",
-        table_name="site_content",
+        "uq_static_content_key_locale",
+        table_name="static_content",
         postgresql_where=sa.text("locale_id IS NOT NULL"),
     )
-    op.drop_index("ix_site_content_locale_id", table_name="site_content")
-    op.drop_index("ix_site_content_key", table_name="site_content")
-    op.drop_table("site_content")
+    op.drop_index("ix_static_content_sort_order", table_name="static_content")
+    op.drop_index("ix_static_content_is_enabled", table_name="static_content")
+    op.drop_index("ix_static_content_locale_id", table_name="static_content")
+    op.drop_index("ix_static_content_key", table_name="static_content")
+    op.drop_table("static_content")
+    op.drop_index("ix_site_setting_is_enabled", table_name="site_setting")
+    op.drop_index("ix_site_setting_is_public", table_name="site_setting")
+    op.drop_index("ix_site_setting_key", table_name="site_setting")
+    op.drop_index("ix_site_setting_parent_id", table_name="site_setting")
+    op.drop_table("site_setting")
     op.drop_table("post_post_tag")
     op.drop_index(op.f("ix_project_weight"), table_name="project")
     op.drop_index(op.f("ix_project_github_updated_at"), table_name="project")
@@ -203,6 +253,11 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_locale_trans_key"), table_name="locale")
     op.drop_index(op.f("ix_locale_code"), table_name="locale")
     op.drop_table("locale")
+    op.drop_index("ix_site_navigation_sort_order", table_name="site-navigation")
+    op.drop_index("ix_site_navigation_label_key", table_name="site-navigation")
+    op.drop_index("ix_site_navigation_key", table_name="site-navigation")
+    op.drop_index("ix_site_navigation_parent_id", table_name="site-navigation")
+    op.drop_table("site-navigation")
     op.drop_index("ix_embedding_source", table_name="embedding")
     op.drop_table("embedding")
     op.drop_index(op.f("ix_dictionary_key"), table_name="dictionary")
