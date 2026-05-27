@@ -12,7 +12,7 @@ interface PostsPageProps {
 export default async function PostsPage({ params }: PostsPageProps) {
   const { locale } = await params
   const payload = await serverHttpData<BlogPostsPayload>('/post', {
-    headers: { 'X-Site-Language': locale },
+    headers: { 'X-Locale': locale },
     params: { pageSize: POSTS_PER_PAGE },
   })
 

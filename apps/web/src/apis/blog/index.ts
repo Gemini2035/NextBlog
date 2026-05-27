@@ -21,7 +21,7 @@ export const getBlogPosts = (params?: GetBlogPostsParams) => {
     url: '/post',
     method: 'GET',
     params: queryParams,
-    headers: siteLanguage ? { 'X-Site-Language': siteLanguage } : undefined,
+    headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
   })
 }
 
@@ -29,7 +29,7 @@ export const getBlogPostDetail = (postId: number | string, siteLanguage?: string
   return httpRequest<BlogPostDetailPayload>({
     url: `/post/${postId}`,
     method: 'GET',
-    headers: siteLanguage ? { 'X-Site-Language': siteLanguage } : undefined,
+    headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
   })
 }
 

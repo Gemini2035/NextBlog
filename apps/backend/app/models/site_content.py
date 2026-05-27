@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
 from app.database.base import Base
 from app.models.embedding import Embedding
 from app.models.mixins import TimestampMixin
-from app.models.site_language import SiteLanguage
+from app.models.locale import Locale
 
 
 class SiteContent(TimestampMixin, Base):
@@ -16,16 +16,16 @@ class SiteContent(TimestampMixin, Base):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
     key: Mapped[str] = mapped_column(String(255), nullable=False)
-    language_id: Mapped[int | None] = mapped_column(
+    locale_id: Mapped[int | None] = mapped_column(
         Integer,
-        ForeignKey("site_language.id", ondelete="SET NULL"),
+        ForeignKey("locale.id", ondelete="SET NULL"),
         nullable=True,
     )
     content: Mapped[dict[str, Any] | list[Any]] = mapped_column(JSONB, nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
-    language: Mapped[SiteLanguage | None] = relationship("SiteLanguage")
+    locale: Mapped[Locale | None] = relationship("Locale")
     embeddings: Mapped[list[Embedding]] = relationship(
         "Embedding",
         primaryjoin=lambda: and_(
@@ -37,18 +37,18 @@ class SiteContent(TimestampMixin, Base):
 
     __table_args__ = (
         Index("ix_site_content_key", "key"),
-        Index("ix_site_content_language_id", "language_id"),
+        Index("ix_site_content_locale_id", "locale_id"),
         Index(
-            "uq_site_content_key_language",
+            "uq_site_content_key_locale",
             "key",
-            "language_id",
+            "locale_id",
             unique=True,
-            postgresql_where=language_id.isnot(None),
+            postgresql_where=locale_id.isnot(None),
         ),
         Index(
             "uq_site_content_key_global",
             "key",
             unique=True,
-            postgresql_where=language_id.is_(None),
+            postgresql_where=locale_id.is_(None),
         ),
     )
