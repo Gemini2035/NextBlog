@@ -15,7 +15,7 @@ from app.schemas.blog_tags import (
     BlogTagUpdateRequest,
     BlogTagUpsertManyRequest,
 )
-from app.services.blog_tags import (
+from app.services.blog.tag import (
     BlogTagAlreadyExistsError,
     BlogTagDeleteFailedError,
     BlogTagIdsNotFoundError,
@@ -25,8 +25,8 @@ from app.services.blog_tags import (
     upsert_blog_tags,
 )
 
-prefix = "/blog-tags"
-tags: list[str | Enum] = ["blog-tags"]
+prefix = "/post-tag"
+tags: list[str | Enum] = ["post-tag"]
 router = APIRouter()
 
 

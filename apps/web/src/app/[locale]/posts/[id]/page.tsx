@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: PostPageProps) {
   const { id, locale } = await params
 
   try {
-    const payload = await serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
+    const payload = await serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
       headers: { 'X-Site-Language': locale },
     })
     const post = payload.post
@@ -34,10 +34,10 @@ export async function generateMetadata({ params }: PostPageProps) {
 export default async function PostPage({ params }: PostPageProps) {
   const { id, locale } = await params
   const [payload, postsPayload] = await Promise.all([
-    serverHttpData<BlogPostDetailPayload>(`/posts/${id}`, {
+    serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
       headers: { 'X-Site-Language': locale },
     }).catch(() => null),
-    serverHttpData<BlogPostsPayload>('/posts', {
+    serverHttpData<BlogPostsPayload>('/post', {
       headers: { 'X-Site-Language': locale },
       params: { pageSize: POSTS_PER_PAGE },
     }).catch(() => null),

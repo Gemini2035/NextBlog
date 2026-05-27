@@ -1,10 +1,11 @@
 from sqlalchemy import delete, select
+from sqlalchemy.engine import CursorResult
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.models.blog import BLOG_POST_EMBEDDING_SOURCE_TYPE, BlogPost
 from app.models.embedding import Embedding
-from app.services.blog.public_ids import decode_blog_post_id
+from app.services.blog.post.utils.public_ids import decode_blog_post_id
 
 
 class InvalidBlogPostIdsError(RuntimeError):
@@ -71,7 +72,8 @@ def delete_blog_posts(db: Session, post_ids: list[str]) -> int:
             )
         )
         result = db.execute(delete(BlogPost).where(BlogPost.id.in_(internal_ids)))
-        if result.rowcount != len(internal_ids):
+        result_rowcount = result.rowcount if isinstance(result, CursorResult) else 0
+        if result_rowcount != len(internal_ids):
             db.rollback()
             raise BlogPostDeleteFailedError(post_ids)
 
@@ -82,4 +84,4 @@ def delete_blog_posts(db: Session, post_ids: list[str]) -> int:
         db.rollback()
         raise BlogPostDeleteFailedError(post_ids) from error
 
-    return result.rowcount or 0
+    return result_rowcount or 0

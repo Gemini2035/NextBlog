@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
 from app.models.blog import BlogPost
-from app.services.blog.public_ids import encode_blog_post_id
-from app.services.blog.translations import resolve_dictionary_value
+from app.services.blog.post.utils.public_ids import encode_blog_post_id
+from app.services.blog.post.utils.translations import resolve_dictionary_value
 
 
 def get_blog_tag_dictionary_key(key: str) -> str:
@@ -20,7 +20,7 @@ def serialize_post_list_item(
 ) -> dict[str, object]:
     return {
         "id": encode_blog_post_id(post.id),
-        "url": f"/posts/{encode_blog_post_id(post.id)}",
+        "url": f"/post/{encode_blog_post_id(post.id)}",
         "title": resolve_dictionary_value(db, post.title_key, site_language) or "",
         "description": resolve_dictionary_value(db, post.description_key, site_language),
         "is_featured": post.is_featured,

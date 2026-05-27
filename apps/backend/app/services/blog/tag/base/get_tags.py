@@ -2,12 +2,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.blog import BlogTag
+from app.services.blog.tag.base.exceptions import InvalidBlogTagIdsError
+from app.services.blog.tag.utils.helpers import build_blog_tag_payloads
 
 
-class InvalidBlogTagIdsError(RuntimeError):
-    def __init__(self, tag_ids: list[int]) -> None:
-        self.tag_ids = tag_ids
-        super().__init__(f"Invalid blog tag ids: {tag_ids}")
+def get_blog_tags(db: Session) -> list[dict[str, object]]:
+    tags = list(db.scalars(select(BlogTag).order_by(BlogTag.id.asc())).all())
+    return build_blog_tag_payloads(db, tags)
 
 
 def get_blog_tags_by_ids(db: Session, tag_ids: list[int]) -> list[BlogTag]:

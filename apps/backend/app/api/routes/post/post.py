@@ -16,18 +16,18 @@ from app.schemas import (
     BlogPostWriteRequest,
 )
 from app.services import blog
-from app.services.blog.create_blog_post import BlogPostWriteError
-from app.services.blog.delete_blog_posts import (
+from app.services.blog.post.base.create_post import BlogPostWriteError
+from app.services.blog.post.base.delete_posts import (
     BlogPostDeleteFailedError,
     BlogPostIdsNotFoundError,
     InvalidBlogPostIdsError,
 )
-from app.services.blog.public_ids import decode_blog_post_id
-from app.services.blog.serializers import serialize_post_list_item
-from app.services.blog.tags import InvalidBlogTagIdsError
+from app.services.blog.post.utils.public_ids import decode_blog_post_id
+from app.services.blog.post.utils.serializers import serialize_post_list_item
+from app.services.blog.tag.base.exceptions import InvalidBlogTagIdsError
 
-prefix = "/posts"
-tags: list[str | Enum] = ["posts"]
+prefix = "/post"
+tags: list[str | Enum] = ["post"]
 router = APIRouter()
 
 

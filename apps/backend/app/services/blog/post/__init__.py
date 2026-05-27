@@ -1,4 +1,4 @@
-from .post import (
+from .base import (
     create_blog_post,
     delete_blog_posts,
     get_blog_post,

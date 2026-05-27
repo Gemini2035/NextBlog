@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from app.integrations.llm import OpenAIClient
 from app.models.blog import BLOG_POST_EMBEDDING_SOURCE_TYPE, BlogPost
 from app.models.embedding import Embedding
-from app.services.blog_tags import get_blog_tag_dictionary_key
-from app.services.blog.translations import resolve_dictionary_value
+from app.services.blog.post.utils.translations import resolve_dictionary_value
+from app.services.blog.tag.utils.helpers import get_blog_tag_dictionary_key
 
 
 class _HTMLTextExtractor(HTMLParser):

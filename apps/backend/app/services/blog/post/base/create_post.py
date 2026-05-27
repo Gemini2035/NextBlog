@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from app.integrations.llm import OpenAIClient
 from app.models.blog import BlogPost
 from app.schemas.blog import BlogPostCreateRequest
-from app.services.blog.embeddings import upsert_blog_post_embedding
-from app.services.blog.tags import get_blog_tags_by_ids
-from app.services.blog.translations import ensure_blog_translation
+from app.services.blog.post.utils.embeddings import upsert_blog_post_embedding
+from app.services.blog.post.utils.translations import ensure_blog_translation
+from app.services.blog.tag.base.get_tags import get_blog_tags_by_ids
 
 
 class BlogPostWriteError(RuntimeError):
