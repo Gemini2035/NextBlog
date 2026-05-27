@@ -23,7 +23,6 @@ class Settings(BaseSettings):
     next_database_url: str | None = None
     next_database_url_unpooled: str | None = None
 
-    cron_secret: str | None = None
     admin_api_secret: str | None = None
 
     model_config = SettingsConfigDict(

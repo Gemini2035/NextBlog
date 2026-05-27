@@ -1,8 +1,9 @@
 import logging
+from collections.abc import Callable
 from enum import Enum
 
 from fastapi import APIRouter, Depends, Header, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -26,27 +27,35 @@ class SyncGithubProjectsCronResponse(BaseModel):
     warnings: list[str]
 
 
-def verify_cron_request(authorization: str | None = Header(default=None)) -> None:
-    if not settings.cron_secret:
-        raise HTTPException(status_code=500, detail="CRON_SECRET is not configured")
+class CronJobResult(BaseModel):
+    name: str
+    status: str
+    synced: int = 0
+    skipped: int = 0
+    warnings: list[str] = Field(default_factory=list)
 
-    if authorization != f"Bearer {settings.cron_secret}":
+
+class DailyCronResponse(BaseModel):
+    status: str
+    jobs: list[CronJobResult]
+
+
+def verify_cron_request(authorization: str | None = Header(default=None)) -> None:
+    if not settings.admin_api_secret:
+        raise HTTPException(status_code=500, detail="ADMIN_API_SECRET is not configured")
+
+    if authorization != f"Bearer {settings.admin_api_secret}":
         raise HTTPException(status_code=401, detail="Unauthorized")
 
 
-@router.get("/sync-github-projects")
-def sync_github_projects_cron(
-    db: Session = Depends(get_db),
-    _: None = Depends(verify_cron_request),
-) -> SyncGithubProjectsCronResponse:
+def run_sync_github_projects_job(db: Session) -> CronJobResult:
     try:
         github_config = get_github_site_config(db)
     except GitHubSiteConfigError as error:
         logger.warning("GitHub project sync skipped: %s", error)
-        return SyncGithubProjectsCronResponse(
+        return CronJobResult(
+            name="sync-github-projects",
             status="error",
-            synced=0,
-            skipped=0,
             warnings=[str(error)],
         )
 
@@ -59,4 +68,47 @@ def sync_github_projects_cron(
         exclude_repos=github_config["exclude_repos"],
     )
 
-    return SyncGithubProjectsCronResponse(status="ok", **result)
+    return CronJobResult(name="sync-github-projects", status="ok", **result)
+
+
+def run_daily_job(
+    db: Session,
+    *,
+    name: str,
+    runner: Callable[[Session], CronJobResult],
+) -> CronJobResult:
+    try:
+        return runner(db)
+    except Exception as error:
+        logger.exception("Daily cron job failed: %s", name)
+        return CronJobResult(name=name, status="error", warnings=[str(error)])
+
+
+@router.get("/daily")
+def daily_cron(
+    db: Session = Depends(get_db),
+    _: None = Depends(verify_cron_request),
+) -> DailyCronResponse:
+    jobs = [
+        run_daily_job(
+            db,
+            name="sync-github-projects",
+            runner=run_sync_github_projects_job,
+        ),
+    ]
+    status = "ok" if all(job.status == "ok" for job in jobs) else "partial_error"
+    return DailyCronResponse(status=status, jobs=jobs)
+
+
+@router.get("/sync-github-projects")
+def sync_github_projects_cron(
+    db: Session = Depends(get_db),
+    _: None = Depends(verify_cron_request),
+) -> SyncGithubProjectsCronResponse:
+    job = run_sync_github_projects_job(db)
+    return SyncGithubProjectsCronResponse(
+        status=job.status,
+        synced=job.synced,
+        skipped=job.skipped,
+        warnings=job.warnings,
+    )
