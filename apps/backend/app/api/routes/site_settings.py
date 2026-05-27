@@ -13,18 +13,19 @@ from app.schemas.site_settings import (
     SiteSettingDeleteRequest,
     SiteSettingPayload,
     SiteSettingsPayload,
+    SiteSettingUpdateByKeyRequest,
     SiteSettingUpdateRequest,
 )
 from app.services.site_settings import (
     SiteSettingAlreadyExistsError,
+    SiteSettingCategoryNotFoundError,
     SiteSettingDeleteFailedError,
     SiteSettingIdsNotFoundError,
-    SiteSettingInvalidParentError,
-    SiteSettingParentNotFoundError,
     create_site_setting,
     delete_site_settings,
     get_site_settings,
     update_site_setting,
+    update_site_setting_by_key,
 )
 
 prefix = "/site-setting"
@@ -77,8 +78,27 @@ def create_setting(
         setting = create_site_setting(db, payload)
     except SiteSettingAlreadyExistsError as error:
         raise HTTPException(status_code=409, detail="Site setting already exists") from error
-    except SiteSettingParentNotFoundError as error:
-        raise HTTPException(status_code=404, detail="Parent site setting not found") from error
+    except SiteSettingCategoryNotFoundError as error:
+        raise HTTPException(status_code=404, detail="Site config category not found") from error
+
+    return ApiResponse[SiteSettingPayload](data=SiteSettingPayload.model_validate(setting))
+
+
+@router.put("/by-key", response_model=ApiResponse[SiteSettingPayload])
+def update_setting_by_key(
+    payload: SiteSettingUpdateByKeyRequest,
+    db: Session = Depends(get_db),
+    _: None = Depends(verify_admin_request),
+) -> ApiResponse[SiteSettingPayload]:
+    try:
+        setting = update_site_setting_by_key(db, payload)
+    except SiteSettingAlreadyExistsError as error:
+        raise HTTPException(status_code=409, detail="Site setting already exists") from error
+    except SiteSettingCategoryNotFoundError as error:
+        raise HTTPException(status_code=404, detail="Site config category not found") from error
+
+    if setting is None:
+        raise HTTPException(status_code=404, detail="Site setting not found")
 
     return ApiResponse[SiteSettingPayload](data=SiteSettingPayload.model_validate(setting))
 
@@ -94,10 +114,8 @@ def update_setting(
         setting = update_site_setting(db, setting_id, payload)
     except SiteSettingAlreadyExistsError as error:
         raise HTTPException(status_code=409, detail="Site setting already exists") from error
-    except SiteSettingParentNotFoundError as error:
-        raise HTTPException(status_code=404, detail="Parent site setting not found") from error
-    except SiteSettingInvalidParentError as error:
-        raise HTTPException(status_code=400, detail="Invalid parent site setting") from error
+    except SiteSettingCategoryNotFoundError as error:
+        raise HTTPException(status_code=404, detail="Site config category not found") from error
 
     if setting is None:
         raise HTTPException(status_code=404, detail="Site setting not found")

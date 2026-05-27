@@ -1,6 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from app.models.site_config_category import SiteConfigCategory
 from app.models.site_setting import SiteSetting
 from app.schemas.site_settings import SiteSettingCreateRequest
 
@@ -9,16 +10,16 @@ class SiteSettingAlreadyExistsError(RuntimeError):
     pass
 
 
-class SiteSettingParentNotFoundError(RuntimeError):
+class SiteSettingCategoryNotFoundError(RuntimeError):
     pass
 
 
 def create_site_setting(db: Session, payload: SiteSettingCreateRequest) -> SiteSetting:
-    if payload.parent_id is not None and db.get(SiteSetting, payload.parent_id) is None:
-        raise SiteSettingParentNotFoundError("Parent site setting not found")
+    if db.get(SiteConfigCategory, payload.category_id) is None:
+        raise SiteSettingCategoryNotFoundError("Site config category not found")
 
     setting = SiteSetting(
-        parent_id=payload.parent_id,
+        category_id=payload.category_id,
         key=payload.key.strip(),
         value=payload.value,
         description=payload.description.strip() if payload.description else None,

@@ -1,10 +1,11 @@
 from typing import Any
 
-from sqlalchemy import BigInteger, Boolean, ForeignKey, Index, String, Text
+from sqlalchemy import BigInteger, Boolean, ForeignKey, Index, String, Text, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.base import Base
+from app.models.site_config_category import SiteConfigCategory
 from app.models.mixins import TimestampMixin
 
 
@@ -13,12 +14,12 @@ class SiteSetting(TimestampMixin, Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
-    parent_id: Mapped[int | None] = mapped_column(
+    category_id: Mapped[int] = mapped_column(
         BigInteger,
-        ForeignKey("site_setting.id", ondelete="SET NULL"),
-        nullable=True,
+        ForeignKey("site_config_category.id", ondelete="RESTRICT"),
+        nullable=False,
     )
-    key: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
+    key: Mapped[str] = mapped_column(String(255), nullable=False)
     value: Mapped[dict[str, Any] | list[Any] | str | int | float | bool | None] = mapped_column(
         JSONB,
         nullable=False,
@@ -27,18 +28,15 @@ class SiteSetting(TimestampMixin, Base):
     is_public: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     is_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
-    parent: Mapped["SiteSetting | None"] = relationship(
-        "SiteSetting",
-        remote_side=[id],
-        back_populates="children",
-    )
-    children: Mapped[list["SiteSetting"]] = relationship(
-        "SiteSetting",
-        back_populates="parent",
-    )
+    category: Mapped[SiteConfigCategory] = relationship("SiteConfigCategory")
+
+    @property
+    def category_key(self) -> str | None:
+        return self.category.key if self.category else None
 
     __table_args__ = (
-        Index("ix_site_setting_parent_id", "parent_id"),
+        UniqueConstraint("category_id", "key", name="uq_site_setting_category_key"),
+        Index("ix_site_setting_category_id", "category_id"),
         Index("ix_site_setting_key", "key"),
         Index("ix_site_setting_is_public", "is_public"),
         Index("ix_site_setting_is_enabled", "is_enabled"),

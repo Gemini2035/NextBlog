@@ -7,10 +7,9 @@ from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 class SiteSettingCreateRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    parent_id: int | None = Field(
-        default=None,
-        validation_alias=AliasChoices("parent_id", "parentId", "parent"),
-        serialization_alias="parentId",
+    category_id: int = Field(
+        validation_alias=AliasChoices("category_id", "categoryId"),
+        serialization_alias="categoryId",
     )
     key: str = Field(min_length=1, max_length=255)
     value: dict[str, Any] | list[Any] | str | int | float | bool | None
@@ -30,12 +29,34 @@ class SiteSettingCreateRequest(BaseModel):
 class SiteSettingUpdateRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    parent_id: int | None = Field(
+    category_id: int | None = Field(
         default=None,
-        validation_alias=AliasChoices("parent_id", "parentId", "parent"),
-        serialization_alias="parentId",
+        validation_alias=AliasChoices("category_id", "categoryId"),
+        serialization_alias="categoryId",
     )
     key: str | None = Field(default=None, min_length=1, max_length=255)
+    value: dict[str, Any] | list[Any] | str | int | float | bool | None = None
+    description: str | None = None
+    is_public: bool | None = Field(
+        default=None,
+        validation_alias=AliasChoices("is_public", "isPublic"),
+        serialization_alias="isPublic",
+    )
+    is_enabled: bool | None = Field(
+        default=None,
+        validation_alias=AliasChoices("is_enabled", "isEnabled"),
+        serialization_alias="isEnabled",
+    )
+
+
+class SiteSettingUpdateByKeyRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    category_id: int = Field(
+        validation_alias=AliasChoices("category_id", "categoryId"),
+        serialization_alias="categoryId",
+    )
+    key: str = Field(min_length=1, max_length=255)
     value: dict[str, Any] | list[Any] | str | int | float | bool | None = None
     description: str | None = None
     is_public: bool | None = Field(
@@ -62,7 +83,8 @@ class SiteSettingPayload(BaseModel):
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
     id: int
-    parent_id: int | None = Field(serialization_alias="parentId")
+    category_id: int = Field(serialization_alias="categoryId")
+    category_key: str | None = Field(serialization_alias="categoryKey")
     key: str
     value: dict[str, Any] | list[Any] | str | int | float | bool | None
     description: str | None

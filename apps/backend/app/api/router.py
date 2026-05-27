@@ -7,6 +7,7 @@ from app.api.routes import projects
 from app.api.routes import locales
 from app.api.routes import site_settings
 from app.api.routes import site_navigation
+from app.api.routes import site_config_categories
 
 api_router = APIRouter()
 api_router.include_router(
@@ -36,4 +37,9 @@ api_router.include_router(
     site_navigation.router,
     prefix=site_navigation.prefix,
     tags=site_navigation.tags,
+)
+api_router.include_router(
+    site_config_categories.router,
+    prefix=site_config_categories.prefix,
+    tags=site_config_categories.tags,
 )

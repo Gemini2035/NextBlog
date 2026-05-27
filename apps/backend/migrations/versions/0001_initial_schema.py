@@ -69,6 +69,30 @@ def upgrade() -> None:
     op.create_index(op.f("ix_locale_trans_key"), "locale", ["trans_key"], unique=False)
 
     op.create_table(
+        "site_config_category",
+        sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
+        sa.Column("parent_id", sa.BigInteger(), nullable=True),
+        sa.Column("key", sa.String(length=255), nullable=False),
+        sa.Column("sort_order", sa.Integer(), nullable=False),
+        *_timestamps(),
+        sa.ForeignKeyConstraint(["parent_id"], ["site_config_category.id"], ondelete="SET NULL"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("key"),
+    )
+    op.create_index(
+        "ix_site_config_category_parent_id",
+        "site_config_category",
+        ["parent_id"],
+        unique=False,
+    )
+    op.create_index("ix_site_config_category_key", "site_config_category", ["key"], unique=False)
+    op.create_index(
+        "ix_site_config_category_sort_order",
+        "site_config_category",
+        ["sort_order"],
+        unique=False,
+    )
+    op.create_table(
         "site-navigation",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("parent_id", sa.BigInteger(), nullable=True),
@@ -168,18 +192,18 @@ def upgrade() -> None:
     op.create_table(
         "site_setting",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
-        sa.Column("parent_id", sa.BigInteger(), nullable=True),
+        sa.Column("category_id", sa.BigInteger(), nullable=False),
         sa.Column("key", sa.String(length=255), nullable=False),
         sa.Column("value", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
         sa.Column("description", sa.Text(), nullable=True),
         sa.Column("is_public", sa.Boolean(), nullable=False),
         sa.Column("is_enabled", sa.Boolean(), nullable=False),
         *_timestamps(),
-        sa.ForeignKeyConstraint(["parent_id"], ["site_setting.id"], ondelete="SET NULL"),
+        sa.ForeignKeyConstraint(["category_id"], ["site_config_category.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("key"),
+        sa.UniqueConstraint("category_id", "key", name="uq_site_setting_category_key"),
     )
-    op.create_index("ix_site_setting_parent_id", "site_setting", ["parent_id"], unique=False)
+    op.create_index("ix_site_setting_category_id", "site_setting", ["category_id"], unique=False)
     op.create_index("ix_site_setting_key", "site_setting", ["key"], unique=False)
     op.create_index("ix_site_setting_is_public", "site_setting", ["is_public"], unique=False)
     op.create_index("ix_site_setting_is_enabled", "site_setting", ["is_enabled"], unique=False)
@@ -232,8 +256,12 @@ def downgrade() -> None:
     op.drop_index("ix_site_setting_is_enabled", table_name="site_setting")
     op.drop_index("ix_site_setting_is_public", table_name="site_setting")
     op.drop_index("ix_site_setting_key", table_name="site_setting")
-    op.drop_index("ix_site_setting_parent_id", table_name="site_setting")
+    op.drop_index("ix_site_setting_category_id", table_name="site_setting")
     op.drop_table("site_setting")
+    op.drop_index("ix_site_config_category_sort_order", table_name="site_config_category")
+    op.drop_index("ix_site_config_category_key", table_name="site_config_category")
+    op.drop_index("ix_site_config_category_parent_id", table_name="site_config_category")
+    op.drop_table("site_config_category")
     op.drop_table("post_post_tag")
     op.drop_index(op.f("ix_project_weight"), table_name="project")
     op.drop_index(op.f("ix_project_github_updated_at"), table_name="project")

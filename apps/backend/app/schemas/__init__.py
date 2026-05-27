@@ -29,6 +29,7 @@ from app.schemas.site_settings import (
     SiteSettingDeleteRequest,
     SiteSettingPayload,
     SiteSettingsPayload,
+    SiteSettingUpdateByKeyRequest,
     SiteSettingUpdateRequest,
 )
 from app.schemas.site_navigation import (
@@ -39,6 +40,12 @@ from app.schemas.site_navigation import (
     SiteNavigationsPayload,
     SiteNavigationUpdateRequest,
     SiteNavigationUpsertManyRequest,
+)
+from app.schemas.site_config_categories import (
+    SiteConfigCategoriesPayload,
+    SiteConfigCategoryCreateRequest,
+    SiteConfigCategoryPayload,
+    SiteConfigCategoryUpsertManyRequest,
 )
 
 __all__ = [
@@ -67,6 +74,7 @@ __all__ = [
     "SiteSettingDeleteRequest",
     "SiteSettingPayload",
     "SiteSettingsPayload",
+    "SiteSettingUpdateByKeyRequest",
     "SiteSettingUpdateRequest",
     "SiteNavigationCreateRequest",
     "SiteNavigationDeletePayload",
@@ -75,4 +83,8 @@ __all__ = [
     "SiteNavigationsPayload",
     "SiteNavigationUpdateRequest",
     "SiteNavigationUpsertManyRequest",
+    "SiteConfigCategoriesPayload",
+    "SiteConfigCategoryCreateRequest",
+    "SiteConfigCategoryPayload",
+    "SiteConfigCategoryUpsertManyRequest",
 ]
