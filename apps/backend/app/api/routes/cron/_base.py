@@ -2,12 +2,11 @@ import logging
 from collections.abc import Callable
 from enum import Enum
 
-from fastapi import APIRouter, Depends, Header, HTTPException
+from fastapi import Header, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.database.session import get_db
 from app.services.projects.sync_github_projects import sync_github_projects
 from app.services.site_settings import (
     GitHubSiteConfigError,
@@ -16,15 +15,7 @@ from app.services.site_settings import (
 
 prefix = "/cron"
 tags: list[str | Enum] = ["cron"]
-router = APIRouter()
 logger = logging.getLogger(__name__)
-
-
-class SyncGithubProjectsCronResponse(BaseModel):
-    status: str
-    synced: int
-    skipped: int
-    warnings: list[str]
 
 
 class CronJobResult(BaseModel):
@@ -33,11 +24,6 @@ class CronJobResult(BaseModel):
     synced: int = 0
     skipped: int = 0
     warnings: list[str] = Field(default_factory=list)
-
-
-class DailyCronResponse(BaseModel):
-    status: str
-    jobs: list[CronJobResult]
 
 
 def verify_cron_request(authorization: str | None = Header(default=None)) -> None:
@@ -82,33 +68,3 @@ def run_daily_job(
     except Exception as error:
         logger.exception("Daily cron job failed: %s", name)
         return CronJobResult(name=name, status="error", warnings=[str(error)])
-
-
-@router.get("/daily")
-def daily_cron(
-    db: Session = Depends(get_db),
-    _: None = Depends(verify_cron_request),
-) -> DailyCronResponse:
-    jobs = [
-        run_daily_job(
-            db,
-            name="sync-github-projects",
-            runner=run_sync_github_projects_job,
-        ),
-    ]
-    status = "ok" if all(job.status == "ok" for job in jobs) else "partial_error"
-    return DailyCronResponse(status=status, jobs=jobs)
-
-
-@router.get("/sync-github-projects")
-def sync_github_projects_cron(
-    db: Session = Depends(get_db),
-    _: None = Depends(verify_cron_request),
-) -> SyncGithubProjectsCronResponse:
-    job = run_sync_github_projects_job(db)
-    return SyncGithubProjectsCronResponse(
-        status=job.status,
-        synced=job.synced,
-        skipped=job.skipped,
-        warnings=job.warnings,
-    )

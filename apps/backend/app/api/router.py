@@ -18,7 +18,16 @@ api_router.include_router(
     prefix=post.post_tag_routes.prefix,
     tags=post.post_tag_routes.tags,
 )
-api_router.include_router(cron.router, prefix=cron.prefix, tags=cron.tags)
+api_router.include_router(
+    cron.daily_cron_routes.router,
+    prefix=cron.daily_cron_routes.prefix,
+    tags=cron.daily_cron_routes.tags,
+)
+api_router.include_router(
+    cron.sync_github_projects_cron_routes.router,
+    prefix=cron.sync_github_projects_cron_routes.prefix,
+    tags=cron.sync_github_projects_cron_routes.tags,
+)
 api_router.include_router(health.router, prefix="/health", tags=["health"])
 api_router.include_router(projects.router, prefix=projects.prefix, tags=projects.tags)
 api_router.include_router(
