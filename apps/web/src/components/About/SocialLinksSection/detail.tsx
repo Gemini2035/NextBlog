@@ -2,11 +2,10 @@
 
 import { ComponentType } from 'react'
 import Image from 'next/image'
-import { useSiteConfig } from '@/components/SiteDataProvider'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
+import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
-import { FRIEND_LINKS } from '@/constants'
 
 interface SocialLinksDetailProps {
   className?: string
@@ -15,7 +14,8 @@ interface SocialLinksDetailProps {
 export default function SocialLinksDetail({ className }: SocialLinksDetailProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
-  const siteConfig = useSiteConfig()
+  const socialLink = useAboutRecord('social_link')
+  const friendLinks = useFriendLinks()
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -26,8 +26,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
     pixiv: PixivIcon
   }
 
-  // 动态生成社交链接数组 - 从site-config读取
-  const socialLinks = Object.entries(siteConfig.socialLink ?? {})
+  const socialLinks = Object.entries(socialLink)
     .map(([key, value]) => {
       // 社交平台名称映射 - 使用国际化
       const getSocialName = (key: string) => {
@@ -105,13 +104,13 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
         })}
       </div>
 
-      {FRIEND_LINKS.length > 0 && (
+      {friendLinks.length > 0 && (
         <>
           <h3 className="text-xl font-semibold text-gray-900 mt-10 mb-4 pt-6 border-t border-gray-200">
             {skillsT('friendLinksTitle')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FRIEND_LINKS.map((link) => (
+            {friendLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.url}

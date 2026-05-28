@@ -2,9 +2,8 @@
 
 import { ComponentType } from 'react'
 import Image from 'next/image'
-import { FRIEND_LINKS } from '@/constants'
-import { useSiteConfig } from '@/components/SiteDataProvider'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon } from '@/assets/icons'
+import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
@@ -15,7 +14,8 @@ interface SocialLinksBriefProps {
 export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
-  const siteConfig = useSiteConfig()
+  const socialLink = useAboutRecord('social_link')
+  const friendLinks = useFriendLinks()
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -26,8 +26,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
     pixiv: PixivIcon
   }
 
-  // 动态生成社交链接数组 - 从site-config读取
-  const socialLinks = Object.entries(siteConfig.socialLink ?? {})
+  const socialLinks = Object.entries(socialLink)
     .map(([key, value]) => {
       // 社交平台名称映射 - 使用国际化
       const getSocialName = (key: string) => {
@@ -78,13 +77,13 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
         })}
       </div>
 
-      {FRIEND_LINKS.length > 0 && (
+      {friendLinks.length > 0 && (
         <>
           <h4 className="text-base font-semibold text-gray-900 mt-6 mb-3 pt-4 border-t border-gray-200">
             {skillsT('friendLinksTitle')}
           </h4>
           <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
-            {FRIEND_LINKS.map((link) => (
+            {friendLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.url}

@@ -12,8 +12,14 @@ import { SkillsBrief, SkillsDetail } from './SkillsSection'
 import { SocialLinksBrief, SocialLinksDetail } from './SocialLinksSection'
 import { TechStackBrief, TechStackDetail } from './TechStackSection'
 import { useMemo, type ComponentProps } from "react"
+import type { AboutInitPayload } from '@/types/about'
+import { AboutDataProvider } from './AboutDataProvider'
 
-export default function AboutPageClient() {
+interface AboutPageClientProps {
+  aboutInit: AboutInitPayload
+}
+
+export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
     const navT = useTranslations('Navigation')
 
     const waterfallItems = useMemo<ComponentProps<typeof ExpandableWaterfall>['items']>(() => [
@@ -203,26 +209,28 @@ export default function AboutPageClient() {
       ], [navT])
 
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          {/* 页面标题 */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
-              {navT('About Me')}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {navT('Learn about my background, skills, experience and contact information')}
-            </p>
-          </div>
+      <AboutDataProvider value={aboutInit}>
+        <div className="min-h-screen bg-gray-50">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            {/* 页面标题 */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4">
+                {navT('About Me')}
+              </h1>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                {navT('Learn about my background, skills, experience and contact information')}
+              </p>
+            </div>
   
-          {/* 主要内容区域 - 使用ExpandableWaterfall */}
-          <div className="mb-12">
-            <ExpandableWaterfall
-              columns={2}
-              items={waterfallItems}
-            />
-          </div> 
+            {/* 主要内容区域 - 使用ExpandableWaterfall */}
+            <div className="mb-12">
+              <ExpandableWaterfall
+                columns={2}
+                items={waterfallItems}
+              />
+            </div> 
+          </div>
         </div>
-      </div>
+      </AboutDataProvider>
     )
   }

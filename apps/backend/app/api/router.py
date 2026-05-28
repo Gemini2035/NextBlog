@@ -46,6 +46,11 @@ api_router.include_router(
     tags=site.home_init_routes.tags,
 )
 api_router.include_router(
+    site.about_init_routes.router,
+    prefix=site.about_init_routes.prefix,
+    tags=site.about_init_routes.tags,
+)
+api_router.include_router(
     site.site_setting_routes.router,
     prefix=site.site_setting_routes.prefix,
     tags=site.site_setting_routes.tags,
