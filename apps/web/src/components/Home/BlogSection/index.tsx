@@ -18,10 +18,12 @@ interface BlogSectionProps {
 }
 
 const getNavigationIcon = (item: SiteNavigationItem) => {
-  if (item.dynamicDataKey === 'posts.featured' || item.href.includes('featured')) {
+  const { dynamicDataKey, href } = item
+
+  if (dynamicDataKey === 'posts.featured' || href.includes('featured')) {
     return StarFilledIcon
   }
-  if (item.dynamicDataKey === 'posts.recent' || item.href.includes('recent')) {
+  if (dynamicDataKey === 'posts.recent' || href.includes('recent')) {
     return ClockIcon
   }
   return FileTextIcon
@@ -29,12 +31,14 @@ const getNavigationIcon = (item: SiteNavigationItem) => {
 
 export default function BlogSection({ index, item, posts }: BlogSectionProps) {
   const t = useTranslations('HomePage')
-  const blogDescription = item.description || 'Explore my latest technical insights and development experience'
+  const { description, href, id, items } = item
+  const { floating: floatingPosts, popularTags } = posts
+  const blogDescription = description || 'Explore my latest technical insights and development experience'
   const navigationLinks = [
-    ...item.items,
+    ...items,
     {
       ...item,
-      id: item.id * -1,
+      id: id * -1,
       label: t('allArticles', { default: '所有文章' }),
       description: null,
       items: [],
@@ -42,12 +46,10 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
     },
   ]
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const floatingPosts = posts.floating
-  const popularTags = posts.popularTags
 
   return (
     <HomeSectionSkeleton index={index}>
-      {/* 突破padding限制的飘动容器 */}
+      {/* Floating container that extends beyond the section padding. */}
       {floatingPosts.length > 0 && (
         <div className={cn(
           'absolute inset-y-0 left-0 right-0 w-full h-full overflow-hidden hidden lg:block pointer-events-none'
@@ -68,7 +70,7 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
         </div>
       )}
 
-      {/* 主要内容区域 - 突破padding限制 */}
+      {/* Main content area that extends beyond the section padding. */}
       <div className="relative max-w-6xl mx-auto -ml-6 sm:-ml-10 lg:-ml-16">
         <div className="max-w-3xl pl-6 sm:pl-10 lg:pl-16">
           <h2 className={cn(
@@ -82,15 +84,17 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
             {blogDescription}
           </p>
 
-          {/* 博客分类链接 */}
+          {/* Blog category links */}
           <div className="mt-8 sm:mt-10">
             <div className="flex flex-wrap gap-3 mb-6">
               {navigationLinks.map((navigationItem) => {
+                const { id, href, label } = navigationItem
                 const Icon = getNavigationIcon(navigationItem)
+
                 return (
                   <Link
-                    key={`${navigationItem.id}-${navigationItem.href}`}
-                    href={navigationItem.href}
+                    key={`${id}-${href}`}
+                    href={href}
                     className={cn(
                       'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
                       'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
@@ -98,13 +102,13 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
                     )}
                   >
                     <Icon className="w-4 h-4" />
-                    <span>{navigationItem.label}</span>
+                    <span>{label}</span>
                   </Link>
                 )
               })}
             </div>
 
-            {/* 热门标签链接 */}
+            {/* Popular tag links */}
             {popularTags.length > 0 && (
               <div className="mt-4">
                 <p className="text-sm text-blue-600 mb-3">
@@ -129,9 +133,9 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
               </div>
             )}
 
-            {/* 主要CTA按钮 */}
+            {/* Primary CTA */}
             <div className="mt-8">
-              <Link href={item.href}>
+              <Link href={href}>
                 <Button
                   type="primary"
                   size="sm"
@@ -146,25 +150,25 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
           </div>
         </div>
 
-        {/* 移动端显示的文章预览 */}
+        {/* Mobile post previews */}
         {floatingPosts.length > 0 && (
           <div className="mt-8 lg:hidden">
             <div className={cn(
               'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2'
             )}>
-              {floatingPosts.slice(0, 6).map((post) => (
-                <div key={post.id} className={cn(
+              {floatingPosts.slice(0, 6).map(({ id, title }) => (
+                <div key={id} className={cn(
                   'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-lg',
                   'border border-blue-200/60 p-2.5'
                 )}>
-                  <Link href={`/posts/${post.id}`} className="block">
+                  <Link href={`/posts/${id}`} className="block">
                     <div className="flex items-center gap-2">
                       <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                         <PostIcon className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0 flex items-center">
                         <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
-                          {post.title}
+                          {title}
                         </h3>
                       </div>
                     </div>

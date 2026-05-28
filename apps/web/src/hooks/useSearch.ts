@@ -42,13 +42,14 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         limit: 3,
         siteLanguage: locale,
       })
+      const { data } = response
 
-      if (response.data.mode === 'recommend') {
-        setRecommendedContent({ items: response.data.items })
+      if (data.mode === 'recommend') {
+        setRecommendedContent({ items: data.items })
         setSearchResults([])
       } else {
         setRecommendedContent({ items: [] })
-        setSearchResults(response.data.groups)
+        setSearchResults(data.groups)
       }
     } catch {
       // Keep the last successful results visible when a duplicate dev request is canceled.

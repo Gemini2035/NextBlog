@@ -25,7 +25,7 @@ export default function SearchResults({
 }: SearchResultsProps) {
   const t = useTranslations('Search')
   const hasSearchResults = searchResults.some((group) => group.items.length > 0)
-  const hasRecommendations = recommendedContent.items.length > 0
+  const { items: recommendedItems } = recommendedContent
   const getSearchGroupTitle = (type: SearchResultsGroup['type']) => {
     if (type === 'posts') {
       return t('searchResults.blogPosts')
@@ -38,29 +38,29 @@ export default function SearchResults({
     return t('searchResults.categories')
   }
 
-  // 渲染搜索结果组
-  const renderSearchResultsGroup = (group: SearchResultsGroup) => (
-    <div key={group.type} className="space-y-6">
-      {/* 分类标题 */}
+  // Render a search results group.
+  const renderSearchResultsGroup = ({ type, items }: SearchResultsGroup) => (
+    <div key={type} className="space-y-6">
+      {/* Group title */}
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-gray-900 mb-1 flex items-center">
-          {getSearchGroupTitle(group.type)}
+          {getSearchGroupTitle(type)}
         </h3>
       </div>
 
-      {/* 分类内容 */}
+      {/* Group content */}
       <ul className="space-y-3">
-        {group.items.map((item) => (
-          <li key={item.id}>
+        {items.map(({ id, href, title }) => (
+          <li key={id}>
             <Link
-              href={item.href}
+              href={href}
               className="block group cursor-pointer"
-              onClick={() => onItemClick(item.href)}
+              onClick={() => onItemClick(href)}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 flex items-center">
                   <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                    {item.title}
+                    {title}
                   </h4>
                   {/* {item.description && (
                     <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
@@ -77,7 +77,7 @@ export default function SearchResults({
     </div>
   );
 
-  // 渲染推荐内容组
+  // Render a recommended content group.
   const renderRecommendedGroup = (
     title: string,
     items: SearchResultItem[]
@@ -86,24 +86,24 @@ export default function SearchResults({
 
     return (
       <div key={title} className="space-y-6">
-        {/* 分类标题 */}
+        {/* Group title */}
         <div className="mb-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-1">{title}</h3>
         </div>
 
-        {/* 分类内容 */}
+        {/* Group content */}
         <ul className="space-y-3">
-          {items.map((item) => (
-            <li key={item.id}>
+          {items.map(({ id, href, title }) => (
+            <li key={id}>
               <Link
-                href={item.href}
+                href={href}
                 className="block group cursor-pointer"
-                onClick={() => onItemClick(item.href)}
+                onClick={() => onItemClick(href)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 flex items-center">
                     <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                      {item.title}
+                      {title}
                     </h4>
                     {/* {item.description && (
                       <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
@@ -121,7 +121,7 @@ export default function SearchResults({
     );
   };
 
-  // 加载状态
+  // Loading state.
   if (isSearching) {
     return (
       <motion.div
@@ -135,8 +135,8 @@ export default function SearchResults({
     );
   }
 
-  if (isShowingRecommendations && recommendedContent.items.length > 0) {
-    const group = renderRecommendedGroup(t('recommendedContent'), recommendedContent.items);
+  if (isShowingRecommendations && recommendedItems.length > 0) {
+    const group = renderRecommendedGroup(t('recommendedContent'), recommendedItems);
 
     return (
       <div className="max-h-96 overflow-y-auto">
@@ -157,7 +157,7 @@ export default function SearchResults({
     );
   }
 
-  // 无结果状态
+  // Empty state.
   return (
     <motion.div
       className="text-center py-12"

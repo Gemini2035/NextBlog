@@ -13,8 +13,9 @@ interface AboutSectionProps {
 
 export default function AboutSection({ index, item }: AboutSectionProps) {
   const t = useTranslations('HomePage')
-  const aboutDescription = item.description || 'Learn about my background, skills, experience and contact information'
-  const submenuItems = item.items
+  const { description, href, items } = item
+  const aboutDescription = description || 'Learn about my background, skills, experience and contact information'
+  const submenuItems = items
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -26,30 +27,30 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
           {aboutDescription}
         </p>
 
-        {/* 快速导航链接 */}
+        {/* Quick navigation links */}
         {submenuItems.length > 0 && (
           <div className="mt-8 sm:mt-10">
             <div className="space-y-6">
-              {submenuItems.map((item, itemIndex) => (
+              {submenuItems.map(({ href, label, items }, itemIndex) => (
                 <div key={itemIndex}>
-                  {/* 父级链接 */}
+                  {/* Parent link */}
                   <Link
-                    href={item.href}
+                    href={href}
                     className="block text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors mb-3"
                   >
-                    {item.label}
+                    {label}
                   </Link>
                   
-                  {/* 次级链接 */}
-                  {item.items && item.items.length > 0 && (
+                  {/* Child links */}
+                  {items && items.length > 0 && (
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
-                      {item.items.map((subItem, subIndex) => (
+                      {items.map(({ href, label }, subIndex) => (
                         <Link
                           key={subIndex}
-                          href={subItem.href}
+                          href={href}
                           className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                         >
-                          {subItem.label}
+                          {label}
                         </Link>
                       ))}
                     </div>
@@ -61,7 +62,7 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
         )}
 
         <div className="mt-6 sm:mt-8">
-          <Link href={item.href}>
+          <Link href={href}>
             <Button
               type="primary"
               size="sm"

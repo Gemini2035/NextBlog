@@ -13,7 +13,8 @@ interface ProjectsSectionProps {
 
 export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
   const t = useTranslations('HomePage')
-  const projectsDescription = item.description || 'Showcase my technical projects and portfolio'
+  const { description, href } = item
+  const projectsDescription = description || 'Showcase my technical projects and portfolio'
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -26,7 +27,7 @@ export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
         </p>
 
         <div className="mt-8 sm:mt-10">
-          <Link href={item.href}>
+          <Link href={href}>
             <Button
               type="primary"
               size="sm"
