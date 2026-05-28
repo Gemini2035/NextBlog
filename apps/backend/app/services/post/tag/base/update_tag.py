@@ -35,9 +35,11 @@ def update_post_tag(
     if dictionary is None:
         dictionary = Dictionary(key=tag.key, values={})
         db.add(dictionary)
+        db.flush()
     else:
         dictionary.key = tag.key
 
+    tag.dictionary_id = dictionary.id
     if translations is not None:
         dictionary.values = normalize_translations(translations)
 

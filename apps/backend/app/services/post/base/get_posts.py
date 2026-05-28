@@ -30,13 +30,14 @@ def _apply_search_filter(statement: Select[tuple[Post]], keyword: str | None) ->
     description_dictionary = aliased(Dictionary)
     return (
         statement.outerjoin(Post.tags)
-        .outerjoin(Dictionary, Dictionary.key == PostTag.key)
+        .outerjoin(Dictionary, Dictionary.id == PostTag.dictionary_id)
         .outerjoin(title_dictionary, title_dictionary.key == Post.title_key)
         .outerjoin(description_dictionary, description_dictionary.key == Post.description_key)
         .where(
             or_(
                 Post.title_key.ilike(pattern),
                 Post.description_key.ilike(pattern),
+                PostTag.key.ilike(pattern),
                 Dictionary.key.ilike(pattern),
                 Dictionary.values["zh"].astext.ilike(pattern),
                 Dictionary.values["en"].astext.ilike(pattern),

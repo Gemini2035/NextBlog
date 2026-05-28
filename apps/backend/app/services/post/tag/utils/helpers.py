@@ -34,12 +34,16 @@ def get_post_tag_translations(db: Session, keys: list[str]) -> dict[str, dict[st
 
 
 def build_post_tag_payloads(db: Session, tags: list[PostTag]) -> list[dict[str, object]]:
-    translations_by_key = get_post_tag_translations(db, [tag.key for tag in tags])
     return [
         {
             "id": tag.id,
             "key": tag.key,
-            "translations": translations_by_key.get(tag.key, {}),
+            "dictionary_id": tag.dictionary_id,
+            "translations": (
+                tag.dictionary.values
+                if tag.dictionary and isinstance(tag.dictionary.values, dict)
+                else {}
+            ),
             "created_at": tag.created_at,
             "updated_at": tag.updated_at,
         }

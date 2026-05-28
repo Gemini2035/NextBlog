@@ -7,7 +7,6 @@ from app.integrations.llm import OpenAIClient
 from app.models.post import POST_EMBEDDING_SOURCE_TYPE, Post
 from app.models.embedding import Embedding
 from app.services.post.utils.translations import resolve_dictionary_value
-from app.services.post.tag.utils.helpers import get_post_tag_dictionary_key
 
 
 class _HTMLTextExtractor(HTMLParser):
@@ -31,7 +30,10 @@ def extract_html_text(html: str) -> str:
 
 
 def get_post_embedding_text(db: Session, post: Post) -> str:
-    tags = ", ".join(get_post_tag_dictionary_key(tag.key) for tag in post.tags)
+    tags = ", ".join(
+        resolve_dictionary_value(db, tag.dictionary.key if tag.dictionary else tag.key, "zh") or tag.key
+        for tag in post.tags
+    )
     content_text = extract_html_text(post.content)
 
     return "\n".join(

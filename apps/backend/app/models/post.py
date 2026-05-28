@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, foreign, mapped_column, relationship
 
 from app.database.base import Base
+from app.models.dictionary import Dictionary
 from app.models.embedding import Embedding
 from app.models.mixins import TimestampMixin
 
@@ -31,6 +32,7 @@ class Post(TimestampMixin, Base):
         "PostTag",
         secondary="post_post_tag",
         back_populates="posts",
+        lazy="selectin",
     )
     embeddings: Mapped[list[Embedding]] = relationship(
         "Embedding",
@@ -51,10 +53,20 @@ class PostTag(TimestampMixin, Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     key: Mapped[str] = mapped_column(String(255), nullable=False, unique=True, index=True)
+    dictionary_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("dictionary.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    dictionary: Mapped[Dictionary] = relationship("Dictionary", lazy="joined")
     posts: Mapped[list[Post]] = relationship(
         "Post",
         secondary="post_post_tag",
         back_populates="tags",
+    )
+
+    __table_args__ = (
+        Index("ix_post_tag_dictionary_id", "dictionary_id"),
     )
 
 

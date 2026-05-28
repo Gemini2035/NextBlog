@@ -37,6 +37,7 @@ class PostTagPayload(BaseModel):
 
     id: int
     key: str
+    dictionary_id: int = Field(serialization_alias="dictionaryId")
     translations: dict[str, str]
     created_at: datetime
     updated_at: datetime

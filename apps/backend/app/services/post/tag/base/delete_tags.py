@@ -18,15 +18,17 @@ def delete_post_tags(db: Session, tag_ids: list[int]) -> int:
     if missing_ids:
         raise PostTagIdsNotFoundError(missing_ids)
 
-    keys = list(db.scalars(select(PostTag.key).where(PostTag.id.in_(unique_tag_ids))).all())
+    dictionary_ids = list(
+        db.scalars(select(PostTag.dictionary_id).where(PostTag.id.in_(unique_tag_ids))).all()
+    )
 
     try:
-        db.execute(delete(Dictionary).where(Dictionary.key.in_(keys)))
         result = db.execute(delete(PostTag).where(PostTag.id.in_(unique_tag_ids)))
         result_rowcount = result.rowcount if isinstance(result, CursorResult) else 0
         if result_rowcount != len(unique_tag_ids):
             db.rollback()
             raise PostTagDeleteFailedError(tag_ids)
+        db.execute(delete(Dictionary).where(Dictionary.id.in_(dictionary_ids)))
         db.commit()
     except PostTagDeleteFailedError:
         raise

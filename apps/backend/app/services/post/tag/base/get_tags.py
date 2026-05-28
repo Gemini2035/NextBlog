@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.models.post import PostTag
 from app.services.post.tag.base.exceptions import InvalidPostTagIdsError
@@ -7,7 +7,13 @@ from app.services.post.tag.utils.helpers import build_post_tag_payloads
 
 
 def get_post_tags(db: Session) -> list[dict[str, object]]:
-    tags = list(db.scalars(select(PostTag).order_by(PostTag.id.asc())).all())
+    tags = list(
+        db.scalars(
+            select(PostTag)
+            .options(joinedload(PostTag.dictionary))
+            .order_by(PostTag.id.asc())
+        ).all()
+    )
     return build_post_tag_payloads(db, tags)
 
 

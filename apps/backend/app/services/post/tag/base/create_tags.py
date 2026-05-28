@@ -45,14 +45,15 @@ def upsert_post_tags(db: Session, payloads: list[PostTagCreateRequest]) -> list[
         raise PostTagAlreadyExistsError(build_post_tag_payloads(db, existing_tags))
 
     for normalized_key, translations in normalized_payloads:
-        tag = PostTag(key=normalized_key)
-        db.add(tag)
-
         dictionary = db.scalar(select(Dictionary).where(Dictionary.key == normalized_key))
         if dictionary is None:
             dictionary = Dictionary(key=normalized_key, values={})
             db.add(dictionary)
+            db.flush()
         dictionary.values = translations
+
+        tag = PostTag(key=normalized_key, dictionary_id=dictionary.id)
+        db.add(tag)
         result_tags.append(tag)
 
     try:
