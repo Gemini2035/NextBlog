@@ -59,10 +59,10 @@ export function useRecommendedContent() {
 
     // 导航链接
     const navigationLinks: SearchableItem[] = navigation
-      .filter(navItem => navItem.type !== '__search' && navItem.type !== '__language')
+      .filter(navItem => navItem.key !== 'search' && navItem.key !== 'language')
       .slice(0, 5)
       .map(navItem => ({
-        id: `nav-${navItem.type}`,
+        id: `nav-${navItem.key}`,
         type: 'link',
         title: navItem.label,
         description: navItem.description ?? undefined,

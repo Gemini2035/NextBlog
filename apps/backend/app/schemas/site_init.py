@@ -10,7 +10,6 @@ class SiteInitNavigationItem(BaseModel):
 
     id: int
     parent_id: int | None = Field(serialization_alias="parentId")
-    type: str
     key: str
     label: str
     description: str | None = None

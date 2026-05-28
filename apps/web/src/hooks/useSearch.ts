@@ -76,9 +76,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     })
 
     const appendNavigationItem = (navItem: SiteNavigationItem, depth: number = 0) => {
-      if (navItem.type !== '__search' && navItem.type !== '__language') {
+      if (navItem.key !== 'search' && navItem.key !== 'language') {
         items.push({
-          id: `nav-${navItem.type}`,
+          id: `nav-${navItem.key}`,
           type: 'link',
           title: navItem.label,
           originalTitle: navItem.label,

@@ -35,7 +35,7 @@ export default function MobileNav({ navigationItems, onItemClick }: MobileNavPro
     const data: TreeNode[] = navigationItems.map(nav => {
       const children = nav.items.map(item => mapSub(item))
       const node: TreeNode = {
-        key: nav.type,
+        key: nav.key,
         title: nav.label,
         href: nav.href,
         children: children.length > 0 ? children : undefined
@@ -53,4 +53,3 @@ export default function MobileNav({ navigationItems, onItemClick }: MobileNavPro
     </nav>
   )
 }
-

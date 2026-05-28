@@ -11,8 +11,14 @@ import { useSiteConfig, useSiteData } from "@/components/SiteDataProvider";
 import { smoothScrollToElement } from "@/utils";
 import { ChevronRightIcon } from "@/assets/icons";
 import { useRef, useCallback } from "react";
+import type { HomeInitPayload } from "@/types/home";
+import type { SiteNavigationItem } from "@/types/site";
 
-export default function HomeClient() {
+interface HomeClientProps {
+  homeInit: HomeInitPayload;
+}
+
+export default function HomeClient({ homeInit }: HomeClientProps) {
   const t = useTranslations("HomePage");
   const siteConfig = useSiteConfig();
   const { navigation: navigationItems } = useSiteData();
@@ -26,18 +32,17 @@ export default function HomeClient() {
 
   // 过滤掉非内容型导航（如搜索、语言）
   const contentNavs = navigationItems.filter(
-    (item) => item.type !== "__search" && item.type !== "__language",
+    (item) => !["search", "language"].includes(item.key),
   );
-  const getNav = (type: string) => contentNavs.find((n) => n.type === type);
+  const getNav = (type: string) => {
+    return contentNavs.find((navigationItem) => navigationItem.key === type);
+  };
 
   const sections = [
-    getNav("__blog"),
-    getNav("__about"),
-    getNav("__projects"),
-  ].filter(Boolean) as Array<{
-    type: "__blog" | "__about" | "__projects";
-    href: string;
-  }>;
+    getNav("blog"),
+    getNav("about"),
+    getNav("projects"),
+  ].filter(Boolean) as SiteNavigationItem[];
 
   // 获取博客区域的引用
   const blogSectionRef = useRef<HTMLDivElement>(null);
@@ -127,14 +132,14 @@ export default function HomeClient() {
         ) : (
           sections.map((item, idx) => {
             // 为博客区域添加引用
-            if (item.type === "__blog") {
+            if (item.key === "blog") {
               return (
-                <div key={item.type} ref={blogSectionRef}>
-                  <SectionSwitch item={item} index={idx} />
+                <div key={item.key} ref={blogSectionRef}>
+                  <SectionSwitch item={item} index={idx} homeInit={homeInit} />
                 </div>
               );
             }
-            return <SectionSwitch key={item.type} item={item} index={idx} />;
+            return <SectionSwitch key={item.key} item={item} index={idx} homeInit={homeInit} />;
           })
         )}
       </div>

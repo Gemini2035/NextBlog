@@ -47,7 +47,6 @@ export interface SiteLanguage {
 export interface SiteNavigationItem {
   id: number
   parentId?: number | null
-  type: string
   key: string
   label: string
   description?: string | null

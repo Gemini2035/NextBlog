@@ -104,10 +104,10 @@ export default function FullscreenDropdown({
   const submenuRef = useRef<HTMLDivElement>(null)
 
   // 判断是否为搜索模式
-  const isSearchMode = currentNavigationItem.type === '__search'
+  const isSearchMode = currentNavigationItem.key === 'search'
   
   // 判断是否为语言选择模式
-  const isLanguageMode = currentNavigationItem.type === '__language'
+  const isLanguageMode = currentNavigationItem.key === 'language'
 
   // 语言选择的状态
   const { currentLang, changeLanguage } = useLanguage()
@@ -219,7 +219,7 @@ export default function FullscreenDropdown({
                 staggerChildren: isExiting ? 0.02 : 0.08,
                 delayChildren: isExiting ? 0 : 0.1 // 退出时立即开始动画
               }}
-              key={currentNavigationItem.type}
+              key={currentNavigationItem.key}
             >
               {/* 标题区域 - 仅在非语言模式和非搜索模式下显示 */}
               {!isLanguageMode && !isSearchMode && (

@@ -15,7 +15,7 @@ import MobileNav from './MobileNav'
 interface NavItemProps {
   item: SiteNavigationItem
   activeSubmenu: string | null
-  onNavHover: (itemType: string) => void
+  onNavHover: (itemKey: string) => void
 }
 
 function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
@@ -25,13 +25,13 @@ function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
     return (
       <div
         className="relative"
-        onMouseEnter={() => onNavHover(item.type)}
+        onMouseEnter={() => onNavHover(item.key)}
       >
         <Link 
           href={item.href} 
           className="text-gray-700 hover:text-gray-800 transition-colors flex items-center"
           aria-haspopup="true"
-          aria-expanded={activeSubmenu === item.type}
+          aria-expanded={activeSubmenu === item.key}
         >
           {item.label}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
@@ -105,13 +105,13 @@ export default function Header() {
     if (isOnSearchButton || isOnLanguageButton) {
       // 如果当前有 submenu 打开，但不是对应的类型
       if (activeSubmenu) {
-        const shouldClose = (isOnSearchButton && activeSubmenu !== '__search') || 
-                           (isOnLanguageButton && activeSubmenu !== '__language')
+        const shouldClose = (isOnSearchButton && activeSubmenu !== 'search') || 
+                           (isOnLanguageButton && activeSubmenu !== 'language')
         
         // 只有在不是从搜索切换到语言或从语言切换到搜索时才关闭
         const isSwitchingBetweenSpecialMenus = 
-          (isOnSearchButton && activeSubmenu === '__language') ||
-          (isOnLanguageButton && activeSubmenu === '__search')
+          (isOnSearchButton && activeSubmenu === 'language') ||
+          (isOnLanguageButton && activeSubmenu === 'search')
         
         if (shouldClose && !isSwitchingBetweenSpecialMenus) {
           setIsExiting(true)
@@ -193,35 +193,35 @@ export default function Header() {
   // 切换到新的导航项（不带动画）
   const switchToNavigationItem = useCallback((newNavigationItem: SiteNavigationItem) => {
     // 直接切换，不播放容器动画
-    setActiveSubmenu(newNavigationItem.type)
+    setActiveSubmenu(newNavigationItem.key)
     setIsExiting(false)
   }, [])
 
   // 处理搜索点击
   const handleSearchClick = useCallback(() => {
-    if (activeSubmenu === '__search') {
+    if (activeSubmenu === 'search') {
       setActiveSubmenu(null)
       setIsExiting(false)
     } else {
-      setActiveSubmenu('__search')
+      setActiveSubmenu('search')
       setIsExiting(false)
     }
   }, [activeSubmenu])
 
   // 处理语言切换点击
   const handleLanguageClick = useCallback(() => {
-    if (activeSubmenu === '__language') {
+    if (activeSubmenu === 'language') {
       setActiveSubmenu(null)
       setIsExiting(false)
     } else {
-      setActiveSubmenu('__language')
+      setActiveSubmenu('language')
       setIsExiting(false)
     }
   }, [activeSubmenu])
 
   // 处理导航项悬停
-  const handleNavHover = useCallback((itemType: string) => {
-    const targetItem = navigationItems.find(item => item.type === itemType)
+  const handleNavHover = useCallback((itemKey: string) => {
+    const targetItem = navigationItems.find(item => item.key === itemKey)
     if (targetItem) {
       switchToNavigationItem(targetItem)
     }
@@ -249,8 +249,7 @@ export default function Header() {
   const searchNavigationItem = useMemo(() => ({
     id: -1,
     parentId: null,
-    type: '__search' as const,
-    key: '__search',
+    key: 'search',
     label: '搜索',
     href: '#',
     description: searchSubmenu.description,
@@ -269,8 +268,7 @@ export default function Header() {
   const languageNavigationItem = useMemo(() => ({
     id: -2,
     parentId: null,
-    type: '__language' as const,
-    key: '__language',
+    key: 'language',
     label: '语言',
     href: '#',
     description: languageSubmenu.description,
@@ -383,11 +381,11 @@ export default function Header() {
           isOpen={true}
           onClose={handleSubmenuClose}
           navigationItem={
-            activeSubmenu === '__search' 
+            activeSubmenu === 'search' 
               ? searchNavigationItem 
-              : activeSubmenu === '__language'
+              : activeSubmenu === 'language'
               ? languageNavigationItem
-              : navigationItems.find(item => item.type === activeSubmenu) || searchNavigationItem
+              : navigationItems.find(item => item.key === activeSubmenu) || searchNavigationItem
           }
           isExiting={isExiting}
           onAnimationComplete={handleAnimationComplete}

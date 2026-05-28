@@ -4,21 +4,17 @@ import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { ArrowRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
-import { useSiteData } from '@/components/SiteDataProvider'
+import type { SiteNavigationItem } from '@/types/site'
 
 interface AboutSectionProps {
   index: number
-  href: string
+  item: SiteNavigationItem
 }
 
-export default function AboutSection({ index, href }: AboutSectionProps) {
+export default function AboutSection({ index, item }: AboutSectionProps) {
   const t = useTranslations('HomePage')
-  const { navigation } = useSiteData()
-
-  // 获取about section的导航配置
-  const aboutNav = navigation.find(item => item.type === '__about')
-  const aboutDescription = aboutNav?.description || 'Learn about my background, skills, experience and contact information'
-  const submenuItems = aboutNav?.items || []
+  const aboutDescription = item.description || 'Learn about my background, skills, experience and contact information'
+  const submenuItems = item.items
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -65,7 +61,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
         )}
 
         <div className="mt-6 sm:mt-8">
-          <Link href={href}>
+          <Link href={item.href}>
             <Button
               type="primary"
               size="sm"

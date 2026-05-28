@@ -4,20 +4,16 @@ import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { ArrowRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
-import { useSiteData } from '@/components/SiteDataProvider'
+import type { SiteNavigationItem } from '@/types/site'
 
 interface ProjectsSectionProps {
   index: number
-  href: string
+  item: SiteNavigationItem
 }
 
-export default function ProjectsSection({ index, href }: ProjectsSectionProps) {
+export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
   const t = useTranslations('HomePage')
-  const { navigation } = useSiteData()
-  
-  // 获取projects section的导航配置
-  const projectsNav = navigation.find(item => item.type === '__projects')
-  const projectsDescription = projectsNav?.description || 'Showcase my technical projects and portfolio'
+  const projectsDescription = item.description || 'Showcase my technical projects and portfolio'
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -30,7 +26,7 @@ export default function ProjectsSection({ index, href }: ProjectsSectionProps) {
         </p>
 
         <div className="mt-8 sm:mt-10">
-          <Link href={href}>
+          <Link href={item.href}>
             <Button
               type="primary"
               size="sm"

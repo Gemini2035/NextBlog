@@ -1,4 +1,5 @@
-from typing import Any
+from datetime import datetime
+from typing import Any, Callable
 
 from sqlalchemy.orm import Session
 
@@ -103,7 +104,6 @@ def _build_navigation_tree(
         nodes[navigation_id] = {
             "id": navigation_id,
             "parent_id": navigation.get("parent_id"),
-            "type": key,
             "key": key,
             "label": _resolve_translation(navigation.get("label"), locale, key),
             "description": (
@@ -152,7 +152,6 @@ def _build_post_navigation_item(
     return {
         "id": -(parent_id * 1000 + sort_order + 1),
         "parent_id": parent_id,
-        "type": f"post.{post_id}",
         "key": f"post.{post_id}",
         "label": post.get("title") or post_id,
         "description": post.get("description"),
@@ -166,12 +165,17 @@ def _build_post_navigation_item(
 
 
 def _get_post_sort_timestamp(post: dict[str, Any]) -> float:
-    value = post.get("updated_at") or post.get("created_at")
+    value = _get_post_datetime(post, "updated_at") or _get_post_datetime(post, "created_at")
 
-    if hasattr(value, "timestamp"):
-        return float(value.timestamp())
+    if value is None:
+        return 0
 
-    return 0
+    return float(value.timestamp())
+
+
+def _get_post_datetime(post: dict[str, Any], field: str) -> datetime | None:
+    value = post.get(field)
+    return value if isinstance(value, datetime) else None
 
 
 def _attach_post_navigation_items(
@@ -184,7 +188,7 @@ def _attach_post_navigation_items(
         if isinstance(post, dict)
     ]
 
-    dynamic_post_filters = {
+    dynamic_post_filters: dict[str, Callable[[], list[dict[str, Any]]]] = {
         "posts.featured": lambda: [
             post
             for post in post_items
@@ -200,7 +204,11 @@ def _attach_post_navigation_items(
     def visit(nodes: list[dict[str, Any]]) -> None:
         for node in nodes:
             dynamic_data_key = node.get("dynamic_data_key")
-            get_dynamic_posts = dynamic_post_filters.get(dynamic_data_key)
+            get_dynamic_posts = (
+                dynamic_post_filters.get(dynamic_data_key)
+                if isinstance(dynamic_data_key, str)
+                else None
+            )
             if get_dynamic_posts is not None:
                 node["items"] = [
                     _build_post_navigation_item(post, parent_id=node["id"], sort_order=index)
