@@ -1,9 +1,9 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { cn } from "@/utils";
-import { DEVELOPMENT_PROTOCOLS } from "@/constants";
 import { IconMap } from "./constants";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface DevelopmentProtocolsDetailProps {
   className?: string;
@@ -12,9 +12,20 @@ interface DevelopmentProtocolsDetailProps {
 export default function DevelopmentProtocolsDetail({
   className,
 }: DevelopmentProtocolsDetailProps) {
-  const locale = useLocale();
-  const developmentProtocols =
-    DEVELOPMENT_PROTOCOLS[locale as keyof typeof DEVELOPMENT_PROTOCOLS];
+  const developmentProtocols = useAboutList<{
+    id: string
+    icon: keyof typeof IconMap
+    color?: {
+      bg?: string
+      icon?: string
+      badge?: string
+    }
+    category: string
+    name: string
+    description: string
+    features: string[]
+    url: string
+  }>("development_protocols");
   const t = useTranslations("AboutPage");
 
   return (
@@ -96,7 +107,7 @@ export default function DevelopmentProtocolsDetail({
                           <span
                             className={cn(
                               "shrink-0 w-1.5 h-1.5 rounded-full mt-2",
-                              color?.icon.replace("text-", "bg-")
+                              color?.icon?.replace("text-", "bg-") ?? "bg-gray-500"
                             )}
                           />
                           <span className="text-sm text-gray-700">

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/server-http'
+import { getSiteInit } from '@/apis/site/server'
 import { PostInfoCard, RelatedPostsClient, ContactButton } from '@/components/Post'
-import { POSTS_PER_PAGE } from '@/constants'
 import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
 
 interface PostPageProps {
@@ -33,13 +33,14 @@ export async function generateMetadata({ params }: PostPageProps) {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { id, locale } = await params
+  const siteInit = await getSiteInit(locale)
   const [payload, postsPayload] = await Promise.all([
     serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
       headers: { 'X-Locale': locale },
     }).catch(() => null),
     serverHttpData<BlogPostsPayload>('/post', {
       headers: { 'X-Locale': locale },
-      params: { pageSize: POSTS_PER_PAGE },
+      params: { pageSize: siteInit.siteConfig.postsPerPage ?? 6 },
     }).catch(() => null),
   ])
   const post = payload?.post

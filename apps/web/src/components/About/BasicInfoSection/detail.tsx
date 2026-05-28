@@ -1,19 +1,18 @@
 "use client";
 
-import { BASE_INFO } from "@/constants";
 import { GlobeIcon } from "@/assets/icons";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { FC } from "react";
+import { useAboutRecord } from "@/components/About/AboutDataProvider";
 
 interface BasicInfoDetailProps {
   className?: string;
 }
 
 const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
   const navT = useTranslations("Navigation");
-  const baseInfo = BASE_INFO[locale as keyof typeof BASE_INFO];
+  const baseInfo = useAboutRecord("base_info");
 
   return (
     <div className={className}>
@@ -38,7 +37,7 @@ const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
         </h3>
         <div
           className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: baseInfo.description }}
+          dangerouslySetInnerHTML={{ __html: baseInfo.description ?? "" }}
         />
       </div>
     </div>

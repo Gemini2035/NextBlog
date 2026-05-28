@@ -1,11 +1,11 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { ClockIcon } from '@/assets/icons'
 import { FC, Fragment } from 'react'
-import { DEVELOPMENT_HISTORY } from '@/constants'
 import { TagColorMap } from './constants'
 import { cn } from '@/utils'
+import { useAboutList } from '@/components/About/AboutDataProvider'
 
 interface DevelopmentHistoryDetailProps {
   className?: string
@@ -18,9 +18,24 @@ const TitleColorMap = {
 } as const
 
 const DevelopmentHistoryDetail: FC<DevelopmentHistoryDetailProps> = ({ className }) => {
-  const locale = useLocale()
   const t = useTranslations('AboutPage')
-  const developmentHistory = DEVELOPMENT_HISTORY[locale as keyof typeof DEVELOPMENT_HISTORY]
+  const developmentHistory = useAboutList<{
+    id: string
+    title: string
+    version: string
+    period: string
+    status: keyof typeof TagColorMap
+    description: string
+    children?: Array<{
+      id: string
+      title: string
+      version: string
+      period: string
+      tags: string[]
+      status: keyof typeof TagColorMap
+      description: string
+    }>
+  }>('development_history')
 
   return (
     <div className={className} id="development-history">

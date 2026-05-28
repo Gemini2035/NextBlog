@@ -1,7 +1,6 @@
 'use client'
 
 import { createContext, useContext, type ReactNode } from 'react'
-import { SITE_CONFIG as DEFAULT_SITE_CONFIG } from '@/constants'
 import type { SiteConfig, SiteInitPayload } from '@/types/site'
 
 interface SiteDataProviderProps {
@@ -32,7 +31,6 @@ export function useSiteData() {
 export function useSiteConfig(): SiteConfig {
   const { siteConfig, siteLanguages } = useSiteData()
   return {
-    ...DEFAULT_SITE_CONFIG,
     ...siteConfig,
     languages: siteLanguages.map((language) => ({
       code: language.code,

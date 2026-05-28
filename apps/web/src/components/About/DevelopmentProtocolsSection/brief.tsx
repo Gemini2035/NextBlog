@@ -1,11 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { cn } from "@/utils";
-import { DEVELOPMENT_PROTOCOLS } from "@/constants";
 import { useRandomSort } from "@/hooks";
 import { IconMap } from "./constants";
 import { FC } from "react";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface DevelopmentProtocolsBriefProps {
   className?: string;
@@ -13,10 +13,16 @@ interface DevelopmentProtocolsBriefProps {
 const DevelopmentProtocolsBrief: FC<DevelopmentProtocolsBriefProps> = ({
   className,
 }) => {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
-  const developmentProtocols =
-    DEVELOPMENT_PROTOCOLS[locale as keyof typeof DEVELOPMENT_PROTOCOLS];
+  const developmentProtocols = useAboutList<{
+    id: string
+    icon: keyof typeof IconMap
+    color?: {
+      bg?: string
+      icon?: string
+    }
+    name: string
+  }>("development_protocols");
 
   const developmentProtocolsWithRandom = useRandomSort(developmentProtocols, 6);
 

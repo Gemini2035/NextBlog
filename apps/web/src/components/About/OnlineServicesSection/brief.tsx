@@ -1,12 +1,12 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { OnlineServiceIcon } from "@/assets/icons";
-import { ONLINE_SERVICES } from "@/constants";
 import { IconMap } from "./constants";
 import { useRandomSort } from "@/hooks";
 import { cn } from "@/utils";
 import { FC } from "react";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface OnlineServicesBriefProps {
   className?: string;
@@ -14,18 +14,26 @@ interface OnlineServicesBriefProps {
 
 const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
   const t = useTranslations("AboutPage");
-  const locale = useLocale();
-  const onlineServices =
-    ONLINE_SERVICES[locale as keyof typeof ONLINE_SERVICES]?.flatMap(
-      ({ services }) =>
-        services.map(({ id, icon, name, category, externalDescription }) => ({
-          id,
-          icon,
-          name,
-          category,
-          externalDescription,
-        }))
-    ) || [];
+  const onlineServices = useAboutList<{
+    services: Array<{
+      id: string
+      icon: keyof typeof IconMap
+      name: string
+      category: string
+      externalDescription: {
+        text: string
+        textColor: string
+      }
+    }>
+  }>("online_services").flatMap(({ services }) =>
+    services.map(({ id, icon, name, category, externalDescription }) => ({
+      id,
+      icon,
+      name,
+      category,
+      externalDescription,
+    }))
+  );
 
   const onlineServicesWithRandom = useRandomSort(onlineServices, 4);
 

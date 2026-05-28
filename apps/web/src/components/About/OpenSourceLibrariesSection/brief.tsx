@@ -1,11 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
-import { OPEN_SOURCE_LIBRARIES } from "@/constants";
+import { useTranslations } from "next-intl";
 import { OpenSourceIcon } from "@/assets/icons";
 import { IconMap } from "./constants";
 import { useMemo } from "react";
 import { useRandomSort } from "@/hooks/useRandomSort";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface OpenSourceLibrariesBriefProps {
   className?: string;
@@ -15,13 +15,20 @@ interface OpenSourceLibrariesBriefProps {
 const OpenSourceLibrariesBrief = ({
   className,
 }: OpenSourceLibrariesBriefProps) => {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
+  const openSourceLibraries = useAboutList<{
+    sources: Array<{
+      key: string
+      version: string
+      icon: keyof typeof IconMap
+      summary: string
+    }>
+  }>("open_source");
 
   // 所有数据（固定顺序，用于 SSR）
   const allSourcesData = useMemo(
     () =>
-      OPEN_SOURCE_LIBRARIES[locale as keyof typeof OPEN_SOURCE_LIBRARIES].flatMap(({ sources }) =>
+      openSourceLibraries.flatMap(({ sources }) =>
         sources.map(({ key, version, icon, summary }) => ({
           key,
           version,
@@ -29,7 +36,7 @@ const OpenSourceLibrariesBrief = ({
           summary,
         }))
       ),
-    [locale]
+    [openSourceLibraries]
   );
 
   // 随机获取8个开源库（仅在客户端）

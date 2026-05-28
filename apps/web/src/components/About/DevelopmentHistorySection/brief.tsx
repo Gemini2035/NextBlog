@@ -1,19 +1,26 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { ClockIcon } from '@/assets/icons'
-import { DEVELOPMENT_HISTORY } from '@/constants'
 import { cn } from '@/utils'
 import { FC } from 'react'
 import { TagColorMap } from './constants'
+import { useAboutList } from '@/components/About/AboutDataProvider'
 interface DevelopmentHistoryBriefProps {
   className?: string
 }
 
 const DevelopmentHistoryBrief: FC<DevelopmentHistoryBriefProps> = ({ className }) => {
-  const locale = useLocale()
   const t = useTranslations('AboutPage')
-  const developmentHistory = DEVELOPMENT_HISTORY[locale as keyof typeof DEVELOPMENT_HISTORY]
+  const developmentHistory = useAboutList<{
+    id: string
+    title: string
+    version: string
+    period: string
+    tags: string[]
+    status: keyof typeof TagColorMap
+    summary: string
+  }>('development_history')
 
   const developmentHistoryBrief = developmentHistory.map(({ id, title, version, period, tags, status, summary }) => (
     {
