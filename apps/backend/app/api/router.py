@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from app.api.routes import cron
 from app.api.routes import health
 from app.api.routes import post
+from app.api.routes import search
 from app.api.routes import projects
 from app.api.routes import locales
 from app.api.routes import site
@@ -75,3 +76,4 @@ api_router.include_router(
     prefix=site.static_content_category_routes.prefix,
     tags=site.static_content_category_routes.tags,
 )
+api_router.include_router(search.router, prefix=search.prefix, tags=search.tags)

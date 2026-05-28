@@ -2,7 +2,7 @@
 
 import { motion, Variants } from "framer-motion";
 import { Link } from "@/ui";
-import { SearchResultsGroup, RecommendedContent } from '@/types/search';
+import { SearchResultsGroup, RecommendedContent, SearchResultItem } from '@/types/search';
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 
@@ -24,34 +24,47 @@ export default function SearchResults({
   itemVariants,
 }: SearchResultsProps) {
   const t = useTranslations('Search')
+  const hasSearchResults = searchResults.some((group) => group.items.length > 0)
+  const hasRecommendations = recommendedContent.items.length > 0
+  const getSearchGroupTitle = (type: SearchResultsGroup['type']) => {
+    if (type === 'posts') {
+      return t('searchResults.blogPosts')
+    }
+
+    if (type === 'links') {
+      return t('searchResults.navigationLinks')
+    }
+
+    return t('searchResults.categories')
+  }
 
   // 渲染搜索结果组
   const renderSearchResultsGroup = (group: SearchResultsGroup) => (
-    <div key={group.title} className="space-y-6">
+    <div key={group.type} className="space-y-6">
       {/* 分类标题 */}
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-gray-900 mb-1 flex items-center">
-          {group.title}
+          {getSearchGroupTitle(group.type)}
         </h3>
       </div>
 
       {/* 分类内容 */}
       <ul className="space-y-3">
-        {group.items.map((result) => (
-          <li key={result.item.id}>
+        {group.items.map((item) => (
+          <li key={item.id}>
             <Link
-              href={result.item.href}
+              href={item.href}
               className="block group cursor-pointer"
-              onClick={() => onItemClick(result.item.href)}
+              onClick={() => onItemClick(item.href)}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1 flex items-center">
                   <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                    {result.item.title}
+                    {item.title}
                   </h4>
-                  {/* {result.item.description && (
+                  {/* {item.description && (
                     <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
-                      {result.item.description}
+                      {item.description}
                     </p>
                   )} */}
                   <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 transition-colors shrink-0 ml-2" />
@@ -67,13 +80,7 @@ export default function SearchResults({
   // 渲染推荐内容组
   const renderRecommendedGroup = (
     title: string,
-    items: {
-      id: string;
-      title: string;
-      href: string;
-      description?: string;
-      tags?: string[];
-    }[]
+    items: SearchResultItem[]
   ) => {
     if (items.length === 0) return null;
 
@@ -128,39 +135,24 @@ export default function SearchResults({
     );
   }
 
-  // 显示搜索结果
-  if (!isShowingRecommendations && searchResults.length > 0) {
+  if (isShowingRecommendations && recommendedContent.items.length > 0) {
+    const group = renderRecommendedGroup(t('recommendedContent'), recommendedContent.items);
+
     return (
       <div className="max-h-96 overflow-y-auto">
-        <div className="space-y-8">
-          {searchResults.map(renderSearchResultsGroup)}
-        </div>
+        <div className="space-y-8">{group}</div>
       </div>
     );
   }
 
-  // 显示推荐内容
-  if (isShowingRecommendations) {
-    const groups = [];
-    if (recommendedContent.featuredPosts.length > 0) {
-      groups.push(
-        renderRecommendedGroup(t('recommendedBlog'), recommendedContent.featuredPosts)
-      );
-    }
-    if (recommendedContent.recentPosts.length > 0) {
-      groups.push(
-        renderRecommendedGroup(t('latestPosts'), recommendedContent.recentPosts)
-      );
-    }
-    if (recommendedContent.navigationLinks.length > 0) {
-      groups.push(
-        renderRecommendedGroup(t('recommendedLinks'), recommendedContent.navigationLinks)
-      );
-    }
-
+  if (hasSearchResults) {
     return (
       <div className="max-h-96 overflow-y-auto">
-        <div className="space-y-8">{groups}</div>
+        <div className="space-y-8">
+          {searchResults
+            .filter((group) => group.items.length > 0)
+            .map(renderSearchResultsGroup)}
+        </div>
       </div>
     );
   }

@@ -1,37 +1,24 @@
-import { FuseResultMatch } from 'fuse.js'
-
-// 搜索项类型定义
 export interface SearchableItem {
   id: string
   type: 'post' | 'link' | 'category'
   title: string
-  originalTitle?: string // 原始标签，用于检索
   description?: string
-  originalDescription?: string // 原始描述，用于检索
   href: string
-  tags?: string[]
-  content?: string
-  priority: number
-  category?: string
 }
 
-// 搜索结果类型
-export interface SearchResult {
-  item: SearchableItem
-  score?: number
-  matches?: FuseResultMatch[]
-}
-
-// 搜索结果分组
-export interface SearchResultsGroup {
+export interface SearchResultItem {
+  id: string
+  type: 'post' | 'link'
   title: string
-  items: SearchResult[]
-  type: 'posts' | 'links' | 'categories'
+  description?: string | null
+  href: string
 }
 
-// 推荐内容类型
+export interface SearchResultsGroup {
+  type: 'posts' | 'links' | 'categories'
+  items: SearchResultItem[]
+}
+
 export interface RecommendedContent {
-  featuredPosts: SearchableItem[]
-  recentPosts: SearchableItem[]
-  navigationLinks: SearchableItem[]
+  items: SearchResultItem[]
 }

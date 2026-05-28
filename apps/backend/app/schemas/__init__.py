@@ -1,4 +1,5 @@
 from app.schemas.common import ApiResponse
+from app.schemas.search import SearchGroupPayload, SearchItemPayload, SearchPayload
 from app.schemas.post import (
     PostCreateRequest,
     PostDeletePayload,
@@ -66,6 +67,9 @@ from app.schemas.static_content_categories import (
 
 __all__ = [
     "ApiResponse",
+    "SearchGroupPayload",
+    "SearchItemPayload",
+    "SearchPayload",
     "PostCreateRequest",
     "PostDeletePayload",
     "PostDeleteRequest",
