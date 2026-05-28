@@ -7,6 +7,7 @@ from app.models.site_config_category import SiteConfigCategory
 from app.models.site_navigation import SiteNavigation
 from app.models.site_setting import SiteSetting
 from app.models.static_content import StaticContent
+from app.models.static_content_category import StaticContentCategory
 
 __all__ = [
     "Dictionary",
@@ -20,4 +21,5 @@ __all__ = [
     "SiteNavigation",
     "SiteSetting",
     "StaticContent",
+    "StaticContentCategory",
 ]

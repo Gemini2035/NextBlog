@@ -209,8 +209,34 @@ def upgrade() -> None:
     op.create_index("ix_site_setting_is_enabled", "site_setting", ["is_enabled"], unique=False)
 
     op.create_table(
+        "static_content_category",
+        sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
+        sa.Column("parent_id", sa.BigInteger(), nullable=True),
+        sa.Column("key", sa.String(length=255), nullable=False),
+        sa.Column("sort_order", sa.Integer(), nullable=False),
+        *_timestamps(),
+        sa.ForeignKeyConstraint(["parent_id"], ["static_content_category.id"], ondelete="SET NULL"),
+        sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("key"),
+    )
+    op.create_index(
+        "ix_static_content_category_parent_id",
+        "static_content_category",
+        ["parent_id"],
+        unique=False,
+    )
+    op.create_index("ix_static_content_category_key", "static_content_category", ["key"], unique=False)
+    op.create_index(
+        "ix_static_content_category_sort_order",
+        "static_content_category",
+        ["sort_order"],
+        unique=False,
+    )
+
+    op.create_table(
         "static_content",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
+        sa.Column("category_id", sa.BigInteger(), nullable=False),
         sa.Column("key", sa.String(length=255), nullable=False),
         sa.Column("locale_id", sa.Integer(), nullable=True),
         sa.Column("content", postgresql.JSONB(astext_type=sa.Text()), nullable=False),
@@ -218,9 +244,11 @@ def upgrade() -> None:
         sa.Column("is_enabled", sa.Boolean(), nullable=False),
         sa.Column("sort_order", sa.Integer(), nullable=False),
         *_timestamps(),
+        sa.ForeignKeyConstraint(["category_id"], ["static_content_category.id"], ondelete="RESTRICT"),
         sa.ForeignKeyConstraint(["locale_id"], ["locale.id"], ondelete="SET NULL"),
         sa.PrimaryKeyConstraint("id"),
     )
+    op.create_index("ix_static_content_category_id", "static_content", ["category_id"], unique=False)
     op.create_index("ix_static_content_key", "static_content", ["key"], unique=False)
     op.create_index("ix_static_content_locale_id", "static_content", ["locale_id"], unique=False)
     op.create_index("ix_static_content_is_enabled", "static_content", ["is_enabled"], unique=False)
@@ -228,14 +256,14 @@ def upgrade() -> None:
     op.create_index(
         "uq_static_content_key_locale",
         "static_content",
-        ["key", "locale_id"],
+        ["category_id", "key", "locale_id"],
         unique=True,
         postgresql_where=sa.text("locale_id IS NOT NULL"),
     )
     op.create_index(
         "uq_static_content_key_global",
         "static_content",
-        ["key"],
+        ["category_id", "key"],
         unique=True,
         postgresql_where=sa.text("locale_id IS NULL"),
     )
@@ -252,7 +280,12 @@ def downgrade() -> None:
     op.drop_index("ix_static_content_is_enabled", table_name="static_content")
     op.drop_index("ix_static_content_locale_id", table_name="static_content")
     op.drop_index("ix_static_content_key", table_name="static_content")
+    op.drop_index("ix_static_content_category_id", table_name="static_content")
     op.drop_table("static_content")
+    op.drop_index("ix_static_content_category_sort_order", table_name="static_content_category")
+    op.drop_index("ix_static_content_category_key", table_name="static_content_category")
+    op.drop_index("ix_static_content_category_parent_id", table_name="static_content_category")
+    op.drop_table("static_content_category")
     op.drop_index("ix_site_setting_is_enabled", table_name="site_setting")
     op.drop_index("ix_site_setting_is_public", table_name="site_setting")
     op.drop_index("ix_site_setting_key", table_name="site_setting")

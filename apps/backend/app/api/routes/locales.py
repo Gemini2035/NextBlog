@@ -9,10 +9,12 @@ from app.schemas import (
     ApiResponse,
     LocaleCreateRequest,
     LocalePayload,
+    LocalesPayload,
     LocaleUpdateRequest,
 )
 from app.services.dictionaries import get_dictionary_by_key
 from app.services.locales import create_locale as create_locale_service
+from app.services.locales import get_locales as get_locales_service
 from app.services.locales import update_locale as update_locale_service
 from app.services.locales.create_locale import LocaleAlreadyExistsError
 from app.services.locales.update_locale import LocaleTranslationKeyRequiredError
@@ -37,6 +39,16 @@ def build_locale_payload(locale: object, db: Session) -> LocalePayload:
         "updated_at": getattr(locale, "updated_at"),
     }
     return LocalePayload.model_validate(data)
+
+
+@router.get("", response_model=ApiResponse[LocalesPayload])
+def list_locales_route(
+    db: Session = Depends(get_db),
+) -> ApiResponse[LocalesPayload]:
+    locales = [build_locale_payload(locale, db) for locale in get_locales_service(db)]
+    return ApiResponse[LocalesPayload](
+        data=LocalesPayload.model_validate({"locales": locales}),
+    )
 
 
 @router.post("", response_model=ApiResponse[LocalePayload])

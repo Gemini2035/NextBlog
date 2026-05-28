@@ -8,6 +8,7 @@ from app.database.base import Base
 from app.models.embedding import Embedding
 from app.models.locale import Locale
 from app.models.mixins import TimestampMixin
+from app.models.static_content_category import StaticContentCategory
 
 
 STATIC_CONTENT_EMBEDDING_SOURCE_TYPE = "static_content"
@@ -18,6 +19,11 @@ class StaticContent(TimestampMixin, Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
+    category_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("static_content_category.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
     key: Mapped[str] = mapped_column(String(255), nullable=False)
     locale_id: Mapped[int | None] = mapped_column(
         Integer,
@@ -29,6 +35,7 @@ class StaticContent(TimestampMixin, Base):
     is_enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
+    category: Mapped[StaticContentCategory] = relationship("StaticContentCategory")
     locale: Mapped[Locale | None] = relationship("Locale")
     embeddings: Mapped[list[Embedding]] = relationship(
         "Embedding",
@@ -40,12 +47,14 @@ class StaticContent(TimestampMixin, Base):
     )
 
     __table_args__ = (
+        Index("ix_static_content_category_id", "category_id"),
         Index("ix_static_content_key", "key"),
         Index("ix_static_content_locale_id", "locale_id"),
         Index("ix_static_content_is_enabled", "is_enabled"),
         Index("ix_static_content_sort_order", "sort_order"),
         Index(
             "uq_static_content_key_locale",
+            "category_id",
             "key",
             "locale_id",
             unique=True,
@@ -53,6 +62,7 @@ class StaticContent(TimestampMixin, Base):
         ),
         Index(
             "uq_static_content_key_global",
+            "category_id",
             "key",
             unique=True,
             postgresql_where=locale_id.is_(None),

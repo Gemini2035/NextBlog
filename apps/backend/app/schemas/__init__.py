@@ -21,6 +21,7 @@ from app.schemas.projects import ProjectDetailPayload, ProjectsPayload
 from app.schemas.locales import (
     LocaleCreateRequest,
     LocalePayload,
+    LocalesPayload,
     LocaleUpdateRequest,
 )
 from app.schemas.site_settings import (
@@ -47,6 +48,21 @@ from app.schemas.site_config_categories import (
     SiteConfigCategoryPayload,
     SiteConfigCategoryUpsertManyRequest,
 )
+from app.schemas.static_content import (
+    StaticContentCreateRequest,
+    StaticContentDeletePayload,
+    StaticContentDeleteRequest,
+    StaticContentPayload,
+    StaticContentsPayload,
+    StaticContentUpdateRequest,
+    StaticContentUpsertByKeyRequest,
+)
+from app.schemas.static_content_categories import (
+    StaticContentCategoriesPayload,
+    StaticContentCategoryCreateRequest,
+    StaticContentCategoryPayload,
+    StaticContentCategoryUpsertManyRequest,
+)
 
 __all__ = [
     "ApiResponse",
@@ -68,6 +84,7 @@ __all__ = [
     "ProjectsPayload",
     "LocaleCreateRequest",
     "LocalePayload",
+    "LocalesPayload",
     "LocaleUpdateRequest",
     "SiteSettingCreateRequest",
     "SiteSettingDeletePayload",
@@ -87,4 +104,15 @@ __all__ = [
     "SiteConfigCategoryCreateRequest",
     "SiteConfigCategoryPayload",
     "SiteConfigCategoryUpsertManyRequest",
+    "StaticContentCreateRequest",
+    "StaticContentDeletePayload",
+    "StaticContentDeleteRequest",
+    "StaticContentPayload",
+    "StaticContentsPayload",
+    "StaticContentUpdateRequest",
+    "StaticContentUpsertByKeyRequest",
+    "StaticContentCategoriesPayload",
+    "StaticContentCategoryCreateRequest",
+    "StaticContentCategoryPayload",
+    "StaticContentCategoryUpsertManyRequest",
 ]

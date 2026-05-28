@@ -50,3 +50,13 @@ api_router.include_router(
     prefix=site.site_config_category_routes.prefix,
     tags=site.site_config_category_routes.tags,
 )
+api_router.include_router(
+    site.static_content_routes.router,
+    prefix=site.static_content_routes.prefix,
+    tags=site.static_content_routes.tags,
+)
+api_router.include_router(
+    site.static_content_category_routes.router,
+    prefix=site.static_content_category_routes.prefix,
+    tags=site.static_content_category_routes.tags,
+)

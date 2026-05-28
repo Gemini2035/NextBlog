@@ -50,3 +50,7 @@ class LocalePayload(BaseModel):
     sort_order: int
     created_at: datetime
     updated_at: datetime
+
+
+class LocalesPayload(BaseModel):
+    locales: list[LocalePayload]
