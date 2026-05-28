@@ -1,20 +1,21 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useNavigation, useScrollParallax, useLayoutHeights } from "@/hooks";
+import { useScrollParallax, useLayoutHeights } from "@/hooks";
 import SectionSwitch from "./SectionSwitch";
 import HomeSectionSkeleton from "./HomeSectionSkeleton";
 import HeroMediaBackground, {
   type HeroMediaBackgroundRef,
 } from "./HeroMediaBackground";
-import { SITE_CONFIG } from "@/constants";
+import { useSiteConfig, useSiteData } from "@/components/SiteDataProvider";
 import { smoothScrollToElement } from "@/utils";
 import { ChevronRightIcon } from "@/assets/icons";
 import { useRef, useCallback } from "react";
 
 export default function HomeClient() {
   const t = useTranslations("HomePage");
-  const { navigationItems } = useNavigation();
+  const siteConfig = useSiteConfig();
+  const { navigation: navigationItems } = useSiteData();
   const { headerHeight } = useLayoutHeights();
   const { scrollY, isScrolling, opacity, currentHeight, isClient } =
     useScrollParallax({
@@ -83,7 +84,7 @@ export default function HomeClient() {
             className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight will-change-transform bg-clip-text text-transparent transition-opacity duration-300 ease-out bg-[linear-gradient(180deg,rgba(255,255,255,0.78)_0%,rgba(255,255,255,0.62)_45%,rgba(240,242,250,0.68)_100%)] [-webkit-background-clip:text] filter-[drop-shadow(0_0_1px_rgba(255,255,255,0.6))_drop-shadow(0_0_16px_rgba(255,255,255,0.2))]"
             style={{ opacity }}
           >
-            {t("welcome", { siteTitle: SITE_CONFIG.title })}
+            {t("welcome", { siteTitle: siteConfig.title ?? "Apodidae" })}
           </h1>
           <p
             className="mt-4 sm:mt-6 text-lg sm:text-xl font-bold max-w-3xl mx-auto will-change-transform bg-clip-text text-transparent transition-[transform,opacity] duration-100 ease-out bg-[linear-gradient(180deg,rgba(255,255,255,0.72)_0%,rgba(248,249,252,0.58)_50%,rgba(230,234,245,0.65)_100%)] [-webkit-background-clip:text] filter-[drop-shadow(0_0_1px_rgba(255,255,255,0.5))_drop-shadow(0_0_12px_rgba(255,255,255,0.15))]"

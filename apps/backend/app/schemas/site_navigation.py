@@ -20,6 +20,12 @@ class SiteNavigationCreateRequest(BaseModel):
     href: str = Field(min_length=1)
     icon: str | None = None
     target: str | None = Field(default=None, max_length=50)
+    dynamic_data_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("dynamic_data_key", "dynamicDataKey"),
+        serialization_alias="dynamicDataKey",
+        max_length=100,
+    )
     sort_order: int = Field(
         default=0,
         validation_alias=AliasChoices("sort_order", "sortOrder"),
@@ -48,6 +54,12 @@ class SiteNavigationUpdateRequest(BaseModel):
     href: str | None = Field(default=None, min_length=1)
     icon: str | None = None
     target: str | None = Field(default=None, max_length=50)
+    dynamic_data_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("dynamic_data_key", "dynamicDataKey"),
+        serialization_alias="dynamicDataKey",
+        max_length=100,
+    )
     sort_order: int | None = Field(
         default=None,
         validation_alias=AliasChoices("sort_order", "sortOrder"),
@@ -81,6 +93,7 @@ class SiteNavigationPayload(BaseModel):
     href: str
     icon: str | None
     target: str | None
+    dynamic_data_key: str | None = Field(serialization_alias="dynamicDataKey")
     sort_order: int = Field(serialization_alias="sortOrder")
     disable: list[str] | None
     created_at: datetime = Field(serialization_alias="createdAt")

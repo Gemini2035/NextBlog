@@ -4,7 +4,7 @@ import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { ArrowRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
-import { NAVIGATION_ITEMS } from '@/constants'
+import { useSiteData } from '@/components/SiteDataProvider'
 
 interface AboutSectionProps {
   index: number
@@ -13,12 +13,12 @@ interface AboutSectionProps {
 
 export default function AboutSection({ index, href }: AboutSectionProps) {
   const t = useTranslations('HomePage')
-  const navT = useTranslations('Navigation')
+  const { navigation } = useSiteData()
 
   // 获取about section的导航配置
-  const aboutNav = NAVIGATION_ITEMS.find(item => item.type === '__about')
-  const aboutDescription = aboutNav?.submenu?.description || 'Learn about my background, skills, experience and contact information'
-  const submenuItems = aboutNav?.submenu?.items || []
+  const aboutNav = navigation.find(item => item.type === '__about')
+  const aboutDescription = aboutNav?.description || 'Learn about my background, skills, experience and contact information'
+  const submenuItems = aboutNav?.items || []
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -27,7 +27,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
           {t('aboutTitle', { default: '关于我' })}
         </h2>
         <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
-          {navT(aboutDescription, { default: aboutDescription })}
+          {aboutDescription}
         </p>
 
         {/* 快速导航链接 */}
@@ -41,7 +41,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
                     href={item.href}
                     className="block text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors mb-3"
                   >
-                    {navT(item.label as keyof typeof navT, { default: item.label })}
+                    {item.label}
                   </Link>
                   
                   {/* 次级链接 */}
@@ -53,7 +53,7 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
                           href={subItem.href}
                           className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                         >
-                          {navT(subItem.label as keyof typeof navT, { default: subItem.label })}
+                          {subItem.label}
                         </Link>
                       ))}
                     </div>

@@ -3,8 +3,8 @@
 import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { SITE_CONFIG, NavigationItem } from '@/constants'
-import { useNavigation } from '@/hooks'
+import { useSiteConfig, useSiteData } from '@/components/SiteDataProvider'
+import type { SiteNavigationItem } from '@/types/site'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
@@ -13,14 +13,13 @@ import { LanguageBar } from './LanguageToggle'
 import MobileNav from './MobileNav'
 
 interface NavItemProps {
-  item: NavigationItem
+  item: SiteNavigationItem
   activeSubmenu: string | null
   onNavHover: (itemType: string) => void
-  t: (key: string) => string
 }
 
-function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
-  const hasSubmenu = item.submenu && item.submenu.items && item.submenu.items.length > 0
+function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
+  const hasSubmenu = item.items.length > 0
   
   if (hasSubmenu) {
     return (
@@ -34,7 +33,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
           aria-haspopup="true"
           aria-expanded={activeSubmenu === item.type}
         >
-          {t(item.label)}
+          {item.label}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
         </Link>
       </div>
@@ -46,7 +45,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
       href={item.href} 
       className="text-gray-700 hover:text-gray-800 transition-colors"
     >
-      {t(item.label)}
+      {item.label}
     </Link>
   )
 }
@@ -60,9 +59,8 @@ export default function Header() {
   const lastScrollYRef = useRef<number>(0)
   const t = useTranslations('Navigation')
   const pathname = usePathname()
-  
-  // 获取带有动态子菜单的导航项
-  const { navigationItems } = useNavigation()
+  const siteConfig = useSiteConfig()
+  const { navigation: navigationItems } = useSiteData()
 
   // 处理滚动事件
   const handleScroll = useCallback(() => {
@@ -193,7 +191,7 @@ export default function Header() {
   }, [pathname])
 
   // 切换到新的导航项（不带动画）
-  const switchToNavigationItem = useCallback((newNavigationItem: NavigationItem) => {
+  const switchToNavigationItem = useCallback((newNavigationItem: SiteNavigationItem) => {
     // 直接切换，不播放容器动画
     setActiveSubmenu(newNavigationItem.type)
     setIsExiting(false)
@@ -249,10 +247,15 @@ export default function Header() {
 
   // 搜索导航项 - 使用useMemo避免在渲染中创建新对象
   const searchNavigationItem = useMemo(() => ({
+    id: -1,
+    parentId: null,
     type: '__search' as const,
+    key: '__search',
     label: '搜索',
     href: '#',
-    submenu: searchSubmenu
+    description: searchSubmenu.description,
+    sortOrder: 0,
+    items: []
   }), [searchSubmenu])
 
   // 语言导航项的子菜单配置
@@ -264,10 +267,15 @@ export default function Header() {
 
   // 语言导航项 - 使用useMemo避免在渲染中创建新对象
   const languageNavigationItem = useMemo(() => ({
+    id: -2,
+    parentId: null,
     type: '__language' as const,
+    key: '__language',
     label: '语言',
     href: '#',
-    submenu: languageSubmenu
+    description: languageSubmenu.description,
+    sortOrder: 0,
+    items: []
   }), [languageSubmenu])
 
   // 处理移动端菜单打开
@@ -299,7 +307,7 @@ export default function Header() {
               className="flex items-center space-x-2 text-xl font-bold text-gray-900 hover:text-gray-800 transition-colors"
             >
               <LogoIcon className="h-6 w-6" />
-              <span>{SITE_CONFIG.title}</span>
+              <span>{siteConfig.title}</span>
             </Link>
           </div>
           
@@ -314,7 +322,6 @@ export default function Header() {
                       item={item}
                       activeSubmenu={activeSubmenu}
                       onNavHover={handleNavHover}
-                      t={t}
                     />
                   </li>
                 ))}
@@ -359,7 +366,7 @@ export default function Header() {
         onClose={handleMobileMenuClose}
         placement="right"
         size="full"
-        title={SITE_CONFIG.title}
+        title={siteConfig.title}
         className="lg:hidden"
         bodyClassName="px-6 py-4"
         destroyOnClose

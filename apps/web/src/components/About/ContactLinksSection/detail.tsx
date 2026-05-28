@@ -1,7 +1,7 @@
 'use client'
 
 import { ComponentType } from 'react'
-import { SITE_CONFIG } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 import { ContactIcon, GmailIcon, OutlookIcon, ICloudIcon, EmailIcon, TelegramIcon, DefaultContactIcon } from '@/assets/icons'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
@@ -13,6 +13,7 @@ interface ContactLinksDetailProps {
 export default function ContactLinksDetail({ className }: ContactLinksDetailProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
+  const siteConfig = useSiteConfig()
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -24,7 +25,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
   }
 
   // 动态生成联系方式数组 - 从site-config读取
-  const contactMethods = Object.entries(SITE_CONFIG.contactLink)
+  const contactMethods = Object.entries(siteConfig.contactLink ?? {})
     .map(([key, value]) => {
       // 联系方式名称映射 - 使用国际化
       const getContactName = (key: string) => {

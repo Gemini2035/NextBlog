@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocale } from 'next-intl'
 import { getBlogPosts } from '@/apis/blog'
-import { POSTS_PER_PAGE } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 import type { BlogPostListItem } from '@/types/blog'
 
 export interface UsePostsReturn {
@@ -15,13 +15,17 @@ export interface UsePostsReturn {
 
 export function usePosts(): UsePostsReturn {
   const locale = useLocale()
+  const siteConfig = useSiteConfig()
   const [posts, setPosts] = useState<BlogPostListItem[]>([])
 
   useEffect(() => {
     let ignore = false
 
     const fetchPosts = async () => {
-      const response = await getBlogPosts({ siteLanguage: locale, pageSize: POSTS_PER_PAGE })
+      const response = await getBlogPosts({
+        siteLanguage: locale,
+        pageSize: siteConfig.postsPerPage ?? 6,
+      })
       if (!ignore) {
         setPosts(response.data.posts)
       }
@@ -32,7 +36,7 @@ export function usePosts(): UsePostsReturn {
     return () => {
       ignore = true
     }
-  }, [locale])
+  }, [locale, siteConfig.postsPerPage])
 
   const sortedPosts = useMemo(
     () =>

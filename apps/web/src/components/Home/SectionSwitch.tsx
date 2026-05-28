@@ -2,10 +2,10 @@
 import BlogSection from './BlogSection/index'
 import AboutSection from './AboutSection/index'
 import ProjectsSection from './ProjectsSection/index'
-import type { NavigationItem } from '@/constants'
+import type { SiteNavigationItem } from '@/types/site'
 
 export interface SectionSwitchProps {
-  item: Pick<NavigationItem, 'type' | 'href'>
+  item: Pick<SiteNavigationItem, 'type' | 'href'>
   index: number
 }
 
@@ -21,5 +21,4 @@ export default function SectionSwitch({ item, index }: SectionSwitchProps) {
       return null
   }
 }
-
 

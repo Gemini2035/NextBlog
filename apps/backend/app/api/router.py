@@ -36,6 +36,11 @@ api_router.include_router(
     tags=locales.tags,
 )
 api_router.include_router(
+    site.site_init_routes.router,
+    prefix=site.site_init_routes.prefix,
+    tags=site.site_init_routes.tags,
+)
+api_router.include_router(
     site.site_setting_routes.router,
     prefix=site.site_setting_routes.prefix,
     tags=site.site_setting_routes.tags,

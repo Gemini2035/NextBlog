@@ -60,6 +60,9 @@ def upsert_site_navigations(
             href=payload.href.strip(),
             icon=payload.icon.strip() if payload.icon else None,
             target=payload.target.strip() if payload.target else None,
+            dynamic_data_key=(
+                payload.dynamic_data_key.strip() if payload.dynamic_data_key else None
+            ),
             sort_order=payload.sort_order,
             disable=payload.disable,
         )

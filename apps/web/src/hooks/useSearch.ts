@@ -3,11 +3,12 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useTranslations } from 'next-intl'
-import { NAVIGATION_ITEMS } from '@/constants'
 import { useRecommendedContent, RecommendedContent } from './useRecommendedContent'
 import { usePosts } from './usePosts'
 import Fuse, { FuseResultMatch, IFuseOptions } from 'fuse.js'
 import { SearchableItem, SearchResult, SearchResultsGroup } from '@/types/search'
+import { useSiteData } from '@/components/SiteDataProvider'
+import type { SiteNavigationItem } from '@/types/site'
 
 interface UseSearchOptions {
   debounceMs?: number
@@ -48,9 +49,9 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const suspenseResolveRef = useRef<(() => void) | null>(null)
   
   // 基础数据
-  const t = useTranslations('Navigation')
   const tSearch = useTranslations('Search')
   const posts = usePosts()
+  const { navigation } = useSiteData()
   
   // 推荐内容
   const { recommendedContent } = useRecommendedContent()
@@ -74,55 +75,29 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
       })
     })
 
-    // 2. 添加导航链接（同时保存原始标签和翻译标签）
-    NAVIGATION_ITEMS.forEach(navItem => {
+    const appendNavigationItem = (navItem: SiteNavigationItem, depth: number = 0) => {
       if (navItem.type !== '__search' && navItem.type !== '__language') {
         items.push({
           id: `nav-${navItem.type}`,
           type: 'link',
-          title: t(navItem.label), // 翻译后的标签用于显示
-          originalTitle: navItem.label, // 原始标签用于检索
-          description: navItem.submenu?.description ? t(navItem.submenu.description) : undefined,
-          originalDescription: navItem.submenu?.description || undefined,
+          title: navItem.label,
+          originalTitle: navItem.label,
+          description: navItem.description ?? undefined,
+          originalDescription: navItem.description ?? undefined,
           href: navItem.href,
-          priority: 8,
+          priority: Math.max(8 - depth * 2, 2),
           category: '导航链接'
         })
 
-        // 添加子菜单项
-        navItem.submenu?.items.forEach(subItem => {
-          items.push({
-            id: `nav-${navItem.type}-${subItem.label}`,
-            type: 'link',
-            title: t(subItem.label), // 翻译后的标签用于显示
-            originalTitle: subItem.label, // 原始标签用于检索
-            description: subItem.description ? t(subItem.description) : undefined,
-            originalDescription: subItem.description || undefined,
-            href: subItem.href,
-            priority: 6,
-            category: '导航链接'
-          })
-
-          // 添加三级菜单项
-          subItem.items?.forEach(thirdItem => {
-            items.push({
-              id: `nav-${navItem.type}-${subItem.label}-${thirdItem.label}`,
-              type: 'link',
-              title: t(thirdItem.label), // 翻译后的标签用于显示
-              originalTitle: thirdItem.label, // 原始标签用于检索
-              description: thirdItem.description ? t(thirdItem.description) : undefined,
-              originalDescription: thirdItem.description || undefined,
-              href: thirdItem.href,
-              priority: 4,
-              category: '导航链接'
-            })
-          })
-        })
+        navItem.items.forEach(item => appendNavigationItem(item, depth + 1))
       }
-    })
+    }
+
+    // 2. 添加导航链接
+    navigation.forEach(navItem => appendNavigationItem(navItem))
 
     return items
-  }, [posts, t])
+  }, [posts, navigation])
 
   // 搜索引擎 - 使用 useMemo 缓存
   const fuse = useMemo(() => {

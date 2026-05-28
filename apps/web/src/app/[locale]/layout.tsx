@@ -7,6 +7,8 @@ import { getMessages } from 'next-intl/server';
 import { LoadingProvider } from '@/components/LoadingProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { SiteDataProvider } from '@/components/SiteDataProvider';
+import { getSiteInit } from '@/apis/site/server';
 
 interface LocaleLayoutProps {
     children: ReactNode;
@@ -20,19 +22,24 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
         notFound();
     }
 
-    const messages = await getMessages();
+    const [messages, siteInit] = await Promise.all([
+        getMessages(),
+        getSiteInit(locale),
+    ]);
 
     return (
         <NextIntlClientProvider messages={messages}>
-            <LoadingProvider>
-                <div className="min-h-screen bg-gray-50 flex flex-col relative">
-                    <Header />
-                    <main className="flex-1">
-                        {children}
-                    </main>
-                    <Footer />
-                </div>
-            </LoadingProvider>
+            <SiteDataProvider value={siteInit}>
+                <LoadingProvider>
+                    <div className="min-h-screen bg-gray-50 flex flex-col relative">
+                        <Header />
+                        <main className="flex-1">
+                            {children}
+                        </main>
+                        <Footer />
+                    </div>
+                </LoadingProvider>
+            </SiteDataProvider>
         </NextIntlClientProvider>
     );
 }

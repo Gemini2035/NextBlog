@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
-import { useTranslations } from 'next-intl'
 import { usePosts } from './usePosts'
-import { NAVIGATION_ITEMS } from '@/constants'
+import { useSiteData } from '@/components/SiteDataProvider'
 
 // 搜索项类型定义
 interface SearchableItem {
@@ -25,7 +24,7 @@ export interface RecommendedContent {
 
 export function useRecommendedContent() {
   const posts = usePosts()
-  const t = useTranslations('Navigation')
+  const { navigation } = useSiteData()
   
   const recommendedContent = useMemo((): RecommendedContent => {
     const featuredPost = posts.getFeaturedPost()
@@ -58,15 +57,15 @@ export function useRecommendedContent() {
         category: '博客文章'
       }))
 
-    // 导航链接（从 NAVIGATION_ITEMS 生成，并进行翻译）
-    const navigationLinks: SearchableItem[] = NAVIGATION_ITEMS
+    // 导航链接
+    const navigationLinks: SearchableItem[] = navigation
       .filter(navItem => navItem.type !== '__search' && navItem.type !== '__language')
       .slice(0, 5)
       .map(navItem => ({
         id: `nav-${navItem.type}`,
         type: 'link',
-        title: t(navItem.label), // 翻译标题
-        description: navItem.submenu?.description ? t(navItem.submenu.description) : undefined, // 翻译描述
+        title: navItem.label,
+        description: navItem.description ?? undefined,
         href: navItem.href,
         priority: 8,
         category: '导航链接'
@@ -77,7 +76,7 @@ export function useRecommendedContent() {
       recentPosts: recentPostsItems,
       navigationLinks
     }
-  }, [posts, t])
+  }, [posts, navigation])
 
   return {
     recommendedContent

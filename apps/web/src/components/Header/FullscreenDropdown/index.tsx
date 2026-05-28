@@ -2,17 +2,16 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { NavigationItem } from '@/constants'
+import type { SiteNavigationItem } from '@/types/site'
 import { useLanguage } from '@/hooks'
 import NestedMenuGroup from './NestedMenuGroup'
 import SearchDropdown from '../Search/SearchDropdown'
-import { useTranslations } from 'next-intl'
 import { LanguageMode } from '../LanguageToggle'
 
 
 // 普通导航模式组件
 interface NavigationModeProps {
-  navigationItem: NavigationItem
+  navigationItem: SiteNavigationItem
   onClose: () => void
   itemVariants: Variants
   isExiting?: boolean
@@ -26,7 +25,7 @@ function NavigationMode({ navigationItem, onClose, itemVariants, isExiting = fal
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <NestedMenuGroup 
-        items={navigationItem.submenu?.items || []} 
+        items={navigationItem.items} 
         onClose={onClose}
         isAnimating={true}
         isExiting={isExiting}
@@ -38,7 +37,7 @@ function NavigationMode({ navigationItem, onClose, itemVariants, isExiting = fal
 interface FullscreenDropdownProps {
   isOpen: boolean
   onClose: () => void
-  navigationItem: NavigationItem
+  navigationItem: SiteNavigationItem
   isExiting?: boolean
   onAnimationComplete?: () => void
 }
@@ -98,8 +97,6 @@ export default function FullscreenDropdown({
   isExiting = false,
   onAnimationComplete
 }: FullscreenDropdownProps) {
-  const t = useTranslations('Navigation')
-
   // 导航切换状态
   const [currentNavigationItem, setCurrentNavigationItem] = useState(navigationItem)
   
@@ -237,15 +234,15 @@ export default function FullscreenDropdown({
                       variants={itemVariants}
                       transition={{ duration: 0.6, ease: "easeOut" }}
                     >
-                      {t(currentNavigationItem.label)}
+                      {currentNavigationItem.label}
                     </motion.h2>
-                    {currentNavigationItem.submenu?.description && (
+                    {currentNavigationItem.description && (
                       <motion.p 
                         className="text-base text-gray-600"
                         variants={itemVariants}
                         transition={{ duration: 0.6, ease: "easeOut" }}
                       >
-                        {t(currentNavigationItem.submenu?.description)}
+                        {currentNavigationItem.description}
                       </motion.p>
                     )}
                   </div>

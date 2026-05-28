@@ -75,6 +75,7 @@ def build_site_navigation_payloads(
             "href": navigation.href,
             "icon": navigation.icon,
             "target": navigation.target,
+            "dynamic_data_key": navigation.dynamic_data_key,
             "sort_order": navigation.sort_order,
             "disable": navigation.disable,
             "created_at": navigation.created_at,

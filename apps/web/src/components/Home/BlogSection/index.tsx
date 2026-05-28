@@ -4,7 +4,7 @@ import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { useTranslations } from 'next-intl'
 import { usePosts } from '@/hooks/usePosts'
-import { NAVIGATION_ITEMS } from '@/constants'
+import { useSiteData } from '@/components/SiteDataProvider'
 import { useEffect, useState } from 'react'
 import { cn } from '@/utils'
 import { FloatingPost } from './FloatingPost'
@@ -19,12 +19,12 @@ interface BlogSectionProps {
 
 export default function BlogSection({ index, href }: BlogSectionProps) {
   const t = useTranslations('HomePage')
-  const navT = useTranslations('Navigation')
   const { getRecentPosts, getAllPosts, getAllTags } = usePosts()
+  const { navigation } = useSiteData()
   
   // 获取blog section的导航配置
-  const blogNav = NAVIGATION_ITEMS.find(item => item.type === '__blog')
-  const blogDescription = blogNav?.submenu?.description || 'Explore my latest technical insights and development experience'
+  const blogNav = navigation.find(item => item.type === '__blog')
+  const blogDescription = blogNav?.description || 'Explore my latest technical insights and development experience'
   const [floatingPosts, setFloatingPosts] = useState<BlogPostListItem[]>([])
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [popularTags, setPopularTags] = useState<string[]>([])
@@ -91,7 +91,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           <p className={cn(
             'mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-blue-600'
           )}>
-            {navT(blogDescription, { default: blogDescription })}
+            {blogDescription}
           </p>
 
           {/* 博客分类链接 */}

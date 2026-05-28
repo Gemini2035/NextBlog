@@ -22,6 +22,7 @@ class SiteNavigation(TimestampMixin, Base):
     href: Mapped[str] = mapped_column(Text, nullable=False)
     icon: Mapped[str | None] = mapped_column(String(100), nullable=True)
     target: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    dynamic_data_key: Mapped[str | None] = mapped_column(String(100), nullable=True)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     disable: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True)
 
@@ -40,5 +41,6 @@ class SiteNavigation(TimestampMixin, Base):
         Index("ix_site_navigation_parent_id", "parent_id"),
         Index("ix_site_navigation_key", "key"),
         Index("ix_site_navigation_label_key", "label_key"),
+        Index("ix_site_navigation_dynamic_data_key", "dynamic_data_key"),
         Index("ix_site_navigation_sort_order", "sort_order"),
     )

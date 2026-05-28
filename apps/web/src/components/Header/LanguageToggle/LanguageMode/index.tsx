@@ -1,4 +1,4 @@
-import { LANGUAGES } from "@/constants"
+import { useSiteConfig } from "@/components/SiteDataProvider"
 import { Variants, motion } from "framer-motion"
 import { useTranslations } from 'next-intl'
 
@@ -11,6 +11,8 @@ interface LanguageModeProps {
   
 export default function LanguageMode({ currentLang, onLanguageChange, itemVariants }: LanguageModeProps) {
     const t = useTranslations('Navigation')
+    const siteConfig = useSiteConfig()
+    const languages = siteConfig.languages ?? []
     
     return (
       <motion.div 
@@ -19,7 +21,7 @@ export default function LanguageMode({ currentLang, onLanguageChange, itemVarian
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <ul className="space-y-2" role="listbox" aria-label={t('languageSelection')}>
-          {LANGUAGES.map((lang, index) => (
+          {languages.map((lang, index) => (
             <motion.li 
               key={lang.code}
               variants={itemVariants}

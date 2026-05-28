@@ -2,7 +2,7 @@
 
 import { ComponentType } from 'react'
 import Image from 'next/image'
-import { SITE_CONFIG } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
@@ -15,6 +15,7 @@ interface SocialLinksDetailProps {
 export default function SocialLinksDetail({ className }: SocialLinksDetailProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
+  const siteConfig = useSiteConfig()
 
   // 图标映射表 - 支持后续扩展
   const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
@@ -26,7 +27,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
   }
 
   // 动态生成社交链接数组 - 从site-config读取
-  const socialLinks = Object.entries(SITE_CONFIG.socialLink)
+  const socialLinks = Object.entries(siteConfig.socialLink ?? {})
     .map(([key, value]) => {
       // 社交平台名称映射 - 使用国际化
       const getSocialName = (key: string) => {
