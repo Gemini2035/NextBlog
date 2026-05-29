@@ -7,7 +7,6 @@ from app.models.dictionary import Dictionary
 from app.models.post import Post, PostTag
 from app.models.site_navigation import SiteNavigation
 from app.services.post.base.get_posts import _apply_disable_filter
-from app.services.post.utils.public_ids import encode_post_id
 from app.services.post.utils.serializers import serialize_post_list_item
 from app.services.post.utils.translations import resolve_dictionary_value
 
