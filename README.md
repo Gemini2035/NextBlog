@@ -1,12 +1,6 @@
 # NextBlog
 
-NextBlog 现在采用 monorepo 结构，前端和后端按应用边界拆分。
-
-```txt
-apps/
-├── web/   # Next.js 前端应用
-└── api/   # Python 后端应用
-```
+NextBlog 是一个基于 Next.js 的前端项目。后端服务已从当前仓库拆出，前端仍通过原有 API 契约访问外部后端。
 
 ## 常用命令
 
@@ -14,7 +8,12 @@ apps/
 pnpm dev       # 启动前端开发服务
 pnpm build     # 构建前端
 pnpm lint      # 检查前端代码
-pnpm api:dev   # 启动 Python API
+pnpm check     # 运行 lint 和 TypeScript 检查
+pnpm api:types # 从外部后端 OpenAPI 生成接口类型
 ```
 
-前端项目文档见 `apps/web/README.md`，后端项目文档见 `apps/api/README.md`。
+## API 配置
+
+- 浏览器侧接口默认请求 `/api`。
+- 服务端请求可通过 `API_BASE_URL` 或 `NEXT_PUBLIC_API_BASE_URL` 指向外部后端。
+- 本地开发时 `/api/*` 默认代理到 `https://admin.apodidae2035.com/api/*`，可用 `API_PROXY_TARGET` 覆盖。

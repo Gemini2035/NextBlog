@@ -4,37 +4,29 @@ on:
   push:
     branches: [ main, master, production ]
     paths:
-      - 'apps/web/src/**'
-      - 'apps/web/package.json'
-      - 'apps/web/next.config.ts'
-      - 'apps/web/postcss.config.mjs'
-      - 'apps/web/vercel.json'
-      - 'apps/web/src/app/globals.css'
-      - 'apps/backend/**'
-      - 'api/**'
-      - 'requirements.txt'
-      - 'runtime.txt'
+      - 'src/**'
+      - 'locales/**'
+      - 'public/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
+      - 'next.config.ts'
+      - 'postcss.config.mjs'
+      - 'tsconfig.json'
+      - 'eslint.config.mjs'
       - 'vercel.json'
       - '.github/workflows/deploy.yml'
   pull_request:
     branches: [ main, master, production ]
     paths:
-      - 'apps/web/src/**'
-      - 'apps/web/package.json'
-      - 'apps/web/next.config.ts'
-      - 'apps/web/postcss.config.mjs'
-      - 'apps/web/vercel.json'
-      - 'apps/web/src/app/globals.css'
-      - 'apps/backend/**'
-      - 'api/**'
-      - 'requirements.txt'
-      - 'runtime.txt'
+      - 'src/**'
+      - 'locales/**'
+      - 'public/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
+      - 'next.config.ts'
+      - 'postcss.config.mjs'
+      - 'tsconfig.json'
+      - 'eslint.config.mjs'
       - 'vercel.json'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
@@ -78,15 +70,6 @@ jobs:
       with:
         node-version: '20.18.0'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-        cache-dependency-path: |
-          apps/backend/pyproject.toml
-          requirements.txt
-
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
       with:
@@ -103,17 +86,8 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install backend dependencies
-      run: pnpm api:setup
-
-    - name: Install uv for Vercel Python build
-      run: python -m pip install uv
-
-    - name: Check backend
-      run: pnpm api:check
-
     - name: Check frontend
-      run: pnpm web:check
+      run: pnpm check
 
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -136,15 +110,6 @@ jobs:
       with:
         node-version: '20.18.0'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-        cache: 'pip'
-        cache-dependency-path: |
-          apps/backend/pyproject.toml
-          requirements.txt
-
     - name: Setup pnpm
       uses: pnpm/action-setup@v4
       with:
@@ -161,20 +126,11 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
-    - name: Install backend dependencies
-      run: pnpm api:setup
-
-    - name: Install uv for Vercel Python build
-      run: python -m pip install uv
-
-    - name: Check backend
-      run: pnpm api:check
-
     - name: Check frontend
-      run: pnpm web:check
+      run: pnpm check
       
     - name: Build Next.js
-      run: pnpm --filter @nextblog/web build
+      run: pnpm build
 
     - name: Set deployment environment
       id: set-env
