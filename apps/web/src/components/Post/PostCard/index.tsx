@@ -2,13 +2,13 @@
 
 import { Link, Card, Tooltip } from '@/ui'
 import { PostTag } from '../PostTag'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 import { formatDate, cn } from '@/utils'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface PostCardProps {
-  post: Post
+  post: BlogPostListItem
   variant?: 'default' | 'compact'
   showDescription?: boolean
 }
@@ -298,8 +298,8 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
       shadow={isCompact ? "sm" : "md"} 
       rounded 
     >
-      <Link 
-        href={post.url}
+      <Link
+        href={`/posts/${post.id}`}
         className="block h-full"
         onMouseEnter={() => {
           setIsHovered(true)
@@ -353,10 +353,10 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
               
               {/* 日期信息 */}
               <div className="text-xs text-gray-500 mb-3">
-                <time dateTime={post.date}>
-                  {formatDate(post.date)}
+                <time dateTime={post.createdAt}>
+                  {formatDate(post.createdAt)}
                 </time>
-                {post.updatedAt && post.updatedAt !== post.date && (
+                {post.updatedAt && post.updatedAt !== post.createdAt && (
                   <div className="text-xs text-gray-400 mt-1">
                     更新于 {formatDate(post.updatedAt)}
                   </div>
@@ -430,10 +430,10 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                   )}
                   
                   <div className="text-sm text-gray-500 flex-shrink-0">
-                    <time dateTime={post.date}>
-                      {formatDate(post.date)}
+                    <time dateTime={post.createdAt}>
+                      {formatDate(post.createdAt)}
                     </time>
-                    {post.updatedAt && post.updatedAt !== post.date && (
+                    {post.updatedAt && post.updatedAt !== post.createdAt && (
                       <div className="text-xs text-gray-400 mt-1">
                         更新于 {formatDate(post.updatedAt)}
                       </div>

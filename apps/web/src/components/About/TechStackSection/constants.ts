@@ -1,12 +1,11 @@
-import { NextJsIcon, ContentlayerIcon, MdxIcon, TailwindIcon, TypeScriptIcon, DeploymentIcon, GraphQLIcon, IconProps } from '@/assets/icons'
+import { NextJsIcon, RESTfulIcon, ArchiveIcon, TailwindIcon, TypeScriptIcon, DeploymentIcon, IconProps } from '@/assets/icons'
 import { ComponentType } from 'react'
 
 export const IconMap: Record<string, ComponentType<IconProps>> = {
     NextJsIcon,
-    ContentlayerIcon,
-    MdxIcon,
+    RESTfulIcon,
+    ArchiveIcon,
     TailwindIcon,
     TypeScriptIcon,
     DeploymentIcon,
-    GraphQLIcon
 }

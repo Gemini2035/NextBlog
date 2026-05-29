@@ -1,6 +1,6 @@
 'use client'
 
-import { SITE_CONFIG } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 import { useTranslations } from 'next-intl'
 import { LogoIcon } from '@/assets/icons'
 import { Link, Divider } from '@/ui'
@@ -8,8 +8,9 @@ import { cn } from '@/utils'
 
 export default function Footer() {
   const t = useTranslations('Footer')
+  const siteConfig = useSiteConfig()
   const currentYear = new Date().getFullYear()
-  const baseYear = SITE_CONFIG.baseYear
+  const baseYear = siteConfig.baseYear ?? 2025
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -32,7 +33,7 @@ export default function Footer() {
             {/* 版权信息 */}
             <div className={cn('flex flex-wrap items-center gap-1 text-xs md:text-sm text-gray-600')}>
               <span>{getCopyrightYear()}</span>
-              <span>{SITE_CONFIG.title}</span>
+              <span>{siteConfig.title}</span>
               <span className={cn('hidden md:inline')}>·</span>
               <Link
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"
@@ -89,4 +90,3 @@ export default function Footer() {
     </footer>
   )
 }
-

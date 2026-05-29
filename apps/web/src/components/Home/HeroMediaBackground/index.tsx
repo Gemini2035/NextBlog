@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import { useLayoutHeights } from '@/hooks'
 import { cn } from '@/utils'
 import { VolumeIcon, MuteIcon } from '@/assets/icons'
-import { SITE_CONFIG } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 
 export interface HeroMediaBackgroundProps {
   /** 视频封面图 URL */
@@ -25,14 +25,11 @@ export interface HeroMediaBackgroundRef {
   playAudio: () => void
 }
 
-const DEFAULT_POSTER = `${SITE_CONFIG.cdnUrl}/chou-kaguya/video/poster.avif`
-const DEFAULT_VIDEO_SRC = `${SITE_CONFIG.cdnUrl}/chou-kaguya/video/master.m3u8`
-
 const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgroundProps>(
   (
     {
-      poster = DEFAULT_POSTER,
-      videoSrc = DEFAULT_VIDEO_SRC,
+      poster,
+      videoSrc,
       videoType = 'application/x-mpegURL',
       unmuteOnInteraction = true,
       portalTargetRef,
@@ -40,7 +37,11 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
     },
     ref
   ) => {
+    const siteConfig = useSiteConfig()
     const { headerHeight } = useLayoutHeights()
+    const cdnUrl = siteConfig.cdnUrl ?? ''
+    const resolvedPoster = poster ?? `${cdnUrl}/chou-kaguya/video/poster.avif`
+    const resolvedVideoSrc = videoSrc ?? `${cdnUrl}/chou-kaguya/video/master.m3u8`
     const videoRef = useRef<HTMLVideoElement>(null)
     const hasRequestedUnmuteRef = useRef(false)
     const volumeFadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -204,13 +205,13 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
             loop
             playsInline
             preload="metadata"
-            poster={poster}
+            poster={resolvedPoster}
             disablePictureInPicture
             disableRemotePlayback
             onLoadedData={() => setVideoError(false)}
             onError={() => setVideoError(true)}
           >
-            <source src={videoSrc} type={videoType} />
+            <source src={resolvedVideoSrc} type={videoType} />
           </video>
         </div>
       </div>
@@ -237,12 +238,12 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
             loop
             playsInline
             preload="metadata"
-            poster={poster}
+            poster={resolvedPoster}
             disablePictureInPicture
             disableRemotePlayback
             onError={() => setVideoError(true)}
           >
-            <source src={videoSrc} type={videoType} />
+            <source src={resolvedVideoSrc} type={videoType} />
           </video>
         </div>
         {!videoError && muteButton}

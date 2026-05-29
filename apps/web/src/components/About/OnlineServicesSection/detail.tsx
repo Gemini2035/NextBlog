@@ -1,11 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { OnlineServiceIcon } from "@/assets/icons";
 import { cn } from "@/utils";
 import { FC, ReactNode } from "react";
-import { ONLINE_SERVICES } from "@/constants";
 import { IconMap } from "./constants";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface OnlineServicesDetailProps {
   className?: string;
@@ -89,8 +89,24 @@ const ServiceCard: FC<ServiceCardProps> = ({
 export default function OnlineServicesDetail({
   className,
 }: OnlineServicesDetailProps) {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
+  const onlineServices = useAboutList<{
+    id: string
+    name: string
+    services: Array<{
+      id: string
+      icon: keyof typeof IconMap
+      name: string
+      description: string
+      externalDescription: {
+        text: string
+        textColor: string
+      }
+      category: string
+      url: string
+      documentation?: string
+    }>
+  }>("online_services");
 
   return (
     <div className={className} id="online-services">
@@ -108,7 +124,7 @@ export default function OnlineServicesDetail({
         </div>
       </div>
 
-      {ONLINE_SERVICES[locale as keyof typeof ONLINE_SERVICES]?.map(
+      {onlineServices.map(
         ({ id, name, services }) => (
           <div className="mb-8" key={id}>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">{name}</h3>

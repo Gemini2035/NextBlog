@@ -2,24 +2,24 @@
 import BlogSection from './BlogSection/index'
 import AboutSection from './AboutSection/index'
 import ProjectsSection from './ProjectsSection/index'
-import type { NavigationItem } from '@/constants'
+import type { SiteNavigationItem } from '@/types/site'
+import type { HomeInitPayload } from '@/types/home'
 
 export interface SectionSwitchProps {
-  item: Pick<NavigationItem, 'type' | 'href'>
+  item: SiteNavigationItem
   index: number
+  homeInit: HomeInitPayload
 }
 
-export default function SectionSwitch({ item, index }: SectionSwitchProps) {
-  switch (item.type) {
-    case '__blog':
-      return <BlogSection index={index} href={item.href} />
-    case '__about':
-      return <AboutSection index={index} href={item.href} />
-    case '__projects':
-      return <ProjectsSection index={index} href={item.href} />
+export default function SectionSwitch({ item, index, homeInit }: SectionSwitchProps) {
+  switch (item.key) {
+    case 'blog':
+      return <BlogSection index={index} item={item} posts={homeInit.posts} />
+    case 'about':
+      return <AboutSection index={index} item={item} />
+    case 'projects':
+      return <ProjectsSection index={index} item={item} />
     default:
       return null
   }
 }
-
-

@@ -3,63 +3,53 @@
 import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { useTranslations } from 'next-intl'
-import { usePosts } from '@/hooks/usePosts'
-import { NAVIGATION_ITEMS } from '@/constants'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { cn } from '@/utils'
 import { FloatingPost } from './FloatingPost'
 import { StarFilledIcon, ClockIcon, FileTextIcon, TagIcon, ArrowRightIcon } from '@/assets/icons'
 import { PostIcon } from '@/assets/icons/PostIcon'
-import type { Post } from '.contentlayer/generated'
+import type { HomePostsPayload } from '@/types/home'
+import type { SiteNavigationItem } from '@/types/site'
 
 interface BlogSectionProps {
   index: number
-  href: string
+  item: SiteNavigationItem
+  posts: HomePostsPayload
 }
 
-export default function BlogSection({ index, href }: BlogSectionProps) {
-  const t = useTranslations('HomePage')
-  const navT = useTranslations('Navigation')
-  const { getRecentPosts, getAllPosts, getAllTags } = usePosts()
-  
-  // 获取blog section的导航配置
-  const blogNav = NAVIGATION_ITEMS.find(item => item.type === '__blog')
-  const blogDescription = blogNav?.submenu?.description || 'Explore my latest technical insights and development experience'
-  const [floatingPosts, setFloatingPosts] = useState<Post[]>([])
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [popularTags, setPopularTags] = useState<string[]>([])
+const getNavigationIcon = (item: SiteNavigationItem) => {
+  const { dynamicDataKey, href } = item
 
-  useEffect(() => {
-    const recentPosts = getRecentPosts()
-    const allPosts = getAllPosts()
-    const allTags = getAllTags()
-    
-    // 优先显示最近更新的文章，如果不足6篇则补充最新的文章
-    let postsToShow = recentPosts.slice(0, 6)
-    
-    if (postsToShow.length < 6) {
-      const remainingCount = 6 - postsToShow.length
-      const usedSlugs = new Set(postsToShow.map(post => post.slug))
-      const additionalPosts = allPosts
-        .filter(post => !usedSlugs.has(post.slug))
-        .slice(0, remainingCount)
-      postsToShow = [...postsToShow, ...additionalPosts]
-    }
-    
-    // 确保总是显示6篇文章（如果总文章数足够的话）
-    if (postsToShow.length < 6 && allPosts.length >= 6) {
-      postsToShow = allPosts.slice(0, 6)
-    }
-    
-    setFloatingPosts(postsToShow)
-    
-    // 获取热门标签（最多显示5个）
-    setPopularTags(allTags.slice(0, 5))
-  }, [getRecentPosts, getAllPosts, getAllTags])
+  if (dynamicDataKey === 'posts.featured' || href.includes('featured')) {
+    return StarFilledIcon
+  }
+  if (dynamicDataKey === 'posts.recent' || href.includes('recent')) {
+    return ClockIcon
+  }
+  return FileTextIcon
+}
+
+export default function BlogSection({ index, item, posts }: BlogSectionProps) {
+  const t = useTranslations('HomePage')
+  const { description, href, id, items } = item
+  const { floating: floatingPosts, popularTags } = posts
+  const blogDescription = description || 'Explore my latest technical insights and development experience'
+  const navigationLinks = [
+    ...items,
+    {
+      ...item,
+      id: id * -1,
+      label: t('allArticles', { default: '所有文章' }),
+      description: null,
+      items: [],
+      dynamicDataKey: null,
+    },
+  ]
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   return (
     <HomeSectionSkeleton index={index}>
-      {/* 突破padding限制的飘动容器 */}
+      {/* Floating container that extends beyond the section padding. */}
       {floatingPosts.length > 0 && (
         <div className={cn(
           'absolute inset-y-0 left-0 right-0 w-full h-full overflow-hidden hidden lg:block pointer-events-none'
@@ -67,7 +57,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           <div className="relative w-full h-full">
             {floatingPosts.map((post, idx) => (
               <FloatingPost
-                key={post.slug}
+                key={post.id}
                 post={post}
                 index={idx}
                 total={floatingPosts.length}
@@ -80,7 +70,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
         </div>
       )}
 
-      {/* 主要内容区域 - 突破padding限制 */}
+      {/* Main content area that extends beyond the section padding. */}
       <div className="relative max-w-6xl mx-auto -ml-6 sm:-ml-10 lg:-ml-16">
         <div className="max-w-3xl pl-6 sm:pl-10 lg:pl-16">
           <h2 className={cn(
@@ -91,50 +81,34 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           <p className={cn(
             'mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-blue-600'
           )}>
-            {navT(blogDescription, { default: blogDescription })}
+            {blogDescription}
           </p>
 
-          {/* 博客分类链接 */}
+          {/* Blog category links */}
           <div className="mt-8 sm:mt-10">
             <div className="flex flex-wrap gap-3 mb-6">
-              <Link
-                href="/posts#featured"
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
-                  'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
-                  'border border-blue-300 hover:border-blue-400'
-                )}
-              >
-                <StarFilledIcon className="w-4 h-4" />
-                <span>{t('featuredArticles', { default: '精选文章' })}</span>
-              </Link>
-              
-              <Link
-                href="/posts#recent"
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
-                  'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
-                  'border border-blue-300 hover:border-blue-400'
-                )}
-              >
-                <ClockIcon className="w-4 h-4" />
-                <span>{t('latestArticles', { default: '最新文章' })}</span>
-              </Link>
-              
-              <Link
-                href="/posts"
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
-                  'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
-                  'border border-blue-300 hover:border-blue-400'
-                )}
-              >
-                <FileTextIcon className="w-4 h-4" />
-                <span>{t('allArticles', { default: '所有文章' })}</span>
-              </Link>
+              {navigationLinks.map((navigationItem) => {
+                const { id, href, label } = navigationItem
+                const Icon = getNavigationIcon(navigationItem)
+
+                return (
+                  <Link
+                    key={`${id}-${href}`}
+                    href={href}
+                    className={cn(
+                      'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
+                      'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
+                      'border border-blue-300 hover:border-blue-400'
+                    )}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{label}</span>
+                  </Link>
+                )
+              })}
             </div>
 
-            {/* 热门标签链接 */}
+            {/* Popular tag links */}
             {popularTags.length > 0 && (
               <div className="mt-4">
                 <p className="text-sm text-blue-600 mb-3">
@@ -159,7 +133,7 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
               </div>
             )}
 
-            {/* 主要CTA按钮 */}
+            {/* Primary CTA */}
             <div className="mt-8">
               <Link href={href}>
                 <Button
@@ -176,25 +150,25 @@ export default function BlogSection({ index, href }: BlogSectionProps) {
           </div>
         </div>
 
-        {/* 移动端显示的文章预览 */}
+        {/* Mobile post previews */}
         {floatingPosts.length > 0 && (
           <div className="mt-8 lg:hidden">
             <div className={cn(
               'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2'
             )}>
-              {floatingPosts.slice(0, 6).map((post) => (
-                <div key={post.slug} className={cn(
+              {floatingPosts.slice(0, 6).map(({ id, title }) => (
+                <div key={id} className={cn(
                   'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-lg',
                   'border border-blue-200/60 p-2.5'
                 )}>
-                  <Link href={post.url} className="block">
+                  <Link href={`/posts/${id}`} className="block">
                     <div className="flex items-center gap-2">
                       <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">
                         <PostIcon className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0 flex items-center">
                         <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
-                          {post.title}
+                          {title}
                         </h3>
                       </div>
                     </div>

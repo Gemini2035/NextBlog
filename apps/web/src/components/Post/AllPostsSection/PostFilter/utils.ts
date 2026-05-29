@@ -1,15 +1,14 @@
 import Fuse from 'fuse.js'
 import type { FilterState } from './types'
-import { Post } from '.contentlayer/generated/types';
+import type { BlogPostListItem } from '@/types/blog'
 
 // 计算文章字数
-export function getWordCount(post: Post): number {
-  if (!post.body?.raw) return 0
-  return post.body.raw.split(/\s+/).length
+export function getWordCount(post: BlogPostListItem): number {
+  return post.description?.split(/\s+/).filter(Boolean).length ?? 0
 }
 
 // 获取所有标签及其计数
-export function getAllTagsWithCount(posts: Post[]): Array<{ value: string; label: string; count: number }> {
+export function getAllTagsWithCount(posts: BlogPostListItem[]): Array<{ value: string; label: string; count: number }> {
   const tagCounts: Record<string, number> = {}
   
   posts.forEach(post => {
@@ -30,7 +29,7 @@ export function getAllTagsWithCount(posts: Post[]): Array<{ value: string; label
 }
 
 // 使用Fuse.js进行模糊搜索
-export function searchPosts(posts: Post[], keyword: string): Post[] {
+export function searchPosts(posts: BlogPostListItem[], keyword: string): BlogPostListItem[] {
   if (!keyword.trim()) return posts
   
   const fuse = new Fuse(posts, {
@@ -38,7 +37,6 @@ export function searchPosts(posts: Post[], keyword: string): Post[] {
       { name: 'title', weight: 0.4 },
       { name: 'description', weight: 0.3 },
       { name: 'tags', weight: 0.2 },
-      { name: 'body.raw', weight: 0.1 }
     ],
     threshold: 0.6,
     includeScore: true
@@ -49,7 +47,7 @@ export function searchPosts(posts: Post[], keyword: string): Post[] {
 }
 
 // 按标签筛选
-export function filterByTags(posts: Post[], selectedTags: string[]): Post[] {
+export function filterByTags(posts: BlogPostListItem[], selectedTags: string[]): BlogPostListItem[] {
   if (selectedTags.length === 0) return posts
   
   return posts.filter(post => 
@@ -58,14 +56,14 @@ export function filterByTags(posts: Post[], selectedTags: string[]): Post[] {
 }
 
 // 按featured筛选
-export function filterByFeatured(posts: Post[], featuredFilter: boolean | null): Post[] {
+export function filterByFeatured(posts: BlogPostListItem[], featuredFilter: boolean | null): BlogPostListItem[] {
   if (featuredFilter === null) return posts
   
   return posts.filter(post => post.featured === featuredFilter)
 }
 
 // 按字数排序
-export function sortByWordCount(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
+export function sortByWordCount(posts: BlogPostListItem[], direction: 'asc' | 'desc' | null): BlogPostListItem[] {
   if (!direction) return posts
   
   return [...posts].sort((a, b) => {
@@ -76,29 +74,29 @@ export function sortByWordCount(posts: Post[], direction: 'asc' | 'desc' | null)
 }
 
 // 按创建时间排序
-export function sortByCreateTime(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
+export function sortByCreateTime(posts: BlogPostListItem[], direction: 'asc' | 'desc' | null): BlogPostListItem[] {
   if (!direction) return posts
   
   return [...posts].sort((a, b) => {
-    const dateA = new Date(a.date).getTime()
-    const dateB = new Date(b.date).getTime()
+    const dateA = new Date(a.createdAt).getTime()
+    const dateB = new Date(b.createdAt).getTime()
     return direction === 'asc' ? dateA - dateB : dateB - dateA
   })
 }
 
 // 按更新时间排序
-export function sortByUpdateTime(posts: Post[], direction: 'asc' | 'desc' | null): Post[] {
+export function sortByUpdateTime(posts: BlogPostListItem[], direction: 'asc' | 'desc' | null): BlogPostListItem[] {
   if (!direction) return posts
   
   return [...posts].sort((a, b) => {
-    const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : new Date(a.date).getTime()
-    const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : new Date(b.date).getTime()
+    const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : new Date(a.createdAt).getTime()
+    const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : new Date(b.createdAt).getTime()
     return direction === 'asc' ? dateA - dateB : dateB - dateA
   })
 }
 
 // 应用所有筛选条件
-export function applyFilters(posts: Post[], filters: FilterState): Post[] {
+export function applyFilters(posts: BlogPostListItem[], filters: FilterState): BlogPostListItem[] {
   let filteredPosts = [...posts]
   
   // 1. 关键字搜索

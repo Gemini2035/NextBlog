@@ -183,7 +183,6 @@ pnpm export
 | `@/styles/*`     | `./src/styles/*`     | 样式文件                |
 | `@/assets/*`     | `./src/assets/*`     | 静态资源                |
 | `@/hooks/*`      | `./src/hooks/*`      | React 自定义 Hooks      |
-| `@/constants/*`  | `./src/constants/*`  | 常量定义                |
 
 ### 使用示例
 
@@ -204,11 +203,9 @@ import PostCard from "../components/PostCard";
 ```typescript
 // 使用别名
 import { formatDate, truncateText } from "@/utils";
-import { SITE_CONFIG } from "@/constants";
 
 // 不使用别名
 import { formatDate, truncateText } from "../utils";
-import { SITE_CONFIG } from "../constants";
 ```
 
 #### 导入类型定义
@@ -381,8 +378,8 @@ pnpm start
 
 ### 基础配置
 
-- **站点配置**: 修改 `src/constants/index.ts` 中的 `SITE_CONFIG`
-- **导航菜单**: 更新 `src/constants/index.ts` 中的 `NAVIGATION_ITEMS`
+- **站点配置**: 通过后端数据库中的 site settings 维护
+- **导航菜单**: 通过后端数据库中的 site navigation 维护
 - **主题配置**: 调整 `tailwind.config.ts` 中的配置
 
 ### 国际化配置

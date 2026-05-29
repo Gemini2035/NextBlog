@@ -2,7 +2,7 @@
 
 import { GlobeIcon } from '@/assets/icons'
 import { useLocale, useTranslations } from 'next-intl'
-import { LANGUAGES } from '@/constants'
+import { useSiteConfig } from '@/components/SiteDataProvider'
 
 interface LanguageBarProps {
   onLanguageClick: () => void
@@ -11,7 +11,8 @@ interface LanguageBarProps {
 export default function LanguageBar({ onLanguageClick }: LanguageBarProps) {
   const locale = useLocale()
   const t = useTranslations('Navigation')
-  const currentLanguage = LANGUAGES.find(lang => lang.code === locale)
+  const siteConfig = useSiteConfig()
+  const currentLanguage = siteConfig.languages?.find(lang => lang.code === locale)
   
   const handleLanguageClick = () => {
     onLanguageClick()

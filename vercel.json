@@ -12,7 +12,7 @@
   ],
   "crons": [
     {
-      "path": "/api/cron/sync-github-projects",
+      "path": "/api/cron/daily",
       "schedule": "40 9 * * *"
     }
   ]
