@@ -3,28 +3,56 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @nextblog/web dev",
-    "build": "pnpm check && pnpm web:build",
-    "start": "pnpm --filter @nextblog/web start",
-    "lint": "pnpm web:lint && pnpm api:lint",
-    "check": "pnpm web:check && pnpm api:check",
-    "web:dev": "pnpm --filter @nextblog/web dev",
-    "web:build": "pnpm --filter @nextblog/web build",
-    "web:start": "pnpm --filter @nextblog/web start",
-    "web:lint": "pnpm --filter @nextblog/web lint",
-    "web:check": "pnpm --filter @nextblog/web lint && pnpm --filter @nextblog/web exec tsc --noEmit",
-    "api:setup": "python -m pip install -e \"apps/backend[dev]\"",
-    "api:dev": "cd apps/backend && python -m uvicorn app.main:app --reload",
-    "api:lint": "cd apps/backend && python -m ruff check .",
-    "api:test": "cd apps/backend && python -m pytest",
-    "api:check": "pnpm api:lint && pnpm api:test",
-    "api:migration": "cd apps/backend && alembic revision --autogenerate",
-    "api:migrate": "cd apps/backend && alembic upgrade head",
-    "api:sync-github-projects": "cd apps/backend && python -m app.tasks.sync_github_projects"
+    "dev": "next dev",
+    "build": "pnpm check && next build",
+    "start": "next start",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "check": "pnpm lint && pnpm exec tsc --noEmit",
+    "api:types": "openapi-typescript http://localhost:8000/openapi.json -o src/types/api.generated.ts",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@emotion/is-prop-valid": "^1.4.0",
+    "@vercel/speed-insights": "^2.0.0",
+    "axios": "^1.13.2",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.16",
+    "fuse.js": "^7.1.0",
+    "gemini-uis": "0.14.0",
     "next": "15.5.9",
+    "next-intl": "^4.3.9",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "recharts": "^3.2.1",
+    "swr": "^2.3.6",
+    "use-debounce": "^10.0.6"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "dotenv": "^17.2.3",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.10",
+    "openapi-typescript": "^7.10.1",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^4",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md}": [
+      "npx prettier --write",
+      "git add"
+    ]
   }
 }

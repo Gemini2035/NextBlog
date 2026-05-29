@@ -1,9 +1,0 @@
-packages:
-  - "apps/*"
-
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-  - protobufjs
-  - sharp
-  - unrs-resolver

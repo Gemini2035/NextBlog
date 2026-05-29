@@ -1,10 +1,24 @@
-# workspace dependencies
+# dependencies
 /node_modules
 .pnpm-store/
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+coverage/
+
+# next.js
+.next/
+out/
+
+# production
+build/
 
 # misc
 .DS_Store
 *.pem
+.cursor
 
 # debug
 npm-debug.log*
@@ -14,9 +28,18 @@ yarn-error.log*
 # root env files
 .env
 .env.*
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.ruff_cache/
 *.log
+
+# vercel
+.vercel/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# contentlayer
+.contentlayer/
+
+# translated content generated from Chinese source
+content/en/
+content/ja/
