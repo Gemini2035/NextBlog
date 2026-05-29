@@ -46,7 +46,6 @@ export default function SkillsBrief({ className }: SkillsBriefProps) {
             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Node.js</span>
             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">PostgreSQL</span>
             <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">RESTful</span>
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">GraphQL</span>
           </div>
         </div>
         <div>

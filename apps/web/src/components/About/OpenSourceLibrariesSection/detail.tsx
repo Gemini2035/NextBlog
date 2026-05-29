@@ -1,11 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { OpenSourceIcon, GitHubIcon } from "@/assets/icons";
 import { cn } from "@/utils";
 import { FC } from "react";
-import { OPEN_SOURCE_LIBRARIES } from "@/constants";
 import { IconMap } from "./constants";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface OpenSourceLibrariesDetailProps {
   className?: string;
@@ -85,8 +85,21 @@ const LibraryCard: FC<LibraryCardProps> = ({
 const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
   className,
 }) => {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
+  const openSourceLibraries = useAboutList<{
+    key: string
+    name: string
+    sources: Array<{
+      key: string
+      name: string
+      version: string
+      documentation: string
+      sourceCode: string
+      icon: keyof typeof IconMap
+      subCategory: string
+      description: string
+    }>
+  }>("open_source");
 
   return (
     <div className={className} id="open-source">
@@ -102,7 +115,7 @@ const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
         </div>
       </div>
 
-      {OPEN_SOURCE_LIBRARIES[locale as keyof typeof OPEN_SOURCE_LIBRARIES].map(
+      {openSourceLibraries.map(
         ({ key, sources, name }) => (
           <div className="mb-8" key={key}>
             <h3 className="text-xl font-semibold text-gray-900 mb-4">

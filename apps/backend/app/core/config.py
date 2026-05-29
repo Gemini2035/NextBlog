@@ -17,16 +17,13 @@ def normalize_database_url(url: str | None) -> str | None:
 class Settings(BaseSettings):
     project_name: str = "NextBlog API"
     api_prefix_restful: str = "/api"
-    api_prefix_graphql: str = "/api/graphql"
 
     database_url: str | None = None
     database_url_unpooled: str | None = None
     next_database_url: str | None = None
     next_database_url_unpooled: str | None = None
 
-    github_username: str = "Gemini2035"
-    github_token: str | None = None
-    cron_secret: str | None = None
+    admin_api_secret: str | None = None
 
     model_config = SettingsConfigDict(
         env_file=(".env", ".env.local", ".env.development.local"),

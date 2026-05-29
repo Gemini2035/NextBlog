@@ -1,8 +1,8 @@
 import { StickyWrapper } from './StickyWrapper'
-import type { Post } from '.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 
 interface AllPostsSectionProps {
-  posts: Post[] | null | undefined
+  posts: BlogPostListItem[] | null | undefined
   title: string
   prevText?: string
   nextText?: string

@@ -1,6 +1,7 @@
 from datetime import UTC, datetime
 from typing import Any, TypedDict
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.integrations.github import (
@@ -10,7 +11,11 @@ from app.integrations.github import (
     GitHubRepository,
     GitHubRequestError,
 )
+from app.integrations.llm import LLMClientError, OpenAIClient
+from app.models.embedding import Embedding
 from app.models.project import Project
+from app.models.project import PROJECT_EMBEDDING_SOURCE_TYPE
+from app.services.site_settings import GitHubFetchOptions
 
 LANGUAGE_COLORS = {
     "CSS": "#563d7c",
@@ -102,12 +107,71 @@ def _get_activity_score(repo: GitHubRepository) -> float:
     )
 
 
+def _get_project_embedding_text(project: Project) -> str:
+    topics = ", ".join(project.topics)
+    languages = ", ".join(
+        language["name"]
+        for language in project.language_stats
+        if isinstance(language.get("name"), str)
+    )
+    license_name = project.license or "No license"
+    homepage = project.homepage or "No homepage"
+
+    return "\n".join(
+        [
+            f"Name: {project.name}",
+            f"Full name: {project.full_name}",
+            f"Description: {project.description}",
+            f"URL: {project.url}",
+            f"Homepage: {homepage}",
+            f"Owner: {project.owner_login}",
+            f"Primary language: {project.primary_language_name or 'Unknown'}",
+            f"Languages: {languages or 'Unknown'}",
+            f"Topics: {topics or 'None'}",
+            f"License: {license_name}",
+            f"Stars: {project.stars}",
+            f"Forks: {project.forks}",
+            f"Open issues: {project.open_issues}",
+            f"Archived: {project.is_archived}",
+            f"Fork: {project.is_fork}",
+        ]
+    )
+
+
+def _upsert_project_embedding(
+    db: Session,
+    project: Project,
+    llm_client: OpenAIClient,
+) -> None:
+    embedding_text = _get_project_embedding_text(project)
+
+    existing_embedding = db.scalar(
+        select(Embedding).where(
+            Embedding.source_type == PROJECT_EMBEDDING_SOURCE_TYPE,
+            Embedding.source_id == str(project.id),
+            Embedding.embedding_model == llm_client.embedding_model,
+        )
+    )
+    if existing_embedding and existing_embedding.embedding_text == embedding_text:
+        return
+
+    vector = llm_client.get_context_embedding(embedding_text)
+    embedding = existing_embedding or Embedding(
+        source_type=PROJECT_EMBEDDING_SOURCE_TYPE,
+        source_id=str(project.id),
+        embedding_model=llm_client.embedding_model,
+    )
+    embedding.embedding = vector
+    embedding.embedding_text = embedding_text
+    db.add(embedding)
+
+
 def _upsert_project(
     db: Session,
     repo: GitHubRepository,
     languages: dict[str, int],
     contributors: list[GitHubContributor],
-) -> None:
+) -> Project:
     repo_id = repo["id"]
     owner = repo["owner"]
     existing_project = db.get(Project, repo_id)
@@ -147,36 +211,104 @@ def _upsert_project(
     project.weight = activity_score + (10000 if project.is_pinned else 0)
 
     db.add(project)
+    return project
 
 
-def sync_github_projects(db: Session, username: str, token: str | None = None) -> SyncResult:
+def _should_sync_repo(
+    repo: GitHubRepository,
+    *,
+    fetch_options: GitHubFetchOptions,
+    exclude_repos: set[str],
+) -> bool:
+    repo_name = repo["name"]
+    full_name = repo["full_name"]
+    if repo_name in exclude_repos or full_name in exclude_repos:
+        return False
+
+    if not fetch_options.get("include_forked", True) and repo["fork"]:
+        return False
+
+    if not fetch_options.get("include_archived", True) and repo["archived"]:
+        return False
+
+    if repo["stargazers_count"] < fetch_options.get("min_stars", 0):
+        return False
+
+    return True
+
+
+def sync_github_projects(
+    db: Session,
+    username: str,
+    token: str | None = None,
+    fetch_options: GitHubFetchOptions | None = None,
+    featured_repos: list[str] | None = None,
+    exclude_repos: list[str] | None = None,
+) -> SyncResult:
     synced = 0
     skipped = 0
     warnings: list[str] = []
+    llm_client = OpenAIClient()
+    normalized_fetch_options = fetch_options or {}
+    excluded_repo_names = set(exclude_repos or [])
+    featured_repo_names = set(featured_repos or [])
 
     with GitHubClient(token=token) as github:
-        repositories = github.get_user_repositories(username)
+        try:
+            repositories = github.get_user_repositories(
+                username,
+                repo_type=normalized_fetch_options.get("repo_type", "all"),
+                sort_by=normalized_fetch_options.get("sort_by", "updated"),
+                max_pages=normalized_fetch_options.get("max_pages", 10),
+            )
 
-        for repo in repositories:
-            full_name = repo["full_name"]
-            if not full_name:
-                skipped += 1
-                continue
+            for repo in repositories:
+                full_name = repo["full_name"]
+                if not full_name:
+                    skipped += 1
+                    continue
 
-            try:
-                languages = github.get_repository_languages(full_name)
-            except (GitHubRateLimitError, GitHubRequestError) as error:
-                languages = {}
-                warnings.append(f"{full_name}: languages unavailable: {error}")
+                if not _should_sync_repo(
+                    repo,
+                    fetch_options=normalized_fetch_options,
+                    exclude_repos=excluded_repo_names,
+                ):
+                    skipped += 1
+                    continue
 
-            try:
-                contributors = github.get_repository_contributors(full_name)
-            except (GitHubRateLimitError, GitHubRequestError) as error:
-                contributors = []
-                warnings.append(f"{full_name}: contributors unavailable: {error}")
+                try:
+                    languages = (
+                        github.get_repository_languages(full_name)
+                        if normalized_fetch_options.get("include_languages", True)
+                        else {}
+                    )
+                except (GitHubRateLimitError, GitHubRequestError) as error:
+                    languages = {}
+                    warnings.append(f"{full_name}: languages unavailable: {error}")
 
-            _upsert_project(db, repo, languages, contributors)
-            synced += 1
+                try:
+                    contributors = (
+                        github.get_repository_contributors(full_name)
+                        if normalized_fetch_options.get("include_contributors", True)
+                        else []
+                    )
+                except (GitHubRateLimitError, GitHubRequestError) as error:
+                    contributors = []
+                    warnings.append(f"{full_name}: contributors unavailable: {error}")
+
+                project = _upsert_project(db, repo, languages, contributors)
+                project.is_pinned = (
+                    repo["name"] in featured_repo_names
+                    or full_name in featured_repo_names
+                )
+                project.weight = (project.activity_score or 0) + (10000 if project.is_pinned else 0)
+                try:
+                    _upsert_project_embedding(db, project, llm_client)
+                except LLMClientError as error:
+                    warnings.append(f"{full_name}: embedding unavailable: {error}")
+                synced += 1
+        finally:
+            llm_client.close()
 
     db.commit()
 

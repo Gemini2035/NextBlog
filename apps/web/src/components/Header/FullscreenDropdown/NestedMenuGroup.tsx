@@ -3,8 +3,7 @@
 import { Link } from '@/ui'
 import { motion } from 'framer-motion'
 import { cn } from '@/utils'
-import { SubmenuItem } from '@/constants'
-import { useTranslations } from 'next-intl'
+import type { SiteNavigationItem } from '@/types/site'
 
 // 辅助函数 - 减少三目运算符的使用
 function getFlexClasses(columnCount: number): string {
@@ -23,7 +22,7 @@ function getAnimationState(isAnimating: boolean, isExiting: boolean = false): "v
 }
 
 interface NestedMenuGroupProps {
-  items: SubmenuItem[]
+  items: SiteNavigationItem[]
   onClose: () => void
   level?: number
   isAnimating?: boolean
@@ -57,9 +56,6 @@ const containerVariants = {
 }
 
 export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating = true, isExiting = false }: NestedMenuGroupProps) {
-  const t = useTranslations('Navigation')
-  
-  
   if (level === 0) {
     // 顶级菜单项，使用基于JSON分类的布局
     // 每个分类作为一列，左对齐分布
@@ -98,22 +94,22 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                   }}
                 >
                   <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-gray-800 transition-colors duration-200">
-                    {t(item.label)}
+                    {item.label}
                   </h3>
                   {item.description && (
                     <p className="text-xs text-gray-600 group-hover:text-gray-700 transition-colors duration-200">
-                      {t(item.description)}
+                      {item.description}
                     </p>
                   )}
                 </Link>
               ) : (
                 <>
                   <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                    {t(item.label)}
+                    {item.label}
                   </h3>
                   {item.description && (
                     <p className="text-xs text-gray-600">
-                      {t(item.description)}
+                      {item.description}
                     </p>
                   )}
                 </>
@@ -144,11 +140,11 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <h4 className="text-base font-medium text-gray-900 group-hover:text-gray-800 transition-colors duration-200">
-                          {subItem.href.startsWith('/posts/') ? subItem.label : t(subItem.label)}
+                          {subItem.label}
                         </h4>
                         {subItem.description && (
                           <p className="text-sm text-gray-600 mt-1 group-hover:text-gray-700 transition-colors duration-200">
-                            {subItem.href.startsWith('/posts/') ? subItem.description : t(subItem.description)}
+                            {subItem.description}
                           </p>
                         )}
                       </div>
@@ -173,7 +169,7 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
                               e.stopPropagation()
                             }}
                           >
-                            {t(subSubItem.label)}
+                            {subSubItem.label}
                           </Link>
                         </li>
                       ))}
@@ -220,11 +216,11 @@ export default function NestedMenuGroup({ items, onClose, level = 0, isAnimating
             }}
           >
             <h4 className="text-sm font-medium text-gray-900 hover:text-gray-800 transition-colors">
-              {t(item.label)}
+              {item.label}
             </h4>
             {item.description && (
               <p className="text-xs text-gray-600 mt-1">
-                {t(item.description)}
+                {item.description}
               </p>
             )}
           </Link>

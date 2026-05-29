@@ -112,7 +112,6 @@
     "dependencyManagement": "依赖管理",
     "securityAudit": "安全审计",
     "pnpmPackageManager": "pnpm包管理器",
-
     "aboutMe": "关于我",
     "clickToViewDetails": "点击查看详情"
   },
@@ -120,6 +119,7 @@
     "searching": "搜索中...",
     "noResults": "未找到结果",
     "noResultsDescription": "尝试使用其他关键词搜索",
+    "recommendedContent": "随机推荐",
     "recommendedBlog": "推荐博客",
     "latestPosts": "最新文章",
     "recommendedLinks": "推荐链接",
@@ -293,7 +293,6 @@
       "NodeJS": "基于Chrome V8引擎的JavaScript运行时，用于服务端开发",
       "PostgreSQL": "功能强大的开源关系型数据库，支持复杂查询和数据完整性",
       "RESTful": "REST架构风格的API设计，提供标准化的Web服务接口",
-      "GraphQL": "查询语言和运行时，提供灵活高效的数据查询方式",
       "Git": "分布式版本控制系统，管理代码版本和团队协作",
       "Docker": "容器化平台，简化应用部署和环境管理",
       "VSCode": "轻量级代码编辑器，提供丰富的插件和调试功能",
@@ -444,7 +443,7 @@
     "coreCoursesTitle": "核心课程（Web方向）",
     "course1": "前端工程化与性能优化",
     "course2": "Web 应用开发（React/Next.js）",
-    "course3": "数据库与 API 设计（REST/GraphQL）",
+    "course3": "数据库与 API 设计（REST/API）",
     "course4": "计算机网络与安全基础",
     "project1": "个人博客/内容站点（Next.js + 内容系统）",
     "project2": "后端 API 与数据库建模（Node.js/Prisma）",

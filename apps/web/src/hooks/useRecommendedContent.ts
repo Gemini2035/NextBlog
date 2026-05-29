@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
-import { useTranslations } from 'next-intl'
 import { usePosts } from './usePosts'
-import { NAVIGATION_ITEMS } from '@/constants'
+import { useSiteData } from '@/components/SiteDataProvider'
 
-// 搜索项类型定义
+// Search item type.
 interface SearchableItem {
   id: string
   type: 'post' | 'link' | 'category'
@@ -16,7 +15,7 @@ interface SearchableItem {
   category?: string
 }
 
-// 推荐内容类型
+// Recommended content type.
 export interface RecommendedContent {
   featuredPosts: SearchableItem[]
   recentPosts: SearchableItem[]
@@ -25,49 +24,56 @@ export interface RecommendedContent {
 
 export function useRecommendedContent() {
   const posts = usePosts()
-  const t = useTranslations('Navigation')
+  const { navigation } = useSiteData()
   
   const recommendedContent = useMemo((): RecommendedContent => {
     const featuredPost = posts.getFeaturedPost()
     const recentPosts = posts.getRecentPosts()
+    const featuredPostId = featuredPost?.id
 
-    // 置顶文章
-    const featuredPosts: SearchableItem[] = featuredPost ? [{
-      id: `featured-post-${featuredPost.slug}-${featuredPost.locale || 'default'}`,
-      type: 'post',
-      title: featuredPost.title,
-      description: featuredPost.description,
-      href: `/posts/${featuredPost.slug}`,
-      tags: featuredPost.tags,
-      priority: 10,
-      category: '博客文章'
-    }] : []
+    // Featured post.
+    const featuredPosts: SearchableItem[] = featuredPost
+      ? (() => {
+        const { id, title, description, tags } = featuredPost
 
-    // 最新文章（排除置顶文章以避免重复）
+        return [{
+          id: `featured-post-${id}`,
+          type: 'post',
+          title,
+          description: description ?? undefined,
+          href: `/posts/${id}`,
+          tags,
+          priority: 10,
+          category: '博客文章'
+        }]
+      })()
+      : []
+
+    // Recent posts, excluding the featured post to avoid duplicates.
     const recentPostsItems: SearchableItem[] = recentPosts
-      .filter(post => !featuredPost || post.slug !== featuredPost.slug || post.locale !== featuredPost.locale)
+      .filter(({ id }) => !featuredPostId || id !== featuredPostId)
       .slice(0, 5)
-      .map(post => ({
-        id: `recent-post-${post.slug}-${post.locale || 'default'}`,
+      .map(({ id, title, description, tags }) => ({
+        id: `recent-post-${id}`,
         type: 'post',
-        title: post.title,
-        description: post.description,
-        href: `/posts/${post.slug}`,
-        tags: post.tags,
+        title,
+        description: description ?? undefined,
+        href: `/posts/${id}`,
+        tags,
         priority: 7,
         category: '博客文章'
       }))
 
-    // 导航链接（从 NAVIGATION_ITEMS 生成，并进行翻译）
-    const navigationLinks: SearchableItem[] = NAVIGATION_ITEMS
-      .filter(navItem => navItem.type !== '__search' && navItem.type !== '__language')
+    // Navigation links.
+    const navigationLinks: SearchableItem[] = navigation
+      .filter(navItem => navItem.key !== 'search' && navItem.key !== 'language')
       .slice(0, 5)
-      .map(navItem => ({
-        id: `nav-${navItem.type}`,
+      .map(({ key, label, description, href }) => ({
+        id: `nav-${key}`,
         type: 'link',
-        title: t(navItem.label), // 翻译标题
-        description: navItem.submenu?.description ? t(navItem.submenu.description) : undefined, // 翻译描述
-        href: navItem.href,
+        title: label,
+        description: description ?? undefined,
+        href,
         priority: 8,
         category: '导航链接'
       }))
@@ -77,7 +83,7 @@ export function useRecommendedContent() {
       recentPosts: recentPostsItems,
       navigationLinks
     }
-  }, [posts, t])
+  }, [posts, navigation])
 
   return {
     recommendedContent

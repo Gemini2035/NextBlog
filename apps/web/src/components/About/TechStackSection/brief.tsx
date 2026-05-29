@@ -1,20 +1,23 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { TechStackIcon } from "@/assets/icons";
 import { FC } from "react";
-import { TECH_STACK } from "@/constants";
 import { IconMap } from "./constants";
+import { useAboutList } from "@/components/About/AboutDataProvider";
 
 interface TechStackBriefProps {
   className?: string;
 }
 
 const TechStackBrief: FC<TechStackBriefProps> = ({ className }) => {
-  const locale = useLocale();
   const t = useTranslations("AboutPage");
-
-  const techStack = TECH_STACK[locale as keyof typeof TECH_STACK];
+  const techStack = useAboutList<{
+    id: string
+    icon: keyof typeof IconMap
+    summary: string
+    name: string
+  }>("tech_stack");
 
   return (
     <div className={className}>

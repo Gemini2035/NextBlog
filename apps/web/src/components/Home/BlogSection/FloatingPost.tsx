@@ -4,10 +4,10 @@ import React from 'react'
 import { Link } from '@/ui'
 import { PostIcon } from '@/assets/icons/PostIcon'
 import { cn } from '@/utils'
-import type { Post } from '.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 
 interface FloatingPostProps {
-  post: Post
+  post: BlogPostListItem
   index: number
   total: number
   hoveredIndex: number | null
@@ -126,7 +126,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
         'hover:shadow-lg transition-all duration-300',
         'hover:bg-blue-100/95 hover:opacity-100 max-w-56'
       )}>
-        <Link href={post.url} className="block">
+        <Link href={`/posts/${post.id}`} className="block">
           <div className="flex items-center gap-2">
             {/* 文章图标 */}
             <div className="flex-shrink-0 w-4 h-4 flex items-center justify-center">

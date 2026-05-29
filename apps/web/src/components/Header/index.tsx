@@ -3,8 +3,8 @@
 import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
-import { SITE_CONFIG, NavigationItem } from '@/constants'
-import { useNavigation } from '@/hooks'
+import { useSiteConfig, useSiteData } from '@/components/SiteDataProvider'
+import type { SiteNavigationItem } from '@/types/site'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import FullscreenDropdown from './FullscreenDropdown'
@@ -13,28 +13,27 @@ import { LanguageBar } from './LanguageToggle'
 import MobileNav from './MobileNav'
 
 interface NavItemProps {
-  item: NavigationItem
+  item: SiteNavigationItem
   activeSubmenu: string | null
-  onNavHover: (itemType: string) => void
-  t: (key: string) => string
+  onNavHover: (itemKey: string) => void
 }
 
-function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
-  const hasSubmenu = item.submenu && item.submenu.items && item.submenu.items.length > 0
+function NavItem({ item, activeSubmenu, onNavHover }: NavItemProps) {
+  const hasSubmenu = item.items.length > 0
   
   if (hasSubmenu) {
     return (
       <div
         className="relative"
-        onMouseEnter={() => onNavHover(item.type)}
+        onMouseEnter={() => onNavHover(item.key)}
       >
         <Link 
           href={item.href} 
           className="text-gray-700 hover:text-gray-800 transition-colors flex items-center"
           aria-haspopup="true"
-          aria-expanded={activeSubmenu === item.type}
+          aria-expanded={activeSubmenu === item.key}
         >
-          {t(item.label)}
+          {item.label}
           <ChevronDownIcon className="ml-1 h-4 w-4" />
         </Link>
       </div>
@@ -46,7 +45,7 @@ function NavItem({ item, activeSubmenu, onNavHover, t }: NavItemProps) {
       href={item.href} 
       className="text-gray-700 hover:text-gray-800 transition-colors"
     >
-      {t(item.label)}
+      {item.label}
     </Link>
   )
 }
@@ -60,9 +59,8 @@ export default function Header() {
   const lastScrollYRef = useRef<number>(0)
   const t = useTranslations('Navigation')
   const pathname = usePathname()
-  
-  // 获取带有动态子菜单的导航项
-  const { navigationItems } = useNavigation()
+  const siteConfig = useSiteConfig()
+  const { navigation: navigationItems } = useSiteData()
 
   // 处理滚动事件
   const handleScroll = useCallback(() => {
@@ -107,13 +105,13 @@ export default function Header() {
     if (isOnSearchButton || isOnLanguageButton) {
       // 如果当前有 submenu 打开，但不是对应的类型
       if (activeSubmenu) {
-        const shouldClose = (isOnSearchButton && activeSubmenu !== '__search') || 
-                           (isOnLanguageButton && activeSubmenu !== '__language')
+        const shouldClose = (isOnSearchButton && activeSubmenu !== 'search') || 
+                           (isOnLanguageButton && activeSubmenu !== 'language')
         
         // 只有在不是从搜索切换到语言或从语言切换到搜索时才关闭
         const isSwitchingBetweenSpecialMenus = 
-          (isOnSearchButton && activeSubmenu === '__language') ||
-          (isOnLanguageButton && activeSubmenu === '__search')
+          (isOnSearchButton && activeSubmenu === 'language') ||
+          (isOnLanguageButton && activeSubmenu === 'search')
         
         if (shouldClose && !isSwitchingBetweenSpecialMenus) {
           setIsExiting(true)
@@ -193,37 +191,37 @@ export default function Header() {
   }, [pathname])
 
   // 切换到新的导航项（不带动画）
-  const switchToNavigationItem = useCallback((newNavigationItem: NavigationItem) => {
+  const switchToNavigationItem = useCallback((newNavigationItem: SiteNavigationItem) => {
     // 直接切换，不播放容器动画
-    setActiveSubmenu(newNavigationItem.type)
+    setActiveSubmenu(newNavigationItem.key)
     setIsExiting(false)
   }, [])
 
   // 处理搜索点击
   const handleSearchClick = useCallback(() => {
-    if (activeSubmenu === '__search') {
+    if (activeSubmenu === 'search') {
       setActiveSubmenu(null)
       setIsExiting(false)
     } else {
-      setActiveSubmenu('__search')
+      setActiveSubmenu('search')
       setIsExiting(false)
     }
   }, [activeSubmenu])
 
   // 处理语言切换点击
   const handleLanguageClick = useCallback(() => {
-    if (activeSubmenu === '__language') {
+    if (activeSubmenu === 'language') {
       setActiveSubmenu(null)
       setIsExiting(false)
     } else {
-      setActiveSubmenu('__language')
+      setActiveSubmenu('language')
       setIsExiting(false)
     }
   }, [activeSubmenu])
 
   // 处理导航项悬停
-  const handleNavHover = useCallback((itemType: string) => {
-    const targetItem = navigationItems.find(item => item.type === itemType)
+  const handleNavHover = useCallback((itemKey: string) => {
+    const targetItem = navigationItems.find(item => item.key === itemKey)
     if (targetItem) {
       switchToNavigationItem(targetItem)
     }
@@ -249,10 +247,14 @@ export default function Header() {
 
   // 搜索导航项 - 使用useMemo避免在渲染中创建新对象
   const searchNavigationItem = useMemo(() => ({
-    type: '__search' as const,
+    id: -1,
+    parentId: null,
+    key: 'search',
     label: '搜索',
     href: '#',
-    submenu: searchSubmenu
+    description: searchSubmenu.description,
+    sortOrder: 0,
+    items: []
   }), [searchSubmenu])
 
   // 语言导航项的子菜单配置
@@ -264,10 +266,14 @@ export default function Header() {
 
   // 语言导航项 - 使用useMemo避免在渲染中创建新对象
   const languageNavigationItem = useMemo(() => ({
-    type: '__language' as const,
+    id: -2,
+    parentId: null,
+    key: 'language',
     label: '语言',
     href: '#',
-    submenu: languageSubmenu
+    description: languageSubmenu.description,
+    sortOrder: 0,
+    items: []
   }), [languageSubmenu])
 
   // 处理移动端菜单打开
@@ -299,7 +305,7 @@ export default function Header() {
               className="flex items-center space-x-2 text-xl font-bold text-gray-900 hover:text-gray-800 transition-colors"
             >
               <LogoIcon className="h-6 w-6" />
-              <span>{SITE_CONFIG.title}</span>
+              <span>{siteConfig.title}</span>
             </Link>
           </div>
           
@@ -314,7 +320,6 @@ export default function Header() {
                       item={item}
                       activeSubmenu={activeSubmenu}
                       onNavHover={handleNavHover}
-                      t={t}
                     />
                   </li>
                 ))}
@@ -359,7 +364,7 @@ export default function Header() {
         onClose={handleMobileMenuClose}
         placement="right"
         size="full"
-        title={SITE_CONFIG.title}
+        title={siteConfig.title}
         className="lg:hidden"
         bodyClassName="px-6 py-4"
         destroyOnClose
@@ -376,11 +381,11 @@ export default function Header() {
           isOpen={true}
           onClose={handleSubmenuClose}
           navigationItem={
-            activeSubmenu === '__search' 
+            activeSubmenu === 'search' 
               ? searchNavigationItem 
-              : activeSubmenu === '__language'
+              : activeSubmenu === 'language'
               ? languageNavigationItem
-              : navigationItems.find(item => item.type === activeSubmenu) || searchNavigationItem
+              : navigationItems.find(item => item.key === activeSubmenu) || searchNavigationItem
           }
           isExiting={isExiting}
           onAnimationComplete={handleAnimationComplete}

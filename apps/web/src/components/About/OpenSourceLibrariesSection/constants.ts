@@ -1,4 +1,4 @@
-import { ReactIcon, NextJsIcon, TypeScriptIcon, TailwindIcon, PostCSSIcon, ContentlayerIcon, MdxIcon, GrayMatterIcon, FramerMotionIcon, EmotionIcon, AnimateIcon, OctokitIcon, SWRIcon, RechartsIcon, FuseIcon, ClsxIcon, DebounceIcon, ESLintIcon, PrettierIcon, HuskyIcon, OpenAIIcon, GlobeIcon, GitHubIcon, IconProps } from "@/assets/icons";
+import { ReactIcon, NextJsIcon, TypeScriptIcon, TailwindIcon, PostCSSIcon, ContentlayerIcon, MdxIcon, GrayMatterIcon, FramerMotionIcon, EmotionIcon, AnimateIcon, SWRIcon, RechartsIcon, FuseIcon, ClsxIcon, DebounceIcon, ESLintIcon, PrettierIcon, HuskyIcon, OpenAIIcon, GlobeIcon, GitHubIcon, IconProps } from "@/assets/icons";
 import { ComponentType } from "react";
 
 // 图标组件映射表
@@ -14,7 +14,6 @@ export const IconMap: Record<string, ComponentType<IconProps>> = {
     FramerMotionIcon,
     EmotionIcon,
     AnimateIcon,
-    OctokitIcon,
     SWRIcon,
     RechartsIcon,
     FuseIcon,

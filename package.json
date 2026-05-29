@@ -12,7 +12,7 @@
     "web:build": "pnpm --filter @nextblog/web build",
     "web:start": "pnpm --filter @nextblog/web start",
     "web:lint": "pnpm --filter @nextblog/web lint",
-    "web:check": "pnpm --filter @nextblog/web lint && pnpm --filter @nextblog/web contentlayer && pnpm --filter @nextblog/web exec tsc --noEmit",
+    "web:check": "pnpm --filter @nextblog/web lint && pnpm --filter @nextblog/web exec tsc --noEmit",
     "api:setup": "python -m pip install -e \"apps/backend[dev]\"",
     "api:dev": "cd apps/backend && python -m uvicorn app.main:app --reload",
     "api:lint": "cd apps/backend && python -m ruff check .",

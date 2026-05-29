@@ -4,21 +4,18 @@ import HomeSectionSkeleton from '../HomeSectionSkeleton'
 import { Link, Button } from '@/ui'
 import { ArrowRightIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
-import { NAVIGATION_ITEMS } from '@/constants'
+import type { SiteNavigationItem } from '@/types/site'
 
 interface AboutSectionProps {
   index: number
-  href: string
+  item: SiteNavigationItem
 }
 
-export default function AboutSection({ index, href }: AboutSectionProps) {
+export default function AboutSection({ index, item }: AboutSectionProps) {
   const t = useTranslations('HomePage')
-  const navT = useTranslations('Navigation')
-
-  // 获取about section的导航配置
-  const aboutNav = NAVIGATION_ITEMS.find(item => item.type === '__about')
-  const aboutDescription = aboutNav?.submenu?.description || 'Learn about my background, skills, experience and contact information'
-  const submenuItems = aboutNav?.submenu?.items || []
+  const { description, href, items } = item
+  const aboutDescription = description || 'Learn about my background, skills, experience and contact information'
+  const submenuItems = items
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -27,33 +24,33 @@ export default function AboutSection({ index, href }: AboutSectionProps) {
           {t('aboutTitle', { default: '关于我' })}
         </h2>
         <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
-          {navT(aboutDescription, { default: aboutDescription })}
+          {aboutDescription}
         </p>
 
-        {/* 快速导航链接 */}
+        {/* Quick navigation links */}
         {submenuItems.length > 0 && (
           <div className="mt-8 sm:mt-10">
             <div className="space-y-6">
-              {submenuItems.map((item, itemIndex) => (
+              {submenuItems.map(({ href, label, items }, itemIndex) => (
                 <div key={itemIndex}>
-                  {/* 父级链接 */}
+                  {/* Parent link */}
                   <Link
-                    href={item.href}
+                    href={href}
                     className="block text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors mb-3"
                   >
-                    {navT(item.label as keyof typeof navT, { default: item.label })}
+                    {label}
                   </Link>
                   
-                  {/* 次级链接 */}
-                  {item.items && item.items.length > 0 && (
+                  {/* Child links */}
+                  {items && items.length > 0 && (
                     <div className="flex flex-wrap gap-x-4 gap-y-2">
-                      {item.items.map((subItem, subIndex) => (
+                      {items.map(({ href, label }, subIndex) => (
                         <Link
                           key={subIndex}
-                          href={subItem.href}
+                          href={href}
                           className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
                         >
-                          {navT(subItem.label as keyof typeof navT, { default: subItem.label })}
+                          {label}
                         </Link>
                       ))}
                     </div>

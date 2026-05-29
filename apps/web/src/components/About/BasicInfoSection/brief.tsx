@@ -1,19 +1,17 @@
 'use client'
 
-import { BASE_INFO } from '@/constants'
 import { GlobeIcon } from '@/assets/icons'
-import { useLocale, useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { FC } from 'react'
+import { useAboutRecord } from '@/components/About/AboutDataProvider'
 
 interface BasicInfoBriefProps {
   className?: string
 }
 
 const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
-  const locale = useLocale()
   const navT = useTranslations('Navigation')
-
-  const baseInfo = BASE_INFO[locale as keyof typeof BASE_INFO]
+  const baseInfo = useAboutRecord('base_info')
 
   return (
     <div className={className}>
@@ -29,7 +27,7 @@ const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
       {/* 简化的个人简介 */}
       <div 
         className="mb-6"
-        dangerouslySetInnerHTML={{ __html: baseInfo.summary }}
+        dangerouslySetInnerHTML={{ __html: baseInfo.summary ?? '' }}
       />
 
     </div>

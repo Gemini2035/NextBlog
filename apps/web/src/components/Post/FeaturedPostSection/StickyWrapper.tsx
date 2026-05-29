@@ -7,10 +7,10 @@ import { useLayoutHeights, useAnchorScroll } from '@/hooks'
 import { PostCard } from '../PostCard'
 import { Slider, Button } from '@/ui'
 import { CollapseIcon } from '@/assets/icons'
-import type { Post } from '../../../../.contentlayer/generated'
+import type { BlogPostListItem } from '@/types/blog'
 
 interface StickyWrapperProps {
-  featuredPosts: Post[]
+  featuredPosts: BlogPostListItem[]
   title: string
 }
 
@@ -159,7 +159,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                 <div ref={cardListRef}>
                   <Slider
                     items={featuredPosts.map((post) => (
-                      <PostCard key={post._id} post={post} variant="compact" showDescription={false} />
+                      <PostCard key={post.id} post={post} variant="compact" showDescription={false} />
                     ))}
                     itemsPerPage={3.2}
                     slidePerPage={1}
@@ -188,7 +188,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
                   <div ref={cardListRef}>
                     <Slider
                       items={featuredPosts.map((post) => (
-                        <PostCard key={post._id} post={post} />
+                        <PostCard key={post.id} post={post} />
                       ))}
                       itemsPerPage={3}
                       slidePerPage={1}

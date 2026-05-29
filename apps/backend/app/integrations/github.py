@@ -189,15 +189,23 @@ class GitHubClient:
     def __exit__(self, *args: object) -> None:
         self.close()
 
-    def get_user_repositories(self, username: str) -> list[GitHubRepository]:
+    def get_user_repositories(
+        self,
+        username: str,
+        *,
+        repo_type: str = "all",
+        sort_by: str = "updated",
+        max_pages: int = 10,
+    ) -> list[GitHubRepository]:
         return self._get_paginated(
             f"/users/{username}/repos",
             {
-                "type": "all",
-                "sort": "updated",
+                "type": repo_type,
+                "sort": sort_by,
                 "direction": "desc",
                 "per_page": 100,
             },
+            max_pages=max_pages,
         )
 
     def get_repository_languages(self, full_name: str) -> dict[str, int]:
@@ -233,11 +241,17 @@ class GitHubClient:
             if contributor is not None
         ]
 
-    def _get_paginated(self, path: str, params: QueryParams) -> list[GitHubRepository]:
+    def _get_paginated(
+        self,
+        path: str,
+        params: QueryParams,
+        *,
+        max_pages: int,
+    ) -> list[GitHubRepository]:
         items: list[GitHubRepository] = []
         page = 1
 
-        while True:
+        while page <= max_pages:
             response = self.client.get(path, params={**params, "page": page})
             _raise_for_status(response)
             data = response.json()
@@ -252,6 +266,8 @@ class GitHubClient:
                 return items
 
             page += 1
+
+        return items
 
 
 def _raise_for_status(response: httpx.Response) -> None:

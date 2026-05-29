@@ -24,14 +24,11 @@
       "@/components/*": ["./src/components/*"],
       "@/lib/*": ["./src/lib/*"],
       "@/app/*": ["./src/app/*"],
-      "@/content/*": ["./content/*"],
       "@/types/*": ["./src/types/*"],
       "@/utils/*": ["./src/utils/*"],
       "@/styles/*": ["./src/styles/*"],
       "@/assets/*": ["./src/assets/*"],
-      "@/hooks/*": ["./src/hooks/*"],
-      "@/constants/*": ["./src/constants/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
   "include": [
