@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "cd apps/backend && uv run --python 3.11 alembic upgrade head && cd ../.. && pnpm --filter @nextblog/web build",
+  "buildCommand": "pnpm --filter @nextblog/web build",
   "outputDirectory": "apps/web/.next",
   "rewrites": [
     {
