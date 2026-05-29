@@ -11,7 +11,7 @@
     "web:dev": "pnpm --filter @nextblog/web dev",
     "web:build": "pnpm --filter @nextblog/web build",
     "web:start": "pnpm --filter @nextblog/web start",
-    "vercel:build": "python3 -m pip install -r requirements.txt && cd apps/backend && python3 -m alembic upgrade head && cd ../.. && pnpm web:build",
+    "vercel:build": "python3 -m venv .venv && .venv/bin/python -m pip install -r requirements.txt && cd apps/backend && ../../.venv/bin/python -m alembic upgrade head && cd ../.. && pnpm web:build",
     "web:lint": "pnpm --filter @nextblog/web lint",
     "web:check": "pnpm --filter @nextblog/web lint && pnpm --filter @nextblog/web exec tsc --noEmit",
     "api:setup": "python -m pip install -e \"apps/backend[dev]\"",
