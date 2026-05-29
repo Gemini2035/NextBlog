@@ -20,6 +20,11 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
+    inspector = sa.inspect(op.get_bind())
+    columns = {column["name"] for column in inspector.get_columns("site-navigation")}
+    if "dynamic_data_key" in columns:
+        return
+
     op.add_column(
         "site-navigation",
         sa.Column("dynamic_data_key", sa.String(length=100), nullable=True),
