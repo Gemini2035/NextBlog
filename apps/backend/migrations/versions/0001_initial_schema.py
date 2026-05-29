@@ -102,6 +102,7 @@ def upgrade() -> None:
         sa.Column("href", sa.Text(), nullable=False),
         sa.Column("icon", sa.String(length=100), nullable=True),
         sa.Column("target", sa.String(length=50), nullable=True),
+        sa.Column("dynamic_data_key", sa.String(length=100), nullable=True),
         sa.Column("sort_order", sa.Integer(), nullable=False),
         sa.Column("disable", postgresql.JSONB(astext_type=sa.Text()), nullable=True),
         *_timestamps(),
@@ -111,6 +112,7 @@ def upgrade() -> None:
     op.create_index("ix_site_navigation_parent_id", "site-navigation", ["parent_id"], unique=False)
     op.create_index("ix_site_navigation_key", "site-navigation", ["key"], unique=True)
     op.create_index("ix_site_navigation_label_key", "site-navigation", ["label_key"], unique=False)
+    op.create_index("ix_site_navigation_dynamic_data_key", "site-navigation", ["dynamic_data_key"], unique=False)
     op.create_index("ix_site_navigation_sort_order", "site-navigation", ["sort_order"], unique=False)
 
     op.create_table(
@@ -132,10 +134,13 @@ def upgrade() -> None:
         "post_tag",
         sa.Column("id", sa.BigInteger(), autoincrement=True, nullable=False),
         sa.Column("key", sa.String(length=255), nullable=False),
+        sa.Column("dictionary_id", sa.BigInteger(), nullable=False),
         *_timestamps(),
+        sa.ForeignKeyConstraint(["dictionary_id"], ["dictionary.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_post_tag_key"), "post_tag", ["key"], unique=True)
+    op.create_index("ix_post_tag_dictionary_id", "post_tag", ["dictionary_id"], unique=False)
 
     op.create_table(
         "project",
@@ -305,6 +310,7 @@ def downgrade() -> None:
     op.drop_index(op.f("ix_project_owner_login"), table_name="project")
     op.drop_index(op.f("ix_project_full_name"), table_name="project")
     op.drop_table("project")
+    op.drop_index("ix_post_tag_dictionary_id", table_name="post_tag")
     op.drop_index(op.f("ix_post_tag_key"), table_name="post_tag")
     op.drop_table("post_tag")
     op.drop_index(op.f("ix_post_description_key"), table_name="post")
@@ -316,6 +322,7 @@ def downgrade() -> None:
     op.drop_table("locale")
     op.drop_index("ix_site_navigation_sort_order", table_name="site-navigation")
     op.drop_index("ix_site_navigation_label_key", table_name="site-navigation")
+    op.drop_index("ix_site_navigation_dynamic_data_key", table_name="site-navigation")
     op.drop_index("ix_site_navigation_key", table_name="site-navigation")
     op.drop_index("ix_site_navigation_parent_id", table_name="site-navigation")
     op.drop_table("site-navigation")

@@ -20,6 +20,11 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
+    inspector = sa.inspect(op.get_bind())
+    columns = {column["name"] for column in inspector.get_columns("post_tag")}
+    if "dictionary_id" in columns:
+        return
+
     op.add_column("post_tag", sa.Column("dictionary_id", sa.BigInteger(), nullable=True))
     op.execute(
         """
