@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { headers } from 'next/headers'
 import type { ApiResponse } from '@/types/api'
 
 export interface ServerHttpError {
@@ -17,25 +18,23 @@ export interface ServerHttpRequestOptions<TBody = unknown>
 }
 
 const DEFAULT_ERROR_MESSAGE = '请求失败，请稍后重试'
+const API_BASE_URL = '/api'
 
-const getConfiguredApiBaseUrl = () => {
-  const baseUrl = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api'
+const getConfiguredApiBaseUrl = async () => {
+  const requestHeaders = await headers()
+  const forwardedHost = requestHeaders.get('x-forwarded-host')
+  const host = forwardedHost?.split(',')[0]?.trim() ?? requestHeaders.get('host')
 
-  if (/^https?:\/\//.test(baseUrl)) {
-    return baseUrl.replace(/\/$/, '')
+  if (!host) {
+    return API_BASE_URL
   }
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    process.env.VERCEL_PROJECT_PRODUCTION_URL ??
-    process.env.VERCEL_URL
+  const forwardedProto = requestHeaders.get('x-forwarded-proto')
+  const protocol =
+    forwardedProto?.split(',')[0]?.trim() ??
+    (host.startsWith('localhost') || host.startsWith('127.0.0.1') ? 'http' : 'https')
 
-  if (siteUrl) {
-    const normalizedSiteUrl = siteUrl.startsWith('http') ? siteUrl : `https://${siteUrl}`
-    return `${normalizedSiteUrl.replace(/\/$/, '')}/${baseUrl.replace(/^\//, '').replace(/\/$/, '')}`
-  }
-
-  return baseUrl.replace(/\/$/, '')
+  return `${protocol}://${host}${API_BASE_URL}`
 }
 
 const appendParams = (url: string, params?: Record<string, unknown>) => {
@@ -66,8 +65,8 @@ const appendParams = (url: string, params?: Record<string, unknown>) => {
   return queryString ? `${url}${url.includes('?') ? '&' : '?'}${queryString}` : url
 }
 
-const resolveUrl = (url: string, params?: Record<string, unknown>) => {
-  const baseUrl = getConfiguredApiBaseUrl()
+const resolveUrl = async (url: string, params?: Record<string, unknown>) => {
+  const baseUrl = await getConfiguredApiBaseUrl()
   const requestUrl = /^https?:\/\//.test(url)
     ? url
     : `${baseUrl}${url.startsWith('/') ? url : `/${url}`}`
@@ -115,7 +114,7 @@ export async function serverHttpRequest<TData = unknown, TBody = unknown>(
   options: ServerHttpRequestOptions<TBody> = {}
 ): Promise<ApiResponse<TData>> {
   const { params, body, headers, method = body === undefined ? 'GET' : 'POST', ...init } = options
-  const response = await fetch(resolveUrl(url, params), {
+  const response = await fetch(await resolveUrl(url, params), {
     ...init,
     method,
     headers: {
@@ -157,6 +156,6 @@ export async function serverHttpData<TData = unknown, TBody = unknown>(
   return response.data
 }
 
-export const getServerApiBaseUrl = () => {
+export const getServerApiBaseUrl = async () => {
   return getConfiguredApiBaseUrl()
 }

@@ -3,7 +3,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
-const apiProxyTarget = (process.env.API_PROXY_TARGET ?? 'https://api.apodidae2035.com').replace(
+const apiProxyTarget = (process.env.NEXT_API_PROXY_TARGET || '').replace(
   /\/$/,
   ''
 );
