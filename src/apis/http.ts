@@ -15,11 +15,10 @@ export interface HttpError {
 }
 
 const DEFAULT_ERROR_MESSAGE = '请求失败，请稍后重试'
+const API_BASE_URL = '/api'
 
 const getConfiguredApiBaseUrl = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? '/api'
-
-  return baseUrl.replace(/\/$/, '')
+  return API_BASE_URL
 }
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
