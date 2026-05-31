@@ -16,4 +16,5 @@ pnpm api:types # 从外部后端 OpenAPI 生成接口类型
 
 - 浏览器侧接口默认请求 `/api`。
 - 服务端请求可通过 `API_BASE_URL` 或 `NEXT_PUBLIC_API_BASE_URL` 指向外部后端。
-- 本地开发时 `/api/*` 默认代理到 `https://admin.apodidae2035.com/api/*`，可用 `API_PROXY_TARGET` 覆盖。
+- `/api/*` 会通过 Next 代理到 `https://api.apodidae2035.com/api/*`，可用 `API_PROXY_TARGET` 覆盖。
+- 为避免浏览器跨域，生产环境不要把 `NEXT_PUBLIC_API_BASE_URL` 配成外部 API 域名；保持为空或配置为 `/api`。
