@@ -2,6 +2,7 @@
 
 import { Link, Button, Divider } from '@/ui'
 import { useRouter } from '@/i18n/navigation'
+import { useNavigationLoading } from '@/components/NavigationLoadingProvider'
 
 interface NotFoundContentProps {
   title: string
@@ -17,8 +18,11 @@ export default function NotFoundContent({
   orGoHome,
 }: NotFoundContentProps) {
   const router = useRouter()
+  const { startNavigationLoading } = useNavigationLoading()
 
   const handleGoBack = () => {
+    startNavigationLoading()
+
     if (window.history.length > 1) {
       router.back()
     } else {

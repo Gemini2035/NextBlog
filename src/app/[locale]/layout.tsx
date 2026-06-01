@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
 import { LoadingProvider } from '@/components/LoadingProvider';
+import { NavigationLoadingProvider } from '@/components/NavigationLoadingProvider';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SiteDataProvider } from '@/components/SiteDataProvider';
@@ -32,13 +33,15 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
         <NextIntlClientProvider messages={messages}>
             <SiteDataProvider value={siteInit}>
                 <LoadingProvider>
-                    <div className="min-h-screen bg-gray-50 flex flex-col relative">
-                        <Header />
-                        <main className="flex-1">
-                            {children}
-                        </main>
-                        <Footer />
-                    </div>
+                    <NavigationLoadingProvider>
+                        <div className="min-h-screen bg-gray-50 flex flex-col relative">
+                            <Header />
+                            <main className="flex-1">
+                                {children}
+                            </main>
+                            <Footer />
+                        </div>
+                    </NavigationLoadingProvider>
                 </LoadingProvider>
             </SiteDataProvider>
         </NextIntlClientProvider>

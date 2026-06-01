@@ -1,6 +1,8 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/server-http'
 import { getSiteInit } from '@/apis/site/server'
+import { RouteLoadingMask } from '@/components/RouteLoadingMask'
 import { PostInfoCard, RelatedPostsClient, ContactButton } from '@/components/Post'
 import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
 
@@ -31,13 +33,16 @@ export async function generateMetadata({ params }: PostPageProps) {
   }
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+async function PostPageContent({ params }: PostPageProps) {
   const { id, locale } = await params
-  const siteInit = await getSiteInit(locale)
+  const siteInitPromise = getSiteInit(locale)
+  const postPayloadPromise = serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
+    headers: { 'X-Locale': locale },
+  }).catch(() => null)
+
+  const siteInit = await siteInitPromise
   const [payload, postsPayload] = await Promise.all([
-    serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
-      headers: { 'X-Locale': locale },
-    }).catch(() => null),
+    postPayloadPromise,
     serverHttpData<BlogPostsPayload>('/post', {
       headers: { 'X-Locale': locale },
       params: { pageSize: siteInit.siteConfig.postsPerPage ?? 6 },
@@ -70,5 +75,13 @@ export default async function PostPage({ params }: PostPageProps) {
         <RelatedPostsClient post={post} posts={postsPayload?.posts ?? []} limit={3} />
       </div>
     </>
+  )
+}
+
+export default function PostPage({ params }: PostPageProps) {
+  return (
+    <Suspense fallback={<RouteLoadingMask />}>
+      <PostPageContent params={params} />
+    </Suspense>
   )
 }
