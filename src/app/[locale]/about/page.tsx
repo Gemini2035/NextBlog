@@ -8,12 +8,14 @@ interface AboutPageProps {
   }>
 }
 
-export default async function AboutPage({ params }: AboutPageProps) {
+async function getAboutServerData(params: AboutPageProps['params']) {
   const { locale } = await params
-  const fetchAboutServerData = async () => {
-    return {
-      aboutInit: await getAboutInit(locale),
-    }
+
+  return {
+    aboutInit: await getAboutInit(locale),
   }
-  return <ServerComponent fetchServerData={fetchAboutServerData} ClientComponent={AboutPageClient} />
+}
+
+export default function AboutPage({ params }: AboutPageProps) {
+  return <ServerComponent dataPromise={getAboutServerData(params)} ClientComponent={AboutPageClient} />
 }

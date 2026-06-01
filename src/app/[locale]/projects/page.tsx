@@ -16,6 +16,6 @@ async function fetchProjectsOnServer() {
   }
 }
 
-export default async function ProjectsPage() {
-  return <ServerComponent fetchServerData={fetchProjectsOnServer} ClientComponent={ProjectsClient} />
+export default function ProjectsPage() {
+  return <ServerComponent dataPromise={fetchProjectsOnServer()} ClientComponent={ProjectsClient} />
 }
