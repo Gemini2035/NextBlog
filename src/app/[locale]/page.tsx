@@ -8,13 +8,14 @@ interface HomePageProps {
   }>
 }
 
-export default async function Home({ params }: HomePageProps) {
+async function getHomeServerData(params: HomePageProps['params']) {
   const { locale } = await params
-  const fetchHomeServerData = async () => {
-    return {
-      homeInit: await getHomeInit(locale),
-    }
-  }
 
-  return <ServerComponent fetchServerData={fetchHomeServerData} ClientComponent={HomeClient} />
+  return {
+    homeInit: await getHomeInit(locale),
+  }
+}
+
+export default function Home({ params }: HomePageProps) {
+  return <ServerComponent dataPromise={getHomeServerData(params)} ClientComponent={HomeClient} />
 }
