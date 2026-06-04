@@ -13,13 +13,18 @@ export interface SearchSitePayload {
   groups: SearchResultsGroup[]
 }
 
-export const searchSite = (params?: SearchSiteParams) => {
+export interface SearchSiteOptions {
+  signal?: AbortSignal
+}
+
+export const searchSite = (params?: SearchSiteParams, options?: SearchSiteOptions) => {
   const { siteLanguage, ...queryParams } = params ?? {}
 
   return httpRequest<SearchSitePayload>({
     url: '/search',
     method: 'GET',
     params: queryParams,
+    signal: options?.signal,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
   })
 }
