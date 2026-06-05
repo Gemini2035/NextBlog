@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useLocale } from 'next-intl'
 import { searchSite } from '@/apis/search'
@@ -32,8 +32,27 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const [isSearching, setIsSearching] = useState(false)
   const [searchResults, setSearchResults] = useState<SearchResultsGroup[]>([])
   const [recommendedContent, setRecommendedContent] = useState<RecommendedContent>({ items: [] })
+  const abortControllerRef = useRef<AbortController | null>(null)
+  const requestIdRef = useRef(0)
+
+  const cancelSearchRequest = useCallback((resetLoading = true) => {
+    abortControllerRef.current?.abort()
+    abortControllerRef.current = null
+    requestIdRef.current += 1
+
+    if (resetLoading) {
+      setIsSearching(false)
+    }
+  }, [])
 
   const loadSearchData = useCallback(async (value: string) => {
+    abortControllerRef.current?.abort()
+
+    const requestId = requestIdRef.current + 1
+    const abortController = new AbortController()
+
+    requestIdRef.current = requestId
+    abortControllerRef.current = abortController
     setIsSearching(true)
 
     try {
@@ -41,8 +60,14 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
         query: value.trim() || undefined,
         limit: 3,
         siteLanguage: locale,
+      }, {
+        signal: abortController.signal,
       })
       const { data } = response
+
+      if (requestIdRef.current !== requestId) {
+        return
+      }
 
       if (data.mode === 'recommend') {
         setRecommendedContent({ items: data.items })
@@ -54,7 +79,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
     } catch {
       // Keep the last successful results visible when a duplicate dev request is canceled.
     } finally {
-      setIsSearching(false)
+      if (requestIdRef.current === requestId) {
+        setIsSearching(false)
+        abortControllerRef.current = null
+      }
     }
   }, [locale])
 
@@ -81,9 +109,10 @@ export function useSearch(options: UseSearchOptions = {}): UseSearchReturn {
   const hasResults = searchResults.length > 0
 
   const clearSearch = useCallback(() => {
+    cancelSearchRequest()
     setQuery('')
     setSearchResults([])
-  }, [])
+  }, [cancelSearchRequest])
 
   return {
     query,
