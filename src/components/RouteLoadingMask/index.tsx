@@ -1,6 +1,6 @@
 'use client'
 
-import { Loading } from '@/ui'
+import { SiteLoadingIcon } from '@/components/SiteLoadingIcon'
 import { cn } from '@/utils'
 
 interface RouteLoadingMaskProps {
@@ -19,7 +19,7 @@ export function RouteLoadingMask({ className }: RouteLoadingMaskProps) {
       aria-live="polite"
       aria-busy="true"
     >
-      <Loading variant="spinner" size="lg" />
+      <SiteLoadingIcon />
     </div>
   )
 }

@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Loading } from '@/ui';
+import { SiteLoadingIcon } from '@/components/SiteLoadingIcon';
 import { cn } from '@/utils';
 
 interface SpinnerFadeOverlayProps {
@@ -184,7 +184,7 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
                 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
               )}
             >
-              <Loading variant="spinner" size="lg" />
+              <SiteLoadingIcon />
             </div>
           </SpinnerFadeOverlay>
         );
@@ -201,7 +201,7 @@ export function LoadingProvider({ children }: { children: ReactNode }) {
                 'fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
               )}
             >
-              <Loading variant="spinner" size="lg" />
+              <SiteLoadingIcon />
             </div>
           </SpinnerFadeOverlay>
         );
