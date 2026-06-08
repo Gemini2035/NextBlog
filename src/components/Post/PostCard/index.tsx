@@ -279,7 +279,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const titleTag = isCompact ? 'h3' : 'h2'
   const descriptionHeight = isCompact ? 'h-20' : 'h-36'
   const descriptionSize = isCompact ? 'text-xs' : 'text-sm'
-  const tagHeight = isCompact ? 'h-6' : 'h-8'
+  const tagHeight = isCompact ? 'min-h-6' : 'min-h-8'
   const tagSize = isCompact ? 'text-xs px-2 py-1' : ''
 
   const TitleComponent = titleTag as 'h2' | 'h3'
@@ -445,15 +445,15 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
           )}
           
           {/* 标签区域 */}
-          {post.tags && post.tags.length > 0 && (
-            <div 
-              ref={tagContainerRef}
-              className={cn(
-                tagHeight,
-                "flex items-center overflow-hidden",
-                isCompact ? "gap-1" : "gap-2"
-              )}
-            >
+          <div 
+            ref={tagContainerRef}
+            className={cn(
+              tagHeight,
+              "flex items-center overflow-hidden",
+              isCompact ? "gap-1" : "gap-2"
+            )}
+          >
+            {post.tags && post.tags.length > 0 && (
               <div className="flex items-center overflow-hidden w-full gap-1">
                 {/* 显示的标签 */}
                 <div className="flex items-center gap-1 flex-shrink-0">
@@ -496,8 +496,8 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                   </div>
                 )}
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </Link>
     </Card>
