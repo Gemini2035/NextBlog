@@ -4,6 +4,7 @@ import { motion, Variants } from "framer-motion";
 import { Link } from "@/ui";
 import { SearchResultsGroup, RecommendedContent, SearchResultItem } from '@/types/search';
 import { SearchIcon, ChevronRightIcon } from "@/assets/icons";
+import { SiteLoadingIcon } from '@/components/SiteLoadingIcon';
 import { useTranslations } from "next-intl";
 
 interface SearchResultsProps {
@@ -129,7 +130,7 @@ export default function SearchResults({
         variants={itemVariants}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+        <SiteLoadingIcon className="mx-auto mb-4" />
         <p className="text-sm text-gray-500">{t('searching')}</p>
       </motion.div>
     );

@@ -1,6 +1,6 @@
 'use client'
 
-import { Loading as LoadingSpinner } from '@/ui'
+import { SiteLoadingIcon } from '@/components/SiteLoadingIcon'
 import { cn } from '@/utils'
 
 interface PageLoadingProps {
@@ -23,7 +23,7 @@ export function PageLoading({ text = 'Loading...' }: PageLoadingProps) {
           'shadow-lg border border-white/60',
         )}
       >
-        <LoadingSpinner size="lg" />
+        <SiteLoadingIcon />
         <p className="mt-4 text-sm text-gray-600 tracking-wide">
           {text}
         </p>
