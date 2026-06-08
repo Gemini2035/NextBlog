@@ -75,10 +75,14 @@ export const createHttpRequester = ({
 }: CreateHttpRequesterOptions): HttpRequester => {
   return async <TData = unknown, TBody = unknown>(config: HttpRequestConfig<TBody>) => {
     const baseUrl = await getBaseUrl()
+    const requestConfig: HttpRequestConfig<TBody> = {
+      ...config,
+      baseURL: config.baseURL ?? baseUrl,
+    }
 
     return requestApiWithAxios<TData, TBody>({
       client,
-      config,
+      config: requestConfig,
       defaultDiscardStale,
       resolveRequestUrl: (requestConfig) => getAxiosRequestUrl(requestConfig, baseUrl),
     })
