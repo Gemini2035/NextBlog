@@ -1,11 +1,17 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { AxiosRequestConfig } from 'axios'
-import { httpRequest, normalizeHttpError, type ApiResponse, type HttpError } from '@/apis/http'
+import {
+  httpRequest,
+  isStaleRequestError,
+  normalizeHttpError,
+  type ApiResponse,
+  type HttpError,
+  type HttpRequestConfig,
+} from '@/apis/http'
 
 export interface UseHttpOptions<TData, TBody = unknown> {
-  config?: AxiosRequestConfig<TBody>
+  config?: HttpRequestConfig<TBody>
   immediate?: boolean
   onSuccess?: (response: ApiResponse<TData>) => void
   onError?: (error: HttpError) => void
@@ -16,7 +22,7 @@ export interface UseHttpResult<TData, TBody = unknown> {
   data: TData | null
   response: ApiResponse<TData> | null
   error: HttpError | null
-  execute: (config?: AxiosRequestConfig<TBody>) => Promise<ApiResponse<TData>>
+  execute: (config?: HttpRequestConfig<TBody>) => Promise<ApiResponse<TData>>
   reset: () => void
 }
 
@@ -45,7 +51,7 @@ export function useHttp<TData = unknown, TBody = unknown>(
   }, [])
 
   const execute = useCallback(
-    async (overrideConfig?: AxiosRequestConfig<TBody>) => {
+    async (overrideConfig?: HttpRequestConfig<TBody>) => {
       const baseConfig = configRef.current
       const requestId = requestIdRef.current + 1
       requestIdRef.current = requestId
@@ -64,18 +70,22 @@ export function useHttp<TData = unknown, TBody = unknown>(
 
         if (requestIdRef.current === requestId) {
           setResponse(result)
+          onSuccessRef.current?.(result)
         }
 
-        onSuccessRef.current?.(result)
         return result
       } catch (requestError) {
+        if (isStaleRequestError(requestError)) {
+          throw requestError
+        }
+
         const normalizedError = normalizeHttpError(requestError)
 
         if (requestIdRef.current === requestId) {
           setError(normalizedError)
+          onErrorRef.current?.(normalizedError)
         }
 
-        onErrorRef.current?.(normalizedError)
         throw normalizedError
       } finally {
         if (requestIdRef.current === requestId) {

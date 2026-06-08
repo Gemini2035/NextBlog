@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
-import { serverHttpData } from '@/apis/server-http'
+import { serverHttpData } from '@/apis/http'
 import { getSiteInit } from '@/apis/site/server'
 import { RouteLoadingMask } from '@/components/RouteLoadingMask'
 import { PostInfoCard, RelatedPostsClient, ContactButton } from '@/components/Post'

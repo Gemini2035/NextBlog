@@ -1,8 +1,6 @@
-import { serverHttpData } from '@/apis/server-http'
+import { serverHttpData } from '@/apis/http'
 import type { ProjectsPayload } from '@/types/api'
 
 export const getProjectsOnServer = async () => {
-  return serverHttpData<ProjectsPayload>('/projects', {
-    cache: 'no-store',
-  })
+  return serverHttpData<ProjectsPayload>('/projects')
 }
