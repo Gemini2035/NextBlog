@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { BlogPostsPageClient } from '@/components/Post/BlogPostsPageClient'
-import { serverHttpData } from '@/apis/server-http'
+import { serverHttpData } from '@/apis/http'
 import { getSiteInit } from '@/apis/site/server'
 import { RouteLoadingMask } from '@/components/RouteLoadingMask'
 import type { BlogPostsPayload } from '@/types/blog'
