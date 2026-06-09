@@ -1,9 +1,10 @@
-import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import {
+  appendRequestParams,
   assertApiResponseOk,
+  createHttpError,
   createRequestDedupeKey,
   createRequestVersionKey,
-  getAxiosRequestUrl,
+  getFetchRequestUrl,
   normalizeRequestMethod,
   StaleRequestError,
 } from './util'
@@ -27,8 +28,15 @@ export interface HttpLifecycleOptions {
   discardStale?: boolean
 }
 
-export type HttpRequestConfig<TBody = unknown> = AxiosRequestConfig<TBody> &
-  HttpLifecycleOptions
+export type HttpRequestConfig<TBody = unknown> = Omit<RequestInit, 'body' | 'method'> &
+  HttpLifecycleOptions & {
+    baseURL?: string
+    url: string
+    method?: string
+    params?: unknown
+    data?: TBody
+    body?: BodyInit | null
+  }
 
 interface ManagedHttpRequestOptions<TResponse> {
   method?: string
@@ -41,17 +49,9 @@ interface ManagedHttpRequestOptions<TResponse> {
   request: () => Promise<TResponse>
 }
 
-interface ManagedAxiosRequestOptions<TBody> {
-  client: AxiosInstance
-  config: HttpRequestConfig<TBody>
-  defaultDiscardStale?: boolean
-  resolveRequestUrl: (config: AxiosRequestConfig<TBody>) => string
-}
-
 type MaybePromise<T> = T | Promise<T>
 
 interface CreateHttpRequesterOptions {
-  client: AxiosInstance
   getBaseUrl: () => MaybePromise<string>
   defaultDiscardStale?: boolean
 }
@@ -69,7 +69,6 @@ const pendingRequests = new Map<string, PendingRequestEntry<unknown>>()
 const requestVersions = new Map<string, number>()
 
 export const createHttpRequester = ({
-  client,
   getBaseUrl,
   defaultDiscardStale,
 }: CreateHttpRequesterOptions): HttpRequester => {
@@ -80,45 +79,83 @@ export const createHttpRequester = ({
       baseURL: config.baseURL ?? baseUrl,
     }
 
-    return requestApiWithAxios<TData, TBody>({
-      client,
+    return requestApiWithFetch<TData, TBody>({
       config: requestConfig,
       defaultDiscardStale,
-      resolveRequestUrl: (requestConfig) => getAxiosRequestUrl(requestConfig, baseUrl),
+      resolveRequestUrl: (requestConfig) => getFetchRequestUrl(requestConfig, baseUrl),
     })
   }
 }
 
-export const requestApiWithAxios = <TData = unknown, TBody = unknown>({
-  client,
+export const requestApiWithFetch = <TData = unknown, TBody = unknown>({
   config,
   defaultDiscardStale = true,
   resolveRequestUrl,
-}: ManagedAxiosRequestOptions<TBody>): Promise<ApiResponse<TData>> => {
+}: {
+  config: HttpRequestConfig<TBody>
+  defaultDiscardStale?: boolean
+  resolveRequestUrl: (config: HttpRequestConfig<TBody>) => string
+}): Promise<ApiResponse<TData>> => {
   const {
     dedupe = true,
     discardStale = defaultDiscardStale,
-    ...axiosConfig
+    baseURL: _baseURL,
+    url: _url,
+    params,
+    data,
+    headers,
+    body,
+    method: rawMethod,
+    ...fetchConfig
   } = config
-  const method = normalizeRequestMethod(
-    axiosConfig.method ?? (axiosConfig.data === undefined ? 'GET' : 'POST')
-  )
-  const requestConfig: AxiosRequestConfig<TBody> = {
-    ...axiosConfig,
-    method,
+  void _baseURL
+  void _url
+  const method = normalizeRequestMethod(rawMethod ?? (data === undefined ? 'GET' : 'POST'))
+  const requestUrl = appendRequestParams(resolveRequestUrl(config), params)
+  const requestHeaders = new Headers(headers)
+  let requestBody: BodyInit | null | undefined = body
+
+  if (data !== undefined) {
+    if (
+      typeof FormData !== 'undefined' && data instanceof FormData ||
+      typeof Blob !== 'undefined' && data instanceof Blob ||
+      typeof URLSearchParams !== 'undefined' && data instanceof URLSearchParams
+    ) {
+      requestBody = data
+    } else if (typeof data === 'string') {
+      requestBody = data
+    } else {
+      requestHeaders.set('Content-Type', requestHeaders.get('Content-Type') ?? 'application/json')
+      requestBody = JSON.stringify(data)
+    }
   }
 
   return runManagedHttpRequest({
     method,
-    url: resolveRequestUrl(requestConfig),
-    params: requestConfig.params,
-    body: requestConfig.data,
-    headers: requestConfig.headers,
+    url: requestUrl,
+    params,
+    body: data,
+    headers,
     dedupe,
     discardStale,
     request: async () => {
-      const response = await client.request<ApiResponse<TData>>(requestConfig)
-      return assertApiResponseOk(response.data)
+      const response = await fetch(requestUrl, {
+        ...fetchConfig,
+        method,
+        headers: requestHeaders,
+        body: requestBody,
+      })
+      const payload = await parseFetchJson(response)
+
+      if (!response.ok) {
+        throw createHttpError({
+          message: getResponseErrorMessage(payload) ?? response.statusText,
+          status: response.status,
+          details: payload,
+        })
+      }
+
+      return assertApiResponseOk(payload as ApiResponse<TData>)
     },
   })
 }
@@ -190,6 +227,29 @@ export const runManagedHttpRequest = <TResponse>({
   }
 
   return entry.promise
+}
+
+const parseFetchJson = async (response: Response): Promise<unknown> => {
+  const text = await response.text()
+  if (!text) {
+    return null
+  }
+
+  try {
+    return JSON.parse(text)
+  } catch {
+    return text
+  }
+}
+
+const getResponseErrorMessage = (payload: unknown) => {
+  if (!payload || typeof payload !== 'object') {
+    return undefined
+  }
+
+  const record = payload as Record<string, unknown>
+  const message = record.message ?? record.error ?? record.detail
+  return typeof message === 'string' && message.trim() ? message : undefined
 }
 
 const nextRequestVersion = (versionKey: string) => {

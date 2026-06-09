@@ -1,4 +1,4 @@
-import { getApiBaseUrl, httpRequest } from '@/apis/http'
+import { httpRequest } from '@/apis/http'
 import type {
   AgentMessage,
   AgentMessageCreatePayload,
@@ -72,21 +72,33 @@ const createAgentStreamUrl = (
     searchParams.set('locale', siteLanguage)
   }
 
-  return `${getApiBaseUrl()}${getAgentBasePath(agentType)}/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
+  return `/agent-stream${getAgentBasePath(agentType).replace('/agent', '')}/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
 }
 
 const isStreamPayload = (value: unknown): value is AgentMessageStreamPayload => {
   return typeof value === 'object' && value !== null
 }
 
-const parseStreamPayload = (data: string): AgentMessageStreamPayload => {
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === 'object' && value !== null
+}
+
+const parseStreamPayload = (data: string, eventType?: string): AgentMessageStreamPayload => {
   if (!data || data === '[DONE]') {
     return {
       done: true,
     }
   }
 
-  const parsed = JSON.parse(data) as unknown
+  let parsed: unknown
+
+  try {
+    parsed = JSON.parse(data) as unknown
+  } catch {
+    return {
+      delta: data,
+    }
+  }
 
   if (typeof parsed === 'string') {
     return {
@@ -96,6 +108,54 @@ const parseStreamPayload = (data: string): AgentMessageStreamPayload => {
 
   if (!isStreamPayload(parsed)) {
     return {}
+  }
+
+  const parsedRecord = parsed as Record<string, unknown>
+  const envelopeType = typeof parsedRecord.type === 'string' ? parsedRecord.type : undefined
+  const resolvedEventType = envelopeType ?? eventType
+  const payloadData = envelopeType && 'data' in parsedRecord ? parsedRecord.data : parsed
+
+  if (resolvedEventType === 'ready' || resolvedEventType === 'stage') {
+    return {}
+  }
+
+  if (resolvedEventType === 'error_message') {
+    if (isRecord(payloadData) && typeof payloadData.error === 'string') {
+      return {
+        error: payloadData.error,
+      }
+    }
+    return {
+      error: typeof payloadData === 'string' ? payloadData : 'Agent stream failed',
+    }
+  }
+
+  if (resolvedEventType === 'done') {
+    return {
+      done: true,
+    }
+  }
+
+  if (resolvedEventType === 'user_message') {
+    return {
+      userMessage: payloadData as AgentMessage,
+    }
+  }
+
+  if (resolvedEventType === 'assistant_message') {
+    return {
+      assistantMessage: payloadData as AgentMessage,
+    }
+  }
+
+  if (resolvedEventType === 'delta' || resolvedEventType === 'message_delta') {
+    return {
+      delta: isRecord(payloadData) && typeof payloadData.content === 'string'
+        ? payloadData.content
+        : typeof payloadData === 'string'
+          ? payloadData
+          : data,
+    }
   }
 
   return parsed
@@ -125,6 +185,32 @@ const applyStreamPayload = (payload: AgentMessageStreamPayload, options: StreamA
   }
 }
 
+const parseSseChunk = (chunk: string): Array<{ eventType?: string; data: string }> => {
+  return chunk
+    .split(/\r?\n\r?\n+/)
+    .map((eventText) => {
+      let eventType: string | undefined
+      const dataLines: string[] = []
+
+      for (const line of eventText.split(/\r?\n/)) {
+        if (!line || line.startsWith(':')) continue
+        if (line.startsWith('event:')) {
+          eventType = line.slice('event:'.length).trim()
+          continue
+        }
+        if (line.startsWith('data:')) {
+          dataLines.push(line.slice('data:'.length).trimStart())
+        }
+      }
+
+      return {
+        eventType,
+        data: dataLines.join('\n'),
+      }
+    })
+    .filter((event) => event.data)
+}
+
 export const streamAgentMessage = (
   agentType: AgentType,
   sessionId: number,
@@ -132,46 +218,89 @@ export const streamAgentMessage = (
   siteLanguage: string | undefined,
   options: StreamAgentMessageOptions
 ) => {
-  const eventSource = new EventSource(createAgentStreamUrl(agentType, sessionId, data, siteLanguage))
+  const abortController = new AbortController()
   let finished = false
 
   const finish = () => {
     if (finished) return
     finished = true
-    eventSource.close()
+    abortController.abort()
     options.onDone?.()
   }
 
-  const handleMessage = (event: MessageEvent<string>) => {
+  const handlePayload = (eventData: string, eventType?: string) => {
     try {
-      const payload = parseStreamPayload(event.data)
+      const payload = parseStreamPayload(eventData, eventType)
       applyStreamPayload(payload, {
         ...options,
         onDone: finish,
+        onError: (error) => {
+          finished = true
+          abortController.abort()
+          options.onError?.(error)
+        },
       })
     } catch (error) {
       finished = true
-      eventSource.close()
+      abortController.abort()
       options.onError?.(error instanceof Error ? error : new Error('Failed to parse agent stream'))
     }
   }
 
-  eventSource.onmessage = handleMessage
-  eventSource.addEventListener('delta', handleMessage)
-  eventSource.addEventListener('message_delta', handleMessage)
-  eventSource.addEventListener('user_message', handleMessage)
-  eventSource.addEventListener('assistant_message', handleMessage)
-  eventSource.addEventListener('done', finish)
-  eventSource.addEventListener('error_message', handleMessage)
-  eventSource.onerror = () => {
-    if (finished) return
-    finished = true
-    eventSource.close()
-    options.onError?.(new Error('Agent stream disconnected'))
-  }
+  void (async () => {
+    try {
+      const response = await fetch(createAgentStreamUrl(agentType, sessionId, data, siteLanguage), {
+        method: 'GET',
+        headers: {
+          Accept: 'text/event-stream',
+        },
+        signal: abortController.signal,
+      })
+
+      if (!response.ok) {
+        throw new Error(`Agent stream failed with status ${response.status}`)
+      }
+
+      if (!response.body) {
+        throw new Error('Agent stream response body is empty')
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+
+      while (!finished) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const eventBoundaryMatch = /\r?\n\r?\n(?![\s\S]*\r?\n\r?\n)/.exec(buffer)
+        const eventBoundary = eventBoundaryMatch?.index ?? -1
+        if (eventBoundary < 0) continue
+
+        const completeEvents = buffer.slice(0, eventBoundary)
+        buffer = buffer.slice(eventBoundary + (eventBoundaryMatch?.[0].length ?? 2))
+
+        for (const event of parseSseChunk(completeEvents)) {
+          handlePayload(event.data, event.eventType)
+        }
+      }
+
+      const trailing = `${buffer}${decoder.decode()}`
+      for (const event of parseSseChunk(trailing)) {
+        handlePayload(event.data, event.eventType)
+      }
+
+      finish()
+    } catch (error) {
+      if (finished || abortController.signal.aborted) return
+      finished = true
+      options.onError?.(error instanceof Error ? error : new Error('Agent stream disconnected'))
+    }
+  })()
 
   return () => {
     finished = true
-    eventSource.close()
+    abortController.abort()
   }
 }

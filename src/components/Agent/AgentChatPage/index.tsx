@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
-import { createAgentMessage, createAgentSession } from '@/apis/agent'
+import { createAgentSession, streamAgentMessage } from '@/apis/agent'
 import { ArrowRightIcon, OpenAIIcon, SearchIcon } from '@/assets/icons'
 import { Link } from '@/ui'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
@@ -41,6 +41,9 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
   const [error, setError] = useState('')
   const didCreateRef = useRef(false)
   const bottomRef = useRef<HTMLDivElement | null>(null)
+  const streamCleanupRef = useRef<(() => void) | null>(null)
+  const pendingUserMessageIdRef = useRef<number | null>(null)
+  const assistantDraftMessageIdRef = useRef<number | null>(null)
   const copyKey = agentType === 'chat' ? 'chat' : 'articleSupport'
 
   const targetLabel = useMemo(() => {
@@ -74,39 +77,114 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [messages, loading])
 
-  const sendMessage = async (event?: FormEvent) => {
+  useEffect(() => {
+    return () => {
+      streamCleanupRef.current?.()
+    }
+  }, [])
+
+  const upsertMessage = (message: AgentMessage, replaceId?: number | null) => {
+    setMessages((current) => {
+      const targetId = replaceId ?? message.id
+      const existingIndex = current.findIndex((item) => item.id === targetId)
+
+      if (existingIndex === -1) {
+        return [...current, message]
+      }
+
+      return current.map((item, index) => (index === existingIndex ? message : item))
+    })
+  }
+
+  const appendAssistantDelta = (delta: string) => {
+    const draftId = assistantDraftMessageIdRef.current ?? -Date.now()
+    assistantDraftMessageIdRef.current = draftId
+
+    setMessages((current) => {
+      const existingMessage = current.find((message) => message.id === draftId)
+      if (!existingMessage) {
+        return [
+          ...current,
+          {
+            id: draftId,
+            role: 'assistant',
+            content: delta,
+            sources: [],
+            createdAt: new Date().toISOString(),
+          },
+        ]
+      }
+
+      return current.map((message) =>
+        message.id === draftId
+          ? {
+              ...message,
+              content: `${message.content}${delta}`,
+            }
+          : message
+      )
+    })
+  }
+
+  const sendMessage = (event?: FormEvent) => {
     event?.preventDefault()
     const content = input.trim()
     if (!content || !session || loading) return
 
+    streamCleanupRef.current?.()
     setInput('')
     setError('')
     setLoading(true)
-    try {
-      const response = await createAgentMessage(
-        agentType,
-        session.id,
-        {
-          content,
-          deviceKey: getDeviceKey(),
-        },
-        locale
-      )
-      setMessages((current) => [
-        ...current,
-        response.data.userMessage,
-        response.data.assistantMessage,
-      ])
-    } catch (requestError) {
-      setInput(content)
-      setError(requestError instanceof Error ? requestError.message : t('failedToSend'))
-    } finally {
-      setLoading(false)
+    pendingUserMessageIdRef.current = -Date.now()
+    assistantDraftMessageIdRef.current = null
+
+    const pendingUserMessage: AgentMessage = {
+      id: pendingUserMessageIdRef.current,
+      role: 'user',
+      content,
+      sources: [],
+      createdAt: new Date().toISOString(),
     }
+
+    setMessages((current) => [...current, pendingUserMessage])
+    streamCleanupRef.current = streamAgentMessage(
+      agentType,
+      session.id,
+      {
+        content,
+        deviceKey: getDeviceKey(),
+      },
+      locale,
+      {
+        onUserMessage: (message) => {
+          upsertMessage(message, pendingUserMessageIdRef.current)
+          pendingUserMessageIdRef.current = null
+        },
+        onAssistantMessage: (message) => {
+          upsertMessage(message, assistantDraftMessageIdRef.current)
+          assistantDraftMessageIdRef.current = null
+        },
+        onDelta: appendAssistantDelta,
+        onDone: () => {
+          streamCleanupRef.current = null
+          pendingUserMessageIdRef.current = null
+          assistantDraftMessageIdRef.current = null
+          setLoading(false)
+        },
+        onError: (streamError) => {
+          streamCleanupRef.current = null
+          pendingUserMessageIdRef.current = null
+          assistantDraftMessageIdRef.current = null
+          setInput(content)
+          setError(streamError.message || t('failedToSend'))
+          setLoading(false)
+        },
+      }
+    )
   }
 
   const sendInitialQuestion = () => {
-    void sendMessage()
+    sendMessage()
   }
 
   const goHandoff = (message: AgentMessage) => {
@@ -224,7 +302,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault()
-                    void sendMessage()
+                    sendMessage()
                   }
                 }}
               />

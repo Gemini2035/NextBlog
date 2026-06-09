@@ -39,3 +39,12 @@ export interface AgentMessageCreatePayload {
   userMessage: AgentMessage
   assistantMessage: AgentMessage
 }
+
+export interface AgentMessageStreamPayload {
+  userMessage?: AgentMessage
+  assistantMessage?: AgentMessage
+  delta?: string
+  content?: string
+  done?: boolean
+  error?: string
+}
