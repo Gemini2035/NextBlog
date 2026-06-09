@@ -2,8 +2,9 @@
 
 import { useRef, useEffect, useCallback } from 'react'
 import { motion, Variants } from 'framer-motion'
-import { SearchIcon, CloseIcon } from '@/assets/icons'
+import { SearchIcon, CloseIcon, ArrowRightIcon } from '@/assets/icons'
 import { useSearch } from '@/hooks/useSearch'
+import { Link } from '@/ui'
 import SearchResults from './SearchResults'
 import { useTranslations } from 'next-intl'
 
@@ -29,6 +30,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
     clearSearch,
     refreshRecommendations,
   } = useSearch()
+  const chatAgentHref = `/agent/chat${query.trim() ? `?question=${encodeURIComponent(query.trim())}` : ''}`
 
   // 处理输入变化
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +114,22 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
         onItemClick={handleItemClick}
         itemVariants={itemVariants}
       />
+      <motion.div
+        className="mt-6 flex justify-end border-t border-gray-200 pt-4"
+        variants={itemVariants}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        <Link
+          href={chatAgentHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-900 transition-colors hover:text-gray-600"
+          onClick={onClose}
+        >
+          <span>使用ai助手</span>
+          <ArrowRightIcon className="h-4 w-4" strokeWidth={1.8} />
+        </Link>
+      </motion.div>
     </>
   )
 }

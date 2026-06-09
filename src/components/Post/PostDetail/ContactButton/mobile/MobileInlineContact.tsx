@@ -1,43 +1,46 @@
 'use client'
 
 import { QuestionIcon } from '@/assets/icons'
-import { useTranslations } from 'next-intl'
 import { Link } from '@/ui'
 import { cn } from '@/utils'
+import { useTranslations } from 'next-intl'
+
+interface MobileInlineContactProps {
+  href: string
+  title: string
+}
 
 /**
- * 移动端内联联系卡片
- * 显示在文章底部的卡片式布局
+ * Mobile article support entry.
  */
-export function MobileInlineContact() {
-  const t = useTranslations('Contact')
+export function MobileInlineContact({ href, title }: MobileInlineContactProps) {
+  const t = useTranslations('Agent')
 
   return (
-    <div className={cn('mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg')}>
+    <div className={cn('mt-8 rounded-lg border border-blue-200 bg-blue-50 p-4 md:hidden')}>
       <div className="flex items-start gap-3">
-        <div className={cn('flex-shrink-0 w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center')}>
-          <QuestionIcon 
-            size={20} 
-            className="text-white" 
+        <div className={cn('flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-600')}>
+          <QuestionIcon
+            size={20}
+            className="text-white"
           />
         </div>
         <div className="flex-1">
-          <h3 className="text-sm font-semibold text-gray-900 mb-1">
-            {t('title')}
-          </h3>
-          <Link 
-            href="/about" 
+          <h3 className="mb-1 text-sm font-semibold text-gray-900">{t('articleSupportTitle')}</h3>
+          <Link
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
             className={cn(
               'text-sm text-blue-600 hover:text-blue-800',
               'font-medium underline underline-offset-2',
               'transition-colors duration-200'
             )}
           >
-            {t('description')}
+            {t('articleSupportDescription', { title })}
           </Link>
         </div>
       </div>
     </div>
   )
 }
-

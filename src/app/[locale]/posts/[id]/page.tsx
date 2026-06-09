@@ -68,8 +68,8 @@ async function PostPageContent({ params }: PostPageProps) {
           />
         </article>
         
-        {/* 联系按钮 - 移动端显示在这里，桌面端固定显示 */}
-        <ContactButton />
+        {/* AI article support entry */}
+        <ContactButton postId={id} title={post.title} />
         
         {/* 相关文章 */}
         <RelatedPostsClient post={post} posts={postsPayload?.posts ?? []} limit={3} />
