@@ -4,6 +4,7 @@ import {
   createHttpError,
   createRequestDedupeKey,
   createRequestVersionKey,
+  getErrorMessage,
   getFetchRequestUrl,
   normalizeRequestMethod,
   StaleRequestError,
@@ -243,13 +244,7 @@ const parseFetchJson = async (response: Response): Promise<unknown> => {
 }
 
 const getResponseErrorMessage = (payload: unknown) => {
-  if (!payload || typeof payload !== 'object') {
-    return undefined
-  }
-
-  const record = payload as Record<string, unknown>
-  const message = record.message ?? record.error ?? record.detail
-  return typeof message === 'string' && message.trim() ? message : undefined
+  return getErrorMessage(payload)
 }
 
 const nextRequestVersion = (versionKey: string) => {

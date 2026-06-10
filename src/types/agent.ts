@@ -47,4 +47,5 @@ export interface AgentMessageStreamPayload {
   content?: string
   done?: boolean
   error?: string
+  retryAfterSeconds?: number
 }

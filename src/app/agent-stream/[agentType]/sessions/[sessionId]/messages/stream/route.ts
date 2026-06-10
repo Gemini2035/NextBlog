@@ -14,6 +14,33 @@ const getApiProxyTarget = () => {
   return (process.env.NEXT_API_PROXY_TARGET || '').replace(/\/$/, '')
 }
 
+const readUpstreamError = async (response: Response) => {
+  const text = await response.text().catch(() => '')
+  if (!text) {
+    return `Agent upstream stream failed with status ${response.status}`
+  }
+
+  try {
+    const payload = JSON.parse(text) as unknown
+    if (payload && typeof payload === 'object') {
+      const record = payload as Record<string, unknown>
+      const detail = record.detail
+      if (detail && typeof detail === 'object') {
+        const detailRecord = detail as Record<string, unknown>
+        return typeof detailRecord.message === 'string'
+          ? detailRecord.message
+          : `Agent upstream stream failed with status ${response.status}`
+      }
+      if (typeof record.message === 'string') return record.message
+      if (typeof record.error === 'string') return record.error
+    }
+  } catch {
+    return text
+  }
+
+  return `Agent upstream stream failed with status ${response.status}`
+}
+
 export async function GET(request: NextRequest, context: RouteContext) {
   const apiProxyTarget = getApiProxyTarget()
   if (!apiProxyTarget) {
@@ -73,12 +100,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
         )
 
         if (!upstreamResponse.ok || !upstreamResponse.body) {
+          const errorMessage = await readUpstreamError(upstreamResponse)
           controller.enqueue(
             encoder.encode(
               `data: ${JSON.stringify({
                 type: 'error_message',
                 data: {
-                  error: `Agent upstream stream failed with status ${upstreamResponse.status}`,
+                  error: errorMessage,
                 },
               })}\n\n`
             )

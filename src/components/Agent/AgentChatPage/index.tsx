@@ -1,10 +1,14 @@
 'use client'
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { createAgentSession, streamAgentMessage } from '@/apis/agent'
 import { ArrowRightIcon, OpenAIIcon, SearchIcon } from '@/assets/icons'
+import {
+  MarkdownRenderer,
+  type MarkdownAutoLinkTarget,
+} from '@/components/MarkdownRenderer'
 import { Link } from '@/ui'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
 
@@ -12,6 +16,17 @@ interface AgentChatPageProps {
   agentType: AgentType
   initialQuestion?: string
   targetPostId?: string
+}
+
+const MAX_VISIBLE_SOURCES = 3
+
+type AgentRequestError = Error & {
+  retryAfterSeconds?: number
+  details?: unknown
+}
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === 'object' && value !== null
 }
 
 const getDeviceKey = () => {
@@ -50,6 +65,32 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     if (agentType !== 'article_support') return null
     return targetPostId ? t('targetArticle', { postId: targetPostId }) : t('targetArticleRequired')
   }, [agentType, targetPostId, t])
+  const targetSourceIds = useMemo(() => {
+    return new Set(
+      [targetPostId, session?.targetPostId].filter((sourceId): sourceId is string =>
+        Boolean(sourceId)
+      )
+    )
+  }, [session?.targetPostId, targetPostId])
+
+  const formatAgentError = useCallback((error: unknown, fallback: string) => {
+    const requestError = error as AgentRequestError
+    const details = requestError.details
+    const detail = isRecord(details) && isRecord(details.detail) ? details.detail : null
+    const retryAfterSeconds =
+      typeof requestError.retryAfterSeconds === 'number'
+        ? requestError.retryAfterSeconds
+        : detail && typeof detail.retryAfterSeconds === 'number'
+          ? detail.retryAfterSeconds
+          : undefined
+
+    if (retryAfterSeconds !== undefined) {
+      const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60))
+      return t('rateLimit.exceeded', { minutes })
+    }
+
+    return requestError instanceof Error && requestError.message ? requestError.message : fallback
+  }, [t])
 
   useEffect(() => {
     if (didCreateRef.current) return
@@ -68,10 +109,10 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
         setMessages(response.data.messages)
       })
       .catch((requestError) => {
-        setError(requestError instanceof Error ? requestError.message : t('failedToStart'))
+        setError(formatAgentError(requestError, t('failedToStart')))
       })
       .finally(() => setLoading(false))
-  }, [agentType, locale, t, targetPostId])
+  }, [agentType, formatAgentError, locale, t, targetPostId])
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -176,7 +217,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
           pendingUserMessageIdRef.current = null
           assistantDraftMessageIdRef.current = null
           setInput(content)
-          setError(streamError.message || t('failedToSend'))
+          setError(formatAgentError(streamError, t('failedToSend')))
           setLoading(false)
         },
       }
@@ -196,6 +237,19 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     if (handoff.postId) params.set('postId', handoff.postId)
     const path = handoff.targetAgent === 'chat' ? '/agent/chat' : '/agent/article-support'
     router.push(`${path}?${params.toString()}`)
+  }
+
+  const getArticleSupportLinkTargets = (message: AgentMessage): MarkdownAutoLinkTarget[] => {
+    if (agentType !== 'article_support') {
+      return []
+    }
+
+    return message.sources
+      .filter((source) => !(source.type === 'post' && targetSourceIds.has(source.id)))
+      .map((source) => ({
+        label: source.title,
+        href: source.href,
+      }))
   }
 
   return (
@@ -250,10 +304,18 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                         : 'max-w-[88%] rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm leading-6 text-gray-800'
                     }
                   >
-                    <div className="whitespace-pre-wrap">{message.content}</div>
-                    {message.sources.length > 0 ? (
+                    {message.role === 'assistant' ? (
+                      <MarkdownRenderer
+                        autoLinkTargets={getArticleSupportLinkTargets(message)}
+                        content={message.content}
+                      />
+                    ) : (
+                      <div className="whitespace-pre-wrap">{message.content}</div>
+                    )}
+                    {agentType === 'chat' && message.role === 'assistant' && message.sources.length > 0 ? (
                       <div className="mt-4 space-y-2 border-t border-gray-200 pt-3">
-                        {message.sources.map((source) => (
+                        <div className="text-xs font-semibold text-gray-500">{t('sourcesTitle')}</div>
+                        {message.sources.slice(0, MAX_VISIBLE_SOURCES).map((source) => (
                           <Link
                             key={`${source.type}-${source.id}`}
                             href={source.href}

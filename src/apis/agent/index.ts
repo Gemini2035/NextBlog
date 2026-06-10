@@ -120,9 +120,13 @@ const parseStreamPayload = (data: string, eventType?: string): AgentMessageStrea
   }
 
   if (resolvedEventType === 'error_message') {
-    if (isRecord(payloadData) && typeof payloadData.error === 'string') {
+    if (isRecord(payloadData)) {
+      const message = payloadData.message ?? payloadData.error
       return {
-        error: payloadData.error,
+        error: typeof message === 'string' ? message : 'Agent stream failed',
+        retryAfterSeconds: typeof payloadData.retryAfterSeconds === 'number'
+          ? payloadData.retryAfterSeconds
+          : undefined,
       }
     }
     return {
@@ -163,7 +167,9 @@ const parseStreamPayload = (data: string, eventType?: string): AgentMessageStrea
 
 const applyStreamPayload = (payload: AgentMessageStreamPayload, options: StreamAgentMessageOptions) => {
   if (payload.error) {
-    options.onError?.(new Error(payload.error))
+    const error = new Error(payload.error) as Error & { retryAfterSeconds?: number }
+    error.retryAfterSeconds = payload.retryAfterSeconds
+    options.onError?.(error)
     return
   }
 
@@ -258,6 +264,13 @@ export const streamAgentMessage = (
       })
 
       if (!response.ok) {
+        const errorPayload = await response.json().catch(() => null) as unknown
+        if (isRecord(errorPayload)) {
+          const message = errorPayload.message ?? errorPayload.error
+          if (typeof message === 'string') {
+            throw new Error(message)
+          }
+        }
         throw new Error(`Agent stream failed with status ${response.status}`)
       }
 

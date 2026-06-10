@@ -340,6 +340,7 @@
     "failedToSend": "メッセージの送信に失敗しました",
     "sendPreparedQuestion": "用意された質問を送信",
     "continueIn": "{agent}で続ける",
+    "sourcesTitle": "参照元",
     "thinking": "考えています...",
     "send": "送信",
     "chat": {

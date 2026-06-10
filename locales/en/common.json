@@ -347,8 +347,12 @@
     "failedToSend": "Failed to send message",
     "sendPreparedQuestion": "Send prepared question",
     "continueIn": "Continue in {agent}",
+    "sourcesTitle": "Sources",
     "thinking": "Thinking...",
     "send": "Send",
+    "rateLimit": {
+      "exceeded": "Agent request limit reached. Please try again in about {minutes} minute(s)."
+    },
     "chat": {
       "title": "Chat Agent",
       "subtitle": "Search and reason across posts, projects, navigation, and site content.",

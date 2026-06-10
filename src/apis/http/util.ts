@@ -35,7 +35,11 @@ export const getErrorMessage = (data: unknown): string | undefined => {
   }
 
   const message = data.message ?? data.error ?? data.detail
-  return typeof message === 'string' && message.trim().length > 0 ? message : undefined
+  if (typeof message === 'string' && message.trim().length > 0) {
+    return message
+  }
+
+  return isRecord(message) ? getErrorMessage(message) : undefined
 }
 
 export const createHttpError = (error: HttpError): HttpError => {

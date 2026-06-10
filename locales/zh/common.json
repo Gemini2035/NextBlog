@@ -340,8 +340,12 @@
     "failedToSend": "发送消息失败",
     "sendPreparedQuestion": "发送预设问题",
     "continueIn": "继续使用{agent}",
+    "sourcesTitle": "参考来源",
     "thinking": "思考中...",
     "send": "发送",
+    "rateLimit": {
+      "exceeded": "助手请求次数已达上限，请约 {minutes} 分钟后再试。"
+    },
     "chat": {
       "title": "站点助手",
       "subtitle": "搜索并理解文章、项目、导航和站点内容。",
