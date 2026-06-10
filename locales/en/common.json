@@ -348,6 +348,7 @@
     "sendPreparedQuestion": "Send prepared question",
     "continueIn": "Continue in {agent}",
     "sourcesTitle": "Sources",
+    "contextUsage": "Context {percent}%",
     "thinking": "Thinking...",
     "send": "Send",
     "rateLimit": {

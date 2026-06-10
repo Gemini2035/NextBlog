@@ -9,7 +9,7 @@ import {
   MarkdownRenderer,
   type MarkdownAutoLinkTarget,
 } from '@/components/MarkdownRenderer'
-import { Link } from '@/ui'
+import { Link, Progressing } from '@/ui'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
 
 interface AgentChatPageProps {
@@ -19,6 +19,25 @@ interface AgentChatPageProps {
 }
 
 const MAX_VISIBLE_SOURCES = 3
+const TYPING_INTERVAL_MS = 12
+
+const asRecord = (value: unknown): Record<string, unknown> => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value) ? value as Record<string, unknown> : {}
+}
+
+const getContextUsagePercent = (message: AgentMessage) => {
+  const contextBudget = asRecord(asRecord(message.meta).contextBudget)
+  const percent = contextBudget.conversationPercentOfLimit ?? contextBudget.usedPromptPercentOfLimit
+  return typeof percent === 'number' && Number.isFinite(percent) ? percent : null
+}
+
+const getLatestContextUsagePercent = (messages: AgentMessage[]) => {
+  for (const message of [...messages].reverse()) {
+    const percent = getContextUsagePercent(message)
+    if (percent !== null) return percent
+  }
+  return 0
+}
 
 type AgentRequestError = Error & {
   retryAfterSeconds?: number
@@ -43,6 +62,47 @@ const getDeviceKey = () => {
   const nextKey = `device_${crypto.randomUUID()}`
   window.localStorage.setItem(storageKey, nextKey)
   return nextKey
+}
+
+interface TypingMarkdownRendererProps {
+  content: string
+  autoLinkTargets: MarkdownAutoLinkTarget[]
+}
+
+function TypingMarkdownRenderer({ autoLinkTargets, content }: TypingMarkdownRendererProps) {
+  const [displayedContent, setDisplayedContent] = useState(content)
+  const previousContentRef = useRef(content)
+
+  useEffect(() => {
+    const previousContent = previousContentRef.current
+    previousContentRef.current = content
+
+    if (!content.startsWith(previousContent)) {
+      setDisplayedContent('')
+      return
+    }
+
+    if (content.length > previousContent.length) {
+      setDisplayedContent((current) => current.slice(0, previousContent.length))
+    }
+  }, [content])
+
+  useEffect(() => {
+    if (displayedContent.length >= content.length) return
+
+    const timer = window.setTimeout(() => {
+      setDisplayedContent(content.slice(0, displayedContent.length + 1))
+    }, TYPING_INTERVAL_MS)
+
+    return () => window.clearTimeout(timer)
+  }, [content, displayedContent])
+
+  return (
+    <MarkdownRenderer
+      autoLinkTargets={autoLinkTargets}
+      content={displayedContent}
+    />
+  )
 }
 
 export function AgentChatPage({ agentType, initialQuestion, targetPostId }: AgentChatPageProps) {
@@ -72,6 +132,9 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
       )
     )
   }, [session?.targetPostId, targetPostId])
+  const currentContextUsagePercent = useMemo(() => {
+    return getLatestContextUsagePercent(messages)
+  }, [messages])
 
   const formatAgentError = useCallback((error: unknown, fallback: string) => {
     const requestError = error as AgentRequestError
@@ -186,6 +249,10 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
       sources: [],
       createdAt: new Date().toISOString(),
     }
+    const contextMessages = messages.map((message) => ({
+      role: message.role,
+      content: message.content,
+    }))
 
     setMessages((current) => [...current, pendingUserMessage])
     streamCleanupRef.current = streamAgentMessage(
@@ -194,6 +261,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
       {
         content,
         deviceKey: getDeviceKey(),
+        messages: contextMessages,
       },
       locale,
       {
@@ -293,10 +361,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
 
             <div className="space-y-5">
               {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={message.role === 'user' ? 'flex justify-end' : 'flex justify-start'}
-                >
+                <div key={message.id} className={message.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
                   <div
                     className={
                       message.role === 'user'
@@ -305,7 +370,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                     }
                   >
                     {message.role === 'assistant' ? (
-                      <MarkdownRenderer
+                      <TypingMarkdownRenderer
                         autoLinkTargets={getArticleSupportLinkTargets(message)}
                         content={message.content}
                       />
@@ -354,6 +419,23 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
 
           <form className="border-t border-gray-100 p-4" onSubmit={sendMessage}>
             {error ? <div className="mb-3 text-sm text-red-600">{error}</div> : null}
+            <div className="mb-3 flex justify-start">
+              <Progressing
+                aria-label={t('currentContextUsage', {
+                  percent: currentContextUsagePercent.toFixed(1),
+                })}
+                className="cursor-pointer"
+                format={(percent) => `${percent.toFixed(0)}%`}
+                percent={currentContextUsagePercent}
+                size={38}
+                status={currentContextUsagePercent > 100 ? 'exception' : 'normal'}
+                strokeWidth={4}
+                title={t('currentContextUsage', {
+                  percent: currentContextUsagePercent.toFixed(1),
+                })}
+                type="circle"
+              />
+            </div>
             <div className="flex gap-3">
               <textarea
                 value={input}

@@ -341,6 +341,7 @@
     "sendPreparedQuestion": "用意された質問を送信",
     "continueIn": "{agent}で続ける",
     "sourcesTitle": "参照元",
+    "contextUsage": "コンテキスト {percent}%",
     "thinking": "考えています...",
     "send": "送信",
     "chat": {

@@ -16,6 +16,7 @@ interface CreateAgentSessionRequest {
 interface CreateAgentMessageRequest {
   content: string
   deviceKey: string
+  messages?: Array<Pick<AgentMessage, 'role' | 'content'>>
 }
 
 interface StreamAgentMessageOptions {
@@ -59,20 +60,9 @@ export const createAgentMessage = (
 
 const createAgentStreamUrl = (
   agentType: AgentType,
-  sessionId: number,
-  data: CreateAgentMessageRequest,
-  siteLanguage?: string
+  sessionId: number
 ) => {
-  const searchParams = new URLSearchParams({
-    content: data.content,
-    deviceKey: data.deviceKey,
-  })
-
-  if (siteLanguage) {
-    searchParams.set('locale', siteLanguage)
-  }
-
-  return `/agent-stream${getAgentBasePath(agentType).replace('/agent', '')}/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
+  return `/agent-stream${getAgentBasePath(agentType).replace('/agent', '')}/sessions/${sessionId}/messages/stream`
 }
 
 const isStreamPayload = (value: unknown): value is AgentMessageStreamPayload => {
@@ -255,11 +245,14 @@ export const streamAgentMessage = (
 
   void (async () => {
     try {
-      const response = await fetch(createAgentStreamUrl(agentType, sessionId, data, siteLanguage), {
-        method: 'GET',
+      const response = await fetch(createAgentStreamUrl(agentType, sessionId), {
+        method: 'POST',
         headers: {
           Accept: 'text/event-stream',
+          'Content-Type': 'application/json',
+          ...(siteLanguage ? { 'X-Locale': siteLanguage } : {}),
         },
+        body: JSON.stringify(data),
         signal: abortController.signal,
       })
 

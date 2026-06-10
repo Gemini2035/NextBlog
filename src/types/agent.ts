@@ -23,6 +23,7 @@ export interface AgentMessage {
   content: string
   sources: AgentSource[]
   handoff?: AgentHandoff | null
+  meta?: Record<string, unknown>
   createdAt: string
 }
 
