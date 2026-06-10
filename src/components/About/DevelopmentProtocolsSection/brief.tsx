@@ -46,7 +46,7 @@ const DevelopmentProtocolsBrief: FC<DevelopmentProtocolsBriefProps> = ({
           return (
             <div
               key={id}
-              className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200"
+              className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:border-[var(--site-action)] transition-colors duration-200"
             >
               <div className="flex items-center gap-2 mb-2">
                 <div

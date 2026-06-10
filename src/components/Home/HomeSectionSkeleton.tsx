@@ -16,49 +16,38 @@ export interface HomeSectionSkeletonProps {
 }
 
 export default function HomeSectionSkeleton({ title, description, href, ctaText, index, children }: HomeSectionSkeletonProps) {
-  const isBlogSection = index === 0 // 博客部分
-  
+  const isFirstContentSection = index === 0
+
   // 使用 Intersection Observer 检测元素是否进入视口
   const { elementRef, shouldAnimate } = useIntersectionObserver({
-    threshold: 0, // 当元素开始进入视口时触发
-    rootMargin: '0px 0px 0px 0px', // 上边框出现到屏幕上时触发
+    threshold: isFirstContentSection ? 0.12 : 0, // 首个内容区避免被首屏视频高度变化提前触发
+    rootMargin: isFirstContentSection ? '0px 0px -12% 0px' : '0px 0px 0px 0px',
     triggerOnce: false // 支持重复播放
   })
 
-  // 确定背景色：博客部分使用与标签相同的蓝色，其他部分交替
+  // Apple white style: alternate white and soft canvas, no dark or saturated sections.
   const getBackgroundClass = () => {
-    if (isBlogSection) {
-      return 'bg-blue-100 border-blue-200 hover:border-blue-300'
-    }
-    // 从博客部分之后开始交替：index 1=白色, 2=与博客相同的蓝色, 3=白色...
-    const adjustedIndex = index - 1
-    return adjustedIndex % 2 === 0
-      ? 'bg-white border-gray-200 hover:border-gray-300'
-      : 'bg-blue-100 border-blue-200 hover:border-blue-300'
+    return index % 2 === 0
+      ? 'bg-[var(--site-canvas-muted)] border-transparent'
+      : 'bg-[var(--site-canvas)] border-transparent'
   }
 
   return (
     <section
       ref={elementRef}
       className={cn(
-        'w-full overflow-hidden border transition-all duration-700 ease-out',
+        'w-full overflow-hidden border-y transition-all duration-700 ease-out',
         'group relative isolate',
         getBackgroundClass(),
-        // 动画状态 - 从下方滑入并淡入
-        shouldAnimate 
-          ? 'opacity-100 translate-y-0 scale-100' 
+        shouldAnimate
+          ? 'opacity-100 translate-y-0 scale-100'
           : 'opacity-0 translate-y-12 scale-95'
       )}
     >
       <div className={cn(
-        'px-6 py-16 sm:px-10 sm:py-20 lg:px-16 transition-all duration-700 ease-out delay-150',
-        // 文字颜色：博客部分和projects部分使用与标签相同的蓝色文字，其他部分根据背景色决定
-        isBlogSection || (index - 1) % 2 !== 0
-          ? 'text-blue-800' 
-          : 'text-gray-900',
-        // 内容动画 - 稍微延迟出现
-        shouldAnimate 
-          ? 'opacity-100 translate-y-0' 
+        'mx-auto max-w-7xl px-6 py-16 text-[var(--site-text)] transition-all duration-700 ease-out delay-150 sm:px-10 sm:py-20 lg:px-16',
+        shouldAnimate
+          ? 'opacity-100 translate-y-0'
           : 'opacity-0 translate-y-4'
       )}>
         {children ? (
@@ -72,12 +61,8 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
             )}
             {description && (
               <p className={cn(
-                'mt-4 sm:mt-6', 
-                'text-base sm:text-lg lg:text-xl', 
-                // 描述文字颜色：博客部分和projects部分使用深蓝色，其他部分根据背景色决定
-                isBlogSection || (index - 1) % 2 !== 0
-                  ? 'text-blue-600'
-                  : 'text-gray-600'
+                'mt-4 sm:mt-6',
+                'text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]'
               )}>
                 {description}
               </p>
@@ -92,10 +77,7 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
                     rounded={true}
                     className={cn(
                       'inline-flex items-center gap-2',
-                      // 按钮颜色：博客部分和projects部分使用深蓝色按钮，其他部分根据背景色决定
-                      isBlogSection || (index - 1) % 2 !== 0
-                        ? 'bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800'
-                        : 'bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900'
+                      'rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]'
                     )}
                   >
                     <span>{ctaText}</span>
@@ -111,5 +93,3 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
     </section>
   )
 }
-
-

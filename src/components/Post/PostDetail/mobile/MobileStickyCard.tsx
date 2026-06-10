@@ -21,7 +21,7 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
     <div
       className={cn(
         "fixed left-0 right-0 top-0 z-50",
-        "bg-white border-b border-gray-200 shadow-lg",
+        "bg-white border-b border-gray-200 shadow-sm",
         "transition-all duration-300 ease-out",
         "animate-in slide-in-from-top"
       )}

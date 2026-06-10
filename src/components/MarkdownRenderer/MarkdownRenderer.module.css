@@ -1,0 +1,118 @@
+.root {
+  overflow-wrap: anywhere;
+}
+
+.root > :first-child {
+  margin-top: 0;
+}
+
+.root > :last-child {
+  margin-bottom: 0;
+}
+
+.root h1,
+.root h2,
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
+  color: #111827;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 1rem 0 0.5rem;
+}
+
+.root h1 {
+  font-size: 1.25rem;
+}
+
+.root h2 {
+  font-size: 1.125rem;
+}
+
+.root h3,
+.root h4,
+.root h5,
+.root h6 {
+  font-size: 1rem;
+}
+
+.root p {
+  margin: 0.5rem 0;
+}
+
+.root ul,
+.root ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+
+.root ul {
+  list-style: disc;
+}
+
+.root ol {
+  list-style: decimal;
+}
+
+.root li {
+  margin: 0.25rem 0;
+}
+
+.root a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.root blockquote {
+  border-left: 3px solid #d1d5db;
+  color: #4b5563;
+  margin: 0.75rem 0;
+  padding-left: 0.75rem;
+}
+
+.root code {
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  padding: 0.125rem 0.25rem;
+}
+
+.root pre {
+  background-color: #111827;
+  border-radius: 0.5rem;
+  color: #f9fafb;
+  margin: 0.75rem 0;
+  overflow-x: auto;
+  padding: 0.75rem;
+}
+
+.root pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.root table {
+  border-collapse: collapse;
+  display: block;
+  margin: 0.75rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.root th,
+.root td {
+  border: 1px solid #d1d5db;
+  padding: 0.375rem 0.5rem;
+  text-align: left;
+}
+
+.root th {
+  background-color: #f3f4f6;
+}
+
+.root input[type='checkbox'] {
+  margin-right: 0.375rem;
+}

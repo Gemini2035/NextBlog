@@ -37,10 +37,10 @@ export function SortFilter({ value, onChange }: SortFilterProps) {
       <button
         onClick={handleAscClick}
         className={cn(
-          "flex items-center justify-center w-6 h-6 rounded transition-colors cursor-pointer",
+          "flex items-center justify-center w-6 h-6 rounded-[var(--site-radius-control)] transition-colors cursor-pointer",
           value === 'asc'
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            ? 'bg-[var(--site-action)] text-white'
+            : 'bg-[var(--site-surface)] text-[var(--site-text-muted)] hover:bg-[var(--site-canvas-muted)]'
         )}
         title={t('sortAsc')}
       >
@@ -49,10 +49,10 @@ export function SortFilter({ value, onChange }: SortFilterProps) {
       <button
         onClick={handleDescClick}
         className={cn(
-          "flex items-center justify-center w-6 h-6 rounded transition-colors cursor-pointer",
+          "flex items-center justify-center w-6 h-6 rounded-[var(--site-radius-control)] transition-colors cursor-pointer",
           value === 'desc'
-            ? 'bg-blue-500 text-white'
-            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            ? 'bg-[var(--site-action)] text-white'
+            : 'bg-[var(--site-surface)] text-[var(--site-text-muted)] hover:bg-[var(--site-canvas-muted)]'
         )}
         title={t('sortDesc')}
       >
@@ -61,4 +61,3 @@ export function SortFilter({ value, onChange }: SortFilterProps) {
     </div>
   )
 }
-

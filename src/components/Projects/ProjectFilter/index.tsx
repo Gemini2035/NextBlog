@@ -267,7 +267,7 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
   }, [])
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+    <div className="rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-none">
       <Collapse
         activeKey={isOpen ? ['filter'] : []}
         onChange={(keys: string | string[]) => {

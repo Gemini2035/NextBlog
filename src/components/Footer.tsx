@@ -24,14 +24,14 @@ export default function Footer() {
   }
 
   return (
-    <footer className={cn('bg-gray-50 border-t border-gray-200')}>
-      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4')}>
+    <footer className={cn('bg-[var(--site-canvas-muted)] border-t border-[var(--site-border)]')}>
+      <div className={cn('max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5')}>
         {/* 移动端和桌面端：横向布局，icon始终在右侧 */}
         <div className={cn('flex items-start md:items-center justify-between gap-4')}>
           {/* 左侧：版权信息和政策链接 */}
           <div className={cn('flex flex-col md:flex-row md:items-center gap-3 md:gap-6 flex-1')}>
             {/* 版权信息 */}
-            <div className={cn('flex flex-wrap items-center gap-1 text-xs md:text-sm text-gray-600')}>
+            <div className={cn('flex flex-wrap items-center gap-1 text-xs md:text-sm text-[var(--site-text-tertiary)]')}>
               <span>{getCopyrightYear()}</span>
               <span>{siteConfig.title}</span>
               <span className={cn('hidden md:inline')}>·</span>
@@ -40,32 +40,32 @@ export default function Footer() {
                 external
                 target="_blank"
                 rel="noopener noreferrer"
-                className={cn('hover:text-gray-800 transition-colors text-xs md:text-sm')}
+                className={cn('hover:text-[var(--site-action)] transition-colors text-xs md:text-sm')}
               >
                 CC BY-NC-SA 4.0
               </Link>
             </div>
 
             {/* 分隔线 - 仅在桌面端显示 */}
-            <Divider orientation="vertical" thickness="thin" className={cn('hidden md:block h-4 bg-gray-300')} />
+            <Divider orientation="vertical" thickness="thin" className={cn('hidden md:block h-4 bg-[var(--site-border)]')} />
 
             {/* 政策链接 */}
             <div className={cn('flex items-center gap-3 md:gap-4 text-xs md:text-sm')}>
               <Link
                 href="/policies#terms"
-                className={cn('text-gray-600 hover:text-gray-800 transition-colors whitespace-nowrap')}
+                className={cn('text-[var(--site-text-tertiary)] hover:text-[var(--site-action)] transition-colors whitespace-nowrap')}
               >
                 {t('terms')}
               </Link>
               <Link
                 href="/policies#privacy"
-                className={cn('text-gray-600 hover:text-gray-800 transition-colors whitespace-nowrap')}
+                className={cn('text-[var(--site-text-tertiary)] hover:text-[var(--site-action)] transition-colors whitespace-nowrap')}
               >
                 {t('privacy')}
               </Link>
               <Link
                 href="/policies#security"
-                className={cn('text-gray-600 hover:text-gray-800 transition-colors whitespace-nowrap')}
+                className={cn('text-[var(--site-text-tertiary)] hover:text-[var(--site-action)] transition-colors whitespace-nowrap')}
               >
                 {t('security')}
               </Link>
@@ -77,13 +77,13 @@ export default function Footer() {
             onClick={scrollToTop}
             className={cn(
               'flex items-center justify-center shrink-0',
-              'p-2 rounded-md',
-              'hover:bg-gray-100 active:bg-gray-200',
+              'p-2 rounded-[var(--site-radius-control)]',
+              'hover:bg-[var(--site-canvas)]',
               'transition-colors cursor-pointer'
             )}
             aria-label={t('backToTop')}
           >
-            <LogoIcon className={cn('w-7 h-7 md:w-8 md:h-8 text-gray-600')} />
+            <LogoIcon className={cn('w-7 h-7 md:w-8 md:h-8 text-[var(--site-text-tertiary)]')} />
           </button>
         </div>
       </div>

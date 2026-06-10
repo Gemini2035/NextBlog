@@ -181,7 +181,8 @@ export default function FullscreenDropdown({
         <>
           {/* 背景遮罩 */}
           <motion.div 
-            className="absolute left-0 top-full w-full h-screen bg-white/90 backdrop-blur-xl z-40"
+            className="absolute left-0 top-full z-40 h-[calc(100vh-4rem)] w-full bg-[color-mix(in_srgb,var(--site-canvas)_90%,transparent)] backdrop-blur-xl"
+            data-submenu-backdrop
             variants={backdropVariants}
             initial="hidden"
             animate="visible"
@@ -192,7 +193,7 @@ export default function FullscreenDropdown({
           {/* 全屏下拉菜单 */}
           <motion.div 
             ref={submenuRef}
-            className="absolute w-full top-full bg-white shadow-2xl z-50 border-gray-200 max-h-[80vh] overflow-y-auto"
+            className="absolute w-full top-full z-50 max-h-[80vh] overflow-y-hidden border-y border-[var(--site-border-subtle)] bg-[var(--site-canvas)]"
             variants={containerVariants}
             initial="hidden"
             animate={isExiting ? "exit" : "visible"}

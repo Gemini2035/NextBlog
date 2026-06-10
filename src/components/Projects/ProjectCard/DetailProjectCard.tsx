@@ -61,24 +61,9 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
 
   // 获取分类样式
   const getCategoryStyle = (cat?: ProjectCategory) => {
-    switch (cat) {
-      case 'featured':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'active':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'stable':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'completed':
-        return 'bg-purple-100 text-purple-800 border-purple-200'
-      case 'archived':
-        return 'bg-gray-100 text-gray-600 border-gray-200'
-      case 'fork':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'learning':
-        return 'bg-pink-100 text-pink-800 border-pink-200'
-      default:
-        return 'bg-gray-100 text-gray-600 border-gray-200'
-    }
+    return cat === 'featured'
+      ? 'bg-[var(--site-surface)] text-[var(--site-action)] border-[var(--site-action)]'
+      : 'bg-[var(--site-surface)] text-[var(--site-text-muted)] border-[var(--site-border)]'
   }
 
   return (
@@ -86,23 +71,23 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {/* 项目头部 */}
       <div className="space-y-3">
         <div className="flex items-start sm:items-center gap-2 sm:gap-3">
-          <ProjectIcon className="w-5 h-5 sm:w-6 sm:h-6 text-gray-700 shrink-0 mt-1 sm:mt-0" />
+          <ProjectIcon className="w-5 h-5 sm:w-6 sm:h-6 text-[var(--site-text-muted)] shrink-0 mt-1 sm:mt-0" />
           <div className="flex-1 min-w-0">
             <div className="flex items-start sm:items-center gap-2 flex-wrap mb-2">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 leading-6 wrap-break-word">
+              <h2 className="text-xl sm:text-2xl font-semibold text-[var(--site-text)] leading-6 wrap-break-word">
                 {project.name}
               </h2>
               {/* 置顶标签 */}
               {project.isPinned && (
-                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium bg-linear-to-r from-yellow-100 to-amber-100 text-amber-700 border border-amber-200 rounded-full whitespace-nowrap">
-                  <StarFilledIcon className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500" />
+                <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-normal bg-[var(--site-surface)] text-[var(--site-action)] border border-[var(--site-action)] rounded-[var(--site-radius-chip)] whitespace-nowrap">
+                  <StarFilledIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                   {t('project.pinned')}
                 </span>
               )}
               {/* 分类标签紧邻标题 */}
               {category && (
                 <span className={cn(
-                  'px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-medium rounded-lg border whitespace-nowrap flex items-center gap-1 sm:gap-1.5',
+                  'px-2 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-normal rounded-[var(--site-radius-chip)] border whitespace-nowrap flex items-center gap-1 sm:gap-1.5',
                   getCategoryStyle(category)
                 )}>
                   {category === 'fork' && <ForkIcon className="w-3 h-3 sm:w-4 sm:h-4" />}
@@ -110,12 +95,12 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 break-all">{project.fullName}</p>
+            <p className="text-xs sm:text-sm text-[var(--site-text-tertiary)] break-all">{project.fullName}</p>
           </div>
         </div>
 
         {/* 项目描述 */}
-        <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+        <p className="text-sm sm:text-base text-[var(--site-text-muted)] leading-relaxed">
           {project.description || t('project.noDescription')}
         </p>
       </div>
@@ -126,7 +111,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           href={project.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+          className="inline-flex items-center justify-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-text)] bg-[var(--site-text)] px-4 py-2 text-white transition-colors hover:bg-[var(--site-text)]"
         >
           <GitHubIcon className="w-4 h-4" />
           <span className="text-sm font-medium">{t('project.viewOnGitHub')}</span>
@@ -137,7 +122,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
             href={project.homepage}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            className="inline-flex items-center justify-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] px-4 py-2 text-white transition-colors hover:bg-[var(--site-action)]"
           >
             <span className="text-sm font-medium">{t('project.homepage')}</span>
           </Link>
@@ -146,32 +131,32 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
 
       {/* 项目统计 - 移动端2列，桌面端4列 */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-yellow-50 to-white rounded-lg border border-yellow-100">
-          <StarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-600 shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)]">
+          <StarIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--site-text-muted)] shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.stars')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.stars}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-blue-50 to-white rounded-lg border border-blue-100">
-          <ForkIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)]">
+          <ForkIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--site-text-muted)] shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.forks')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.forks}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-green-50 to-white rounded-lg border border-green-100">
-          <WatchersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)]">
+          <WatchersIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--site-text-muted)] shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.watchers')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.watchers}</div>
           </div>
         </div>
         
-        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 bg-linear-to-br from-red-50 to-white rounded-lg border border-red-100">
-          <IssuesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 shrink-0" />
+        <div className="flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)]">
+          <IssuesIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--site-text-muted)] shrink-0" />
           <div className="min-w-0">
             <div className="text-xs text-gray-500 truncate">{t('project.openIssues')}</div>
             <div className="text-base sm:text-lg font-bold text-gray-900">{project.openIssues}</div>
@@ -180,19 +165,19 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       </div>
 
       {/* 活跃度和权重信息 */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 bg-linear-to-br from-purple-50 to-white rounded-lg border border-purple-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 p-3 sm:p-4 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)]">
         {project.activityScore != null && (
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.activityScore')}</div>
             <div className="flex items-baseline gap-2">
-              <span className="text-xl sm:text-2xl font-bold text-purple-600">
+              <span className="text-xl sm:text-2xl font-semibold text-[var(--site-action)]">
                 {project.activityScore.toFixed(1)}
               </span>
               <span className="text-xs sm:text-sm text-gray-500">/ 100</span>
             </div>
-            <div className="mt-2 w-full bg-gray-200 rounded-full h-2">
+            <div className="mt-2 w-full bg-[var(--site-border)] rounded-full h-2">
               <div 
-                className="bg-purple-600 h-2 rounded-full transition-all"
+                className="bg-[var(--site-action)] h-2 rounded-full transition-all"
                 style={{ width: `${Math.min(project.activityScore, 100)}%` }}
               />
             </div>
@@ -203,7 +188,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
           <div>
             <div className="text-xs text-gray-500 mb-1">{t('project.displayWeight')}</div>
             <div className="flex items-baseline gap-2">
-              <span className="text-xl sm:text-2xl font-bold text-indigo-600">
+              <span className="text-xl sm:text-2xl font-semibold text-[var(--site-action)]">
                 {project.displayWeight.toFixed(1)}
               </span>
             </div>
@@ -412,20 +397,20 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                         href={contributor.profileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                        className="flex items-center gap-3 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-surface)] p-3 transition-colors hover:border-[var(--site-action)] group"
                       >
                         <Image
                           src={contributor.avatarUrl}
                           alt={contributor.login}
                           width={48}
                           height={48}
-                          className="w-12 h-12 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
+                          className="w-12 h-12 rounded-full border-2 border-[var(--site-canvas)] group-hover:border-[var(--site-action)] transition-all"
                         />
                         <div className="flex-1 min-w-0">
-                          <div className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                          <div className="font-medium text-[var(--site-text)] group-hover:text-[var(--site-action)] transition-colors">
                             {contributor.login}
                           </div>
-                          <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
+                          <div className="flex items-center gap-3 text-sm text-[var(--site-text-muted)] mt-1">
                             <span>{contributor.contributions} {t('project.commits')}</span>
                             <span>•</span>
                             <span>{(contributor.percentage || 0).toFixed(1)}%</span>
@@ -433,9 +418,9 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                         </div>
                         {/* 贡献占比进度条 */}
                         <div className="w-24">
-                          <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div className="w-full bg-[var(--site-border)] rounded-full h-2">
                             <div
-                              className="bg-blue-500 h-2 rounded-full transition-all"
+                              className="bg-[var(--site-action)] h-2 rounded-full transition-all"
                               style={{ width: `${contributor.percentage || 0}%` }}
                             />
                           </div>
@@ -532,11 +517,11 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
                               alt={contributor.login}
                               width={32}
                               height={32}
-                              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white group-hover:border-blue-500 transition-all shadow-sm"
+                              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-[var(--site-canvas)] group-hover:border-[var(--site-action)] transition-all"
                             />
                             
                             {/* 名字 */}
-                            <span className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-blue-600 transition-colors">
+                            <span className="text-xs sm:text-sm font-medium text-[var(--site-text-muted)] group-hover:text-[var(--site-action)] transition-colors">
                               {contributor.login}
                             </span>
                           </Link>
@@ -558,8 +543,8 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
       {project.topics.length > 0 && (
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 shrink-0" />
-            <h3 className="text-sm font-semibold text-gray-900 leading-5">
+            <TagIcon className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--site-text-muted)] shrink-0" />
+            <h3 className="text-sm font-semibold text-[var(--site-text)] leading-5">
               {t('project.topics')}
             </h3>
           </div>
@@ -568,7 +553,7 @@ export function DetailProjectCard({ project, category }: DetailProjectCardProps)
             {project.topics.map((topic) => (
               <span
                 key={topic}
-                className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-medium bg-blue-50 text-blue-700 rounded-full border border-blue-100 hover:bg-blue-100 transition-colors"
+                className="px-2.5 sm:px-3 py-1 sm:py-1.5 text-xs font-normal bg-[var(--site-surface)] text-[var(--site-text-muted)] rounded-[var(--site-radius-chip)] border border-[var(--site-border)] hover:border-[var(--site-action)] hover:text-[var(--site-action)] transition-colors"
               >
                 {topic}
               </span>

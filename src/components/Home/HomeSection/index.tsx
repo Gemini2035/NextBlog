@@ -14,19 +14,15 @@ export interface HomeSectionProps {
 }
 
 export default function HomeSection({ title, description, href, ctaText, index, children }: HomeSectionProps) {
-  const isEven = index % 2 === 0
-
   return (
     <section
       className={cn(
-        'rounded-3xl overflow-hidden border transition-colors',
+        'overflow-hidden border-y border-transparent transition-colors',
         'group relative isolate',
-        isEven
-          ? 'bg-white border-gray-200 hover:border-gray-300'
-          : 'bg-gray-900 border-gray-800 hover:border-gray-700'
+        index % 2 === 0 ? 'bg-[var(--site-canvas-muted)]' : 'bg-[var(--site-canvas)]'
       )}
     >
-      <div className={cn('px-6 py-16 sm:px-10 sm:py-20 lg:px-16', isEven ? 'text-gray-900' : 'text-white')}>
+      <div className={cn('mx-auto max-w-7xl px-6 py-16 text-[var(--site-text)] sm:px-10 sm:py-20 lg:px-16')}>
         {children ? (
           children
         ) : (
@@ -37,7 +33,7 @@ export default function HomeSection({ title, description, href, ctaText, index, 
               </h2>
             )}
             {description && (
-              <p className={cn('mt-4 sm:mt-6', 'text-base sm:text-lg lg:text-xl', isEven ? 'text-gray-600' : 'text-gray-300')}>
+              <p className={cn('mt-4 sm:mt-6', 'text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]')}>
                 {description}
               </p>
             )}
@@ -47,17 +43,15 @@ export default function HomeSection({ title, description, href, ctaText, index, 
                 <Link
                   href={href}
                   className={cn(
-                    'inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2',
-                    isEven
-                      ? 'bg-gray-900 text-white hover:bg-black focus-visible:outline-gray-900'
-                      : 'bg-white text-gray-900 hover:bg-gray-100 focus-visible:outline-white'
+                    'inline-flex items-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--site-focus-ring)]',
+                    'hover:bg-[var(--site-action)]'
                   )}
                 >
                   <span>{ctaText}</span>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                     <path
                       d="M7 17L17 7M17 7H8M17 7V16"
-                      stroke={isEven ? 'white' : '#111827'}
+                      stroke="currentColor"
                       strokeWidth="1.8"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -69,17 +63,6 @@ export default function HomeSection({ title, description, href, ctaText, index, 
           </div>
         )}
       </div>
-
-      {/* 背景装饰元素，提升辨识度（Apple 风格的简洁渐变）*/}
-      <div
-        aria-hidden
-        className={cn(
-          'pointer-events-none absolute inset-0 -z-10 opacity-60 transition-opacity group-hover:opacity-80',
-          isEven ? 'bg-[radial-gradient(80%_60%_at_20%_10%,#dbeafe_0%,transparent_60%)]' : 'bg-[radial-gradient(80%_60%_at_80%_20%,#111827_0%,transparent_60%)]'
-        )}
-      />
     </section>
   )
 }
-
-

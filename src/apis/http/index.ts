@@ -1,6 +1,5 @@
-import axios from 'axios'
 import { createHttpRequester, type ApiResponse, type HttpError, type HttpRequestConfig } from './core'
-import { API_BASE_URL, normalizeAxiosHttpError } from './util'
+import { API_BASE_URL, normalizeBaseHttpError } from './util'
 
 export type { ApiResponse, HttpError, HttpRequestConfig } from './core'
 export { isStaleRequestError } from './util'
@@ -10,40 +9,14 @@ const getConfiguredApiBaseUrl = () => {
 }
 
 export const normalizeHttpError = (error: unknown): HttpError => {
-  return normalizeAxiosHttpError(error)
+  return normalizeBaseHttpError(error)
 }
 
 export const normalizeServerHttpError = (error: unknown): HttpError => {
-  return normalizeAxiosHttpError(error)
+  return normalizeBaseHttpError(error)
 }
 
-export const http = axios.create({
-  baseURL: getConfiguredApiBaseUrl(),
-  timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-
-http.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(normalizeHttpError(error))
-)
-
-export const serverHttp = axios.create({
-  timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
-
-serverHttp.interceptors.response.use(
-  (response) => response,
-  (error) => Promise.reject(normalizeServerHttpError(error))
-)
-
 export const httpRequest = createHttpRequester({
-  client: http,
   getBaseUrl: getConfiguredApiBaseUrl,
 })
 
@@ -77,7 +50,6 @@ const getConfiguredServerApiBaseUrl = async () => {
 }
 
 const serverHttpRequester = createHttpRequester({
-  client: serverHttp,
   getBaseUrl: getConfiguredServerApiBaseUrl,
   defaultDiscardStale: false,
 })
@@ -120,8 +92,6 @@ export async function serverHttpData<TData = unknown, TBody = unknown>(
   const response = await serverHttpRequest<TData, TBody>(config)
   return response.data
 }
-
-export default http
 
 export const getApiBaseUrl = () => {
   return getConfiguredApiBaseUrl()

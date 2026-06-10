@@ -337,6 +337,36 @@
     "contactMe": "Contact Me",
     "close": "Close"
   },
+  "Agent": {
+    "articleSupportButton": "Ask article support",
+    "articleSupportTitle": "Article Support",
+    "articleSupportDescription": "Ask focused questions about {title}",
+    "targetArticle": "Target article: {postId}",
+    "targetArticleRequired": "Target article required",
+    "failedToStart": "Failed to start agent",
+    "failedToSend": "Failed to send message",
+    "sendPreparedQuestion": "Send prepared question",
+    "continueIn": "Continue in {agent}",
+    "sourcesTitle": "Sources",
+    "contextUsage": "Context {percent}%",
+    "thinking": "Thinking...",
+    "send": "Send",
+    "rateLimit": {
+      "exceeded": "Agent request limit reached. Please try again in about {minutes} minute(s)."
+    },
+    "chat": {
+      "title": "Chat Agent",
+      "subtitle": "Search and reason across posts, projects, navigation, and site content.",
+      "placeholder": "Ask about anything on this site",
+      "empty": "Ask a question to search the whole site with context."
+    },
+    "articleSupport": {
+      "title": "Article Support",
+      "subtitle": "Ask focused questions about the selected article and related posts.",
+      "placeholder": "Ask about this article",
+      "empty": "Ask a question about the selected article."
+    }
+  },
   "PostCard": {
     "remainingTags": "Other tags"
   },

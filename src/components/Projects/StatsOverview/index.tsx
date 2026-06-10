@@ -30,25 +30,25 @@ export function StatsOverview({ stats, className }: StatsOverviewProps) {
     className?: string
   }) => (
     <div className={cn('flex items-center gap-3', itemClassName)}>
-      <div className="shrink-0">
+      <div className="shrink-0 text-[var(--site-text-muted)]">
         <Icon className="w-6 h-6" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="text-sm text-gray-600">{label}</div>
-        <div className="text-2xl font-bold text-blue-600">{value}</div>
+        <div className="text-sm text-[var(--site-text-tertiary)]">{label}</div>
+        <div className="text-2xl font-semibold text-[var(--site-action)]">{value}</div>
       </div>
     </div>
   )
 
   return (
     <div className={cn('space-y-6', className)}>
-      <h2 className="text-2xl font-bold text-gray-900">{t('title')}</h2>
+      <h2 className="text-2xl font-semibold text-[var(--site-text)]">{t('title')}</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* 我创建的 */}
         {stats.ownedStats && (
-          <div className="bg-linear-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6">
+            <h3 className="text-lg font-semibold text-[var(--site-text)] mb-4 flex items-center gap-2">
               <ProjectIcon className="w-5 h-5" />
               {t('myProjects')}
             </h3>
@@ -79,8 +79,8 @@ export function StatsOverview({ stats, className }: StatsOverviewProps) {
 
         {/* 我参与的 */}
         {stats.contributedStats && (
-          <div className="bg-linear-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-100 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6">
+            <h3 className="text-lg font-semibold text-[var(--site-text)] mb-4 flex items-center gap-2">
               <ProjectIcon className="w-5 h-5" />
               {t('contributedProjects')}
             </h3>

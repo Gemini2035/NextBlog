@@ -74,7 +74,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
           return (
             <div
               key={contact.key}
-              className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+              className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">

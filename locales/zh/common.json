@@ -330,6 +330,37 @@
     "contactMe": "联系我",
     "close": "关闭"
   },
+  "Agent": {
+    "articleSupportButton": "询问文章助手",
+    "articleSupportTitle": "文章助手",
+    "articleSupportDescription": "围绕《{title}》提问",
+    "targetArticle": "目标文章：{postId}",
+    "targetArticleRequired": "需要指定目标文章",
+    "failedToStart": "启动助手失败",
+    "failedToSend": "发送消息失败",
+    "sendPreparedQuestion": "发送预设问题",
+    "continueIn": "继续使用{agent}",
+    "sourcesTitle": "参考来源",
+    "contextUsage": "上下文 {percent}%",
+    "currentContextUsage": "当前对话上下文 {percent}%",
+    "thinking": "思考中...",
+    "send": "发送",
+    "rateLimit": {
+      "exceeded": "助手请求次数已达上限，请约 {minutes} 分钟后再试。"
+    },
+    "chat": {
+      "title": "站点助手",
+      "subtitle": "搜索并理解文章、项目、导航和站点内容。",
+      "placeholder": "询问本站任意内容",
+      "empty": "输入问题，基于站点上下文进行搜索和回答。"
+    },
+    "articleSupport": {
+      "title": "文章助手",
+      "subtitle": "围绕当前文章和相关文章进行聚焦问答。",
+      "placeholder": "询问这篇文章",
+      "empty": "输入关于当前文章的问题。"
+    }
+  },
   "PostCard": {
     "remainingTags": "其余tag"
   },

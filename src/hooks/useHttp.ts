@@ -22,7 +22,7 @@ export interface UseHttpResult<TData, TBody = unknown> {
   data: TData | null
   response: ApiResponse<TData> | null
   error: HttpError | null
-  execute: (config?: HttpRequestConfig<TBody>) => Promise<ApiResponse<TData>>
+  execute: (config?: Partial<HttpRequestConfig<TBody>>) => Promise<ApiResponse<TData>>
   reset: () => void
 }
 
@@ -51,22 +51,23 @@ export function useHttp<TData = unknown, TBody = unknown>(
   }, [])
 
   const execute = useCallback(
-    async (overrideConfig?: HttpRequestConfig<TBody>) => {
+    async (overrideConfig?: Partial<HttpRequestConfig<TBody>>) => {
       const baseConfig = configRef.current
+      const nextConfig = {
+        ...baseConfig,
+        ...overrideConfig,
+        headers: {
+          ...baseConfig?.headers,
+          ...overrideConfig?.headers,
+        },
+      } as HttpRequestConfig<TBody>
       const requestId = requestIdRef.current + 1
       requestIdRef.current = requestId
       setLoading(true)
       setError(null)
 
       try {
-        const result = await httpRequest<TData, TBody>({
-          ...baseConfig,
-          ...overrideConfig,
-          headers: {
-            ...baseConfig?.headers,
-            ...overrideConfig?.headers,
-          },
-        })
+        const result = await httpRequest<TData, TBody>(nextConfig)
 
         if (requestIdRef.current === requestId) {
           setResponse(result)

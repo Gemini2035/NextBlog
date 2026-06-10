@@ -1,4 +1,3 @@
-import axios, { type AxiosRequestConfig } from 'axios'
 import type { ApiResponse, HttpError } from './core'
 
 type SerializedValue =
@@ -36,7 +35,11 @@ export const getErrorMessage = (data: unknown): string | undefined => {
   }
 
   const message = data.message ?? data.error ?? data.detail
-  return typeof message === 'string' && message.trim().length > 0 ? message : undefined
+  if (typeof message === 'string' && message.trim().length > 0) {
+    return message
+  }
+
+  return isRecord(message) ? getErrorMessage(message) : undefined
 }
 
 export const createHttpError = (error: HttpError): HttpError => {
@@ -81,19 +84,6 @@ export const normalizeBaseHttpError = (error: unknown): HttpError => {
   })
 }
 
-export const normalizeAxiosHttpError = (error: unknown): HttpError => {
-  if (axios.isAxiosError(error)) {
-    return createHttpError({
-      message: getErrorMessage(error.response?.data) ?? error.message ?? DEFAULT_ERROR_MESSAGE,
-      status: error.response?.status,
-      code: error.code,
-      details: error.response?.data,
-    })
-  }
-
-  return normalizeBaseHttpError(error)
-}
-
 export const assertApiResponseOk = <TData>(response: ApiResponse<TData>): ApiResponse<TData> => {
   if (response.code !== 0) {
     throw createHttpError({
@@ -110,8 +100,11 @@ export const normalizeRequestMethod = (method?: string) => {
   return (method ?? 'GET').toUpperCase()
 }
 
-export const getAxiosRequestUrl = <TBody>(
-  config: AxiosRequestConfig<TBody>,
+export const getFetchRequestUrl = (
+  config: {
+    baseURL?: string
+    url?: string
+  },
   fallbackBaseUrl: string
 ) => {
   const url = config.url ?? ''
@@ -122,6 +115,54 @@ export const getAxiosRequestUrl = <TBody>(
 
   const baseUrl = config.baseURL ?? fallbackBaseUrl
   return `${String(baseUrl).replace(/\/$/, '')}/${url.replace(/^\//, '')}`
+}
+
+export const appendRequestParams = (url: string, params: unknown) => {
+  if (!params) {
+    return url
+  }
+
+  const requestUrl = new URL(url, typeof window === 'undefined' ? 'http://localhost' : window.location.origin)
+  const searchParams = toSearchParams(params)
+  searchParams.forEach((value, key) => {
+    requestUrl.searchParams.append(key, value)
+  })
+
+  if (/^https?:\/\//.test(url)) {
+    return requestUrl.toString()
+  }
+
+  return `${requestUrl.pathname}${requestUrl.search}${requestUrl.hash}`
+}
+
+const toSearchParams = (params: unknown) => {
+  if (params instanceof URLSearchParams) {
+    return params
+  }
+
+  const searchParams = new URLSearchParams()
+  if (!isRecord(params)) {
+    return searchParams
+  }
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value === undefined || value === null) {
+      return
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        if (item !== undefined && item !== null) {
+          searchParams.append(key, String(item))
+        }
+      })
+      return
+    }
+
+    searchParams.append(key, String(value))
+  })
+
+  return searchParams
 }
 
 export const createRequestDedupeKey = ({

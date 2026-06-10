@@ -24,16 +24,16 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
   onMouseLeave
 }) => {
   // 为多个卡片分配不同的动画和位置
-  const getAnimationClass = (index: number) => {
+  const getAnimationClass = (itemIndex: number) => {
     const animations = [
       'animate-float-1',
-      'animate-float-2', 
+      'animate-float-2',
       'animate-float-3',
       'animate-float-4',
       'animate-float-5',
       'animate-float-6'
     ]
-    return animations[index % animations.length]
+    return animations[itemIndex % animations.length]
   }
 
   // 根据索引调整透明度，创建层次感
@@ -107,7 +107,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
   return (
     <div
       className={cn(
-        'absolute transform transition-all duration-1000 ease-out hover:scale-110 pointer-events-auto',
+        'absolute transform transition-all duration-1000 ease-out pointer-events-auto',
         getAnimationClass(index),
         getOpacity(index)
       )}
@@ -121,10 +121,8 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
       onMouseLeave={onMouseLeave}
     >
       <div className={cn(
-        'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-md',
-        'border border-blue-200/60 p-2.5',
-        'hover:shadow-lg transition-all duration-300',
-        'hover:bg-blue-100/95 hover:opacity-100 max-w-56'
+        'rounded-lg border border-[var(--site-border)] bg-[var(--site-canvas)] p-2.5',
+        'transition-colors duration-300 hover:border-[var(--site-action)] hover:bg-[var(--site-surface)] hover:opacity-100 max-w-56'
       )}>
         <Link href={`/posts/${post.id}`} className="block">
           <div className="flex items-center gap-2">
@@ -134,7 +132,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
             </div>
             
             <div className="flex-1 min-w-0 flex items-center">
-              <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
+              <h3 className="text-xs font-semibold text-[var(--site-text)] line-clamp-2 leading-tight">
                 {post.title}
               </h3>
             </div>

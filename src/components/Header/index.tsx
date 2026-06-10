@@ -134,7 +134,7 @@ export default function Header() {
     const isInHeader = navRef.current?.contains(target)
     
     // 检查鼠标是否在蒙层上
-    const isOnBackdrop = target.closest('.backdrop-blur-xl')
+    const isOnBackdrop = target.closest('[data-submenu-backdrop]')
     
     // 如果鼠标在蒙层上，播放消失动画
     if (isOnBackdrop) {
@@ -159,7 +159,7 @@ export default function Header() {
           
           const stillInSubmenu = currentElement?.closest('[data-submenu]')
           const stillInHeader = currentElement?.closest('header')
-          const stillOnBackdrop = currentElement?.closest('.backdrop-blur-xl')
+          const stillOnBackdrop = currentElement?.closest('[data-submenu-backdrop]')
           
           if (!stillInSubmenu && !stillInHeader && !stillOnBackdrop) {
             setActiveSubmenu(null)
@@ -293,7 +293,7 @@ export default function Header() {
   return (
     <header 
       ref={navRef}
-      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-200 w-full"
+      className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-[0_1px_2px_rgba(0,0,0,0.04)] border-b border-gray-200 w-full"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 主要内容区域 */}

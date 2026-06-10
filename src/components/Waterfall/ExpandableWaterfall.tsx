@@ -43,12 +43,12 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
       data-waterfall-item
       className={cn(
         'absolute transition-all duration-700 ease-out cursor-pointer group',
-        isExpanded ? 'z-50' : 'hover:scale-105',
+        isExpanded ? 'z-50' : '',
         // 锚点聚焦样式
-        isFocused && 'ring-4 ring-blue-400 ring-opacity-60 shadow-2xl scale-105',
+        isFocused && 'ring-2 ring-[var(--site-focus-ring)] ring-offset-2',
         // 动画状态 - 从下方滑入并淡入
         shouldAnimate 
-          ? 'opacity-100 translate-y-0 scale-100' 
+          ? 'opacity-100 translate-y-0 scale-100'
           : 'opacity-0 translate-y-8 scale-95'
       )}
       style={{
@@ -61,14 +61,14 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
       onClick={() => onItemClick(item.id)}
     >
       <Card 
-        shadow="lg" 
         border="sm" 
         rounded 
+        disabledHover
         className={cn(
-          'p-6 bg-white/90 backdrop-blur-sm h-full transition-all duration-300',
-          'hover:shadow-xl hover:bg-white',
+          'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
+          'hover:border-[var(--site-action)]',
           // 锚点聚焦时的卡片样式
-          isFocused && 'bg-blue-50/90 shadow-2xl border-blue-200',
+          isFocused && 'border-[var(--site-action)]',
           item.cardClassName
         )}
       >
@@ -76,7 +76,7 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
           'transition-all duration-700 ease-out delay-150',
           // 内容动画 - 稍微延迟出现
           shouldAnimate 
-            ? 'opacity-100 translate-y-0' 
+            ? 'opacity-100 translate-y-0'
             : 'opacity-0 translate-y-4'
         )}>
           {item.content}
@@ -85,14 +85,14 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
         {/* 展开提示 */}
         {item.expandedContent && (
           <div className={cn(
-            'mt-4 pt-4 border-t border-gray-200 transition-all duration-700 ease-out delay-200',
+            'mt-4 pt-4 border-t border-[var(--site-border)] transition-all duration-700 ease-out delay-200',
             shouldAnimate 
-              ? 'opacity-100 translate-y-0' 
+              ? 'opacity-100 translate-y-0'
               : 'opacity-0 translate-y-2'
           )}>
-            <div className="flex items-center justify-between text-sm text-gray-500">
+            <div className="flex items-center justify-between text-sm text-[var(--site-text-tertiary)]">
               <span>{t('clickToViewDetails')}</span>
-              <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="w-2 h-2 bg-[var(--site-action)] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
           </div>
         )}
@@ -369,14 +369,14 @@ export default function ExpandableWaterfall({
       {expandedItem && (
         <div 
           className={cn(
-            "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm transition-all duration-300",
+            "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm transition-all duration-300",
             isClosing ? "opacity-0" : "opacity-100"
           )}
           onClick={handleBackdropClick}
         >
           <div 
             className={cn(
-              "relative max-w-4xl max-h-[90vh] w-full bg-white rounded-2xl shadow-2xl overflow-hidden transition-all duration-300",
+              "relative max-w-4xl max-h-[90vh] w-full overflow-hidden rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] transition-all duration-300",
               isClosing 
                 ? "opacity-0 scale-95 translate-y-4" 
                 : "opacity-100 scale-100 translate-y-0"
@@ -385,9 +385,9 @@ export default function ExpandableWaterfall({
             {/* 关闭按钮 */}
             <button
               onClick={handleCloseExpanded}
-              className="absolute top-4 right-4 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
+              className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] transition-colors duration-200 hover:bg-[var(--site-canvas-muted)] cursor-pointer"
             >
-              <CloseIcon className="w-4 h-4 text-gray-600" />
+              <CloseIcon className="w-4 h-4 text-[var(--site-text-muted)]" />
             </button>
 
             {/* 内容区域 */}

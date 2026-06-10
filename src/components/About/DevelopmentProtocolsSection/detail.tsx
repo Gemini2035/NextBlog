@@ -54,7 +54,7 @@ export default function DevelopmentProtocolsDetail({
             return (
               <div
                 key={id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200"
+                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:border-[var(--site-action)] transition-colors duration-200"
               >
                 <div className="p-6">
                   {/* 协议头部 */}

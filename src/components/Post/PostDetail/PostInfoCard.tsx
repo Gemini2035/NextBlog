@@ -145,7 +145,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
         <div className={cn(!isMobile && isSticky && "fixed top-60 right-0 z-50")}>
           <Card
             id="post-info-card"
-            shadow="lg"
+            shadow="sm"
             border="sm"
             rounded
             disabledHover
@@ -153,7 +153,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
               "liquid-transform transition-all duration-500 ease-in-out",
               // 桌面端样式
               !isMobile && !isSticky && "relative w-full mb-8 animate-slide-in-top",
-              !isMobile && isSticky && "relative animate-slide-in-right min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-2xl transform -translate-y-1/2",
+              !isMobile && isSticky && "relative animate-slide-in-right min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-md transform -translate-y-1/2",
               !isMobile && isCollapsed && "transform translate-x-full",
               // 移动端样式
               isMobile && "relative w-full mb-8",

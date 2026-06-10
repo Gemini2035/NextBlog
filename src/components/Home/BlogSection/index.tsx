@@ -74,12 +74,12 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
       <div className="relative max-w-6xl mx-auto -ml-6 sm:-ml-10 lg:-ml-16">
         <div className="max-w-3xl pl-6 sm:pl-10 lg:pl-16">
           <h2 className={cn(
-            'text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-blue-800'
+            'text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--site-text)]'
           )}>
             {t('blogTitle', { default: '博客' })}
           </h2>
           <p className={cn(
-            'mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-blue-600'
+            'mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]'
           )}>
             {blogDescription}
           </p>
@@ -96,9 +96,9 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
                     key={`${id}-${href}`}
                     href={href}
                     className={cn(
-                      'inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium',
-                      'bg-blue-200 text-blue-800 hover:bg-blue-300 transition-colors',
-                      'border border-blue-300 hover:border-blue-400'
+                      'inline-flex items-center gap-2 rounded-[var(--site-radius-chip)] px-4 py-2.5 text-sm font-medium',
+                      'border border-[var(--site-border)] bg-[var(--site-surface)] text-[var(--site-text-muted)] transition-colors',
+                      'hover:border-[var(--site-action)] hover:text-[var(--site-action)]'
                     )}
                   >
                     <Icon className="w-4 h-4" />
@@ -111,7 +111,7 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
             {/* Popular tag links */}
             {popularTags.length > 0 && (
               <div className="mt-4">
-                <p className="text-sm text-blue-600 mb-3">
+                <p className="text-sm text-[var(--site-text-tertiary)] mb-3">
                   {t('popularTags', { default: '热门标签' })}:
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -120,9 +120,9 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
                       key={tag}
                       href={`/posts?tag=${encodeURIComponent(tag)}`}
                       className={cn(
-                        'inline-flex items-center gap-1 rounded-md px-3 py-1.5 text-xs font-medium',
-                        'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:text-blue-800 transition-colors',
-                        'border border-blue-200 hover:border-blue-300'
+                        'inline-flex items-center gap-1 rounded-[var(--site-radius-chip)] px-3 py-1.5 text-xs font-medium',
+                        'border border-[var(--site-border)] bg-[var(--site-canvas)] text-[var(--site-text-muted)] transition-colors',
+                        'hover:border-[var(--site-action)] hover:text-[var(--site-action)]'
                       )}
                     >
                       <TagIcon className="w-3 h-3" />
@@ -140,7 +140,7 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
                   type="primary"
                   size="sm"
                   rounded={true}
-                  className="inline-flex items-center gap-2 bg-blue-800 text-white hover:bg-blue-900 focus-visible:outline-blue-800 border border-blue-600 hover:border-blue-700"
+                  className="inline-flex items-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]"
                 >
                   <span>{t('viewMore', { default: '了解更多' })}</span>
                   <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
@@ -158,8 +158,7 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
             )}>
               {floatingPosts.slice(0, 6).map(({ id, title }) => (
                 <div key={id} className={cn(
-                  'bg-blue-50/90 backdrop-blur-sm rounded-lg shadow-lg',
-                  'border border-blue-200/60 p-2.5'
+                  'rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-2.5'
                 )}>
                   <Link href={`/posts/${id}`} className="block">
                     <div className="flex items-center gap-2">
@@ -167,7 +166,7 @@ export default function BlogSection({ index, item, posts }: BlogSectionProps) {
                         <PostIcon className="w-4 h-4" />
                       </div>
                       <div className="flex-1 min-w-0 flex items-center">
-                        <h3 className="text-xs font-semibold text-blue-800 line-clamp-2 leading-tight">
+                        <h3 className="text-xs font-semibold text-[var(--site-text)] line-clamp-2 leading-tight">
                           {title}
                         </h3>
                       </div>

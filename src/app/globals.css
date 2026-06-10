@@ -1,15 +1,71 @@
 @import "tailwindcss";
 @source "../";
 
+:root {
+  --apple-blue: #0066cc;
+  --apple-blue-hover: #0071e3;
+  --apple-ink: #1d1d1f;
+  --apple-ink-muted: #333333;
+  --apple-ink-tertiary: #7a7a7a;
+  --apple-canvas: #ffffff;
+  --apple-canvas-soft: #f5f5f7;
+  --apple-surface: #fafafc;
+  --apple-hairline: #e0e0e0;
+  --apple-divider: rgba(0, 0, 0, 0.08);
+
+  --site-action: var(--apple-blue);
+  --site-action-hover: var(--apple-blue-hover);
+  --site-text: var(--apple-ink);
+  --site-text-muted: var(--apple-ink-muted);
+  --site-text-tertiary: var(--apple-ink-tertiary);
+  --site-canvas: var(--apple-canvas);
+  --site-canvas-muted: var(--apple-canvas-soft);
+  --site-surface: var(--apple-surface);
+  --site-border: var(--apple-hairline);
+  --site-border-subtle: var(--apple-divider);
+  --site-radius-card: 18px;
+  --site-radius-control: 8px;
+  --site-radius-chip: 9999px;
+  --site-nav-height: 52px;
+  --site-focus-ring: var(--apple-blue-hover);
+}
+
+html {
+  background: var(--site-canvas);
+  color-scheme: light;
+}
+
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #ffffff;
-  color: #171717;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  background-color: var(--site-canvas);
+  color: var(--site-text);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(0, 102, 204, 0.16);
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+button,
+a {
+  transition-duration: 180ms;
+}
+
+button:active,
+a[role="button"]:active {
+  transform: scale(0.97);
 }
 
 /* Prose styles for MDX content */
 .prose {
   max-width: none;
+  color: var(--site-text);
 }
 
 .prose h1,
@@ -18,16 +74,17 @@ body {
 .prose h4,
 .prose h5,
 .prose h6 {
-  color: #1f2937;
+  color: var(--site-text);
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.18;
+  letter-spacing: -0.28px;
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
 .prose h1 {
   font-size: 2.25rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--site-border);
   padding-bottom: 0.5rem;
 }
 
@@ -42,32 +99,33 @@ body {
 .prose p {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
-  line-height: 1.75;
+  line-height: 1.62;
 }
 
 .prose a {
-  color: #2563eb;
+  color: var(--site-action);
   text-decoration: underline;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .prose a:hover {
-  color: #1d4ed8;
+  color: var(--site-action-hover);
 }
 
 .prose code {
-  background-color: #f3f4f6;
+  background-color: var(--site-canvas-muted);
   padding: 0.125rem 0.25rem;
-  border-radius: 0.25rem;
+  border-radius: 5px;
   font-size: 0.875em;
   font-weight: 600;
 }
 
 .prose pre {
-  background-color: #1f2937;
+  background-color: var(--site-canvas-muted);
+  border: 1px solid var(--site-border);
   color: #f9fafb;
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   overflow-x: auto;
   margin: 1.5rem 0;
 }
@@ -79,11 +137,10 @@ body {
 }
 
 .prose blockquote {
-  border-left: 4px solid #e5e7eb;
+  border-left: 2px solid var(--site-border);
   padding-left: 1rem;
   margin: 1.5rem 0;
-  font-style: italic;
-  color: #6b7280;
+  color: var(--site-text-tertiary);
 }
 
 .prose ul,
@@ -97,10 +154,9 @@ body {
 }
 
 .prose img {
-  border-radius: 0.5rem;
+  border-radius: 18px;
   margin: 1.5rem 0;
 }
-
 
 /* 文本截断样式 */
 .line-clamp-2 {

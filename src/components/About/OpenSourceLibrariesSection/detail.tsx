@@ -38,7 +38,7 @@ const LibraryCard: FC<LibraryCardProps> = ({
     sourceCode: "Source Code",
   },
 }) => (
-  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow flex flex-col">
+  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-[var(--site-action)] transition-colors flex flex-col">
     <div className="flex items-center mb-4">
       <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3 shrink-0">
         {icon}
