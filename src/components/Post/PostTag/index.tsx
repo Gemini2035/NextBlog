@@ -71,11 +71,13 @@ export function PostTag({
   // 根据环境确定样式
   const getStyles = () => {
     const baseStyles = compact ? 'text-xs' : '';
-    const tooltipStyles = inTooltip ? 'shadow-sm' : '';
+    const surfaceStyles = inTooltip
+      ? 'bg-[var(--site-canvas)] text-[var(--site-text-muted)] border-[var(--site-border)] shadow-none'
+      : 'bg-[var(--site-surface)] text-[var(--site-text-muted)] border-[var(--site-border)] hover:border-[var(--site-action)] hover:text-[var(--site-action)]';
     
     return cn(
       baseStyles,
-      tooltipStyles,
+      surfaceStyles,
       className
     );
   };

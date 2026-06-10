@@ -70,7 +70,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
           return (
             <div
               key={link.key}
-              className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+              className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
@@ -117,7 +117,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                 external
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-3 p-5 rounded-xl border border-gray-200 bg-white hover:border-blue-300 hover:shadow-md transition-all duration-200"
+                className="flex items-center justify-between gap-3 p-5 rounded-xl border border-gray-200 bg-white hover:border-blue-300 transition-colors duration-200"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">

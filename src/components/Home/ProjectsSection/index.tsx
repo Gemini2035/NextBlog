@@ -19,10 +19,10 @@ export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
   return (
     <HomeSectionSkeleton index={index}>
       <div className="max-w-3xl">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--site-text)]">
           {t('projectsTitle', { default: '项目' })}
         </h2>
-        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]">
           {projectsDescription}
         </p>
 
@@ -32,7 +32,7 @@ export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
               type="primary"
               size="sm"
               rounded={true}
-              className="inline-flex items-center gap-2 bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900"
+              className="inline-flex items-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]"
             >
               <span>{t('viewMore', { default: '了解更多' })}</span>
               <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />

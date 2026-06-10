@@ -28,11 +28,11 @@ export function ContributedFilter({ value, onChange }: ContributedFilterProps) {
 
   const getIcon = () => {
     if (value === true) {
-      return <ContributorIcon className="w-4 h-4 text-purple-500" />
+      return <ContributorIcon className="w-4 h-4 text-[var(--site-action)]" />
     } else if (value === false) {
-      return <ContributorIcon className="w-4 h-4 text-gray-400" />
+      return <ContributorIcon className="w-4 h-4 text-[var(--site-text-tertiary)]" />
     }
-    return <ContributorIcon className="w-4 h-4 text-gray-300" />
+    return <ContributorIcon className="w-4 h-4 text-[var(--site-border)]" />
   }
 
   const getTooltip = () => {
@@ -47,11 +47,10 @@ export function ContributedFilter({ value, onChange }: ContributedFilterProps) {
   return (
     <button
       onClick={handleClick}
-      className="flex items-center justify-center w-8 h-8 rounded-full transition-all duration-200 hover:bg-gray-100 cursor-pointer"
+      className="flex items-center justify-center w-8 h-8 rounded-[var(--site-radius-control)] transition-all duration-200 hover:bg-[var(--site-canvas-muted)] cursor-pointer"
       title={getTooltip()}
     >
       {getIcon()}
     </button>
   )
 }
-

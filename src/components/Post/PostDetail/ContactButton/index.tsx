@@ -24,7 +24,7 @@ export function ContactButton({ postId, title }: ContactButtonProps) {
       <MobileInlineContact href={href} title={title} />
       <Link
         href={href}
-        className="fixed bottom-6 right-6 z-50 hidden h-14 w-14 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-xl md:flex md:bottom-24"
+        className="fixed bottom-6 right-6 z-40 hidden h-14 w-14 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg transition-all duration-300 hover:bg-blue-700 hover:shadow-xl md:flex md:bottom-24"
         aria-label={t('articleSupportButton')}
         title={t('articleSupportButton')}
         target="_blank"

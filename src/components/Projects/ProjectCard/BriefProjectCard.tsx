@@ -27,24 +27,9 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
 
   // 获取分类样式
   const getCategoryStyle = (cat?: ProjectCategory) => {
-    switch (cat) {
-      case 'featured':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'active':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'stable':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'completed':
-        return 'bg-purple-100 text-purple-800 border-purple-200'
-      case 'archived':
-        return 'bg-gray-100 text-gray-600 border-gray-200'
-      case 'fork':
-        return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'learning':
-        return 'bg-pink-100 text-pink-800 border-pink-200'
-      default:
-        return 'bg-gray-100 text-gray-600 border-gray-200'
-    }
+    return cat === 'featured'
+      ? 'bg-[var(--site-surface)] text-[var(--site-action)] border-[var(--site-action)]'
+      : 'bg-[var(--site-surface)] text-[var(--site-text-muted)] border-[var(--site-border)]'
   }
 
   return (
@@ -52,8 +37,8 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       {/* 项目头部 - 名称和状态 */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 flex-1 min-w-0">
-          <ProjectIcon className="w-5 h-5 text-gray-600 shrink-0" />
-          <h3 className="text-lg font-bold text-gray-900 truncate leading-5">
+          <ProjectIcon className="w-5 h-5 text-[var(--site-text-muted)] shrink-0" />
+          <h3 className="text-lg font-semibold text-[var(--site-text)] truncate leading-5">
             {project.name}
           </h3>
         </div>
@@ -62,7 +47,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         <div className="flex items-center gap-2">
           {/* 置顶标签 */}
           {project.isPinned && (
-            <span className="px-2 py-1 text-xs font-medium rounded border whitespace-nowrap flex items-center gap-1 bg-yellow-100 text-yellow-800 border-yellow-200">
+            <span className="px-2 py-1 text-xs font-normal rounded-[var(--site-radius-chip)] border whitespace-nowrap flex items-center gap-1 bg-[var(--site-surface)] text-[var(--site-action)] border-[var(--site-action)]">
               <StarFilledIcon className="w-3 h-3" />
               {t('project.pinned')}
             </span>
@@ -71,7 +56,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
           {/* 分类标签 */}
           {category && (
             <span className={cn(
-              'px-2 py-1 text-xs font-medium rounded border whitespace-nowrap flex items-center gap-1',
+                'px-2 py-1 text-xs font-normal rounded-[var(--site-radius-chip)] border whitespace-nowrap flex items-center gap-1',
               getCategoryStyle(category)
             )}>
               {category === 'fork' && <ForkIcon className="w-3 h-3" />}
@@ -82,30 +67,30 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       </div>
 
       {/* 项目描述 */}
-      <p className="text-sm text-gray-600 line-clamp-2 min-h-10">
+      <p className="text-sm text-[var(--site-text-muted)] line-clamp-2 min-h-10">
         {project.description || t('project.noDescription')}
       </p>
 
       {/* 项目统计 */}
-      <div className="flex items-center gap-4 text-xs text-gray-500">
+      <div className="flex items-center gap-4 text-xs text-[var(--site-text-tertiary)]">
         <div className="flex items-center gap-1">
           <StarIcon className="w-4 h-4" />
           <span>{project.stars}</span>
         </div>
         {project.primaryLanguage && (
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-blue-500" />
+            <div className="w-2 h-2 rounded-full bg-[var(--site-action)]" />
             <span>{project.primaryLanguage.name}</span>
           </div>
         )}
       </div>
 
       {/* 时间信息 */}
-      <div className="pt-2 border-t border-gray-100">
-        <div className="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
+      <div className="pt-2 border-t border-[var(--site-border)]">
+        <div className="flex items-center gap-2 text-xs text-[var(--site-text-tertiary)] flex-wrap">
           <ClockIcon className="w-3.5 h-3.5 shrink-0" />
           <span className="whitespace-nowrap">{t('project.created')}: {formatDate(project.createdAt)}</span>
-          <span className="text-gray-300">|</span>
+          <span className="text-[var(--site-border)]">|</span>
           <span className="whitespace-nowrap">{t('project.updated')}: {formatDate(project.updatedAt)}</span>
         </div>
       </div>
@@ -114,12 +99,12 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       {(project.isArchived || project.isFork) && (
         <div className="flex gap-2 text-xs">
           {project.isArchived && (
-            <span className="px-2 py-1 bg-gray-100 text-gray-600 rounded">
+            <span className="px-2 py-1 bg-[var(--site-surface)] text-[var(--site-text-tertiary)] rounded-[var(--site-radius-chip)]">
               {t('project.archived')}
             </span>
           )}
           {project.isFork && (
-            <span className="px-2 py-1 bg-orange-100 text-orange-600 rounded">
+            <span className="px-2 py-1 bg-[var(--site-surface)] text-[var(--site-text-tertiary)] rounded-[var(--site-radius-chip)]">
               {t('project.forked')}
             </span>
           )}

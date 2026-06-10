@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/http'
 import { getSiteInit } from '@/apis/site/server'
 import { RouteLoadingMask } from '@/components/RouteLoadingMask'
-import { PostInfoCard, RelatedPostsClient, ContactButton } from '@/components/Post'
+import { PostInfoCard, PostContent, RelatedPostsClient, ContactButton } from '@/components/Post'
 import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
 
 interface PostPageProps {
@@ -60,13 +60,7 @@ async function PostPageContent({ params }: PostPageProps) {
         {/* 文章信息卡片 - 初始显示在顶部 */}
         <PostInfoCard post={post} />
         
-        {/* 文章内容 */}
-        <article className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:p-8 mt-8">
-          <div
-            className="prose prose-lg max-w-none"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
-        </article>
+        <PostContent content={post.content} />
         
         {/* AI article support entry */}
         <ContactButton postId={id} title={post.title} />

@@ -17,9 +17,9 @@ interface TechTagProps {
 function TechTag({ name, color, isSelected, onClick }: TechTagProps) {
   return (
     <span 
-      className={`px-3 py-1 bg-white rounded-full text-sm font-medium cursor-pointer transition-all duration-200 hover:shadow-md ${
+      className={`px-3 py-1 bg-white rounded-full text-sm font-medium cursor-pointer transition-colors duration-200 hover:ring-1 hover:ring-[var(--site-action)] ${
         isSelected 
-          ? `ring-2 ring-blue-500 shadow-md ${color}` 
+          ? `ring-2 ring-blue-500 ${color}` 
           : color
       }`}
       onClick={onClick}

@@ -192,7 +192,7 @@ function OverflowIndicator({ isVisible, direction, size = 'md', position }: Over
       position === 'title' ? 'bottom-1' : 'bottom-1'
     )}>
       <div className={cn(
-        "text-gray-400 font-bold animate-pulse",
+        "text-[var(--site-text-tertiary)] font-semibold",
         sizeClasses,
         rotation
       )}>
@@ -295,8 +295,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
 
   return (
     <Card 
-      shadow={isCompact ? "sm" : "md"} 
       rounded 
+      disabledHover
+      className="h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-none transition-colors hover:border-[var(--site-action)]"
     >
       <Link
         href={`/posts/${post.id}`}
@@ -330,9 +331,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     key={animationKey}
                     ref={titleRef}
                     className={cn(
-                      titleSize, "font-bold text-gray-900 leading-tight",
+                      titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? "w-max animate-pulse" : "w-full overflow-hidden"
+                      isTitleScrolling && isHovered ? "w-max" : "w-full overflow-hidden"
                     )}
                     style={{
                       animation: isTitleScrolling && isHovered ? 'title-scroll 4s ease-out forwards 0.3s' : 'none',
@@ -352,12 +353,12 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
               </div>
               
               {/* 日期信息 */}
-              <div className="text-xs text-gray-500 mb-3">
+              <div className="text-xs text-[var(--site-text-tertiary)] mb-3">
                 <time dateTime={post.createdAt}>
                   {formatDate(post.createdAt)}
                 </time>
                 {post.updatedAt && post.updatedAt !== post.createdAt && (
-                  <div className="text-xs text-gray-400 mt-1">
+                  <div className="text-xs text-[var(--site-text-tertiary)] mt-1">
                     更新于 {formatDate(post.updatedAt)}
                   </div>
                 )}
@@ -375,9 +376,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     key={animationKey}
                     ref={titleRef}
                     className={cn(
-                      titleSize, "font-bold text-gray-900 leading-tight",
+                      titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? "w-max animate-pulse" : "w-full overflow-hidden"
+                      isTitleScrolling && isHovered ? "w-max" : "w-full overflow-hidden"
                     )}
                     style={{
                       animation: isTitleScrolling && isHovered ? 'title-scroll 4s ease-out forwards 0.3s' : 'none',
@@ -408,9 +409,8 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                         key={animationKey}
                         ref={descriptionRef}
                         className={cn(
-                          "text-gray-600 leading-relaxed transition-all duration-300",
-                          descriptionSize,
-                          isDescriptionScrolling && isHovered ? "animate-pulse" : ""
+                          "text-[var(--site-text-muted)] leading-relaxed transition-all duration-300",
+                          descriptionSize
                         )}
                         style={{
                           animation: isDescriptionScrolling && isHovered ? 'description-scroll 4s ease-out forwards 0.3s' : 'none',
@@ -429,12 +429,12 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     </div>
                   )}
                   
-                  <div className="text-sm text-gray-500 flex-shrink-0">
+                  <div className="text-sm text-[var(--site-text-tertiary)] flex-shrink-0">
                     <time dateTime={post.createdAt}>
                       {formatDate(post.createdAt)}
                     </time>
                     {post.updatedAt && post.updatedAt !== post.createdAt && (
-                      <div className="text-xs text-gray-400 mt-1">
+                      <div className="text-xs text-[var(--site-text-tertiary)] mt-1">
                         更新于 {formatDate(post.updatedAt)}
                       </div>
                     )}

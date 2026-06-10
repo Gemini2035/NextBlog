@@ -80,8 +80,8 @@ export function FilterRow({
         {/* 置顶项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-500 shrink-0')} />
-            <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showPinned')}</span>
+            <StarFilledIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--site-text-muted)] shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-normal text-[var(--site-text-muted)] truncate')}>{t('showPinned')}</span>
           </div>
           <div className={cn('shrink-0 ml-2')}>
             <PinnedFilter
@@ -94,8 +94,8 @@ export function FilterRow({
         {/* 我创建的项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ProjectIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-blue-500 shrink-0')} />
-            <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showOwned')}</span>
+            <ProjectIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--site-text-muted)] shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-normal text-[var(--site-text-muted)] truncate')}>{t('showOwned')}</span>
           </div>
           <div className={cn('shrink-0 ml-2')}>
             <OwnedFilter
@@ -108,8 +108,8 @@ export function FilterRow({
         {/* 我参与的项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ContributorIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-purple-500 shrink-0')} />
-            <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showContributed')}</span>
+            <ContributorIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--site-text-muted)] shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-normal text-[var(--site-text-muted)] truncate')}>{t('showContributed')}</span>
           </div>
           <div className={cn('shrink-0 ml-2')}>
             <ContributedFilter
@@ -122,8 +122,8 @@ export function FilterRow({
         {/* Fork项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-orange-500 shrink-0')} />
-            <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showFork')}</span>
+            <ForkIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--site-text-muted)] shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-normal text-[var(--site-text-muted)] truncate')}>{t('showFork')}</span>
           </div>
           <div className={cn('shrink-0 ml-2')}>
             <ForkFilter
@@ -136,8 +136,8 @@ export function FilterRow({
         {/* 归档项目筛选 */}
         <div className={cn('flex items-center justify-between py-2 md:py-0 min-w-0')}>
           <div className={cn('flex items-center gap-2 min-w-0 flex-1')}>
-            <ArchiveIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-gray-500 shrink-0')} />
-            <span className={cn('text-xs md:text-sm font-medium text-gray-700 truncate')}>{t('showArchived')}</span>
+            <ArchiveIcon className={cn('w-3.5 h-3.5 md:w-4 md:h-4 text-[var(--site-text-muted)] shrink-0')} />
+            <span className={cn('text-xs md:text-sm font-normal text-[var(--site-text-muted)] truncate')}>{t('showArchived')}</span>
           </div>
           <div className={cn('shrink-0 ml-2')}>
             <ArchivedFilter
@@ -234,4 +234,3 @@ export function FilterRow({
     </div>
   )
 }
-

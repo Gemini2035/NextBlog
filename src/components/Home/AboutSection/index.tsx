@@ -20,10 +20,10 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
   return (
     <HomeSectionSkeleton index={index}>
       <div className="max-w-3xl">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--site-text)]">
           {t('aboutTitle', { default: '关于我' })}
         </h2>
-        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-gray-600">
+        <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]">
           {aboutDescription}
         </p>
 
@@ -36,7 +36,7 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
                   {/* Parent link */}
                   <Link
                     href={href}
-                    className="block text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors mb-3"
+                    className="block text-[17px] font-semibold text-[var(--site-text)] hover:text-[var(--site-action)] transition-colors mb-3"
                   >
                     {label}
                   </Link>
@@ -48,7 +48,7 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
                         <Link
                           key={subIndex}
                           href={href}
-                          className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                          className="text-sm text-[var(--site-text-muted)] hover:text-[var(--site-action)] transition-colors"
                         >
                           {label}
                         </Link>
@@ -67,7 +67,7 @@ export default function AboutSection({ index, item }: AboutSectionProps) {
               type="primary"
               size="sm"
               rounded={true}
-              className="inline-flex items-center gap-2 bg-blue-900 text-white hover:bg-blue-800 focus-visible:outline-blue-900"
+              className="inline-flex items-center gap-2 rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]"
             >
               <span>{t('viewMore', { default: '了解更多' })}</span>
               <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />

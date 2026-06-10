@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { Button, Link } from '@/ui'
 import { PostTag } from '../PostTag'
 import type { BlogPostDetail, BlogPostListItem } from '@/types/blog'
@@ -44,10 +44,19 @@ const getRelatedPostsData = (
 }
 
 export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClientProps) {
+  const locale = useLocale()
   const t = useTranslations('Posts')
   const allRelatedPosts = useMemo(() => getRelatedPostsData(post, posts, limit), [post, posts, limit])
   const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>(allRelatedPosts.slice(0, 3))
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const dateFormatter = useMemo(() => {
+    return new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      timeZone: 'UTC',
+    })
+  }, [locale])
 
   if (allRelatedPosts.length === 0) {
     return null
@@ -85,7 +94,7 @@ export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClien
             <Link
               key={relatedPost.id}
               href={`/posts/${relatedPost.id}`}
-              className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
+              className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-[var(--site-action)] transition-colors duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
                 <h4 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
@@ -110,11 +119,7 @@ export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClien
                   )}
 
                   <time dateTime={relatedPost.createdAt} className="text-sm text-gray-500">
-                    {new Date(relatedPost.createdAt).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric',
-                    })}
+                    {dateFormatter.format(new Date(relatedPost.createdAt))}
                   </time>
                 </div>
               </div>

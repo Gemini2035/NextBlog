@@ -61,10 +61,10 @@ export default function ProjectsClient({
   }, [filteredProjects])
 
   return (
-    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12 min-h-[calc(100vh-64px)]">
+    <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-10 sm:py-14 min-h-[calc(100vh-var(--site-nav-height))] text-[var(--site-text)]">
       <div className="mb-6 sm:mb-8">
         <h1 className="text-2xl sm:text-4xl font-bold mb-2">{t('title')}</h1>
-        <p className="text-base sm:text-xl text-gray-600">{t('description')}</p>
+        <p className="text-base sm:text-xl text-[var(--site-text-muted)]">{t('description')}</p>
       </div>
 
       {stats && (
@@ -89,7 +89,7 @@ export default function ProjectsClient({
         </>
       ) : (
         <div className="py-12 text-center">
-          <p className="text-gray-500 text-base sm:text-lg">暂无项目</p>
+          <p className="text-[var(--site-text-tertiary)] text-base sm:text-lg">暂无项目</p>
         </div>
       )}
     </div>

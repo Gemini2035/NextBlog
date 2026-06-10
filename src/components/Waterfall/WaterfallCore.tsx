@@ -165,11 +165,12 @@ export default function WaterfallCore({
             }}
           >
             <Card 
-              shadow="lg" 
+              shadow="none"
               border="sm" 
               rounded 
+              disabledHover
               className={cn(
-                'p-8 bg-white/80 backdrop-blur-sm h-full',
+                'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-8 shadow-none transition-colors hover:border-[var(--site-action)]',
                 item.cardClassName
               )}
             >

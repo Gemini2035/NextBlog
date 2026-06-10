@@ -1,0 +1,156 @@
+.article {
+  margin-top: 2rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.content {
+  max-width: none;
+  overflow-wrap: anywhere;
+  color: var(--site-text);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.content > :first-child {
+  margin-top: 0;
+}
+
+.content > :last-child {
+  margin-bottom: 0;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: var(--site-text);
+  font-weight: 600;
+  letter-spacing: -0.28px;
+  line-height: 1.18;
+}
+
+.content h1 {
+  border-bottom: 1px solid var(--site-border);
+  padding-bottom: 0.5rem;
+  font-size: 2.25rem;
+}
+
+.content h2 {
+  font-size: 1.875rem;
+}
+
+.content h3 {
+  font-size: 1.5rem;
+}
+
+.content h4,
+.content h5,
+.content h6 {
+  font-size: 1.25rem;
+}
+
+.content p {
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.content a {
+  color: var(--site-action);
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.content a:hover {
+  color: var(--site-action-hover);
+}
+
+.content code {
+  border-radius: 5px;
+  background-color: var(--site-canvas-muted);
+  color: var(--site-text);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.875em;
+  font-weight: 600;
+}
+
+.content pre {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--site-border);
+  border-radius: 12px;
+  background-color: #f8fafc;
+  color: #1f2937;
+  padding: 1rem;
+}
+
+.content pre code {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  font-weight: 400;
+}
+
+.content blockquote {
+  margin: 1.5rem 0;
+  border-left: 2px solid var(--site-border);
+  padding-left: 1rem;
+  color: var(--site-text-tertiary);
+}
+
+.content ul,
+.content ol {
+  margin: 1.25rem 0;
+  padding-left: 1.5rem;
+}
+
+.content ul {
+  list-style: disc;
+}
+
+.content ol {
+  list-style: decimal;
+}
+
+.content li {
+  margin: 0.5rem 0;
+}
+
+.content img {
+  margin: 1.5rem 0;
+  max-width: 100%;
+  height: auto;
+  border-radius: 18px;
+}
+
+.content table {
+  display: block;
+  margin: 1.5rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.content th,
+.content td {
+  border: 1px solid var(--site-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.content th {
+  background-color: var(--site-canvas-muted);
+}
+
+@media (min-width: 768px) {
+  .article {
+    padding: 2rem;
+  }
+}
