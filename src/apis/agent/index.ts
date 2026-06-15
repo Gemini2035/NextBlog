@@ -3,6 +3,7 @@ import type {
   AgentMessage,
   AgentMessageCreatePayload,
   AgentMessageStreamPayload,
+  AgentStreamTimelineEvent,
   AgentSession,
   AgentType,
 } from '@/types/agent'
@@ -23,6 +24,7 @@ interface StreamAgentMessageOptions {
   onUserMessage?: (message: AgentMessage) => void
   onAssistantMessage?: (message: AgentMessage) => void
   onDelta?: (delta: string) => void
+  onTimelineEvent?: (event: AgentStreamTimelineEvent) => void
   onDone?: () => void
   onError?: (error: Error) => void
 }
@@ -117,8 +119,24 @@ const parseStreamPayload = (data: string, eventType?: string): AgentMessageStrea
   const resolvedEventType = envelopeType ?? eventType
   const payloadData = envelopeType && 'data' in parsedRecord ? parsedRecord.data : parsed
 
-  if (resolvedEventType === 'ready' || resolvedEventType === 'stage') {
+  if (resolvedEventType === 'ready') {
     return {}
+  }
+
+  if (
+    resolvedEventType === 'stage'
+    || resolvedEventType === 'run_started'
+    || resolvedEventType === 'step_started'
+    || resolvedEventType === 'step_finished'
+    || resolvedEventType === 'step_failed'
+    || resolvedEventType === 'run_finished'
+  ) {
+    return {
+      timelineEvent: {
+        type: resolvedEventType,
+        ...(isRecord(payloadData) ? payloadData : {}),
+      } as AgentStreamTimelineEvent,
+    }
   }
 
   if (resolvedEventType === 'error_message') {
@@ -183,6 +201,10 @@ const applyStreamPayload = (payload: AgentMessageStreamPayload, options: StreamA
     options.onAssistantMessage?.(payload.assistantMessage)
   }
 
+  if (payload.timelineEvent) {
+    options.onTimelineEvent?.(payload.timelineEvent)
+  }
+
   const delta = payload.delta ?? payload.content
   if (delta) {
     options.onDelta?.(delta)
@@ -228,11 +250,20 @@ export const streamAgentMessage = (
 ) => {
   const abortController = new AbortController()
   let finished = false
+  let reader: ReadableStreamDefaultReader<Uint8Array> | null = null
+
+  const cancelReader = () => {
+    const currentReader = reader
+    reader = null
+    if (!currentReader) return
+    void currentReader.cancel().catch(() => undefined)
+  }
 
   const finish = () => {
     if (finished) return
     finished = true
     abortController.abort()
+    cancelReader()
     options.onDone?.()
   }
 
@@ -245,12 +276,14 @@ export const streamAgentMessage = (
         onError: (error) => {
           finished = true
           abortController.abort()
+          cancelReader()
           options.onError?.(error)
         },
       })
     } catch (error) {
       finished = true
       abortController.abort()
+      cancelReader()
       options.onError?.(error instanceof Error ? error : new Error('Failed to parse agent stream'))
     }
   }
@@ -261,6 +294,7 @@ export const streamAgentMessage = (
         method: 'GET',
         headers: {
           Accept: 'text/event-stream',
+          ...(siteLanguage ? { 'X-Locale': siteLanguage } : {}),
         },
         signal: abortController.signal,
       })
@@ -280,7 +314,7 @@ export const streamAgentMessage = (
         throw new Error('Agent stream response body is empty')
       }
 
-      const reader = response.body.getReader()
+      reader = response.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
 
@@ -310,6 +344,7 @@ export const streamAgentMessage = (
     } catch (error) {
       if (finished || abortController.signal.aborted) return
       finished = true
+      cancelReader()
       options.onError?.(error instanceof Error ? error : new Error('Agent stream disconnected'))
     }
   })()
@@ -317,5 +352,6 @@ export const streamAgentMessage = (
   return () => {
     finished = true
     abortController.abort()
+    cancelReader()
   }
 }

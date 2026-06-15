@@ -59,10 +59,21 @@ export async function GET(request: NextRequest, context: RouteContext) {
     apiProxyTarget
   )
   upstreamUrl.search = request.nextUrl.search
+  const locale = request.headers.get('x-locale') ?? request.nextUrl.searchParams.get('locale')
 
   const encoder = new TextEncoder()
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
+      let upstreamReader: ReadableStreamDefaultReader<Uint8Array> | null = null
+      const cancelUpstreamReader = () => {
+        const reader = upstreamReader
+        upstreamReader = null
+        if (!reader) return
+        void reader.cancel().catch(() => undefined)
+      }
+
+      request.signal.addEventListener('abort', cancelUpstreamReader, { once: true })
+
       controller.enqueue(
         encoder.encode(
           `data: ${JSON.stringify({
@@ -80,6 +91,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
           method: 'GET',
           headers: {
             Accept: 'text/event-stream',
+            ...(locale ? { 'X-Locale': locale } : {}),
           },
           cache: 'no-store',
           signal: request.signal,
@@ -112,9 +124,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
           return
         }
 
-        const reader = upstreamResponse.body.getReader()
+        upstreamReader = upstreamResponse.body.getReader()
         while (true) {
-          const { done, value } = await reader.read()
+          const { done, value } = await upstreamReader.read()
           if (done) break
           controller.enqueue(value)
         }
@@ -134,6 +146,8 @@ export async function GET(request: NextRequest, context: RouteContext) {
           )
         )
       } finally {
+        cancelUpstreamReader()
+        request.signal.removeEventListener('abort', cancelUpstreamReader)
         controller.close()
       }
     },

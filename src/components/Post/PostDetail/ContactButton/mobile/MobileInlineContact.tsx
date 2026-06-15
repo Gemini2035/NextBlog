@@ -30,7 +30,7 @@ export function MobileInlineContact({ href, title }: MobileInlineContactProps) {
           <Link
             href={href}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="opener"
             className={cn(
               'text-sm text-blue-600 hover:text-blue-800',
               'font-medium underline underline-offset-2',
