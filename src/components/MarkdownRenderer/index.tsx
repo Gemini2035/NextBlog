@@ -15,23 +15,26 @@ interface MarkdownRendererProps {
   content: string
   className?: string
   autoLinkTargets?: MarkdownAutoLinkTarget[]
+  linkTarget?: '_blank' | '_self'
 }
 
-const markdownComponents: Components = {
+const createMarkdownComponents = (linkTarget?: MarkdownRendererProps['linkTarget']): Components => ({
   a: ({ href, children }) => {
     const isExternalLink = typeof href === 'string' && /^https?:\/\//.test(href)
+    const target = linkTarget ?? (isExternalLink ? '_blank' : undefined)
+    const shouldUseNoReferrer = target === '_blank'
 
     return (
       <a
         href={href}
-        rel={isExternalLink ? 'noreferrer' : undefined}
-        target={isExternalLink ? '_blank' : undefined}
+        rel={shouldUseNoReferrer ? 'noreferrer' : undefined}
+        target={target}
       >
         {children}
       </a>
     )
   },
-}
+})
 
 const fencedCodeBlockPattern = /(^|\n)(`{3,}|~{3,})[^\n]*\n[\s\S]*?\n\2(?=\n|$)/g
 const inlineProtectedPattern = /(!?\[[^\]\n]+\]\([^)]+\)|`+[^`]*`+)/g
@@ -148,10 +151,14 @@ export function MarkdownRenderer({
   content,
   className,
   autoLinkTargets = [],
+  linkTarget,
 }: MarkdownRendererProps) {
   const markdownContent = useMemo(() => {
     return applyMarkdownAutoLinks(content, autoLinkTargets)
   }, [autoLinkTargets, content])
+  const markdownComponents = useMemo(() => {
+    return createMarkdownComponents(linkTarget)
+  }, [linkTarget])
 
   return (
     <div className={clsx(styles.root, className)}>

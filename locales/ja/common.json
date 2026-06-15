@@ -334,7 +334,8 @@
     "articleSupportButton": "記事サポートに質問",
     "articleSupportTitle": "記事サポート",
     "articleSupportDescription": "「{title}」について質問する",
-    "targetArticle": "対象記事：{postId}",
+    "targetArticle": "対象記事：{title}",
+    "targetArticleLoading": "対象記事を読み込み中...",
     "targetArticleRequired": "対象記事が必要です",
     "failedToStart": "エージェントの開始に失敗しました",
     "failedToSend": "メッセージの送信に失敗しました",
@@ -342,8 +343,93 @@
     "continueIn": "{agent}で続ける",
     "sourcesTitle": "参照元",
     "contextUsage": "コンテキスト {percent}%",
+    "currentContextUsage": "現在のコンテキスト {percent}%",
     "thinking": "考えています...",
     "send": "送信",
+    "stop": "生成を停止",
+    "editMessage": "メッセージを編集",
+    "timeline": {
+      "title": "思考プロセス",
+      "running": "考えています...",
+      "hits": "{count} 件ヒット",
+      "topScore": "最高 {score}",
+      "sources": "{count} 件の参照元"
+    },
+    "summary": {
+      "title": "要約",
+      "route": "方針：{route}",
+      "ragHit": "RAG：{count} 件ヒット",
+      "ragMiss": "RAG：ヒットなし",
+      "effective": "有効ヒット",
+      "sources": "参照元：{count}"
+    },
+    "step": {
+      "find_post_candidates": {
+        "label": "記事候補を分析"
+      },
+      "handoff_decision": {
+        "label": "アシスタント切替を判断"
+      },
+      "scope_check": {
+        "label": "質問範囲を確認"
+      },
+      "resolve_target_post": {
+        "label": "現在の記事を特定"
+      },
+      "search_knowledge": {
+        "label": "ブログ知識ベースを検索"
+      },
+      "resolve_sources": {
+        "label": "引用元を整理"
+      },
+      "build_context": {
+        "label": "回答コンテキストを構築"
+      },
+      "select_prompt": {
+        "label": "回答方針を選択"
+      },
+      "model_call": {
+        "label": "回答を生成"
+      }
+    },
+    "stage": {
+      "user_message_saved": {
+        "label": "ユーザーメッセージを保存"
+      },
+      "answer_prepare_start": {
+        "label": "回答を準備"
+      },
+      "answer_prepare": {
+        "label": "回答を準備"
+      },
+      "answer_prepare_done": {
+        "label": "回答準備が完了"
+      },
+      "ai_request_start": {
+        "label": "モデルリクエストを開始"
+      },
+      "ai_request": {
+        "label": "モデルリクエストを開始"
+      },
+      "ai_request_done": {
+        "label": "モデルリクエストが完了"
+      },
+      "assistant_message_saved": {
+        "label": "アシスタント返信を保存"
+      },
+      "next_proxy_connected": {
+        "label": "サイトプロキシに接続"
+      },
+      "upstream_connected": {
+        "label": "バックエンドサービスに接続"
+      }
+    },
+    "routes": {
+      "chat_answer_simple": "サイト回答：簡易",
+      "chat_answer_complex": "サイト回答：複雑",
+      "article_support_answer_simple": "記事回答：簡易",
+      "article_support_answer_complex": "記事回答：複雑"
+    },
     "chat": {
       "title": "チャットエージェント",
       "subtitle": "記事、プロジェクト、ナビゲーション、サイト内容を横断して検索・推論します。",
