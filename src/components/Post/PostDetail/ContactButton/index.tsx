@@ -28,7 +28,7 @@ export function ContactButton({ postId, title }: ContactButtonProps) {
         aria-label={t('articleSupportButton')}
         title={t('articleSupportButton')}
         target="_blank"
-        rel="opener"
+        rel="noopener noreferrer"
       >
         <QuestionIcon
           size={24}

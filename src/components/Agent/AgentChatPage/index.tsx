@@ -421,14 +421,14 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
       .then((response) => {
         if (ignore) return
         setTargetPost({
-          href: `/${locale}/posts/${response.data.post.id}`,
+          href: `/posts/${response.data.post.id}`,
           title: response.data.post.title,
         })
       })
       .catch(() => {
         if (ignore) return
         setTargetPost({
-          href: `/${locale}/posts/${targetPostId}`,
+          href: `/posts/${targetPostId}`,
           title: targetPostId,
         })
       })
@@ -612,23 +612,6 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     })
   }
 
-  const openTargetPost = () => {
-    if (!targetPost) return
-
-    const targetHref = targetPost.href
-    if (window.opener && !window.opener.closed) {
-      try {
-        window.opener.location.assign(targetHref)
-        window.opener.focus()
-        return
-      } catch {
-        // Cross-window access can be blocked; fall back to opening a new tab.
-      }
-    }
-
-    window.open(targetHref, '_blank')
-  }
-
   const sendInitialQuestion = () => {
     sendMessage()
   }
@@ -668,16 +651,20 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
             <div className="min-w-0 flex-1">
               <h1 className="text-2xl font-semibold text-[var(--site-text)]">{t(`${copyKey}.title`)}</h1>
               <p className="mt-1 text-sm leading-6 text-[var(--site-text-muted)]">{t(`${copyKey}.subtitle`)}</p>
-              {targetLabel ? (
-                <button
-                  type="button"
-                  className="mt-3 inline-flex max-w-full rounded-[var(--site-radius-chip)] border border-[var(--site-border)] bg-[var(--site-surface)] px-3 py-1 text-left text-xs font-medium text-[var(--site-text-muted)] transition-colors hover:border-[var(--site-action)] hover:text-[var(--site-action)] disabled:cursor-default disabled:hover:border-[var(--site-border)] disabled:hover:text-[var(--site-text-muted)]"
-                  disabled={!targetPost}
-                  onClick={openTargetPost}
-                  title={targetPost?.title}
+              {targetLabel && targetPost ? (
+                <Link
+                  href={targetPost.href}
+                  className="mt-3 inline-flex max-w-full rounded-[var(--site-radius-chip)] border border-[var(--site-border)] bg-[var(--site-surface)] px-3 py-1 text-left text-xs font-medium text-[var(--site-text-muted)] transition-colors hover:border-[var(--site-action)] hover:text-[var(--site-action)]"
+                  rel="noreferrer"
+                  target="_blank"
+                  title={targetPost.title}
                 >
                   {targetLabel}
-                </button>
+                </Link>
+              ) : targetLabel ? (
+                <span className="mt-3 inline-flex max-w-full rounded-[var(--site-radius-chip)] border border-[var(--site-border)] bg-[var(--site-surface)] px-3 py-1 text-left text-xs font-medium text-[var(--site-text-muted)]">
+                  {targetLabel}
+                </span>
               ) : null}
             </div>
           </div>
