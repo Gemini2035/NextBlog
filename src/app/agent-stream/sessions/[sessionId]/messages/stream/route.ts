@@ -5,7 +5,6 @@ export const runtime = 'nodejs'
 
 interface RouteContext {
   params: Promise<{
-    agentType: string
     sessionId: string
   }>
 }
@@ -54,10 +53,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
     )
   }
 
-  const { agentType, sessionId } = await context.params
-  const normalizedAgentType = agentType === 'article-support' ? 'article-support' : 'chat'
+  const { sessionId } = await context.params
   const upstreamUrl = new URL(
-    `/api/agent/${normalizedAgentType}/sessions/${sessionId}/messages/stream`,
+    `/api/agent/sessions/${sessionId}/messages/stream`,
     apiProxyTarget
   )
   upstreamUrl.search = request.nextUrl.search

@@ -26,8 +26,8 @@ interface StreamAgentMessageOptions {
   onError?: (error: Error) => void
 }
 
-const getAgentBasePath = (agentType: AgentType) => {
-  return agentType === 'chat' ? '/agent/chat' : '/agent/article-support'
+const getAgentQueryType = (agentType: AgentType) => {
+  return agentType === 'chat' ? 'chat' : 'article-support'
 }
 
 export const createAgentSession = (
@@ -36,7 +36,7 @@ export const createAgentSession = (
   siteLanguage?: string
 ) => {
   return httpRequest<AgentSession, CreateAgentSessionRequest>({
-    url: `${getAgentBasePath(agentType)}/sessions`,
+    url: `/agent/sessions?type=${getAgentQueryType(agentType)}`,
     method: 'POST',
     data,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
@@ -50,7 +50,7 @@ export const createAgentMessage = (
   siteLanguage?: string
 ) => {
   return httpRequest<AgentMessageCreatePayload, CreateAgentMessageRequest>({
-    url: `${getAgentBasePath(agentType)}/sessions/${sessionId}/messages`,
+    url: `/agent/sessions/${sessionId}/messages?type=${getAgentQueryType(agentType)}`,
     method: 'POST',
     data,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
@@ -64,6 +64,7 @@ const createAgentStreamUrl = (
   siteLanguage?: string
 ) => {
   const searchParams = new URLSearchParams({
+    type: getAgentQueryType(agentType),
     content: data.content,
     deviceKey: data.deviceKey,
   })
@@ -72,7 +73,7 @@ const createAgentStreamUrl = (
     searchParams.set('locale', siteLanguage)
   }
 
-  return `/agent-stream${getAgentBasePath(agentType).replace('/agent', '')}/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
+  return `/agent-stream/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
 }
 
 const isStreamPayload = (value: unknown): value is AgentMessageStreamPayload => {
