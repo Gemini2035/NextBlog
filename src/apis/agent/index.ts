@@ -27,8 +27,8 @@ interface StreamAgentMessageOptions {
   onError?: (error: Error) => void
 }
 
-const getAgentBasePath = (agentType: AgentType) => {
-  return agentType === 'chat' ? '/agent/chat' : '/agent/article-support'
+const getAgentQueryType = (agentType: AgentType) => {
+  return agentType === 'chat' ? 'chat' : 'article-support'
 }
 
 export const createAgentSession = (
@@ -37,7 +37,7 @@ export const createAgentSession = (
   siteLanguage?: string
 ) => {
   return httpRequest<AgentSession, CreateAgentSessionRequest>({
-    url: `${getAgentBasePath(agentType)}/sessions`,
+    url: `/agent/sessions?type=${getAgentQueryType(agentType)}`,
     method: 'POST',
     data,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
@@ -51,7 +51,7 @@ export const createAgentMessage = (
   siteLanguage?: string
 ) => {
   return httpRequest<AgentMessageCreatePayload, CreateAgentMessageRequest>({
-    url: `${getAgentBasePath(agentType)}/sessions/${sessionId}/messages`,
+    url: `/agent/sessions/${sessionId}/messages?type=${getAgentQueryType(agentType)}`,
     method: 'POST',
     data,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
@@ -60,9 +60,21 @@ export const createAgentMessage = (
 
 const createAgentStreamUrl = (
   agentType: AgentType,
-  sessionId: number
+  sessionId: number,
+  data: CreateAgentMessageRequest,
+  siteLanguage?: string
 ) => {
-  return `/agent-stream${getAgentBasePath(agentType).replace('/agent', '')}/sessions/${sessionId}/messages/stream`
+  const searchParams = new URLSearchParams({
+    type: getAgentQueryType(agentType),
+    content: data.content,
+    deviceKey: data.deviceKey,
+  })
+
+  if (siteLanguage) {
+    searchParams.set('locale', siteLanguage)
+  }
+
+  return `/agent-stream/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
 }
 
 const isStreamPayload = (value: unknown): value is AgentMessageStreamPayload => {
@@ -245,14 +257,11 @@ export const streamAgentMessage = (
 
   void (async () => {
     try {
-      const response = await fetch(createAgentStreamUrl(agentType, sessionId), {
-        method: 'POST',
+      const response = await fetch(createAgentStreamUrl(agentType, sessionId, data, siteLanguage), {
+        method: 'GET',
         headers: {
           Accept: 'text/event-stream',
-          'Content-Type': 'application/json',
-          ...(siteLanguage ? { 'X-Locale': siteLanguage } : {}),
         },
-        body: JSON.stringify(data),
         signal: abortController.signal,
       })
 
