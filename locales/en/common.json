@@ -348,7 +348,6 @@
     "failedToSend": "Failed to send message",
     "sendPreparedQuestion": "Send prepared question",
     "continueIn": "Continue in {agent}",
-    "sourcesTitle": "Sources",
     "contextUsage": "Context {percent}%",
     "currentContextUsage": "Current context {percent}%",
     "thinking": "Thinking...",

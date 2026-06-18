@@ -341,7 +341,6 @@
     "failedToSend": "发送消息失败",
     "sendPreparedQuestion": "发送预设问题",
     "continueIn": "继续使用{agent}",
-    "sourcesTitle": "参考来源",
     "contextUsage": "上下文 {percent}%",
     "currentContextUsage": "当前对话上下文 {percent}%",
     "thinking": "思考中...",
@@ -425,10 +424,10 @@
       }
     },
     "routes": {
-      "chat_answer_simple": "站点问答：简单",
-      "chat_answer_complex": "站点问答：复杂",
-      "article_support_answer_simple": "文章问答：简单",
-      "article_support_answer_complex": "文章问答：复杂"
+      "chat_answer_simple": "站点问答，简单",
+      "chat_answer_complex": "站点问答，复杂",
+      "article_support_answer_simple": "文章问答，简单",
+      "article_support_answer_complex": "文章问答，复杂"
     },
     "rateLimit": {
       "exceeded": "助手请求次数已达上限，请约 {minutes} 分钟后再试。"
