@@ -4,6 +4,7 @@ import type {
   AgentMessageCreatePayload,
   AgentMessageStreamPayload,
   AgentSession,
+  AgentStreamTimelineEvent,
   AgentType,
 } from '@/types/agent'
 
@@ -22,6 +23,7 @@ interface StreamAgentMessageOptions {
   onUserMessage?: (message: AgentMessage) => void
   onAssistantMessage?: (message: AgentMessage) => void
   onDelta?: (delta: string) => void
+  onTimelineEvent?: (event: AgentStreamTimelineEvent) => void
   onDone?: () => void
   onError?: (error: Error) => void
 }
@@ -116,8 +118,26 @@ const parseStreamPayload = (data: string, eventType?: string): AgentMessageStrea
   const resolvedEventType = envelopeType ?? eventType
   const payloadData = envelopeType && 'data' in parsedRecord ? parsedRecord.data : parsed
 
-  if (resolvedEventType === 'ready' || resolvedEventType === 'stage') {
+  if (resolvedEventType === 'ready') {
     return {}
+  }
+
+  if (
+    resolvedEventType === 'proxy_stage' ||
+    resolvedEventType === 'stage' ||
+    resolvedEventType === 'run_started' ||
+    resolvedEventType === 'step_started' ||
+    resolvedEventType === 'step_finished' ||
+    resolvedEventType === 'step_failed' ||
+    resolvedEventType === 'run_finished'
+  ) {
+    const eventPayload = isRecord(payloadData) ? payloadData : {}
+    return {
+      timelineEvent: {
+        ...eventPayload,
+        type: resolvedEventType === 'proxy_stage' ? 'stage' : resolvedEventType,
+      } as AgentStreamTimelineEvent,
+    }
   }
 
   if (resolvedEventType === 'error_message') {
@@ -180,6 +200,10 @@ const applyStreamPayload = (payload: AgentMessageStreamPayload, options: StreamA
 
   if (payload.assistantMessage) {
     options.onAssistantMessage?.(payload.assistantMessage)
+  }
+
+  if (payload.timelineEvent) {
+    options.onTimelineEvent?.(payload.timelineEvent)
   }
 
   const delta = payload.delta ?? payload.content

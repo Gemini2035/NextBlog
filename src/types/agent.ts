@@ -23,6 +23,7 @@ export interface AgentMessage {
   content: string
   sources: AgentSource[]
   handoff?: AgentHandoff | null
+  meta?: Record<string, unknown>
   createdAt: string
 }
 
@@ -43,9 +44,35 @@ export interface AgentMessageCreatePayload {
 export interface AgentMessageStreamPayload {
   userMessage?: AgentMessage
   assistantMessage?: AgentMessage
+  timelineEvent?: AgentStreamTimelineEvent
   delta?: string
   content?: string
   done?: boolean
   error?: string
   retryAfterSeconds?: number
+}
+
+export interface AgentStreamTimelineEvent {
+  type:
+    | 'run_started'
+    | 'step_started'
+    | 'step_finished'
+    | 'step_failed'
+    | 'run_finished'
+    | 'stage'
+  runId?: number
+  sessionId?: number
+  agentType?: AgentType
+  question?: string
+  step?: string
+  stepId?: number
+  order?: number
+  name?: string
+  labelKey?: string
+  label?: string
+  status?: string
+  input?: Record<string, unknown>
+  output?: Record<string, unknown>
+  summary?: Record<string, unknown>
+  error?: string
 }

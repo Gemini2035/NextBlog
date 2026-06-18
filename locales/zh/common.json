@@ -334,15 +334,101 @@
     "articleSupportButton": "询问文章助手",
     "articleSupportTitle": "文章助手",
     "articleSupportDescription": "围绕《{title}》提问",
-    "targetArticle": "目标文章：{postId}",
+    "targetArticle": "目标文章：{title}",
+    "targetArticleLoading": "正在加载目标文章...",
     "targetArticleRequired": "需要指定目标文章",
     "failedToStart": "启动助手失败",
     "failedToSend": "发送消息失败",
     "sendPreparedQuestion": "发送预设问题",
     "continueIn": "继续使用{agent}",
-    "sourcesTitle": "参考来源",
+    "contextUsage": "上下文 {percent}%",
+    "currentContextUsage": "当前对话上下文 {percent}%",
     "thinking": "思考中...",
     "send": "发送",
+    "stop": "停止生成",
+    "editMessage": "编辑消息",
+    "timeline": {
+      "title": "思考过程",
+      "running": "思考中...",
+      "hits": "{count} 条命中",
+      "topScore": "最高 {score}",
+      "sources": "{count} 个来源"
+    },
+    "summary": {
+      "title": "摘要",
+      "route": "策略：{route}",
+      "ragHit": "RAG：命中 {count}",
+      "ragMiss": "RAG：未命中",
+      "effective": "有效命中",
+      "sources": "来源：{count}"
+    },
+    "step": {
+      "find_post_candidates": {
+        "label": "分析文章候选"
+      },
+      "handoff_decision": {
+        "label": "判断是否切换助手"
+      },
+      "scope_check": {
+        "label": "检查问题范围"
+      },
+      "resolve_target_post": {
+        "label": "定位当前文章"
+      },
+      "search_knowledge": {
+        "label": "检索博客知识库"
+      },
+      "resolve_sources": {
+        "label": "整理引用来源"
+      },
+      "build_context": {
+        "label": "构建回答上下文"
+      },
+      "select_prompt": {
+        "label": "选择回答策略"
+      },
+      "model_call": {
+        "label": "生成回答"
+      }
+    },
+    "stage": {
+      "user_message_saved": {
+        "label": "保存用户消息"
+      },
+      "answer_prepare_start": {
+        "label": "准备回答"
+      },
+      "answer_prepare": {
+        "label": "准备回答"
+      },
+      "answer_prepare_done": {
+        "label": "完成回答准备"
+      },
+      "ai_request_start": {
+        "label": "开始模型请求"
+      },
+      "ai_request": {
+        "label": "开始模型请求"
+      },
+      "ai_request_done": {
+        "label": "完成模型请求"
+      },
+      "assistant_message_saved": {
+        "label": "保存助手回复"
+      },
+      "next_proxy_connected": {
+        "label": "连接站点代理"
+      },
+      "upstream_connected": {
+        "label": "连接后端服务"
+      }
+    },
+    "routes": {
+      "chat_answer_simple": "站点问答，简单",
+      "chat_answer_complex": "站点问答，复杂",
+      "article_support_answer_simple": "文章问答，简单",
+      "article_support_answer_complex": "文章问答，复杂"
+    },
     "rateLimit": {
       "exceeded": "助手请求次数已达上限，请约 {minutes} 分钟后再试。"
     },

@@ -11,6 +11,7 @@ import {
 } from '@/components/MarkdownRenderer'
 import { Link } from '@/ui'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
+import type { AgentStreamTimelineEvent } from '@/types/agent'
 
 interface AgentChatPageProps {
   agentType: AgentType
@@ -18,7 +19,21 @@ interface AgentChatPageProps {
   targetPostId?: string
 }
 
-const MAX_VISIBLE_SOURCES = 3
+interface RunSummary {
+  route?: string | null
+  model?: string | null
+  promptCode?: string | null
+  promptVersion?: number | null
+  sourceCount?: number
+  durationMs?: number
+  rag?: {
+    resultCount?: number
+    topScore?: number | null
+    hit?: boolean
+    effectiveHit?: boolean
+    targetPostHit?: boolean | null
+  }
+}
 
 type AgentRequestError = Error & {
   retryAfterSeconds?: number
@@ -27,6 +42,48 @@ type AgentRequestError = Error & {
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
   return typeof value === 'object' && value !== null
+}
+
+type AgentTranslator = ReturnType<typeof useTranslations>
+
+const translateIfExists = (t: AgentTranslator, key: string, fallback: string) => {
+  return t.has(key) ? t(key) : fallback
+}
+
+const getRouteTranslationKey = (route?: string | null) => {
+  if (!route?.startsWith('agent.')) return null
+  return `routes.${route.replace(/^agent\./, '').replaceAll('.', '_')}`
+}
+
+const toRunSummary = (value: unknown): RunSummary | null => {
+  return isRecord(value) ? value as RunSummary : null
+}
+
+const formatDuration = (durationMs: number) => `${durationMs}ms`
+
+function RunSummaryPanel({ summary, t }: { summary: RunSummary | null; t: AgentTranslator }) {
+  if (!summary) return null
+  const routeLabelKey = getRouteTranslationKey(summary.route)
+  const routeLabel = summary.route && routeLabelKey
+    ? translateIfExists(t, routeLabelKey, summary.route)
+    : summary.route
+
+  return (
+    <div className="mt-4 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs text-gray-500">
+      <div className="mb-1 font-semibold text-gray-600">{t('summary.title')}</div>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        {routeLabel ? <span>{t('summary.route', { route: routeLabel })}</span> : null}
+        {summary.rag ? (
+          <span>
+            {t(summary.rag.hit ? 'summary.ragHit' : 'summary.ragMiss', { count: summary.rag.resultCount ?? 0 })}
+            {summary.rag.effectiveHit ? ` / ${t('summary.effective')}` : ''}
+          </span>
+        ) : null}
+        {typeof summary.sourceCount === 'number' ? <span>{t('summary.sources', { count: summary.sourceCount })}</span> : null}
+        {typeof summary.durationMs === 'number' ? <span>{formatDuration(summary.durationMs)}</span> : null}
+      </div>
+    </div>
+  )
 }
 
 const getDeviceKey = () => {
@@ -54,6 +111,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
   const [input, setInput] = useState(initialQuestion ?? '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [runSummary, setRunSummary] = useState<RunSummary | null>(null)
   const didCreateRef = useRef(false)
   const bottomRef = useRef<HTMLDivElement | null>(null)
   const streamCleanupRef = useRef<(() => void) | null>(null)
@@ -176,6 +234,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     setInput('')
     setError('')
     setLoading(true)
+    setRunSummary(null)
     pendingUserMessageIdRef.current = -Date.now()
     assistantDraftMessageIdRef.current = null
 
@@ -206,6 +265,15 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
           assistantDraftMessageIdRef.current = null
         },
         onDelta: appendAssistantDelta,
+        onTimelineEvent: (timelineEvent: AgentStreamTimelineEvent) => {
+          if (timelineEvent.type === 'run_started') {
+            setRunSummary(null)
+            return
+          }
+          if (timelineEvent.type === 'run_finished') {
+            setRunSummary(toRunSummary(timelineEvent.summary))
+          }
+        },
         onDone: () => {
           streamCleanupRef.current = null
           pendingUserMessageIdRef.current = null
@@ -312,21 +380,6 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                     ) : (
                       <div className="whitespace-pre-wrap">{message.content}</div>
                     )}
-                    {agentType === 'chat' && message.role === 'assistant' && message.sources.length > 0 ? (
-                      <div className="mt-4 space-y-2 border-t border-gray-200 pt-3">
-                        <div className="text-xs font-semibold text-gray-500">{t('sourcesTitle')}</div>
-                        {message.sources.slice(0, MAX_VISIBLE_SOURCES).map((source) => (
-                          <Link
-                            key={`${source.type}-${source.id}`}
-                            href={source.href}
-                            className="group flex items-center justify-between gap-3 rounded-md bg-white px-3 py-2 text-gray-800 ring-1 ring-gray-100 transition-colors hover:bg-gray-50"
-                          >
-                            <span className="min-w-0 truncate text-xs font-medium">{source.title}</span>
-                            <ArrowRightIcon className="h-4 w-4 shrink-0 text-gray-400 group-hover:text-gray-600" />
-                          </Link>
-                        ))}
-                      </div>
-                    ) : null}
                     {message.handoff ? (
                       <button
                         className="mt-4 inline-flex items-center rounded-full bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700"
@@ -337,6 +390,9 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                         })}
                         <ArrowRightIcon className="ml-1 h-3.5 w-3.5" />
                       </button>
+                    ) : null}
+                    {message.role === 'assistant' && messages.at(-1)?.id === message.id ? (
+                      <RunSummaryPanel summary={runSummary} t={t} />
                     ) : null}
                   </div>
                 </div>

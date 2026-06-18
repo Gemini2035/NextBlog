@@ -341,15 +341,101 @@
     "articleSupportButton": "Ask article support",
     "articleSupportTitle": "Article Support",
     "articleSupportDescription": "Ask focused questions about {title}",
-    "targetArticle": "Target article: {postId}",
+    "targetArticle": "Target article: {title}",
+    "targetArticleLoading": "Loading target article...",
     "targetArticleRequired": "Target article required",
     "failedToStart": "Failed to start agent",
     "failedToSend": "Failed to send message",
     "sendPreparedQuestion": "Send prepared question",
     "continueIn": "Continue in {agent}",
-    "sourcesTitle": "Sources",
+    "contextUsage": "Context {percent}%",
+    "currentContextUsage": "Current context {percent}%",
     "thinking": "Thinking...",
     "send": "Send",
+    "stop": "Stop generating",
+    "editMessage": "Edit message",
+    "timeline": {
+      "title": "Thinking",
+      "running": "Thinking...",
+      "hits": "{count} hits",
+      "topScore": "top {score}",
+      "sources": "{count} sources"
+    },
+    "summary": {
+      "title": "Summary",
+      "route": "Route: {route}",
+      "ragHit": "RAG: hit {count}",
+      "ragMiss": "RAG: no hit",
+      "effective": "effective",
+      "sources": "Sources: {count}"
+    },
+    "step": {
+      "find_post_candidates": {
+        "label": "Analyze post candidates"
+      },
+      "handoff_decision": {
+        "label": "Decide assistant handoff"
+      },
+      "scope_check": {
+        "label": "Check question scope"
+      },
+      "resolve_target_post": {
+        "label": "Resolve current article"
+      },
+      "search_knowledge": {
+        "label": "Search blog knowledge base"
+      },
+      "resolve_sources": {
+        "label": "Prepare citations"
+      },
+      "build_context": {
+        "label": "Build answer context"
+      },
+      "select_prompt": {
+        "label": "Select answer strategy"
+      },
+      "model_call": {
+        "label": "Generate answer"
+      }
+    },
+    "stage": {
+      "user_message_saved": {
+        "label": "Save user message"
+      },
+      "answer_prepare_start": {
+        "label": "Prepare answer"
+      },
+      "answer_prepare": {
+        "label": "Prepare answer"
+      },
+      "answer_prepare_done": {
+        "label": "Answer prepared"
+      },
+      "ai_request_start": {
+        "label": "Start model request"
+      },
+      "ai_request": {
+        "label": "Start model request"
+      },
+      "ai_request_done": {
+        "label": "Model request finished"
+      },
+      "assistant_message_saved": {
+        "label": "Save assistant reply"
+      },
+      "next_proxy_connected": {
+        "label": "Connect site proxy"
+      },
+      "upstream_connected": {
+        "label": "Connect backend service"
+      }
+    },
+    "routes": {
+      "chat_answer_simple": "Site answer: simple",
+      "chat_answer_complex": "Site answer: complex",
+      "article_support_answer_simple": "Article answer: simple",
+      "article_support_answer_complex": "Article answer: complex"
+    },
     "rateLimit": {
       "exceeded": "Agent request limit reached. Please try again in about {minutes} minute(s)."
     },
