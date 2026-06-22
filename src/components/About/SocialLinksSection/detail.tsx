@@ -4,6 +4,7 @@ import { ComponentType } from 'react'
 import Image from 'next/image'
 import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
 import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
+import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
@@ -49,19 +50,21 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
 
   return (
     <div className={className}>
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
-          <StarIcon className="w-8 h-8 text-blue-600" />
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
+            <StarIcon className="w-8 h-8 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {navT('Social Links')}
+            </h2>
+            <p className="text-lg text-gray-600">
+              {skillsT('socialDescriptionDetail')}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {navT('Social Links')}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {skillsT('socialDescriptionDetail')}
-          </p>
-        </div>
-      </div>
+      </StickySectionHeader>
       
       <div className="space-y-4">
         {socialLinks.map((link) => {

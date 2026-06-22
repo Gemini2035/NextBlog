@@ -6,6 +6,7 @@ import { cn } from "@/utils";
 import { FC, ReactNode } from "react";
 import { IconMap } from "./constants";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
 interface OnlineServicesDetailProps {
   className?: string;
@@ -110,19 +111,21 @@ export default function OnlineServicesDetail({
 
   return (
     <div className={className} id="online-services">
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
-          <OnlineServiceIcon className="w-8 h-8 text-blue-600" />
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
+            <OnlineServiceIcon className="w-8 h-8 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {t("OnlineServies.title")}
+            </h2>
+            <p className="text-lg text-gray-600">
+              {t("OnlineServies.description")}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {t("OnlineServies.title")}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {t("OnlineServies.description")}
-          </p>
-        </div>
-      </div>
+      </StickySectionHeader>
 
       {onlineServices.map(
         ({ id, name, services }) => (

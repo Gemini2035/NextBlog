@@ -3,6 +3,7 @@
 import { ComponentType } from 'react'
 import { ContactIcon, GmailIcon, OutlookIcon, ICloudIcon, EmailIcon, TelegramIcon, DefaultContactIcon } from '@/assets/icons'
 import { useAboutRecord } from '@/components/About/AboutDataProvider'
+import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
@@ -50,19 +51,21 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
 
   return (
     <div className={className}>
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mr-6 shrink-0">
-          <ContactIcon className="w-8 h-8 text-blue-600" />
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mr-6 shrink-0">
+            <ContactIcon className="w-8 h-8 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {navT('Contact Information')}
+            </h2>
+            <p className="text-lg text-gray-600">
+              {skillsT('contactDescriptionDetail')}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {navT('Contact Information')}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {skillsT('contactDescriptionDetail')}
-          </p>
-        </div>
-      </div>
+      </StickySectionHeader>
       
       <div className="space-y-4">
         {contactMethods.map((contact) => {

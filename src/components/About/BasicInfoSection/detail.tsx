@@ -4,6 +4,7 @@ import { GlobeIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { useAboutRecord } from "@/components/About/AboutDataProvider";
+import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
 interface BasicInfoDetailProps {
   className?: string;
@@ -16,19 +17,21 @@ const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
 
   return (
     <div className={className}>
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
-          <GlobeIcon className="w-8 h-8 text-blue-600" />
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
+            <GlobeIcon className="w-8 h-8 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {navT("Personal Profile")}
+            </h2>
+            <p className="text-lg text-gray-600">
+              {t("BasicInfo.subtitle")}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {navT("Personal Profile")}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {t("BasicInfo.subtitle")}
-          </p>
-        </div>
-      </div>
+      </StickySectionHeader>
 
       {/* 完整的个人简介 */}
       <div className="mb-8" id="basic">

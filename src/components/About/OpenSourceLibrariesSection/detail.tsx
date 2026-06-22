@@ -6,6 +6,7 @@ import { cn } from "@/utils";
 import { FC } from "react";
 import { IconMap } from "./constants";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
 interface OpenSourceLibrariesDetailProps {
   className?: string;
@@ -103,17 +104,19 @@ const OpenSourceLibrariesDetail: FC<OpenSourceLibrariesDetailProps> = ({
 
   return (
     <div className={className} id="open-source">
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
-          <OpenSourceIcon className="w-8 h-8 text-blue-600" />
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
+            <OpenSourceIcon className="w-8 h-8 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {t("OpenSource.title")}
+            </h2>
+            <p className="text-lg text-gray-600">{t("OpenSource.description")}</p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {t("OpenSource.title")}
-          </h2>
-          <p className="text-lg text-gray-600">{t("OpenSource.description")}</p>
-        </div>
-      </div>
+      </StickySectionHeader>
 
       {openSourceLibraries.map(
         ({ key, sources, name }) => (

@@ -59,15 +59,7 @@
       "title": "发展历程",
       "description": "查看博客从1.0到2.0的完整发展历程",
       "planning": "规划中...",
-      "continuousDevelopment": "持续发展",
-      "continuousDevelopmentDesc": "持续优化和功能迭代",
-      "languageSupport": "语言支持",
-      "languageSupportDesc": "多语言支持配置和最佳实践",
-      "majorVersions": "主要版本",
-      "majorVersionsDesc": "技术进化从Vue3到Next.js",
-      "yearSpan": "年数跨度",
-      "yearSpanDesc": "从2023年到至今的持续迭代",
-      "milestones": "发展里程碑"
+      "present": "至今"
     },
     "reactDescription": "用于构建用户界面的JavaScript库",
     "nextjsDescription": "基于React的生产级框架",

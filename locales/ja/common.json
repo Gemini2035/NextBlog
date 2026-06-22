@@ -192,15 +192,7 @@
       "title": "開発履歴",
       "description": "ブログ1.0から2.0への完全な開発履歴、各バージョンの詳細な機能進化を含む",
       "planning": "計画中...",
-      "continuousDevelopment": "継続的開発",
-      "continuousDevelopmentDesc": "継続的な最適化と機能反復",
-      "languageSupport": "言語サポート",
-      "languageSupportDesc": "多言語サポート設定とベストプラクティス",
-      "majorVersions": "主要バージョン",
-      "majorVersionsDesc": "技術進化Vue3からNext.js",
-      "yearSpan": "年数スパン",
-      "yearSpanDesc": "2023年から現在までの継続的反復",
-      "milestones": "開発マイルストーン"
+      "present": "現在"
     },
     "visit": "訪問",
     "OnlineServies": {

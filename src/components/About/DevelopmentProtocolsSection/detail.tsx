@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/utils";
 import { IconMap } from "./constants";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
 interface DevelopmentProtocolsDetailProps {
   className?: string;
@@ -31,19 +32,21 @@ export default function DevelopmentProtocolsDetail({
   return (
     <div className={cn(className)} id="protocols">
       {/* 标题部分 */}
-      <div className="flex items-center mb-8">
-        <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
-          <span className="text-3xl">🌐</span>
+      <StickySectionHeader>
+        <div className="flex items-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
+            <span className="text-3xl">🌐</span>
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              {t("DevelopmentProtocols.title")}
+            </h2>
+            <p className="text-lg text-gray-600">
+              {t("DevelopmentProtocols.description")}
+            </p>
+          </div>
         </div>
-        <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            {t("DevelopmentProtocols.title")}
-          </h2>
-          <p className="text-lg text-gray-600">
-            {t("DevelopmentProtocols.description")}
-          </p>
-        </div>
-      </div>
+      </StickySectionHeader>
 
       {/* 协议列表 */}
       <div className="space-y-6">
