@@ -60,15 +60,7 @@
       "title": "Development History",
       "description": "View the complete development history of the blog from 1.0 to 2.0",
       "planning": "Planning...",
-      "continuousDevelopment": "Continuous Development",
-      "continuousDevelopmentDesc": "Continuous optimization and feature iteration",
-      "languageSupport": "Language Support",
-      "languageSupportDesc": "Multi-language support configuration and best practices",
-      "majorVersions": "Major Versions",
-      "majorVersionsDesc": "Technology evolution from Vue3 to Next.js",
-      "yearSpan": "Year Span",
-      "yearSpanDesc": "Continuous iteration from 2023 to present",
-      "milestones": "Development Milestones"
+      "present": "Present"
     },
     "OpenSource": {
       "title": "Open Source Libraries",

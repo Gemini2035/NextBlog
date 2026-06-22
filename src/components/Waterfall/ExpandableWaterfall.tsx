@@ -385,15 +385,17 @@ export default function ExpandableWaterfall({
             {/* 关闭按钮 */}
             <button
               onClick={handleCloseExpanded}
-              className="absolute top-4 right-4 z-10 flex h-8 w-8 items-center justify-center rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] transition-colors duration-200 hover:bg-[var(--site-canvas-muted)] cursor-pointer"
+              className="absolute top-4 right-4 z-40 flex h-8 w-8 items-center justify-center rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm transition-colors duration-200 hover:bg-[var(--site-canvas-muted)] cursor-pointer"
             >
               <CloseIcon className="w-4 h-4 text-[var(--site-text-muted)]" />
             </button>
 
             {/* 内容区域 */}
-            <div className="overflow-y-auto max-h-[90vh] p-8">
-              {items.find(item => item.id === expandedItem)?.expandedContent || 
-               items.find(item => item.id === expandedItem)?.content}
+            <div className="overflow-y-auto max-h-[90vh]">
+              <div className="px-8 pb-8">
+                {items.find(item => item.id === expandedItem)?.expandedContent || 
+                 items.find(item => item.id === expandedItem)?.content}
+              </div>
             </div>
           </div>
         </div>
