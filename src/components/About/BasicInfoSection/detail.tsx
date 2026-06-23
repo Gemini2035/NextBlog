@@ -4,6 +4,7 @@ import { GlobeIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { useAboutRecord } from "@/components/About/AboutDataProvider";
+import { SanitizedHtml } from "@/components/SanitizedHtml";
 import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
 interface BasicInfoDetailProps {
@@ -38,9 +39,9 @@ const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
         <h3 className="text-2xl font-semibold text-gray-900 mb-6">
           {t("aboutMe")}
         </h3>
-        <div
+        <SanitizedHtml
           className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: baseInfo.description ?? "" }}
+          html={baseInfo.description}
         />
       </div>
     </div>
