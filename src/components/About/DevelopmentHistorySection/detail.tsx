@@ -5,6 +5,7 @@ import { ClockIcon } from '@/assets/icons'
 import { FC, Fragment } from 'react'
 import { cn } from '@/utils'
 import { useAboutList } from '@/components/About/AboutDataProvider'
+import { SanitizedHtml } from '@/components/SanitizedHtml'
 import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import type { DevelopmentHistoryItem } from './types'
 import { formatPeriod, getDisplayVersion, getTermStyle } from './utils'
@@ -55,9 +56,9 @@ function HistoryChildNodes({ items, level = 1, planningText, presentText }: Hist
                   </span>
                 </div>
                 {item.description ? (
-                  <div
+                  <SanitizedHtml
                     className="development-history-html mb-4 text-sm sm:text-base text-gray-600"
-                    dangerouslySetInnerHTML={{ __html: item.description }}
+                    html={item.description}
                   />
                 ) : item.summary ? (
                   <p className="mb-4 text-sm sm:text-base text-gray-600">{item.summary}</p>
@@ -165,9 +166,9 @@ const DevelopmentHistoryDetail: FC<DevelopmentHistoryDetailProps> = ({ className
                         {period}
                       </span>
                     </div>
-                    <div
+                    <SanitizedHtml
                       className="development-history-html text-sm sm:text-base text-gray-600"
-                      dangerouslySetInnerHTML={{ __html: item.description ?? '' }}
+                      html={item.description}
                     />
                   </div>
                 </div>

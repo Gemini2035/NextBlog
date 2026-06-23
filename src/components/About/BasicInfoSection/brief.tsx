@@ -4,6 +4,7 @@ import { GlobeIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import { FC } from 'react'
 import { useAboutRecord } from '@/components/About/AboutDataProvider'
+import { SanitizedHtml } from '@/components/SanitizedHtml'
 
 interface BasicInfoBriefProps {
   className?: string
@@ -25,9 +26,9 @@ const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
       </div>
       
       {/* 简化的个人简介 */}
-      <div 
+      <SanitizedHtml
         className="mb-6"
-        dangerouslySetInnerHTML={{ __html: baseInfo.summary ?? '' }}
+        html={baseInfo.summary}
       />
 
     </div>

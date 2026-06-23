@@ -1,3 +1,4 @@
+import { SanitizedHtml } from '@/components/SanitizedHtml'
 import styles from './PostContent.module.css'
 
 interface PostContentProps {
@@ -7,9 +8,9 @@ interface PostContentProps {
 export function PostContent({ content }: PostContentProps) {
   return (
     <article className={styles.article} data-article-content>
-      <div
+      <SanitizedHtml
         className={styles.content}
-        dangerouslySetInnerHTML={{ __html: content }}
+        html={content}
       />
     </article>
   )
