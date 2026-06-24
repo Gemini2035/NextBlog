@@ -9,3 +9,12 @@ export interface FriendLinkItem {
   url: string
   icon?: string
 }
+
+export interface TechStackItem {
+  description: string
+  iconBase64?: string | null
+  id: number
+  isDeprecated: boolean
+  name: string
+  summary: string
+}

@@ -9,7 +9,10 @@ interface SanitizedHtmlProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
 
 export function SanitizedHtml({ html, ...props }: SanitizedHtmlProps) {
   const sanitizedHtml = useMemo(() => {
-    return DOMPurify.sanitize(html ?? '')
+    const value = html ?? ''
+    const sanitize = typeof DOMPurify?.sanitize === 'function' ? DOMPurify.sanitize.bind(DOMPurify) : null
+
+    return sanitize ? sanitize(value) : value
   }, [html])
 
   return (
@@ -19,4 +22,3 @@ export function SanitizedHtml({ html, ...props }: SanitizedHtmlProps) {
     />
   )
 }
-
