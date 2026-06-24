@@ -35,7 +35,8 @@
     "featuredArticles": "精选文章",
     "latestArticles": "最新文章",
     "allArticles": "所有文章",
-    "popularTags": "热门标签"
+    "popularTags": "热门标签",
+    "recommendedForYou": "推荐你看"
   },
   "AboutPage": {
     "title": "关于我",

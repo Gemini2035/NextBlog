@@ -31,7 +31,7 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       poster,
       videoSrc,
       videoType = 'application/x-mpegURL',
-      unmuteOnInteraction = true,
+      unmuteOnInteraction = false,
       portalTargetRef,
       className
     },
@@ -131,7 +131,9 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
           const video = videoRef.current
           if (!video) return
           if (entry.isIntersecting) {
+            clearVolumeTimer()
             video.muted = true
+            video.volume = 0
             isMutedRef.current = true
             setIsMuted(true)
             video.play().catch(() => {})
@@ -147,7 +149,7 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       )
       observer.observe(target)
       return () => observer.disconnect()
-    }, [portalTargetRef, headerHeight, fadeOutVolume])
+    }, [portalTargetRef, headerHeight, fadeOutVolume, clearVolumeTimer])
 
     useEffect(() => {
       if (!unmuteOnInteraction) return

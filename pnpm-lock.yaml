@@ -84,6 +84,9 @@ importers:
       eslint-config-next:
         specifier: 15.5.3
         version: 15.5.3(eslint@9.36.0(jiti@2.6.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@5.9.2)
+      eslint-plugin-react-hooks:
+        specifier: 5.2.0
+        version: 5.2.0(eslint@9.36.0(jiti@2.6.0))
       husky:
         specifier: ^9.0.11
         version: 9.1.7
