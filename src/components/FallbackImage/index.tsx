@@ -58,16 +58,14 @@ export function FallbackImage({
 
   return (
     <>
-      {!loaded ? (
-        pending ?? <Loading variant="spinner" size="xs" />
-      ) : null}
+      {!loaded && (pending ?? <Loading variant="spinner" size="xs" />)}
       <img
+        hidden={!loaded}
         src={validSource}
         alt={alt}
         className={className}
         onLoad={() => setLoaded(true)}
         onError={() => setFailed(true)}
-        style={loaded ? undefined : { display: "none" }}
       />
     </>
   );
