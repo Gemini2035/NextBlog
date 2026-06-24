@@ -35,7 +35,8 @@
     "featuredArticles": "Featured Articles",
     "latestArticles": "Latest Articles",
     "allArticles": "All Articles",
-    "popularTags": "Popular Tags"
+    "popularTags": "Popular Tags",
+    "recommendedForYou": "Recommended for you"
   },
   "AboutPage": {
     "title": "About Me",

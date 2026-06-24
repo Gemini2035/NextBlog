@@ -35,7 +35,8 @@
     "featuredArticles": "おすすめ記事",
     "latestArticles": "最新記事",
     "allArticles": "すべての記事",
-    "popularTags": "人気タグ"
+    "popularTags": "人気タグ",
+    "recommendedForYou": "おすすめ"
   },
   "Navigation": {
     "search": "検索",
