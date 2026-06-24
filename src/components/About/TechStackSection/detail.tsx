@@ -6,6 +6,7 @@ import { FC } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
 import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 import { SanitizedHtml } from "@/components/SanitizedHtml";
+import { FallbackImage } from "@/components/FallbackImage";
 import { cn } from "@/utils";
 
 interface TechStackDetailProps {
@@ -49,11 +50,11 @@ const TechStackDetail: FC<TechStackDetailProps> = ({ className }) => {
               key={id}
             >
               <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mr-4 shrink-0">
-                {iconBase64 ? (
-                  <img src={iconBase64} alt="" className="w-6 h-6 object-contain" />
-                ) : (
-                  <TechStackIcon className="w-6 h-6 text-gray-700" />
-                )}
+                <FallbackImage
+                  src={iconBase64}
+                  className="w-6 h-6 object-contain"
+                  fallback={<TechStackIcon className="w-6 h-6 text-gray-700" />}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="mb-1 flex flex-wrap items-center gap-2">
