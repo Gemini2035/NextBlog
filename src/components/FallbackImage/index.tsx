@@ -45,11 +45,26 @@ export function FallbackImage({
       return;
     }
 
+    const image = new Image();
     const timer = window.setTimeout(() => {
       setFailed(true);
     }, timeoutMs);
 
-    return () => window.clearTimeout(timer);
+    image.onload = () => {
+      window.clearTimeout(timer);
+      setLoaded(true);
+    };
+    image.onerror = () => {
+      window.clearTimeout(timer);
+      setFailed(true);
+    };
+    image.src = validSource;
+
+    return () => {
+      window.clearTimeout(timer);
+      image.onload = null;
+      image.onerror = null;
+    };
   }, [failed, loaded, timeoutMs, validSource]);
 
   if (!validSource || failed) {
@@ -59,14 +74,7 @@ export function FallbackImage({
   return (
     <>
       {!loaded && (pending ?? <Loading variant="spinner" size="xs" />)}
-      <img
-        hidden={!loaded}
-        src={validSource}
-        alt={alt}
-        className={className}
-        onLoad={() => setLoaded(true)}
-        onError={() => setFailed(true)}
-      />
+      {loaded && <img src={validSource} alt={alt} className={className} />}
     </>
   );
 }
