@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { TechStackIcon } from "@/assets/icons";
 import { FC } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { FallbackImage } from "@/components/FallbackImage";
 import { cn } from "@/utils";
 
 interface TechStackBriefProps {
@@ -36,11 +37,11 @@ const TechStackBrief: FC<TechStackBriefProps> = ({ className }) => {
           return (
             <div className={cn("text-center", isDeprecated && "opacity-50 grayscale")} key={id}>
               <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mx-auto mb-2">
-                {iconBase64 ? (
-                  <img src={iconBase64} alt="" className="w-5 h-5 object-contain" />
-                ) : (
-                  <TechStackIcon className="w-5 h-5 text-gray-700" />
-                )}
+                <FallbackImage
+                  src={iconBase64}
+                  className="w-5 h-5 object-contain"
+                  fallback={<TechStackIcon className="w-5 h-5 text-gray-700" />}
+                />
               </div>
               <h3 className="font-medium text-gray-900 text-xs mb-1">
                 {name}

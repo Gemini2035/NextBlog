@@ -2,10 +2,11 @@
 
 import { useTranslations } from "next-intl";
 import { OpenSourceIcon } from "@/assets/icons";
-import { IconMap } from "./constants";
 import { useMemo } from "react";
 import { useRandomSort } from "@/hooks/useRandomSort";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { cn } from "@/utils";
+import { FallbackImage } from "@/components/FallbackImage";
 
 interface OpenSourceLibrariesBriefProps {
   className?: string;
@@ -18,10 +19,13 @@ const OpenSourceLibrariesBrief = ({
   const t = useTranslations("AboutPage");
   const openSourceLibraries = useAboutList<{
     sources: Array<{
-      key: string
-      version: string
-      icon: keyof typeof IconMap
+      id?: number
+      key?: string
+      name: string
+      version?: string | null
+      iconBase64?: string | null
       summary: string
+      isDeprecated?: boolean
     }>
   }>("open_source");
 
@@ -29,11 +33,14 @@ const OpenSourceLibrariesBrief = ({
   const allSourcesData = useMemo(
     () =>
       openSourceLibraries.flatMap(({ sources }) =>
-        sources.map(({ key, version, icon, summary }) => ({
+        sources.map(({ id, key, name, version, iconBase64, summary, isDeprecated }) => ({
+          id,
           key,
+          name,
           version,
-          icon,
+          iconBase64,
           summary,
+          isDeprecated,
         }))
       ),
     [openSourceLibraries]
@@ -54,30 +61,31 @@ const OpenSourceLibrariesBrief = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {sourcesData.map(({ key, version, icon, summary }) => {
-          const IconComponent = IconMap[icon];
-
+        {sourcesData.map(({ id, key, name, version, iconBase64, summary, isDeprecated }) => {
           return (
             <div
-              key={key}
-              className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col justify-between"
+              key={id ?? key ?? name}
+              className={cn(
+                "bg-white p-3 rounded-lg shadow-sm border border-gray-200 flex flex-col justify-between",
+                isDeprecated && "opacity-50 grayscale"
+              )}
             >
               <div className="flex items-center mb-2">
                 <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-                  {IconComponent ? (
-                    <IconComponent className="w-4 h-4 text-gray-700" />
-                  ) : (
-                    <OpenSourceIcon className="w-4 h-4 text-gray-700" />
-                  )}
+                  <FallbackImage
+                    src={iconBase64}
+                    className="w-4 h-4 object-contain"
+                    fallback={<OpenSourceIcon className="w-4 h-4 text-gray-700" />}
+                  />
                 </div>
                 <div>
-                  <h3 className="font-medium text-gray-900 text-sm">{key}</h3>
+                  <h3 className="font-medium text-gray-900 text-sm">{name}</h3>
                   <p className="text-xs text-gray-600">
                     {summary}
                   </p>
                 </div>
               </div>
-              <span className="text-xs text-gray-500">{`v${version}`}</span>
+              {version ? <span className="text-xs text-gray-500">{`v${version}`}</span> : null}
             </div>
           );
         })}
