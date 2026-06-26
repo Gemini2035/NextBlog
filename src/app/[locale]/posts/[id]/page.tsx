@@ -60,7 +60,7 @@ async function PostPageContent({ params }: PostPageProps) {
         {/* 文章信息卡片 - 初始显示在顶部 */}
         <PostInfoCard post={post} />
         
-        <PostContent content={post.content} />
+        <PostContent content={post.content} images={post.images} />
         
         {/* AI article support entry */}
         <ContactButton postId={id} title={post.title} />

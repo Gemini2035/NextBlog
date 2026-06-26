@@ -13,6 +13,23 @@ export interface BlogPostListItem {
 
 export interface BlogPostDetail extends BlogPostListItem {
   content: string
+  images: Record<string, BlogPostImage>
+}
+
+export interface BlogPostImage {
+  id: number
+  assetId: number
+  slotKey: string
+  url: string
+  alt?: string | null
+  caption?: string | null
+  width?: number | null
+  height?: number | null
+  mimeType: string
+  size: number
+  placeholder?: string | null
+  variants: Record<string, string>
+  displayVariant?: string | null
 }
 
 export interface BlogPostDictionaryField {

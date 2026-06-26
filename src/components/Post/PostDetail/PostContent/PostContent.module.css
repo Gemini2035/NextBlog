@@ -130,6 +130,46 @@
   border-radius: 18px;
 }
 
+.content .postImage {
+  display: inline-block;
+  margin: 0 0.25rem;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.content .postImageCard {
+  display: inline-block;
+  max-width: 100%;
+  position: relative;
+  vertical-align: top;
+}
+
+.content .postImagePreview {
+  display: inline-block;
+  max-width: 100%;
+  overflow: visible;
+  vertical-align: top;
+}
+
+.content .postImagePreviewImage {
+  border-radius: 0;
+  display: block;
+  height: auto;
+  margin: 0;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+
+.content .postImageFallback {
+  color: rgb(100 116 139);
+  display: inline-block;
+  font-size: 0.875rem;
+  padding: 0 0.25rem;
+  vertical-align: middle;
+  word-break: break-word;
+}
+
 .content table {
   display: block;
   margin: 1.5rem 0;
