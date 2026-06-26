@@ -12,11 +12,23 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   async rewrites() {
-    return [
+    const rewrites = [
+      ...(apiProxyTarget
+        ? [
+            {
+              source: '/resources/media/:path*',
+              destination: `${apiProxyTarget}/resources/media/:path*`,
+            },
+          ]
+        : []),
       {
         source: '/api/:path*',
         destination: `${apiProxyTarget}/api/:path*`,
       },
+    ]
+
+    return [
+      ...rewrites,
     ]
   },
   images: {
