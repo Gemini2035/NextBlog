@@ -17,7 +17,7 @@ interface ContactButtonProps {
  */
 export function ContactButton({ postId, title }: ContactButtonProps) {
   const t = useTranslations('Agent')
-  const href = `/agent/article-support?postId=${encodeURIComponent(postId)}`
+  const href = `/agent/article-support?target_post=${encodeURIComponent(postId)}`
 
   return (
     <>
