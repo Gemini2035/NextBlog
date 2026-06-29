@@ -2,21 +2,24 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
-import { useRouter } from '@/i18n/navigation'
 import { createAgentSession, streamAgentMessage } from '@/apis/agent'
 import { ArrowRightIcon, OpenAIIcon, SearchIcon } from '@/assets/icons'
 import {
   MarkdownRenderer,
   type MarkdownAutoLinkTarget,
 } from '@/components/MarkdownRenderer'
+import { PostContent } from '@/components/Post'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
 import type { AgentStreamTimelineEvent } from '@/types/agent'
+import type { BlogPostDetail } from '@/types/blog'
+import { Drawer } from '@/ui'
 
 interface AgentChatPageProps {
   agentType: AgentType
   initialQuestion?: string
   targetPostId?: string
   targetPostTitle?: string
+  targetPost?: BlogPostDetail
 }
 
 interface RunSummary {
@@ -102,16 +105,22 @@ const getDeviceKey = () => {
   return nextKey
 }
 
-export function AgentChatPage({ agentType, initialQuestion, targetPostId, targetPostTitle }: AgentChatPageProps) {
+export function AgentChatPage({
+  agentType,
+  initialQuestion,
+  targetPostId,
+  targetPostTitle,
+  targetPost,
+}: AgentChatPageProps) {
   const t = useTranslations('Agent')
   const locale = useLocale()
-  const router = useRouter()
   const [session, setSession] = useState<AgentSession | null>(null)
   const [messages, setMessages] = useState<AgentMessage[]>([])
   const [input, setInput] = useState(initialQuestion ?? '')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [runSummary, setRunSummary] = useState<RunSummary | null>(null)
+  const [targetPostDrawerOpen, setTargetPostDrawerOpen] = useState(false)
   const didCreateRef = useRef(false)
   const bottomRef = useRef<HTMLDivElement | null>(null)
   const streamCleanupRef = useRef<(() => void) | null>(null)
@@ -330,9 +339,14 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId, target
               <h1 className="text-2xl font-semibold text-[var(--site-text)]">{t(`${copyKey}.title`)}</h1>
               <p className="mt-1 text-sm leading-6 text-[var(--site-text-muted)]">{t(`${copyKey}.subtitle`)}</p>
               {targetLabel ? (
-                <div className="mt-3 inline-flex rounded-[var(--site-radius-chip)] border border-[var(--site-action)] bg-[var(--site-surface)] px-3 py-1 text-xs font-medium text-[var(--site-action)]">
+                <button
+                  type="button"
+                  className="mt-3 inline-flex cursor-pointer rounded-[var(--site-radius-chip)] border border-[var(--site-action)] bg-[var(--site-surface)] px-3 py-1 text-left text-xs font-medium text-[var(--site-action)] transition-colors hover:bg-[var(--site-canvas-muted)] disabled:cursor-default disabled:opacity-80"
+                  disabled={!targetPost}
+                  onClick={() => setTargetPostDrawerOpen(true)}
+                >
                   {targetLabel}
-                </div>
+                </button>
               ) : null}
             </div>
           </div>
@@ -426,6 +440,23 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId, target
           </form>
         </section>
       </div>
+
+      <Drawer
+        open={targetPostDrawerOpen}
+        onClose={() => setTargetPostDrawerOpen(false)}
+        placement="right"
+        size="lg"
+        style={{ width: 'min(100vw, 64rem)', zIndex: 1000 }}
+        closable={false}
+        bodyClassName="px-4 py-4 sm:px-6 lg:px-8"
+        destroyOnClose
+      >
+        {targetPost ? (
+          <div className="mx-auto w-full max-w-4xl">
+            <PostContent content={targetPost.content} frameless />
+          </div>
+        ) : null}
+      </Drawer>
     </div>
   )
 }

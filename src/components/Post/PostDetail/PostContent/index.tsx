@@ -14,6 +14,7 @@ import styles from './PostContent.module.css'
 
 interface PostContentProps {
   content: string
+  frameless?: boolean
 }
 
 const sanitizePostContent = (content: string) => {
@@ -55,7 +56,7 @@ const getCodeLanguage = (codeElement?: ParserElement) => {
     .find((className) => className.startsWith('language-'))
 }
 
-export function PostContent({ content }: PostContentProps) {
+export function PostContent({ content, frameless = false }: PostContentProps) {
   const [nodes, setNodes] = useState<ReactNode>(null)
   const options = useMemo<HTMLReactParserOptions>(() => ({
     replace: (node) => {
@@ -108,7 +109,10 @@ export function PostContent({ content }: PostContentProps) {
   }, [content, options])
 
   return (
-    <article className={styles.article} data-article-content>
+    <article
+      className={frameless ? `${styles.article} ${styles.framelessArticle}` : styles.article}
+      data-article-content
+    >
       <div className={styles.content}>{nodes}</div>
     </article>
   )

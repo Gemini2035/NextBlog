@@ -303,3 +303,12 @@
     padding-left: 1rem;
   }
 }
+
+.framelessArticle {
+  margin-top: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}

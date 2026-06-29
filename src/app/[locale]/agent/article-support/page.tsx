@@ -35,6 +35,7 @@ export default async function ArticleSupportAgentPage({
       initialQuestion={question}
       targetPostId={resolvedTargetPost}
       targetPostTitle={targetPostPayload?.post.title}
+      targetPost={targetPostPayload?.post}
     />
   )
 }
