@@ -16,6 +16,7 @@ interface AgentChatPageProps {
   agentType: AgentType
   initialQuestion?: string
   targetPostId?: string
+  targetPostTitle?: string
 }
 
 interface RunSummary {
@@ -101,7 +102,7 @@ const getDeviceKey = () => {
   return nextKey
 }
 
-export function AgentChatPage({ agentType, initialQuestion, targetPostId }: AgentChatPageProps) {
+export function AgentChatPage({ agentType, initialQuestion, targetPostId, targetPostTitle }: AgentChatPageProps) {
   const t = useTranslations('Agent')
   const locale = useLocale()
   const router = useRouter()
@@ -120,8 +121,9 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
 
   const targetLabel = useMemo(() => {
     if (agentType !== 'article_support') return null
-    return targetPostId ? t('targetArticle', { postId: targetPostId }) : t('targetArticleRequired')
-  }, [agentType, targetPostId, t])
+    if (!targetPostId) return t('targetArticleRequired')
+    return t('targetArticle', { title: targetPostTitle ?? targetPostId })
+  }, [agentType, targetPostId, targetPostTitle, t])
   const targetSourceIds = useMemo(() => {
     return new Set(
       [targetPostId, session?.targetPostId].filter((sourceId): sourceId is string =>
@@ -291,19 +293,16 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
     )
   }
 
-  const sendInitialQuestion = () => {
-    sendMessage()
-  }
-
   const goHandoff = (message: AgentMessage) => {
     const handoff = message.handoff
     if (!handoff) return
 
     const params = new URLSearchParams()
     if (handoff.question) params.set('question', handoff.question)
-    if (handoff.postId) params.set('postId', handoff.postId)
+    if (handoff.postId) params.set('target_post', handoff.postId)
     const path = handoff.targetAgent === 'chat' ? '/agent/chat' : '/agent/article-support'
-    router.push(`${path}?${params.toString()}`)
+    const href = `${path}?${params.toString()}`
+    window.open(href, '_blank', 'noopener,noreferrer')
   }
 
   const getArticleSupportLinkTargets = (message: AgentMessage): MarkdownAutoLinkTarget[] => {
@@ -320,9 +319,9 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
   }
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] bg-[var(--site-canvas-muted)]">
-      <div className="mx-auto flex max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-6 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-5 shadow-sm">
+    <div className="min-h-[calc(100dvh-4rem)] bg-[var(--site-canvas-muted)]">
+      <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-5xl flex-col px-4 py-4 sm:px-6 lg:px-8">
+        <header className="mb-4 shrink-0 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-5 shadow-sm">
           <div className="flex items-start gap-4">
             <div className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] text-[var(--site-action)]">
               {agentType === 'chat' ? <SearchIcon className="h-5 w-5" /> : <OpenAIIcon className="h-5 w-5" />}
@@ -339,21 +338,13 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
           </div>
         </header>
 
-        <section className="rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm">
-          <div className="min-h-[480px] px-4 py-5 sm:px-6">
+        <section className="flex flex-1 flex-col rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm">
+          <div className="flex flex-1 flex-col px-4 py-5 sm:px-6">
             {messages.length === 0 && !loading ? (
-              <div className="grid h-full place-items-center text-center">
+              <div className="grid flex-1 place-items-center text-center">
                 <div>
                   <OpenAIIcon className="mx-auto mb-4 h-12 w-12 text-[var(--site-text-tertiary)]" />
                   <p className="text-sm text-[var(--site-text-tertiary)]">{t(`${copyKey}.empty`)}</p>
-                  {initialQuestion ? (
-                    <button
-                      className="mt-4 rounded-[var(--site-radius-chip)] bg-[var(--site-text)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--site-text)]"
-                      onClick={sendInitialQuestion}
-                    >
-                      {t('sendPreparedQuestion')}
-                    </button>
-                  ) : null}
                 </div>
               </div>
             ) : null}
@@ -375,6 +366,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                       <MarkdownRenderer
                         autoLinkTargets={getArticleSupportLinkTargets(message)}
                         content={message.content}
+                        linkTarget="_blank"
                       />
                     ) : (
                       <div className="whitespace-pre-wrap">{message.content}</div>
