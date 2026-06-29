@@ -9,7 +9,6 @@ import {
   MarkdownRenderer,
   type MarkdownAutoLinkTarget,
 } from '@/components/MarkdownRenderer'
-import { Link } from '@/ui'
 import type { AgentMessage, AgentSession, AgentType } from '@/types/agent'
 import type { AgentStreamTimelineEvent } from '@/types/agent'
 
@@ -69,8 +68,8 @@ function RunSummaryPanel({ summary, t }: { summary: RunSummary | null; t: AgentT
     : summary.route
 
   return (
-    <div className="mt-4 rounded-md border border-gray-200 bg-white px-3 py-2 text-xs text-gray-500">
-      <div className="mb-1 font-semibold text-gray-600">{t('summary.title')}</div>
+    <div className="mt-4 rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] px-3 py-2 text-xs text-[var(--site-text-tertiary)]">
+      <div className="mb-1 font-semibold text-[var(--site-text-muted)]">{t('summary.title')}</div>
       <div className="flex flex-wrap gap-x-4 gap-y-1">
         {routeLabel ? <span>{t('summary.route', { route: routeLabel })}</span> : null}
         {summary.rag ? (
@@ -321,18 +320,18 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
   }
 
   return (
-    <div className="min-h-[calc(100vh-8rem)] bg-gray-50">
+    <div className="min-h-[calc(100vh-8rem)] bg-[var(--site-canvas-muted)]">
       <div className="mx-auto flex max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-6 rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+        <header className="mb-6 rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-5 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-blue-50 text-blue-600">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] text-[var(--site-action)]">
               {agentType === 'chat' ? <SearchIcon className="h-5 w-5" /> : <OpenAIIcon className="h-5 w-5" />}
             </div>
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl font-semibold text-gray-900">{t(`${copyKey}.title`)}</h1>
-              <p className="mt-1 text-sm leading-6 text-gray-600">{t(`${copyKey}.subtitle`)}</p>
+              <h1 className="text-2xl font-semibold text-[var(--site-text)]">{t(`${copyKey}.title`)}</h1>
+              <p className="mt-1 text-sm leading-6 text-[var(--site-text-muted)]">{t(`${copyKey}.subtitle`)}</p>
               {targetLabel ? (
-                <div className="mt-3 inline-flex rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                <div className="mt-3 inline-flex rounded-[var(--site-radius-chip)] border border-[var(--site-action)] bg-[var(--site-surface)] px-3 py-1 text-xs font-medium text-[var(--site-action)]">
                   {targetLabel}
                 </div>
               ) : null}
@@ -340,16 +339,16 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
           </div>
         </header>
 
-        <section className="min-h-[480px] rounded-lg border border-gray-200 bg-white shadow-sm">
-          <div className="h-[min(62vh,620px)] overflow-y-auto px-4 py-5 sm:px-6">
+        <section className="rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm">
+          <div className="min-h-[480px] px-4 py-5 sm:px-6">
             {messages.length === 0 && !loading ? (
               <div className="grid h-full place-items-center text-center">
                 <div>
-                  <OpenAIIcon className="mx-auto mb-4 h-12 w-12 text-gray-300" />
-                  <p className="text-sm text-gray-500">{t(`${copyKey}.empty`)}</p>
+                  <OpenAIIcon className="mx-auto mb-4 h-12 w-12 text-[var(--site-text-tertiary)]" />
+                  <p className="text-sm text-[var(--site-text-tertiary)]">{t(`${copyKey}.empty`)}</p>
                   {initialQuestion ? (
                     <button
-                      className="mt-4 rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-gray-800"
+                      className="mt-4 rounded-[var(--site-radius-chip)] bg-[var(--site-text)] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[var(--site-text)]"
                       onClick={sendInitialQuestion}
                     >
                       {t('sendPreparedQuestion')}
@@ -368,8 +367,8 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                   <div
                     className={
                       message.role === 'user'
-                        ? 'max-w-[82%] rounded-lg bg-gray-900 px-4 py-3 text-sm leading-6 text-white'
-                        : 'max-w-[88%] rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm leading-6 text-gray-800'
+                        ? 'max-w-[82%] rounded-[var(--site-radius-control)] bg-[var(--site-text)] px-4 py-3 text-sm leading-6 text-white'
+                        : 'max-w-[88%] rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] px-4 py-3 text-sm leading-6 text-[var(--site-text)]'
                     }
                   >
                     {message.role === 'assistant' ? (
@@ -382,7 +381,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                     )}
                     {message.handoff ? (
                       <button
-                        className="mt-4 inline-flex items-center rounded-full bg-blue-600 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+                        className="mt-4 inline-flex items-center rounded-[var(--site-radius-chip)] bg-[var(--site-action)] px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[var(--site-action)]"
                         onClick={() => goHandoff(message)}
                       >
                         {t('continueIn', {
@@ -399,7 +398,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
               ))}
               {loading ? (
                 <div className="flex justify-start">
-                  <div className="rounded-lg border border-gray-100 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                  <div className="rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] px-4 py-3 text-sm text-[var(--site-text-tertiary)]">
                     {t('thinking')}
                   </div>
                 </div>
@@ -408,7 +407,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
             </div>
           </div>
 
-          <form className="border-t border-gray-100 p-4" onSubmit={sendMessage}>
+          <form className="sticky bottom-0 z-10 rounded-b-[var(--site-radius-card)] border-t border-[var(--site-border-subtle)] bg-[var(--site-canvas)]/95 p-4 shadow-[0_-1px_2px_rgba(0,0,0,0.04)] backdrop-blur supports-[backdrop-filter]:bg-[var(--site-canvas)]/85" onSubmit={sendMessage}>
             {error ? <div className="mb-3 text-sm text-red-600">{error}</div> : null}
             <div className="flex gap-3">
               <textarea
@@ -416,7 +415,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
                 onChange={(event) => setInput(event.target.value)}
                 placeholder={t(`${copyKey}.placeholder`)}
                 rows={2}
-                className="min-h-12 flex-1 resize-none rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 outline-none transition-colors placeholder:text-gray-400 focus:border-gray-400"
+                className="min-h-12 flex-1 resize-none rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] px-4 py-3 text-sm text-[var(--site-text)] outline-none transition-colors placeholder:text-[var(--site-text-tertiary)] focus:border-[var(--site-focus-ring)]"
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' && !event.shiftKey) {
                     event.preventDefault()
@@ -427,7 +426,7 @@ export function AgentChatPage({ agentType, initialQuestion, targetPostId }: Agen
               <button
                 type="submit"
                 disabled={!input.trim() || loading || !session}
-                className="h-12 rounded-lg bg-gray-900 px-5 text-sm font-medium text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-300"
+                className="h-12 rounded-[var(--site-radius-control)] bg-[var(--site-text)] px-5 text-sm font-medium text-white transition-colors hover:bg-[var(--site-text)] disabled:cursor-not-allowed disabled:bg-[var(--site-border)]"
               >
                 {t('send')}
               </button>
