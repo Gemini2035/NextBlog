@@ -1,7 +1,7 @@
 'use client'
 
 import { GlobeIcon, StarIcon } from '@/assets/icons'
-import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
+import { useFriendLinks, useSocialLinks } from '@/components/About/AboutDataProvider'
 import { FallbackImage } from '@/components/FallbackImage'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
@@ -13,27 +13,8 @@ interface SocialLinksBriefProps {
 export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
-  const socialLink = useAboutRecord('social_link')
+  const socialLinks = useSocialLinks()
   const friendLinks = useFriendLinks()
-
-  const socialLinks = Object.entries(socialLink)
-    .map(([key, value]) => {
-      // 社交平台名称映射 - 使用国际化
-      const getSocialName = (key: string) => {
-        try {
-          return skillsT(`socialPlatforms.${key}`)
-        } catch {
-          return key
-        }
-      }
-      
-      return {
-        key,
-        name: getSocialName(key),
-        value
-      }
-    })
-    .filter(link => link.value) // 过滤掉空值
 
   return (
     <div className={`${className} group`}>
@@ -54,11 +35,16 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
       <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
         {socialLinks.map((link) => (
           <div
-            key={link.key}
+            key={`${link.name}:${link.url}`}
             className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
             title={link.name}
           >
-            <GlobeIcon className="w-6 h-6 text-gray-700" />
+            <FallbackImage
+              src={link.icon}
+              alt=""
+              className="h-6 w-6 object-contain"
+              fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}
+            />
           </div>
         ))}
       </div>
@@ -80,7 +66,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
                 title={link.name}
               >
                 <FallbackImage
-                  src={link.iconBase64}
+                  src={link.icon}
                   alt=""
                   className="h-6 w-6 object-contain"
                   fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}

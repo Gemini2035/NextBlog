@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, type ReactNode } from 'react'
-import type { AboutInitPayload, FriendLinkItem } from '@/types/about'
+import type { AboutInitPayload, FriendLinkItem, SocialLinkItem } from '@/types/about'
 
 interface AboutDataProviderProps {
   value: AboutInitPayload
@@ -48,28 +48,10 @@ export function useAboutList<T>(key: string): T[] {
   return Array.isArray(value) ? (value as T[]) : []
 }
 
+export function useSocialLinks() {
+  return useAboutList<SocialLinkItem>('social_link')
+}
+
 export function useFriendLinks() {
-  return useAboutList<unknown>('friend_links')
-    .map((item): FriendLinkItem | null => {
-      if (!item || typeof item !== 'object' || Array.isArray(item)) {
-        return null
-      }
-
-      const record = item as Record<string, unknown>
-      const name = typeof record.name === 'string' ? record.name.trim() : ''
-      const url = typeof record.url === 'string' ? record.url.trim() : ''
-      const rawIcon = typeof record.icon === 'string' ? record.icon.trim() : ''
-      const iconBase64 = rawIcon.startsWith('data:image/') ? rawIcon : null
-
-      if (!name || !url) {
-        return null
-      }
-
-      return {
-        iconBase64,
-        name,
-        url,
-      }
-    })
-    .filter((item): item is FriendLinkItem => item !== null)
+  return useAboutList<FriendLinkItem>('friend_links')
 }

@@ -5,7 +5,13 @@ export interface AboutInitPayload {
 }
 
 export interface FriendLinkItem {
-  iconBase64?: string | null
+  icon?: string | null
+  name: string
+  url: string
+}
+
+export interface SocialLinkItem {
+  icon?: string | null
   name: string
   url: string
 }
