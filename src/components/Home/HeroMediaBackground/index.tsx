@@ -25,6 +25,8 @@ export interface HeroMediaBackgroundRef {
   playAudio: () => void
 }
 
+const clampVolume = (volume: number) => Math.min(1, Math.max(0, volume))
+
 const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgroundProps>(
   (
     {
@@ -44,7 +46,6 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
     const resolvedVideoSrc = videoSrc ?? `${cdnUrl}/chou-kaguya/video/master.m3u8`
     const videoRef = useRef<HTMLVideoElement>(null)
     const hasRequestedUnmuteRef = useRef(false)
-    const volumeFadeTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const isMutedRef = useRef(true)
     const [isMuted, setIsMuted] = useState(true)
     const [videoError, setVideoError] = useState(false)
@@ -53,103 +54,83 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       isMutedRef.current = isMuted
     }, [isMuted])
 
-    const clearVolumeTimer = useCallback(() => {
-      if (volumeFadeTimerRef.current) {
-        clearInterval(volumeFadeTimerRef.current)
-        volumeFadeTimerRef.current = null
+    const getScrollVolume = useCallback(() => {
+      const target = portalTargetRef?.current
+      if (!target) return 1
+
+      const rect = target.getBoundingClientRect()
+      const header = document.querySelector('header')
+      const headerBottom = header?.getBoundingClientRect().bottom ?? headerHeight
+
+      if (rect.height <= 0 || rect.top >= headerBottom) {
+        return 1
       }
-    }, [])
 
-    const fadeInVolume = useCallback((video: HTMLVideoElement) => {
-      clearVolumeTimer()
-      video.volume = 0
-      video.muted = false
+      return clampVolume((rect.bottom - headerBottom) / rect.height)
+    }, [portalTargetRef, headerHeight])
+
+    const syncVideoPlayback = useCallback(() => {
+      const video = videoRef.current
+      if (!video) return
+
+      const nextVolume = getScrollVolume()
+      if (nextVolume <= 0) {
+        video.volume = 0
+        video.pause()
+        return
+      }
+
+      if (isMutedRef.current) {
+        video.muted = true
+        video.volume = 0
+      } else {
+        video.muted = false
+        video.volume = nextVolume
+      }
       video.play().catch(() => {})
-      let v = 0
-      volumeFadeTimerRef.current = setInterval(() => {
-        v += 0.02
-        video.volume = Math.min(v, 0.1)
-        if (v >= 0.1) {
-          clearVolumeTimer()
-        }
-      }, 200)
-    }, [clearVolumeTimer])
-
-    const fadeOutVolume = useCallback((video: HTMLVideoElement) => {
-      clearVolumeTimer()
-      let v = video.volume
-      volumeFadeTimerRef.current = setInterval(() => {
-        v = Math.max(0, v - 0.02)
-        video.volume = v
-        if (v <= 0) {
-          clearVolumeTimer()
-          video.pause()
-        }
-      }, 100)
-    }, [clearVolumeTimer])
+    }, [getScrollVolume])
 
     const playAudio = useCallback(() => {
       hasRequestedUnmuteRef.current = true
-      const video = videoRef.current
-      if (video) {
-        fadeInVolume(video)
-        setIsMuted(false)
-      }
-    }, [fadeInVolume])
+      isMutedRef.current = false
+      setIsMuted(false)
+      syncVideoPlayback()
+    }, [syncVideoPlayback])
 
     useImperativeHandle(ref, () => ({ playAudio }), [playAudio])
 
     const toggleMute = useCallback((e: React.MouseEvent | React.TouchEvent) => {
       e.stopPropagation()
-      const video = videoRef.current
-      if (!video) return
-      const nextMuted = !video.muted
-      video.muted = nextMuted
-      if (!nextMuted) {
-        fadeInVolume(video)
-      }
+      const nextMuted = !isMutedRef.current
+      hasRequestedUnmuteRef.current = hasRequestedUnmuteRef.current || !nextMuted
+      isMutedRef.current = nextMuted
       setIsMuted(nextMuted)
-    }, [fadeInVolume])
+      syncVideoPlayback()
+    }, [syncVideoPlayback])
 
     useEffect(() => {
+      let animationFrameId = 0
+
+      const scheduleSync = () => {
+        if (animationFrameId) return
+        animationFrameId = window.requestAnimationFrame(() => {
+          animationFrameId = 0
+          syncVideoPlayback()
+        })
+      }
+
+      scheduleSync()
+      window.addEventListener('scroll', scheduleSync, { passive: true })
+      window.addEventListener('resize', scheduleSync)
+
       return () => {
-        if (volumeFadeTimerRef.current) {
-          clearInterval(volumeFadeTimerRef.current)
-          volumeFadeTimerRef.current = null
+        window.removeEventListener('scroll', scheduleSync)
+        window.removeEventListener('resize', scheduleSync)
+        if (animationFrameId) {
+          window.cancelAnimationFrame(animationFrameId)
         }
       }
-    }, [])
-
-    // 欢迎 section 移出视口时：有声音则渐出后暂停，静音则直接暂停；移入时静音播放
-    useEffect(() => {
-      const target = portalTargetRef?.current
-      if (!target) return
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          const [entry] = entries
-          const video = videoRef.current
-          if (!video) return
-          if (entry.isIntersecting) {
-            clearVolumeTimer()
-            video.muted = true
-            video.volume = 0
-            isMutedRef.current = true
-            setIsMuted(true)
-            video.play().catch(() => {})
-          } else {
-            if (isMutedRef.current) {
-              video.pause()
-            } else {
-              fadeOutVolume(video)
-            }
-          }
-        },
-        { threshold: 0, rootMargin: `${-headerHeight}px 0px 0px 0px` }
-      )
-      observer.observe(target)
-      return () => observer.disconnect()
-    }, [portalTargetRef, headerHeight, fadeOutVolume, clearVolumeTimer])
+    }, [syncVideoPlayback])
 
     useEffect(() => {
       if (!unmuteOnInteraction) return
