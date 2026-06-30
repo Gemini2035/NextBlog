@@ -5,9 +5,9 @@ export interface AboutInitPayload {
 }
 
 export interface FriendLinkItem {
+  iconBase64?: string | null
   name: string
   url: string
-  icon?: string
 }
 
 export interface TechStackItem {

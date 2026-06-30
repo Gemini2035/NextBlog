@@ -1,9 +1,8 @@
 'use client'
 
-import { ComponentType } from 'react'
-import Image from 'next/image'
-import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
+import { GlobeIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
 import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
+import { FallbackImage } from '@/components/FallbackImage'
 import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
@@ -17,15 +16,6 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
   const skillsT = useTranslations('Skills')
   const socialLink = useAboutRecord('social_link')
   const friendLinks = useFriendLinks()
-
-  // 图标映射表 - 支持后续扩展
-  const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
-    github: GitHubIcon,
-    twitter: TwitterIcon,
-    website: GlobeIcon,
-    bilibili: BilibiliIcon,
-    pixiv: PixivIcon
-  }
 
   const socialLinks = Object.entries(socialLink)
     .map(([key, value]) => {
@@ -42,8 +32,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
       return {
         key,
         name: getSocialName(key),
-        value,
-        icon: iconMap[key] || GlobeIcon
+        value
       }
     })
     .filter(link => link.value) // 过滤掉空值
@@ -67,44 +56,40 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
       </StickySectionHeader>
       
       <div className="space-y-4">
-        {socialLinks.map((link) => {
-          const IconComponent = link.icon
-          
-          return (
-            <div
-              key={link.key}
-              className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
-                  <IconComponent className="w-6 h-6 text-gray-700" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    {link.name}
-                  </h3>
-                  <div className="mt-2">
-                    <code className="text-xs bg-blue-50 px-2 py-1 rounded text-blue-700 break-all">
-                      {link.value}
-                    </code>
-                  </div>
-                </div>
-                <div className="shrink-0">
-                  <Link
-                    href={link.value}
-                    external
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
-                  >
-                    {skillsT('visitPlatform')}
-                    <span className="ml-1">→</span>
-                  </Link>
+        {socialLinks.map((link) => (
+          <div
+            key={link.key}
+            className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
+          >
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
+                <GlobeIcon className="w-6 h-6 text-gray-700" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {link.name}
+                </h3>
+                <div className="mt-2">
+                  <code className="text-xs bg-blue-50 px-2 py-1 rounded text-blue-700 break-all">
+                    {link.value}
+                  </code>
                 </div>
               </div>
+              <div className="shrink-0">
+                <Link
+                  href={link.value}
+                  external
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
+                >
+                  {skillsT('visitPlatform')}
+                  <span className="ml-1">→</span>
+                </Link>
+              </div>
             </div>
-          )
-        })}
+          </div>
+        ))}
       </div>
 
       {friendLinks.length > 0 && (
@@ -124,11 +109,12 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
-                    {link.icon ? (
-                      <Image src={link.icon} alt="" width={24} height={24} className="object-contain" unoptimized />
-                    ) : (
-                      <GlobeIcon className="w-6 h-6 text-gray-600" />
-                    )}
+                    <FallbackImage
+                      src={link.iconBase64}
+                      alt=""
+                      className="h-6 w-6 object-contain"
+                      fallback={<GlobeIcon className="w-6 h-6 text-gray-600" />}
+                    />
                   </span>
                   <span className="font-medium text-gray-900 truncate">{link.name}</span>
                 </div>
