@@ -1,7 +1,7 @@
 'use client'
 
 import { GlobeIcon, StarIcon, ArrowRightIcon } from '@/assets/icons'
-import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
+import { useFriendLinks, useSocialLinks } from '@/components/About/AboutDataProvider'
 import { FallbackImage } from '@/components/FallbackImage'
 import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import { Link } from '@/ui'
@@ -14,28 +14,8 @@ interface SocialLinksDetailProps {
 export default function SocialLinksDetail({ className }: SocialLinksDetailProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
-  const socialLink = useAboutRecord('social_link')
+  const socialLinks = useSocialLinks()
   const friendLinks = useFriendLinks()
-
-  const socialLinks = Object.entries(socialLink)
-    .map(([key, value]) => {
-      // 社交平台名称映射 - 使用国际化
-      const getSocialName = (key: string) => {
-        try {
-          return skillsT(`socialPlatforms.${key}`)
-        } catch {
-          return key
-        }
-      }
-      
-      
-      return {
-        key,
-        name: getSocialName(key),
-        value
-      }
-    })
-    .filter(link => link.value) // 过滤掉空值
 
   return (
     <div className={className}>
@@ -58,12 +38,17 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
       <div className="space-y-4">
         {socialLinks.map((link) => (
           <div
-            key={link.key}
+            key={`${link.name}:${link.url}`}
             className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
           >
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
-                <GlobeIcon className="w-6 h-6 text-gray-700" />
+                <FallbackImage
+                  src={link.icon}
+                  alt=""
+                  className="h-6 w-6 object-contain"
+                  fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
@@ -71,13 +56,13 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                 </h3>
                 <div className="mt-2">
                   <code className="text-xs bg-blue-50 px-2 py-1 rounded text-blue-700 break-all">
-                    {link.value}
+                    {link.url}
                   </code>
                 </div>
               </div>
               <div className="shrink-0">
                 <Link
-                  href={link.value}
+                  href={link.url}
                   external
                   target="_blank"
                   rel="noopener noreferrer"
@@ -110,7 +95,7 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="shrink-0 w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center overflow-hidden">
                     <FallbackImage
-                      src={link.iconBase64}
+                      src={link.icon}
                       alt=""
                       className="h-6 w-6 object-contain"
                       fallback={<GlobeIcon className="w-6 h-6 text-gray-600" />}
