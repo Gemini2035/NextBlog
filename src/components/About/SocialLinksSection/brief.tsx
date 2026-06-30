@@ -1,9 +1,8 @@
 'use client'
 
-import { ComponentType } from 'react'
-import Image from 'next/image'
-import { GitHubIcon, TwitterIcon, GlobeIcon, BilibiliIcon, PixivIcon, StarIcon } from '@/assets/icons'
+import { GlobeIcon, StarIcon } from '@/assets/icons'
 import { useAboutRecord, useFriendLinks } from '@/components/About/AboutDataProvider'
+import { FallbackImage } from '@/components/FallbackImage'
 import { Link } from '@/ui'
 import { useTranslations } from 'next-intl'
 
@@ -16,15 +15,6 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
   const skillsT = useTranslations('Skills')
   const socialLink = useAboutRecord('social_link')
   const friendLinks = useFriendLinks()
-
-  // 图标映射表 - 支持后续扩展
-  const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
-    github: GitHubIcon,
-    twitter: TwitterIcon,
-    website: GlobeIcon,
-    bilibili: BilibiliIcon,
-    pixiv: PixivIcon
-  }
 
   const socialLinks = Object.entries(socialLink)
     .map(([key, value]) => {
@@ -40,8 +30,7 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
       return {
         key,
         name: getSocialName(key),
-        value,
-        icon: iconMap[key] || GlobeIcon
+        value
       }
     })
     .filter(link => link.value) // 过滤掉空值
@@ -63,18 +52,15 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
       </div>
       
       <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
-        {socialLinks.map((link) => {
-          const IconComponent = link.icon
-          return (
-            <div
-              key={link.key}
-              className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
-              title={link.name}
-            >
-              <IconComponent className="w-6 h-6 text-gray-700" />
-            </div>
-          )
-        })}
+        {socialLinks.map((link) => (
+          <div
+            key={link.key}
+            className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
+            title={link.name}
+          >
+            <GlobeIcon className="w-6 h-6 text-gray-700" />
+          </div>
+        ))}
       </div>
 
       {friendLinks.length > 0 && (
@@ -93,11 +79,12 @@ export default function SocialLinksBrief({ className }: SocialLinksBriefProps) {
                 className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0 hover:bg-gray-300 transition-colors"
                 title={link.name}
               >
-                {link.icon ? (
-                  <Image src={link.icon} alt="" width={24} height={24} className="object-contain" unoptimized />
-                ) : (
-                  <GlobeIcon className="w-6 h-6 text-gray-700" />
-                )}
+                <FallbackImage
+                  src={link.iconBase64}
+                  alt=""
+                  className="h-6 w-6 object-contain"
+                  fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}
+                />
               </Link>
             ))}
           </div>
