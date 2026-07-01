@@ -2,9 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { OnlineServiceIcon } from "@/assets/icons";
-import { IconMap } from "./constants";
 import { useRandomSort } from "@/hooks";
-import { cn } from "@/utils";
+import Image from "next/image";
 import { FC } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
 
@@ -14,24 +13,26 @@ interface OnlineServicesBriefProps {
 
 const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
   const t = useTranslations("AboutPage");
+  const planSuffix = t("OnlineServices.planSuffix");
   const onlineServices = useAboutList<{
     services: Array<{
-      id: string
-      icon: keyof typeof IconMap
+      id: number
+      icon?: string | null
       name: string
-      category: string
-      externalDescription: {
-        text: string
+      serviceCategory: string
+      plan: {
+        name: string
         textColor: string
+        backgroundColor: string
       }
     }>
   }>("online_services").flatMap(({ services }) =>
-    services.map(({ id, icon, name, category, externalDescription }) => ({
+    services.map(({ id, icon, name, serviceCategory, plan }) => ({
       id,
       icon,
       name,
-      category,
-      externalDescription,
+      serviceCategory,
+      plan,
     }))
   );
 
@@ -44,7 +45,7 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
           <OnlineServiceIcon className="w-5 h-5 text-blue-600" />
         </div>
         <h2 className="text-xl font-bold text-gray-900">
-          {t("OnlineServies.title")}
+          {t("OnlineServices.title")}
         </h2>
       </div>
 
@@ -54,11 +55,9 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
             id,
             icon,
             name,
-            category,
-            externalDescription: { text, textColor },
+            serviceCategory,
+            plan,
           }) => {
-            const IconComponent = IconMap[icon as keyof typeof IconMap];
-
             return (
               <div
                 className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
@@ -66,8 +65,15 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
               >
                 <div className="flex items-center mb-2">
                   <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-                    {IconComponent ? (
-                      <IconComponent className="w-4 h-4 text-gray-700" />
+                    {icon ? (
+                      <Image
+                        src={icon}
+                        alt=""
+                        width={16}
+                        height={16}
+                        unoptimized
+                        className="h-4 w-4 object-contain"
+                      />
                     ) : (
                       <OnlineServiceIcon className="w-4 h-4 text-gray-700" />
                     )}
@@ -76,10 +82,19 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
                     <h3 className="font-medium text-gray-900 text-sm">
                       {name}
                     </h3>
-                    <p className="text-xs text-gray-600">{category}</p>
+                    <p className="text-xs text-gray-600">{serviceCategory}</p>
                   </div>
                 </div>
-                <span className={cn("text-xs", textColor)}>{text}</span>
+                <span
+                  className="rounded px-1.5 py-0.5 text-xs"
+                  style={{
+                    backgroundColor: plan.backgroundColor,
+                    color: plan.textColor,
+                  }}
+                >
+                  {plan.name}
+                  {planSuffix}
+                </span>
               </div>
             );
           }

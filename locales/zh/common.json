@@ -69,9 +69,10 @@
     "typescriptDescription": "为JavaScript添加类型系统的语言",
     "nextIntlDescription": "Next.js国际化库",
     "visit": "访问",
-    "OnlineServies": {
+    "OnlineServices": {
       "title": "在线服务",
       "description": "项目部署和维护使用的在线服务",
+      "planSuffix": "方案",
       "InteractiveText": {
         "visitWebsite": "访问网站",
         "viewDocs": "查看文档"
