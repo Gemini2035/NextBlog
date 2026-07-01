@@ -6,7 +6,7 @@ import typescript from 'highlight.js/lib/languages/typescript'
 import xml from 'highlight.js/lib/languages/xml'
 import { useEffect, useState } from 'react'
 import { CopyIcon } from '@/assets/icons/CopyIcon'
-import { message } from '@/ui'
+import { toast } from '@/ui'
 import styles from './PostContent.module.css'
 
 interface PostContentCodeBlockProps {
@@ -103,10 +103,10 @@ export function PostContentCodeBlock({ code, language }: PostContentCodeBlockPro
     try {
       await copyText(code)
       setCopied(true)
-      message.success('复制成功')
+      toast.success('复制成功')
     } catch {
       setCopied(false)
-      message.error('复制失败')
+      toast.error('复制失败')
     }
   }
 
