@@ -73,17 +73,10 @@
       }
     },
     "visit": "Visit",
-    "OnlineServies": {
-      "title": "Online Services",
-      "description": "Online services used for project deployment and maintenance",
-      "InteractiveText": {
-        "visitWebsite": "Visit Website",
-        "viewDocs": "View Docs"
-      }
-    },
     "OnlineServices": {
       "title": "Online Services",
       "description": "Online services used for project deployment and maintenance",
+      "planSuffix": " Plan",
       "InteractiveText": {
         "visitWebsite": "Visit Website",
         "viewDocs": "View Docs"

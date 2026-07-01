@@ -196,9 +196,10 @@
       "present": "現在"
     },
     "visit": "訪問",
-    "OnlineServies": {
+    "OnlineServices": {
       "title": "オンラインサービス",
       "description": "プロジェクトのデプロイとメンテナンスに使用されるオンラインサービス",
+      "planSuffix": "プラン",
       "InteractiveText": {
         "visitWebsite": "ウェブサイトにアクセス",
         "viewDocs": "ドキュメントを表示"

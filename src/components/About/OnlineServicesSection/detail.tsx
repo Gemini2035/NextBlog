@@ -3,8 +3,8 @@
 import { useTranslations } from "next-intl";
 import { OnlineServiceIcon } from "@/assets/icons";
 import { cn } from "@/utils";
+import Image from "next/image";
 import { FC, ReactNode } from "react";
-import { IconMap } from "./constants";
 import { useAboutList } from "@/components/About/AboutDataProvider";
 import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
@@ -13,14 +13,17 @@ interface OnlineServicesDetailProps {
 }
 
 interface ServiceCardProps {
-  icon: ReactNode;
+  icon?: ReactNode;
+  serviceIcon?: string | null;
   name: string;
   category: string;
   description: string;
-  externalDescription: {
-    text: string;
+  plan: {
+    name: string;
     textColor: string;
+    backgroundColor: string;
   };
+  planSuffix: string;
   websiteUrl: string;
   docsUrl?: string;
   interactiveText?: {
@@ -31,10 +34,12 @@ interface ServiceCardProps {
 
 const ServiceCard: FC<ServiceCardProps> = ({
   icon,
+  serviceIcon,
   name,
   category,
   description,
-  externalDescription: { text, textColor },
+  plan,
+  planSuffix,
   websiteUrl,
   docsUrl,
   interactiveText = {
@@ -45,7 +50,18 @@ const ServiceCard: FC<ServiceCardProps> = ({
   <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:border-[var(--site-action)] transition-colors flex flex-col">
     <div className="flex items-center mb-4">
       <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3 shrink-0">
-        {icon}
+        {serviceIcon ? (
+          <Image
+            src={serviceIcon}
+            alt=""
+            width={20}
+            height={20}
+            unoptimized
+            className="h-5 w-5 object-contain"
+          />
+        ) : (
+          icon ?? <OnlineServiceIcon className="w-5 h-5 text-gray-700" />
+        )}
       </div>
       <div>
         <h3 className="font-semibold text-gray-900">{name}</h3>
@@ -55,7 +71,16 @@ const ServiceCard: FC<ServiceCardProps> = ({
     <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
     <div className="mt-auto pt-2 border-t border-gray-100">
       <div className="flex items-center justify-between mb-2">
-        <span className={cn("text-xs font-medium", textColor)}>{text}</span>
+        <span
+          className="rounded px-2 py-0.5 text-xs font-medium"
+          style={{
+            backgroundColor: plan.backgroundColor,
+            color: plan.textColor,
+          }}
+        >
+          {plan.name}
+          {planSuffix}
+        </span>
       </div>
       <div className="flex items-center justify-between">
         <a
@@ -91,21 +116,24 @@ export default function OnlineServicesDetail({
   className,
 }: OnlineServicesDetailProps) {
   const t = useTranslations("AboutPage");
+  const planSuffix = t("OnlineServices.planSuffix");
   const onlineServices = useAboutList<{
-    id: string
+    id: number
     name: string
     services: Array<{
-      id: string
-      icon: keyof typeof IconMap
+      id: number
+      icon?: string | null
       name: string
       description: string
-      externalDescription: {
-        text: string
+      plan: {
+        name: string
         textColor: string
+        backgroundColor: string
       }
-      category: string
+      serviceCategory: string
       url: string
       documentation?: string
+      isDesperate?: boolean
     }>
   }>("online_services");
 
@@ -118,10 +146,10 @@ export default function OnlineServicesDetail({
           </div>
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-2">
-              {t("OnlineServies.title")}
+              {t("OnlineServices.title")}
             </h2>
             <p className="text-lg text-gray-600">
-              {t("OnlineServies.description")}
+              {t("OnlineServices.description")}
             </p>
           </div>
         </div>
@@ -138,34 +166,28 @@ export default function OnlineServicesDetail({
                   icon,
                   name,
                   description,
-                  externalDescription,
-                  category,
+                  plan,
+                  serviceCategory,
                   url,
                   documentation,
                 }) => {
-                  const IconComponent = IconMap[icon as keyof typeof IconMap];
-
                   return (
                     <ServiceCard
                       key={id}
-                      icon={
-                        IconComponent ? (
-                          <IconComponent className="w-5 h-5 text-gray-700" />
-                        ) : (
-                          <OnlineServiceIcon className="w-5 h-5 text-gray-700" />
-                        )
-                      }
+                      icon={<OnlineServiceIcon className="w-5 h-5 text-gray-700" />}
+                      serviceIcon={icon}
                       name={name}
-                      category={category}
+                      category={serviceCategory}
                       description={description}
-                      externalDescription={externalDescription}
+                      plan={plan}
+                      planSuffix={planSuffix}
                       websiteUrl={url}
                       docsUrl={documentation}
                       interactiveText={{
                         visitWebsite: t(
-                          `OnlineServies.InteractiveText.visitWebsite`
+                          `OnlineServices.InteractiveText.visitWebsite`
                         ),
-                        viewDocs: t(`OnlineServies.InteractiveText.viewDocs`),
+                        viewDocs: t(`OnlineServices.InteractiveText.viewDocs`),
                       }}
                     />
                   );
