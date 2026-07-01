@@ -3,7 +3,7 @@
 import { GlobeIcon } from "@/assets/icons";
 import { useTranslations } from "next-intl";
 import { FC } from "react";
-import { useAboutRecord } from "@/components/About/AboutDataProvider";
+import { useBaseInfo } from "@/components/About/AboutDataProvider";
 import { SanitizedHtml } from "@/components/SanitizedHtml";
 import { StickySectionHeader } from "@/components/About/StickySectionHeader";
 
@@ -14,7 +14,7 @@ interface BasicInfoDetailProps {
 const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
   const t = useTranslations("AboutPage");
   const navT = useTranslations("Navigation");
-  const baseInfo = useAboutRecord("base_info");
+  const baseInfo = useBaseInfo();
 
   return (
     <div className={className}>
@@ -40,7 +40,7 @@ const BasicInfoDetail: FC<BasicInfoDetailProps> = ({ className }) => {
           {t("aboutMe")}
         </h3>
         <SanitizedHtml
-          className="prose prose-lg max-w-none"
+          className="prose prose-lg max-w-none text-gray-700 [&_p]:mb-4 [&_p]:leading-relaxed [&_p:last-child]:mb-0"
           html={baseInfo.description}
         />
       </div>
