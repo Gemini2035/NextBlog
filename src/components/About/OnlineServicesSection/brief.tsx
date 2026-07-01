@@ -11,6 +11,15 @@ interface OnlineServicesBriefProps {
   className?: string;
 }
 
+interface OnlineServicePlanBadge {
+  name: string
+  textColor: string
+}
+
+const getPlanStyle = (plan: OnlineServicePlanBadge) => ({
+  color: plan.textColor,
+})
+
 const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
   const t = useTranslations("AboutPage");
   const planSuffix = t("OnlineServices.planSuffix");
@@ -20,11 +29,7 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
       icon?: string | null
       name: string
       serviceCategory: string
-      plan: {
-        name: string
-        textColor: string
-        backgroundColor: string
-      }
+      plan: OnlineServicePlanBadge
     }>
   }>("online_services").flatMap(({ services }) =>
     services.map(({ id, icon, name, serviceCategory, plan }) => ({
@@ -86,11 +91,8 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
                   </div>
                 </div>
                 <span
-                  className="rounded px-1.5 py-0.5 text-xs"
-                  style={{
-                    backgroundColor: plan.backgroundColor,
-                    color: plan.textColor,
-                  }}
+                  className="text-xs"
+                  style={getPlanStyle(plan)}
                 >
                   {plan.name}
                   {planSuffix}
