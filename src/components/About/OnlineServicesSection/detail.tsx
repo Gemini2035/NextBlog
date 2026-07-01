@@ -7,10 +7,20 @@ import Image from "next/image";
 import { FC, ReactNode } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
 import { StickySectionHeader } from "@/components/About/StickySectionHeader";
+import { SanitizedHtml } from "@/components/SanitizedHtml";
 
 interface OnlineServicesDetailProps {
   className?: string;
 }
+
+interface OnlineServicePlanBadge {
+  name: string;
+  textColor: string;
+}
+
+const getPlanStyle = (plan: OnlineServicePlanBadge) => ({
+  color: plan.textColor,
+})
 
 interface ServiceCardProps {
   icon?: ReactNode;
@@ -18,11 +28,7 @@ interface ServiceCardProps {
   name: string;
   category: string;
   description: string;
-  plan: {
-    name: string;
-    textColor: string;
-    backgroundColor: string;
-  };
+  plan: OnlineServicePlanBadge;
   planSuffix: string;
   websiteUrl: string;
   docsUrl?: string;
@@ -68,15 +74,12 @@ const ServiceCard: FC<ServiceCardProps> = ({
         <p className="text-sm text-gray-600">{category}</p>
       </div>
     </div>
-    <p className="text-gray-600 text-sm mb-4 flex-grow">{description}</p>
+    <SanitizedHtml html={description} className="prose text-sm mb-4 max-w-none flex-grow text-gray-600" />
     <div className="mt-auto pt-2 border-t border-gray-100">
       <div className="flex items-center justify-between mb-2">
         <span
-          className="rounded px-2 py-0.5 text-xs font-medium"
-          style={{
-            backgroundColor: plan.backgroundColor,
-            color: plan.textColor,
-          }}
+          className="text-xs font-medium"
+          style={getPlanStyle(plan)}
         >
           {plan.name}
           {planSuffix}
@@ -125,11 +128,7 @@ export default function OnlineServicesDetail({
       icon?: string | null
       name: string
       description: string
-      plan: {
-        name: string
-        textColor: string
-        backgroundColor: string
-      }
+      plan: OnlineServicePlanBadge
       serviceCategory: string
       url: string
       documentation?: string
