@@ -3,7 +3,7 @@
 import { GlobeIcon } from '@/assets/icons'
 import { useTranslations } from 'next-intl'
 import { FC } from 'react'
-import { useAboutRecord } from '@/components/About/AboutDataProvider'
+import { useBaseInfo } from '@/components/About/AboutDataProvider'
 import { SanitizedHtml } from '@/components/SanitizedHtml'
 
 interface BasicInfoBriefProps {
@@ -12,7 +12,7 @@ interface BasicInfoBriefProps {
 
 const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
   const navT = useTranslations('Navigation')
-  const baseInfo = useAboutRecord('base_info')
+  const baseInfo = useBaseInfo()
 
   return (
     <div className={className}>
@@ -27,7 +27,7 @@ const BasicInfoBrief: FC<BasicInfoBriefProps> = ({ className }) => {
       
       {/* 简化的个人简介 */}
       <SanitizedHtml
-        className="mb-6"
+        className="mb-6 text-sm leading-relaxed text-gray-600 [&_p+p]:mt-2"
         html={baseInfo.summary}
       />
 
