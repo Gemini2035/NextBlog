@@ -55,7 +55,7 @@ export default function RootLayout({
     <html lang="zh-CN" className="w-full overflow-x-hidden">
       <body className="antialiased w-full">
         {children}
-        <ToastContainer />
+        <ToastContainer position="top-center" maxCount={3} />
       </body>
     </html>
   );
