@@ -41,6 +41,15 @@ export function useAboutRecord(key: string): Record<string, string> {
   )
 }
 
+export function useBaseInfo() {
+  const record = useAboutRecord('base_info')
+
+  return {
+    description: record.description ?? '',
+    summary: record.summary ?? '',
+  }
+}
+
 export function useAboutList<T>(key: string): T[] {
   const { content } = useAboutData()
   const value = content[key]
