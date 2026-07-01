@@ -93,8 +93,6 @@ export type {
 } from './Timeline'
 export { default as ToastContainer, toast } from './Toast'
 export type { ToastOptions, ToastType, ToastInstance } from 'gemini-uis'
-export { MessageContainer, message } from './Message'
-export type { MessageOptions, MessageType } from './Message'
 export { Tree } from './Tree'
 export type { TreeNode, TreeProps } from './Tree'
 export { Progressing } from 'gemini-uis'

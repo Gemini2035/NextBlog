@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { MessageContainer, ToastContainer } from "@/ui";
+import { ToastContainer } from "@/ui";
 import "gemini-uis/style.css";
 import "./globals.css";
 // 移动端视口配置
@@ -55,7 +55,6 @@ export default function RootLayout({
     <html lang="zh-CN" className="w-full overflow-x-hidden">
       <body className="antialiased w-full">
         {children}
-        <MessageContainer />
         <ToastContainer />
       </body>
     </html>
