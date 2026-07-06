@@ -33,7 +33,6 @@ export interface TechStackItem {
 export interface ContactLinkItem {
   iconBase64?: string | null
   id: number
-  key: string
   label: string
   type: string
   value: string

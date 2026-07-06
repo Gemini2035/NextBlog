@@ -35,9 +35,9 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
         {contactMethods.map((method) => {
           return (
             <div
-              key={method.key}
+              key={method.id}
               className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
-              title={method.label || method.key}
+              title={method.label || method.value}
             >
               {method.iconBase64 ? (
                 <Image src={method.iconBase64} alt="" width={24} height={24} unoptimized className="h-6 w-6 object-contain" />

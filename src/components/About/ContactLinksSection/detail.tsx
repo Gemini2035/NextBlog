@@ -44,7 +44,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
           
           return (
             <div
-              key={contact.key}
+              key={contact.id}
               className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -57,7 +57,7 @@ export default function ContactLinksDetail({ className }: ContactLinksDetailProp
                     )}
                   </div>
                   <h3 className="min-w-0 text-lg font-semibold text-gray-900">
-                    {contact.label || contact.key}
+                    {contact.label || contact.value}
                   </h3>
                 </div>
                 <div className="min-w-0 sm:flex-1">
