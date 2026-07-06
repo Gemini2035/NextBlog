@@ -329,7 +329,7 @@ export default function ExpandableWaterfall({
           closeButton: 'top-4 right-4 z-40 rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] text-[var(--site-text-muted)] shadow-sm hover:bg-[var(--site-canvas-muted)] cursor-pointer',
         }}
       >
-        <div className="px-8 pt-0 pb-8">
+        <div className="px-4 pt-0 pb-6 [--about-detail-category-top:0px] sm:px-8 sm:pb-8">
           {expandedWaterfallItem?.expandedContent || expandedWaterfallItem?.content}
         </div>
       </Modal>

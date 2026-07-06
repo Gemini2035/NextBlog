@@ -17,18 +17,18 @@ export default function EducationDetail({ className }: EducationDetailProps) {
   return (
     <div className={className}>
       <StickySectionHeader>
-        <div className="flex items-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
-            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="flex items-start gap-4 sm:items-center sm:gap-6">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 sm:h-16 sm:w-16">
+            <svg className="w-7 h-7 text-blue-600 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
             </svg>
           </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2" id="education">
+          <div className="min-w-0 flex-1">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl" id="education">
               {eduT('sectionTitle')}
             </h2>
-            <p className="text-lg text-gray-600">{eduT('detailSummary')}</p>
+            <p className="text-base text-gray-600 sm:text-lg">{eduT('detailSummary')}</p>
           </div>
         </div>
       </StickySectionHeader>

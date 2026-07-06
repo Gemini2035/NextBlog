@@ -20,15 +20,15 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
   return (
     <div className={className}>
       <StickySectionHeader>
-        <div className="flex items-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
+        <div className="flex items-start gap-4 sm:items-center sm:gap-6">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 sm:h-16 sm:w-16">
             <StarIcon className="w-8 h-8 text-blue-600" />
           </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="min-w-0 flex-1">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">
               {navT('Social Links')}
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base text-gray-600 sm:text-lg">
               {skillsT('socialDescriptionDetail')}
             </p>
           </div>
@@ -41,32 +41,32 @@ export default function SocialLinksDetail({ className }: SocialLinksDetailProps)
             key={`${link.name}:${link.url}`}
             className="p-6 bg-white rounded-xl border border-blue-200 hover:border-blue-400 transition-colors duration-200"
           >
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
-                <FallbackImage
-                  src={link.icon}
-                  alt=""
-                  className="h-6 w-6 object-contain"
-                  fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              <div className="flex min-w-0 items-center gap-4 sm:flex-1">
+                <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0">
+                  <FallbackImage
+                    src={link.icon}
+                    alt=""
+                    className="h-6 w-6 object-contain"
+                    fallback={<GlobeIcon className="w-6 h-6 text-gray-700" />}
+                  />
+                </div>
+                <h3 className="min-w-0 text-lg font-semibold text-gray-900">
                   {link.name}
                 </h3>
-                <div className="mt-2">
-                  <code className="text-xs bg-blue-50 px-2 py-1 rounded text-blue-700 break-all">
-                    {link.url}
-                  </code>
-                </div>
               </div>
-              <div className="shrink-0">
+              <div className="min-w-0 sm:flex-1">
+                <code className="block rounded bg-blue-50 px-2 py-1 text-xs text-blue-700 break-all">
+                  {link.url}
+                </code>
+              </div>
+              <div className="shrink-0 sm:ml-auto">
                 <Link
                   href={link.url}
                   external
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md"
+                  className="inline-flex w-full items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 shadow-sm hover:shadow-md sm:w-auto"
                 >
                   {skillsT('visitPlatform')}
                   <span className="ml-1">→</span>

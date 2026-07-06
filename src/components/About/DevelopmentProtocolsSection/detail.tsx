@@ -19,12 +19,12 @@ export default function DevelopmentProtocolsDetail({
   return (
     <div className={cn(className)} id="protocols">
       <StickySectionHeader>
-        <div className="flex items-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6">
-            <span className="text-3xl">🌐</span>
+        <div className="flex items-start gap-4 sm:items-center sm:gap-6">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 sm:h-16 sm:w-16">
+            <span className="text-2xl sm:text-3xl">🌐</span>
           </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="min-w-0 flex-1">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">
               {t("DevelopmentProtocols.title")}
             </h2>
           </div>
