@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useSkillCategories } from '@/components/About/AboutDataProvider'
 
 interface SkillsBriefProps {
   className?: string
@@ -8,6 +9,7 @@ interface SkillsBriefProps {
 
 export default function SkillsBrief({ className }: SkillsBriefProps) {
   const skillsT = useTranslations('Skills')
+  const categories = useSkillCategories()
 
   return (
     <div className={className}>
@@ -23,43 +25,22 @@ export default function SkillsBrief({ className }: SkillsBriefProps) {
       </div>
 
       <div className="space-y-4" id="skills">
-        <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('frontendTech')}</h4>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">React</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Vue</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Next.js</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">HTML5</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">CSS3</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Vite</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Tailwind</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Magento</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Catalyst</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">ES6</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">JavaScript</span>
-            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">TypeScript</span>
+        {categories.map((category) => (
+          <div key={category.id}>
+            <h4 className="font-medium text-gray-800 mb-2 text-sm">{category.name}</h4>
+            <div className="flex flex-wrap gap-1.5">
+              {category.items.map((item) => (
+                <span
+                  key={item.id}
+                  className="px-2 py-1 bg-gray-100 rounded-full text-xs"
+                  style={{ color: category.textColor || undefined }}
+                >
+                  {item.name}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
-        <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('backendTech')}</h4>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Node.js</span>
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">PostgreSQL</span>
-            <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">RESTful</span>
-          </div>
-        </div>
-        <div>
-          <h4 className="font-medium text-gray-800 mb-2 text-sm">{skillsT('devTools')}</h4>
-          <div className="flex flex-wrap gap-1.5">
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Git</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Docker</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">VSCode</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Cursor</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">ChatGPT</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Figma</span>
-            <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">SF Symbol</span>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   )

@@ -10,7 +10,6 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SiteDataProvider } from '@/components/SiteDataProvider';
 import { getSiteInit } from '@/apis/site/server';
-import { fallbackSiteInit } from '@/apis/fallbacks';
 
 interface LocaleLayoutProps {
     children: ReactNode;
@@ -26,7 +25,7 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
 
     const [messages, siteInit] = await Promise.all([
         getMessages(),
-        getSiteInit(locale).catch(() => fallbackSiteInit),
+        getSiteInit(locale),
     ]);
 
     return (

@@ -125,7 +125,7 @@ export default function OnlineServicesDetail({
     name: string
     services: Array<{
       id: number
-      icon?: string | null
+      iconBase64?: string | null
       name: string
       description: string
       plan: OnlineServicePlanBadge
@@ -139,15 +139,15 @@ export default function OnlineServicesDetail({
   return (
     <div className={className} id="online-services">
       <StickySectionHeader>
-        <div className="flex items-center">
-          <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mr-6 shrink-0">
-            <OnlineServiceIcon className="w-8 h-8 text-blue-600" />
+        <div className="flex items-start gap-4 sm:items-center sm:gap-6">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 sm:h-16 sm:w-16">
+            <OnlineServiceIcon className="w-7 h-7 text-blue-600 sm:w-8 sm:h-8" />
           </div>
-          <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="min-w-0 flex-1">
+            <h2 className="mb-2 text-2xl font-bold text-gray-900 sm:text-3xl">
               {t("OnlineServices.title")}
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-base text-gray-600 sm:text-lg">
               {t("OnlineServices.description")}
             </p>
           </div>
@@ -157,12 +157,14 @@ export default function OnlineServicesDetail({
       {onlineServices.map(
         ({ id, name, services }) => (
           <div className="mb-8" key={id}>
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">{name}</h3>
+            <h3 className="sticky top-[var(--about-detail-category-top,5.5rem)] z-10 mb-4 bg-white/95 py-2 text-xl font-semibold text-gray-900 backdrop-blur">
+              {name}
+            </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map(
                 ({
                   id,
-                  icon,
+                  iconBase64,
                   name,
                   description,
                   plan,
@@ -174,7 +176,7 @@ export default function OnlineServicesDetail({
                     <ServiceCard
                       key={id}
                       icon={<OnlineServiceIcon className="w-5 h-5 text-gray-700" />}
-                      serviceIcon={icon}
+                      serviceIcon={iconBase64}
                       name={name}
                       category={serviceCategory}
                       description={description}
