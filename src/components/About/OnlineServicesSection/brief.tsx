@@ -2,7 +2,6 @@
 
 import { useTranslations } from "next-intl";
 import { OnlineServiceIcon } from "@/assets/icons";
-import { useRandomSort } from "@/hooks";
 import Image from "next/image";
 import { FC } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
@@ -26,22 +25,12 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
   const onlineServices = useAboutList<{
     services: Array<{
       id: number
-      icon?: string | null
+      iconBase64?: string | null
       name: string
       serviceCategory: string
       plan: OnlineServicePlanBadge
     }>
-  }>("online_services").flatMap(({ services }) =>
-    services.map(({ id, icon, name, serviceCategory, plan }) => ({
-      id,
-      icon,
-      name,
-      serviceCategory,
-      plan,
-    }))
-  );
-
-  const onlineServicesWithRandom = useRandomSort(onlineServices, 4);
+  }>("online_services");
 
   return (
     <div className={className}>
@@ -55,10 +44,11 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {onlineServicesWithRandom.map(
+        {onlineServices.map(({ services }) =>
+          services.map(
           ({
             id,
-            icon,
+            iconBase64,
             name,
             serviceCategory,
             plan,
@@ -70,9 +60,9 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
               >
                 <div className="flex items-center mb-2">
                   <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-                    {icon ? (
+                    {iconBase64 ? (
                       <Image
-                        src={icon}
+                        src={iconBase64}
                         alt=""
                         width={16}
                         height={16}
@@ -100,6 +90,7 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
               </div>
             );
           }
+          )
         )}
       </div>
     </div>

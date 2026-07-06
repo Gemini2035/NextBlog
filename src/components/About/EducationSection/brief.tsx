@@ -1,13 +1,17 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useEducationExperiences } from '@/components/About/AboutDataProvider'
 
 interface EducationBriefProps {
   className?: string
 }
 
+const formatPeriod = (start?: string | null, end?: string | null) => [start, end].filter(Boolean).join(' - ')
+
 export default function EducationBrief({ className }: EducationBriefProps) {
   const eduT = useTranslations('Education')
+  const educations = useEducationExperiences()
 
   return (
     <div className={className}>
@@ -23,11 +27,12 @@ export default function EducationBrief({ className }: EducationBriefProps) {
         </h2>
       </div>
       <div className="space-y-3">
-        <div className="border-l-3 border-purple-200 pl-3">
-          <h4 className="font-medium text-gray-800 text-sm">{eduT('briefTitle')}</h4>
-          <p className="text-xs text-gray-600">{eduT('briefDegreeYears')}</p>
-          <p className="text-gray-600 text-xs mt-1">{eduT('briefDescription')}</p>
-        </div>
+        {educations.map((item) => (
+          <div key={item.id} className="border-l-3 border-gray-200 pl-3">
+            <h4 className="font-medium text-gray-800 text-sm">{item.school}</h4>
+            <p className="text-xs text-gray-600">{[item.degree, item.major, formatPeriod(item.periodStart, item.periodEnd)].filter(Boolean).join(' | ')}</p>
+          </div>
+        ))}
       </div>
     </div>
   )

@@ -1,9 +1,9 @@
 'use client'
 
-import { ComponentType } from 'react'
-import { ContactIcon, GmailIcon, OutlookIcon, ICloudIcon, TelegramIcon, DefaultContactIcon } from '@/assets/icons'
-import { useAboutRecord } from '@/components/About/AboutDataProvider'
+import { ContactIcon, DefaultContactIcon } from '@/assets/icons'
+import { useContactLinks } from '@/components/About/AboutDataProvider'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 interface ContactLinksBriefProps {
   className?: string
@@ -12,40 +12,8 @@ interface ContactLinksBriefProps {
 export default function ContactLinksBrief({ className }: ContactLinksBriefProps) {
   const navT = useTranslations('Navigation')
   const skillsT = useTranslations('Skills')
-  const contactLink = useAboutRecord('contact_link')
-
-  // 图标映射表 - 支持后续扩展
-  const iconMap: Record<string, ComponentType<{ className?: string; size?: number }>> = {
-    googleMail: GmailIcon,
-    outlookMail: OutlookIcon,
-    appleMail: ICloudIcon,
-    telegram: TelegramIcon
-    // 后续可以在这里添加更多图标的映射
-  }
-
-  const contactMethods = Object.entries(contactLink)
-    .map(([key, value]) => {
-      // 联系方式名称映射 - 使用国际化
-      const getContactName = (key: string) => {
-        try {
-          return skillsT(`contactMethods.${key}`)
-        } catch {
-          return key
-        }
-      }
-      
-      // 判断是否为邮箱
-      const isEmail = key.includes('Mail')
-      
-      return {
-        key,
-        name: getContactName(key),
-        value,
-        icon: iconMap[key] || DefaultContactIcon,
-        isEmail
-      }
-    })
-    .filter(method => method.value) // 过滤掉空值
+  const contactLinks = useContactLinks()
+  const contactMethods = contactLinks.filter((item) => item.value)
 
   return (
     <div className={`${className} group`}>
@@ -65,15 +33,17 @@ export default function ContactLinksBrief({ className }: ContactLinksBriefProps)
       
       <div className="flex flex-wrap items-start gap-4 min-h-[3rem]">
         {contactMethods.map((method) => {
-          const IconComponent = method.icon
-          
           return (
             <div
               key={method.key}
               className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center shrink-0"
-              title={method.name}
+              title={method.label || method.key}
             >
-              <IconComponent className="w-6 h-6 text-gray-700" />
+              {method.iconBase64 ? (
+                <Image src={method.iconBase64} alt="" width={24} height={24} unoptimized className="h-6 w-6 object-contain" />
+              ) : (
+                <DefaultContactIcon className="w-6 h-6 text-gray-700" />
+              )}
             </div>
           )
         })}

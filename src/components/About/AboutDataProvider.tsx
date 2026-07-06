@@ -1,7 +1,16 @@
 'use client'
 
 import { createContext, useContext, type ReactNode } from 'react'
-import type { AboutInitPayload, FriendLinkItem, SocialLinkItem } from '@/types/about'
+import type {
+  AboutInitPayload,
+  BaseInfoContent,
+  ContactLinkItem,
+  EducationExperienceItem,
+  FriendLinkItem,
+  SiteProtocolItem,
+  SkillCategory,
+  SocialLinkItem,
+} from '@/types/about'
 
 interface AboutDataProviderProps {
   value: AboutInitPayload
@@ -28,26 +37,18 @@ export function useAboutData() {
   return value
 }
 
-export function useAboutRecord(key: string): Record<string, string> {
+export function useAboutValue<T>(key: string, fallback: T): T {
   const { content } = useAboutData()
   const value = content[key]
 
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    return {}
-  }
-
-  return Object.fromEntries(
-    Object.entries(value).filter((entry): entry is [string, string] => typeof entry[1] === 'string')
-  )
+  return value === undefined || value === null ? fallback : (value as T)
 }
 
 export function useBaseInfo() {
-  const record = useAboutRecord('base_info')
-
-  return {
-    description: record.description ?? '',
-    summary: record.summary ?? '',
-  }
+  return useAboutValue<BaseInfoContent>('base_info', {
+    description: '',
+    summary: '',
+  })
 }
 
 export function useAboutList<T>(key: string): T[] {
@@ -63,4 +64,20 @@ export function useSocialLinks() {
 
 export function useFriendLinks() {
   return useAboutList<FriendLinkItem>('friend_links')
+}
+
+export function useContactLinks() {
+  return useAboutList<ContactLinkItem>('contact_links')
+}
+
+export function useSkillCategories() {
+  return useAboutList<SkillCategory>('skills')
+}
+
+export function useEducationExperiences() {
+  return useAboutList<EducationExperienceItem>('education_experiences')
+}
+
+export function useSiteProtocols() {
+  return useAboutList<SiteProtocolItem>('site_protocols')
 }

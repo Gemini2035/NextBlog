@@ -2,6 +2,8 @@ import ServerComponent from '@/components/ServerComponent'
 import AboutPageClient from '@/components/About'
 import { getAboutInit } from '@/apis/about/server'
 
+export const dynamic = 'force-dynamic'
+
 interface AboutPageProps {
   params: Promise<{
     locale: string

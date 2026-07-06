@@ -1,50 +1,44 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { StickySectionHeader } from '@/components/About/StickySectionHeader'
+import { useSkillCategories } from '@/components/About/AboutDataProvider'
 
 interface SkillsDetailProps {
   className?: string
 }
 
 interface TechTagProps {
-  name: string
-  color: string
+  color?: string | null
   isSelected: boolean
+  name: string
   onClick: () => void
 }
 
 function TechTag({ name, color, isSelected, onClick }: TechTagProps) {
   return (
-    <span 
+    <button
       className={`px-3 py-1 bg-white rounded-full text-sm font-medium cursor-pointer transition-colors duration-200 hover:ring-1 hover:ring-[var(--site-action)] ${
-        isSelected 
-          ? `ring-2 ring-blue-500 ${color}` 
-          : color
+        isSelected ? 'ring-2 ring-[var(--site-action)]' : ''
       }`}
+      style={{ color: color || undefined }}
       onClick={onClick}
+      type="button"
     >
       {name}
-    </span>
+    </button>
   )
 }
 
 export default function SkillsDetail({ className }: SkillsDetailProps) {
   const skillsT = useTranslations('Skills')
-  const [selectedTech, setSelectedTech] = useState<string | null>(null)
-
-  const handleTechClick = (techName: string) => {
-    setSelectedTech(selectedTech === techName ? null : techName)
-  }
-
-  const getTechDescription = (techName: string) => {
-    try {
-      return skillsT(`techDescriptions.${techName}`)
-    } catch {
-      return ''
-    }
-  }
+  const categories = useSkillCategories()
+  const [selectedSkillId, setSelectedSkillId] = useState<number | null>(null)
+  const selectedSkill = useMemo(
+    () => categories.flatMap((category) => category.items).find((item) => item.id === selectedSkillId),
+    [categories, selectedSkillId]
+  )
 
   return (
     <div className={className}>
@@ -67,64 +61,37 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
       </StickySectionHeader>
 
       <div className="space-y-8" id="skills">
-        {/* 核心技术栈 */}
-        <div className="p-6 bg-gray-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6">{skillsT('coreTechStack')}</h3>
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('frontendTech')}</h4>
-              <div className="flex flex-wrap gap-2">
-                <TechTag name="React" color="text-blue-800" isSelected={selectedTech === 'React'} onClick={() => handleTechClick('React')} />
-                <TechTag name="Vue" color="text-blue-800" isSelected={selectedTech === 'Vue'} onClick={() => handleTechClick('Vue')} />
-                <TechTag name="Next.js" color="text-blue-800" isSelected={selectedTech === 'NextJS'} onClick={() => handleTechClick('NextJS')} />
-                <TechTag name="HTML5" color="text-blue-800" isSelected={selectedTech === 'HTML5'} onClick={() => handleTechClick('HTML5')} />
-                <TechTag name="CSS3" color="text-blue-800" isSelected={selectedTech === 'CSS3'} onClick={() => handleTechClick('CSS3')} />
-                <TechTag name="Vite" color="text-blue-800" isSelected={selectedTech === 'Vite'} onClick={() => handleTechClick('Vite')} />
-                <TechTag name="Tailwind" color="text-blue-800" isSelected={selectedTech === 'Tailwind'} onClick={() => handleTechClick('Tailwind')} />
-                <TechTag name="Magento" color="text-blue-800" isSelected={selectedTech === 'Magento'} onClick={() => handleTechClick('Magento')} />
-                <TechTag name="Catalyst" color="text-blue-800" isSelected={selectedTech === 'Catalyst'} onClick={() => handleTechClick('Catalyst')} />
-                <TechTag name="ES6" color="text-blue-800" isSelected={selectedTech === 'ES6'} onClick={() => handleTechClick('ES6')} />
-                <TechTag name="JavaScript" color="text-blue-800" isSelected={selectedTech === 'JavaScript'} onClick={() => handleTechClick('JavaScript')} />
-                <TechTag name="TypeScript" color="text-blue-800" isSelected={selectedTech === 'TypeScript'} onClick={() => handleTechClick('TypeScript')} />
-              </div>
+        {categories.map((category) => (
+          <section key={category.id} className="border-b border-gray-100 pb-6 last:border-b-0">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">{category.name}</h3>
+            <div className="flex flex-wrap gap-2">
+              {category.items.map((item) => (
+                <TechTag
+                  key={item.id}
+                  name={item.name}
+                  color={category.textColor}
+                  isSelected={selectedSkillId === item.id}
+                  onClick={() => setSelectedSkillId(selectedSkillId === item.id ? null : item.id)}
+                />
+              ))}
             </div>
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('backendTech')}</h4>
-              <div className="flex flex-wrap gap-2">
-                <TechTag name="Node.js" color="text-green-800" isSelected={selectedTech === 'NodeJS'} onClick={() => handleTechClick('NodeJS')} />
-                <TechTag name="PostgreSQL" color="text-green-800" isSelected={selectedTech === 'PostgreSQL'} onClick={() => handleTechClick('PostgreSQL')} />
-                <TechTag name="RESTful" color="text-green-800" isSelected={selectedTech === 'RESTful'} onClick={() => handleTechClick('RESTful')} />
-              </div>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('devTools')}</h4>
-              <div className="flex flex-wrap gap-2">
-                <TechTag name="Git" color="text-purple-800" isSelected={selectedTech === 'Git'} onClick={() => handleTechClick('Git')} />
-                <TechTag name="Docker" color="text-purple-800" isSelected={selectedTech === 'Docker'} onClick={() => handleTechClick('Docker')} />
-                <TechTag name="VSCode" color="text-purple-800" isSelected={selectedTech === 'VSCode'} onClick={() => handleTechClick('VSCode')} />
-                <TechTag name="Cursor" color="text-purple-800" isSelected={selectedTech === 'Cursor'} onClick={() => handleTechClick('Cursor')} />
-                <TechTag name="ChatGPT" color="text-purple-800" isSelected={selectedTech === 'ChatGPT'} onClick={() => handleTechClick('ChatGPT')} />
-                <TechTag name="Figma" color="text-purple-800" isSelected={selectedTech === 'Figma'} onClick={() => handleTechClick('Figma')} />
-                <TechTag name="SF Symbol" color="text-purple-800" isSelected={selectedTech === 'SFSymbol'} onClick={() => handleTechClick('SFSymbol')} />
-              </div>
-            </div>
-          </div>
-        </div>
+          </section>
+        ))}
 
-        {/* 技术描述显示区域 */}
-        {selectedTech && (
+        {selectedSkill ? (
           <div className="p-6 bg-gray-50 rounded-xl border-l-4 border-gray-300">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedTech}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedSkill.name}</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  {getTechDescription(selectedTech)}
+                  {selectedSkill.description}
                 </p>
               </div>
               <button
-                onClick={() => setSelectedTech(null)}
+                onClick={() => setSelectedSkillId(null)}
                 className="ml-4 p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors"
                 aria-label="关闭描述"
+                type="button"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -132,67 +99,8 @@ export default function SkillsDetail({ className }: SkillsDetailProps) {
               </button>
             </div>
           </div>
-        )}
-
-        {/* 专业领域 */}
-        <div className="p-6 bg-gray-50 rounded-xl">
-          <h3 className="text-xl font-semibold text-gray-900 mb-6">{skillsT('specializedAreas')}</h3>
-          <div className="space-y-6">
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('codeArchitecture')}</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('frontendArchitecture')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('microserviceArchitecture')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('performanceOptimization')}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('teamCollaboration')}</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('agileDevelopment')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('codeReview')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('techSharing')}
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-gray-800 mb-3">{skillsT('projectManagement')}</h4>
-              <ul className="space-y-2 text-gray-700">
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('projectPlanning')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('riskManagement')}
-                </li>
-                <li className="flex items-center">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full mr-3"></div>
-                  {skillsT('crossTeamCommunication')}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        ) : null}
       </div>
-
     </div>
   )
 }

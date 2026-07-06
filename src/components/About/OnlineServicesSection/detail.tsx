@@ -125,7 +125,7 @@ export default function OnlineServicesDetail({
     name: string
     services: Array<{
       id: number
-      icon?: string | null
+      iconBase64?: string | null
       name: string
       description: string
       plan: OnlineServicePlanBadge
@@ -162,7 +162,7 @@ export default function OnlineServicesDetail({
               {services.map(
                 ({
                   id,
-                  icon,
+                  iconBase64,
                   name,
                   description,
                   plan,
@@ -174,7 +174,7 @@ export default function OnlineServicesDetail({
                     <ServiceCard
                       key={id}
                       icon={<OnlineServiceIcon className="w-5 h-5 text-gray-700" />}
-                      serviceIcon={icon}
+                      serviceIcon={iconBase64}
                       name={name}
                       category={serviceCategory}
                       description={description}
