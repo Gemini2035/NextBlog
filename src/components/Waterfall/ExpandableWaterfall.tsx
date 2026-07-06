@@ -2,9 +2,8 @@
 
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Card } from '@/ui'
+import { Card, Modal } from '@/ui'
 import { cn, smoothScrollToElement } from '@/utils'
-import { CloseIcon } from '@/assets/icons'
 import { useIntersectionObserver, useLayoutHeights } from '@/hooks'
 
 interface ExpandableWaterfallItem {
@@ -120,8 +119,6 @@ export default function ExpandableWaterfall({
   const [columnHeights, setColumnHeights] = useState<number[]>([])
   const [itemPositions, setItemPositions] = useState<Array<{ top: number; left: number; width: number }>>([])
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
-  const [isAnimating, setIsAnimating] = useState(false)
-  const [isClosing, setIsClosing] = useState(false)
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null)
 
   useEffect(() => {
@@ -267,59 +264,14 @@ export default function ExpandableWaterfall({
 
 
   const handleItemClick = (itemId: string) => {
-    if (isAnimating) return
-    
-    setIsAnimating(true)
     setExpandedItem(itemId)
-    
-    // 禁用body滚动
-    document.body.style.overflow = 'hidden'
-    
-    // 动画完成后重置动画状态
-    setTimeout(() => {
-      setIsAnimating(false)
-    }, 300)
   }
 
   const handleCloseExpanded = useCallback(() => {
-    if (isAnimating) return
-    
-    setIsAnimating(true)
-    setIsClosing(true)
-    
-    // 开始关闭动画
-    setTimeout(() => {
-      setExpandedItem(null)
-      setIsClosing(false)
-      
-      // 恢复body滚动
-      document.body.style.overflow = 'unset'
-      
-      // 动画完成后重置动画状态
-      setTimeout(() => {
-        setIsAnimating(false)
-      }, 100)
-    }, 300) // 关闭动画持续时间
-  }, [isAnimating])
+    setExpandedItem(null)
+  }, [])
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      handleCloseExpanded()
-    }
-  }
-
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape' && expandedItem) {
-      handleCloseExpanded()
-    }
-  }, [expandedItem, handleCloseExpanded])
-
-  useEffect(() => {
-    if (expandedItem) {
-      document.addEventListener('keydown', handleKeyDown)
-      return () => document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [expandedItem, handleKeyDown])
+  const expandedWaterfallItem = items.find(item => item.id === expandedItem)
 
   if (!mounted) {
     return (
@@ -365,41 +317,22 @@ export default function ExpandableWaterfall({
         })}
       </div>
 
-      {/* 展开的模态框 */}
-      {expandedItem && (
-        <div 
-          className={cn(
-            "fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm transition-all duration-300",
-            isClosing ? "opacity-0" : "opacity-100"
-          )}
-          onClick={handleBackdropClick}
-        >
-          <div 
-            className={cn(
-              "relative max-w-4xl max-h-[90vh] w-full overflow-hidden rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] transition-all duration-300",
-              isClosing 
-                ? "opacity-0 scale-95 translate-y-4" 
-                : "opacity-100 scale-100 translate-y-0"
-            )}
-          >
-            {/* 关闭按钮 */}
-            <button
-              onClick={handleCloseExpanded}
-              className="absolute top-4 right-4 z-40 flex h-8 w-8 items-center justify-center rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm transition-colors duration-200 hover:bg-[var(--site-canvas-muted)] cursor-pointer"
-            >
-              <CloseIcon className="w-4 h-4 text-[var(--site-text-muted)]" />
-            </button>
-
-            {/* 内容区域 */}
-            <div className="overflow-y-auto max-h-[90vh]">
-              <div className="px-8 pb-8">
-                {items.find(item => item.id === expandedItem)?.expandedContent || 
-                 items.find(item => item.id === expandedItem)?.content}
-              </div>
-            </div>
-          </div>
+      <Modal
+        open={Boolean(expandedItem)}
+        onClose={handleCloseExpanded}
+        size="xl"
+        classNames={{
+          mask: 'bg-black/30 backdrop-blur-sm',
+          content: 'max-w-4xl max-h-[90vh] rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-none',
+          header: 'hidden',
+          body: 'max-h-[90vh] overflow-y-auto p-0',
+          closeButton: 'top-4 right-4 z-40 rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] text-[var(--site-text-muted)] shadow-sm hover:bg-[var(--site-canvas-muted)] cursor-pointer',
+        }}
+      >
+        <div className="px-8 pt-0 pb-8">
+          {expandedWaterfallItem?.expandedContent || expandedWaterfallItem?.content}
         </div>
-      )}
+      </Modal>
 
     </>
   )

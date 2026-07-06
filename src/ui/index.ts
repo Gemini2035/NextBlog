@@ -22,6 +22,13 @@ export type {
   DrawerPlacement,
   DrawerSize
 } from 'gemini-uis'
+export { Modal } from 'gemini-uis'
+export type {
+  ModalClassNames,
+  ModalProps,
+  ModalRef,
+  ModalSize
+} from 'gemini-uis'
 export { Card } from 'gemini-uis'
 export type {
   CardProps,
