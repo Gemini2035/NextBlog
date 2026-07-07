@@ -15,6 +15,7 @@ async function getAboutServerData(params: AboutPageProps['params']) {
 
   return {
     aboutInit: await getAboutInit(locale),
+    aboutBriefSeed: Date.now(),
   }
 }
 

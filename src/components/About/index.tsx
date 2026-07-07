@@ -17,9 +17,10 @@ import { AboutDataProvider } from './AboutDataProvider'
 
 interface AboutPageClientProps {
   aboutInit: AboutInitPayload
+  aboutBriefSeed: number
 }
 
-export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
+export default function AboutPageClient({ aboutInit, aboutBriefSeed }: AboutPageClientProps) {
     const navT = useTranslations('Navigation')
 
     const waterfallItems = useMemo<ComponentProps<typeof ExpandableWaterfall>['items']>(() => [
@@ -122,7 +123,7 @@ export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
           anchorId: 'tech-stack',
           content: (
             <div id="tech-stack">
-              <TechStackBrief />
+              <TechStackBrief seed={aboutBriefSeed} />
             </div>
           ),
           expandedContent: (
@@ -159,7 +160,7 @@ export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
           anchorId: 'open-source',
           content: (
             <div id="open-source">
-              <OpenSourceLibrariesBrief />
+              <OpenSourceLibrariesBrief seed={aboutBriefSeed} />
             </div>
           ),
           expandedContent: (
@@ -177,7 +178,7 @@ export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
           anchorId: 'online-services',
           content: (
             <div id="online-services">
-              <OnlineServicesBrief />
+              <OnlineServicesBrief seed={aboutBriefSeed} />
             </div>
           ),
           expandedContent: (
@@ -206,7 +207,7 @@ export default function AboutPageClient({ aboutInit }: AboutPageClientProps) {
           height: 'medium',
           cardClassName: 'bg-gray-50'
         }
-      ], [navT])
+      ], [aboutBriefSeed, navT])
 
     return (
       <AboutDataProvider value={aboutInit}>

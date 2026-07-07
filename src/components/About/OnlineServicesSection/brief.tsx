@@ -5,9 +5,11 @@ import { OnlineServiceIcon } from "@/assets/icons";
 import Image from "next/image";
 import { FC } from "react";
 import { useAboutList } from "@/components/About/AboutDataProvider";
+import { BriefItemSelection } from "@/components/BriefItemSelection";
 
 interface OnlineServicesBriefProps {
   className?: string;
+  seed: number;
 }
 
 interface OnlineServicePlanBadge {
@@ -19,7 +21,7 @@ const getPlanStyle = (plan: OnlineServicePlanBadge) => ({
   color: plan.textColor,
 })
 
-const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
+const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className, seed }) => {
   const t = useTranslations("AboutPage");
   const planSuffix = t("OnlineServices.planSuffix");
   const onlineServices = useAboutList<{
@@ -31,6 +33,7 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
       plan: OnlineServicePlanBadge
     }>
   }>("online_services");
+  const onlineServiceItems = onlineServices.flatMap(({ services }) => services);
 
   return (
     <div className={className}>
@@ -44,54 +47,56 @@ const OnlineServicesBrief: FC<OnlineServicesBriefProps> = ({ className }) => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {onlineServices.map(({ services }) =>
-          services.map(
-          ({
-            id,
-            iconBase64,
-            name,
-            serviceCategory,
-            plan,
-          }) => {
-            return (
-              <div
-                className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
-                key={id}
-              >
-                <div className="flex items-center mb-2">
-                  <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
-                    {iconBase64 ? (
-                      <Image
-                        src={iconBase64}
-                        alt=""
-                        width={16}
-                        height={16}
-                        unoptimized
-                        className="h-4 w-4 object-contain"
-                      />
-                    ) : (
-                      <OnlineServiceIcon className="w-4 h-4 text-gray-700" />
-                    )}
+        <BriefItemSelection items={onlineServiceItems} limit={6} seed={seed} getKey={({ id }) => id}>
+          {(briefOnlineServices) =>
+            briefOnlineServices.map(
+              ({
+                id,
+                iconBase64,
+                name,
+                serviceCategory,
+                plan,
+              }) => {
+                return (
+                  <div
+                    className="bg-white p-3 rounded-lg shadow-sm border border-gray-200"
+                    key={id}
+                  >
+                    <div className="flex items-center mb-2">
+                      <div className="w-6 h-6 bg-gray-100 rounded flex items-center justify-center mr-2">
+                        {iconBase64 ? (
+                          <Image
+                            src={iconBase64}
+                            alt=""
+                            width={16}
+                            height={16}
+                            unoptimized
+                            className="h-4 w-4 object-contain"
+                          />
+                        ) : (
+                          <OnlineServiceIcon className="w-4 h-4 text-gray-700" />
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-gray-900 text-sm">
+                          {name}
+                        </h3>
+                        <p className="text-xs text-gray-600">{serviceCategory}</p>
+                      </div>
+                    </div>
+                    <span
+                      className="text-xs"
+                      style={getPlanStyle(plan)}
+                    >
+                      {plan.name}
+                      {planSuffix}
+                    </span>
                   </div>
-                  <div>
-                    <h3 className="font-medium text-gray-900 text-sm">
-                      {name}
-                    </h3>
-                    <p className="text-xs text-gray-600">{serviceCategory}</p>
-                  </div>
-                </div>
-                <span
-                  className="text-xs"
-                  style={getPlanStyle(plan)}
-                >
-                  {plan.name}
-                  {planSuffix}
-                </span>
-              </div>
-            );
+                );
+              }
+            )
           }
-          )
-        )}
+        </BriefItemSelection>
       </div>
     </div>
   );
