@@ -5,14 +5,17 @@ import { OpenSourceIcon } from "@/assets/icons";
 import { useAboutList } from "@/components/About/AboutDataProvider";
 import { cn } from "@/utils";
 import { FallbackImage } from "@/components/FallbackImage";
+import { BriefItemSelection } from "@/components/BriefItemSelection";
 
 interface OpenSourceLibrariesBriefProps {
   className?: string;
+  seed: number;
 }
 
 
 const OpenSourceLibrariesBrief = ({
   className,
+  seed,
 }: OpenSourceLibrariesBriefProps) => {
   const t = useTranslations("AboutPage");
   const openSourceLibraries = useAboutList<{
@@ -26,6 +29,7 @@ const OpenSourceLibrariesBrief = ({
       isDeprecated?: boolean
     }>
   }>("open_source");
+  const openSourceLibraryItems = openSourceLibraries.flatMap(({ sources }) => sources);
 
   return (
     <div className={className}>
@@ -39,8 +43,14 @@ const OpenSourceLibrariesBrief = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {openSourceLibraries.map(({ sources }) =>
-          sources.map(({ id, key, name, version, iconBase64, summary, isDeprecated }) => (
+        <BriefItemSelection
+          items={openSourceLibraryItems}
+          limit={6}
+          seed={seed}
+          getKey={({ id, key, name }) => id ?? key ?? name}
+        >
+          {(briefOpenSourceLibraries) =>
+            briefOpenSourceLibraries.map(({ id, key, name, version, iconBase64, summary, isDeprecated }) => (
               <div
                 key={id ?? key ?? name}
                 className={cn(
@@ -66,7 +76,8 @@ const OpenSourceLibrariesBrief = ({
                 {version ? <span className="text-xs text-gray-500">{`v${version}`}</span> : null}
               </div>
             ))
-        )}
+          }
+        </BriefItemSelection>
       </div>
     </div>
   );
