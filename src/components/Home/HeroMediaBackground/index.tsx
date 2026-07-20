@@ -6,6 +6,7 @@ import { useLayoutHeights } from '@/hooks'
 import { cn } from '@/utils'
 import { VolumeIcon, MuteIcon } from '@/assets/icons'
 import { useSiteConfig } from '@/components/SiteDataProvider'
+import { getHeroPosterUrl, getHeroVideoUrl } from './media'
 
 export interface HeroMediaBackgroundProps {
   /** 视频封面图 URL */
@@ -42,8 +43,8 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
     const siteConfig = useSiteConfig()
     const { headerHeight } = useLayoutHeights()
     const cdnUrl = siteConfig.cdnUrl ?? ''
-    const resolvedPoster = poster ?? `${cdnUrl}/chou-kaguya/video/poster.avif`
-    const resolvedVideoSrc = videoSrc ?? `${cdnUrl}/chou-kaguya/video/master.m3u8`
+    const resolvedPoster = poster ?? getHeroPosterUrl(cdnUrl)
+    const resolvedVideoSrc = videoSrc ?? getHeroVideoUrl(cdnUrl)
     const videoRef = useRef<HTMLVideoElement>(null)
     const hasRequestedUnmuteRef = useRef(false)
     const isMutedRef = useRef(true)

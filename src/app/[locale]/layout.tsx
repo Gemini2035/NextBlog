@@ -10,6 +10,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { SiteDataProvider } from '@/components/SiteDataProvider';
 import { getSiteInit } from '@/apis/site/server';
+import { getHeroPosterUrl, getUrlOrigin } from '@/components/Home/HeroMediaBackground/media';
 
 interface LocaleLayoutProps {
     children: ReactNode;
@@ -27,9 +28,15 @@ export default async function RootIntlLayout({ children, params }: LocaleLayoutP
         getMessages(),
         getSiteInit(locale),
     ]);
+    const heroPosterUrl = getHeroPosterUrl(siteInit.siteConfig.cdnUrl);
+    const heroPosterOrigin = getUrlOrigin(heroPosterUrl);
 
     return (
         <NextIntlClientProvider messages={messages}>
+            {heroPosterOrigin ? (
+                <link rel="preconnect" href={heroPosterOrigin} crossOrigin="anonymous" />
+            ) : null}
+            <link rel="preload" as="image" href={heroPosterUrl} fetchPriority="high" />
             <SiteDataProvider value={siteInit}>
                 <LoadingProvider>
                     <NavigationLoadingProvider>
