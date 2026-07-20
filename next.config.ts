@@ -11,6 +11,15 @@ const apiProxyTarget = (process.env.NEXT_API_PROXY_TARGET || '').replace(
 const nextConfig: NextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/zh/',
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     const rewrites = [
       ...(apiProxyTarget
