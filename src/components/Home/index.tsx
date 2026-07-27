@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useScrollParallax, useLayoutHeights } from "@/hooks";
 import SectionSwitch from "./SectionSwitch";
 import HomeSectionSkeleton from "./HomeSectionSkeleton";
@@ -10,9 +10,10 @@ import HeroMediaBackground, {
 import { useSiteConfig, useSiteData } from "@/components/SiteDataProvider";
 import { smoothScrollToElement } from "@/utils";
 import { ChevronRightIcon } from "@/assets/icons";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import type { HomeInitPayload } from "@/types/home";
 import type { SiteNavigationItem } from "@/types/site";
+import { withProjectSubmenu } from "@/utils/navigation";
 
 interface HomeClientProps {
   homeInit: HomeInitPayload;
@@ -20,29 +21,33 @@ interface HomeClientProps {
 
 export default function HomeClient({ homeInit }: HomeClientProps) {
   const t = useTranslations("HomePage");
+  const locale = useLocale();
   const siteConfig = useSiteConfig();
-  const { navigation: navigationItems } = useSiteData();
+  const { navigation } = useSiteData();
   const { headerHeight } = useLayoutHeights();
-  const { scrollY, isScrolling, opacity, currentHeight, isClient } =
-    useScrollParallax({
-      threshold: 400,
-      maxHeight: 100,
-      minHeight: 0,
-    });
+  const { scrollY, isScrolling, opacity } = useScrollParallax({
+    threshold: 400,
+  });
 
   // 过滤掉非内容型导航（如搜索、语言）
-  const contentNavs = navigationItems.filter(
-    (item) => !["search", "language"].includes(item.key),
+  const navigationItems = useMemo(
+    () => withProjectSubmenu(navigation, locale),
+    [navigation, locale]
   );
-  const getNav = (type: string) => {
-    return contentNavs.find((navigationItem) => navigationItem.key === type);
-  };
+  const sections = useMemo(() => {
+    const contentNavs = navigationItems.filter(
+      (item) => !["search", "language"].includes(item.key),
+    );
+    const getNav = (type: string) => {
+      return contentNavs.find((navigationItem) => navigationItem.key === type);
+    };
 
-  const sections = [
-    getNav("blog"),
-    getNav("about"),
-    getNav("projects"),
-  ].filter(Boolean) as SiteNavigationItem[];
+    return [
+      getNav("blog"),
+      getNav("about"),
+      getNav("projects"),
+    ].filter(Boolean) as SiteNavigationItem[];
+  }, [navigationItems]);
 
   // 获取博客区域的引用
   const blogSectionRef = useRef<HTMLDivElement>(null);
@@ -64,13 +69,8 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
         ref={heroSectionRef}
         className="relative flex items-center justify-center overflow-hidden bg-black will-change-transform cursor-default touch-manipulation"
         style={{
-          height: isClient ? `${currentHeight}px` : heroInitialHeight,
-          minHeight: isClient ? `${currentHeight}px` : heroInitialHeight,
-          paddingTop: isScrolling ? "2rem" : "0",
-          paddingBottom: isScrolling ? "2rem" : "0",
-          transition: isClient
-            ? "height 0.1s ease-out, padding 0.3s ease-out"
-            : "none",
+          height: heroInitialHeight,
+          minHeight: heroInitialHeight,
         }}
       >
         {/* 视频 + 背景音乐 背景 */}
@@ -93,7 +93,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
             {t("welcome", { siteTitle: siteConfig.title ?? "Apodidae" })}
           </h1>
           <p
-            className="mt-4 sm:mt-6 text-lg sm:text-xl font-medium max-w-3xl mx-auto text-white/78 will-change-transform transition-[transform,opacity] duration-100 ease-out"
+            className="mt-4 sm:mt-6 text-lg sm:text-xl font-medium max-w-3xl mx-auto text-white/90 will-change-transform transition-[transform,opacity] duration-100 ease-out"
             style={{
               transform: isScrolling
                 ? "translateY(0)"
@@ -106,7 +106,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
 
           {/* 点击提示 */}
           <div
-            className="mt-8 sm:mt-12 cursor-pointer flex items-center justify-center text-sm text-white/82 will-change-transform transition-[transform,opacity] duration-100 ease-out"
+            className="mt-8 sm:mt-12 cursor-pointer flex items-center justify-center text-sm text-white/90 will-change-transform transition-[transform,opacity] duration-100 ease-out"
             style={{
               transform: isScrolling
                 ? "translateY(0)"

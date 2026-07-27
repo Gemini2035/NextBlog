@@ -1,27 +1,27 @@
 # Apodidae
 
-Apodidae is a personal technology blog and project portfolio focused on software engineering, development notes, open source projects, and practical technical writing.
+> Personal technology blog and project portfolio for software engineering notes, open source work, development experience, and practical technical writing.
 
-## Primary URLs
+## Core Pages
 
-- Home: https://apodidae2035.com/zh/
-- Posts: https://apodidae2035.com/zh/posts/
-- Projects: https://apodidae2035.com/zh/projects/
-- About: https://apodidae2035.com/zh/about/
-- Policies: https://apodidae2035.com/zh/policies/
-- Sitemap: https://apodidae2035.com/sitemap.xml
-- Robots: https://apodidae2035.com/robots.txt
+- [Home](https://apodidae2035.com/zh/): Chinese home page and primary entry point.
+- [Posts](https://apodidae2035.com/zh/posts/): Technical articles, tags, and publication metadata.
+- [Projects](https://apodidae2035.com/zh/projects/): Software project summaries and repository metadata.
+- [About](https://apodidae2035.com/zh/about/): Author profile, skills, services, and contact information.
+- [Policies](https://apodidae2035.com/zh/policies/): Site policies and usage notes.
+
+## Discovery
+
+- [Sitemap](https://apodidae2035.com/sitemap.xml): Canonical page discovery.
+- [Robots](https://apodidae2035.com/robots.txt): Crawling policy.
+- [Full LLM Context](https://apodidae2035.com/llms-full.txt): Expanded site guide for AI agents.
 
 ## Languages
 
-- Chinese: https://apodidae2035.com/zh/
-- English: https://apodidae2035.com/en/
-- Japanese: https://apodidae2035.com/ja/
+- [Chinese](https://apodidae2035.com/zh/)
+- [English](https://apodidae2035.com/en/)
+- [Japanese](https://apodidae2035.com/ja/)
 
-## Content Notes
+## Guidance
 
-The posts section contains article pages, tags, publication metadata, and technical content. The projects section contains software project summaries, repository metadata, and related technology information.
-
-## Agent Guidance
-
-Use the sitemap to discover canonical pages. Prefer article detail pages for citations over listing pages. Respect robots.txt and avoid authenticated admin paths.
+Prefer canonical article and project detail pages for citations. Use listing pages for discovery. Avoid authenticated admin paths and respect robots.txt.

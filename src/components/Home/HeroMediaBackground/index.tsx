@@ -27,6 +27,16 @@ export interface HeroMediaBackgroundRef {
 }
 
 const clampVolume = (volume: number) => Math.min(1, Math.max(0, volume))
+const VOLUME_FADE_DURATION_MS = 1200
+const LONG_PRESS_DELAY_MS = 500
+
+const easeInOutCubic = (progress: number) => {
+  if (progress < 0.5) {
+    return 4 * progress * progress * progress
+  }
+
+  return 1 - Math.pow(-2 * progress + 2, 3) / 2
+}
 
 const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgroundProps>(
   (
@@ -46,14 +56,28 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
     const resolvedPoster = poster ?? getHeroPosterUrl(cdnUrl)
     const resolvedVideoSrc = videoSrc ?? getHeroVideoUrl(cdnUrl)
     const videoRef = useRef<HTMLVideoElement>(null)
+    const muteControlRef = useRef<HTMLDivElement>(null)
+    const volumeFadeFrameRef = useRef<number | null>(null)
+    const longPressTimeoutRef = useRef<number | null>(null)
+    const didLongPressRef = useRef(false)
+    const userVolumeRef = useRef(1)
     const hasRequestedUnmuteRef = useRef(false)
     const isMutedRef = useRef(true)
     const [isMuted, setIsMuted] = useState(true)
+    const [isVolumeSliderOpen, setIsVolumeSliderOpen] = useState(false)
+    const [userVolume, setUserVolume] = useState(1)
     const [videoError, setVideoError] = useState(false)
 
     useEffect(() => {
       isMutedRef.current = isMuted
     }, [isMuted])
+
+    const cancelVolumeFade = useCallback(() => {
+      if (volumeFadeFrameRef.current === null) return
+
+      window.cancelAnimationFrame(volumeFadeFrameRef.current)
+      volumeFadeFrameRef.current = null
+    }, [])
 
     const getScrollVolume = useCallback(() => {
       const target = portalTargetRef?.current
@@ -70,11 +94,49 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
       return clampVolume((rect.bottom - headerBottom) / rect.height)
     }, [portalTargetRef, headerHeight])
 
+    const getEffectiveVolume = useCallback(() => {
+      return clampVolume(getScrollVolume() * userVolumeRef.current)
+    }, [getScrollVolume])
+
+    const fadeVideoVolume = useCallback((targetVolume: number, onComplete?: () => void) => {
+      const video = videoRef.current
+      if (!video) return
+
+      cancelVolumeFade()
+      const startVolume = video.volume
+      const nextVolume = clampVolume(targetVolume)
+      const startedAt = performance.now()
+
+      if (nextVolume > 0) {
+        video.muted = false
+        video.play().catch(() => {})
+      }
+
+      const tick = (currentTime: number) => {
+        const progress = Math.min((currentTime - startedAt) / VOLUME_FADE_DURATION_MS, 1)
+        const easedProgress = easeInOutCubic(progress)
+
+        video.volume = clampVolume(startVolume + (nextVolume - startVolume) * easedProgress)
+
+        if (progress < 1) {
+          volumeFadeFrameRef.current = window.requestAnimationFrame(tick)
+          return
+        }
+
+        video.volume = nextVolume
+        volumeFadeFrameRef.current = null
+        onComplete?.()
+      }
+
+      volumeFadeFrameRef.current = window.requestAnimationFrame(tick)
+    }, [cancelVolumeFade])
+
     const syncVideoPlayback = useCallback(() => {
       const video = videoRef.current
       if (!video) return
 
-      const nextVolume = getScrollVolume()
+      cancelVolumeFade()
+      const nextVolume = getEffectiveVolume()
       if (nextVolume <= 0) {
         video.volume = 0
         video.pause()
@@ -89,25 +151,124 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
         video.volume = nextVolume
       }
       video.play().catch(() => {})
-    }, [getScrollVolume])
+    }, [cancelVolumeFade, getEffectiveVolume])
 
     const playAudio = useCallback(() => {
+      const video = videoRef.current
+      if (!video) return
+
       hasRequestedUnmuteRef.current = true
       isMutedRef.current = false
       setIsMuted(false)
-      syncVideoPlayback()
-    }, [syncVideoPlayback])
+      fadeVideoVolume(getEffectiveVolume())
+    }, [fadeVideoVolume, getEffectiveVolume])
 
     useImperativeHandle(ref, () => ({ playAudio }), [playAudio])
 
     const toggleMute = useCallback((e: React.MouseEvent | React.TouchEvent) => {
       e.stopPropagation()
+      if (didLongPressRef.current) {
+        didLongPressRef.current = false
+        return
+      }
+
       const nextMuted = !isMutedRef.current
       hasRequestedUnmuteRef.current = hasRequestedUnmuteRef.current || !nextMuted
       isMutedRef.current = nextMuted
       setIsMuted(nextMuted)
-      syncVideoPlayback()
-    }, [syncVideoPlayback])
+      if (nextMuted) {
+        fadeVideoVolume(0, () => {
+          const video = videoRef.current
+          if (!video || !isMutedRef.current) return
+
+          video.muted = true
+        })
+        return
+      }
+
+      fadeVideoVolume(getEffectiveVolume())
+    }, [fadeVideoVolume, getEffectiveVolume])
+
+    const clearLongPressTimeout = useCallback(() => {
+      if (longPressTimeoutRef.current === null) return
+
+      window.clearTimeout(longPressTimeoutRef.current)
+      longPressTimeoutRef.current = null
+    }, [])
+
+    const openVolumeSlider = useCallback(() => {
+      setIsVolumeSliderOpen(true)
+    }, [])
+
+    const handleContextMenu = useCallback((e: React.MouseEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+      openVolumeSlider()
+    }, [openVolumeSlider])
+
+    const handlePointerDown = useCallback((e: React.PointerEvent) => {
+      e.stopPropagation()
+      if (e.pointerType === 'mouse') return
+
+      clearLongPressTimeout()
+      didLongPressRef.current = false
+      longPressTimeoutRef.current = window.setTimeout(() => {
+        didLongPressRef.current = true
+        openVolumeSlider()
+      }, LONG_PRESS_DELAY_MS)
+    }, [clearLongPressTimeout, openVolumeSlider])
+
+    const handleVolumeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+      const nextUserVolume = clampVolume(Number(e.target.value) / 100)
+      const video = videoRef.current
+
+      userVolumeRef.current = nextUserVolume
+      setUserVolume(nextUserVolume)
+
+      if (!video) return
+
+      cancelVolumeFade()
+
+      if (isMutedRef.current) {
+        video.volume = 0
+        video.muted = true
+        return
+      }
+
+      video.muted = false
+      video.volume = clampVolume(getScrollVolume() * nextUserVolume)
+      if (video.volume <= 0) {
+        video.pause()
+        return
+      }
+
+      video.play().catch(() => {})
+    }, [cancelVolumeFade, getScrollVolume])
+
+    useEffect(() => {
+      return () => {
+        cancelVolumeFade()
+        clearLongPressTimeout()
+      }
+    }, [cancelVolumeFade, clearLongPressTimeout])
+
+    useEffect(() => {
+      if (!isVolumeSliderOpen) return
+
+      const handlePointerDownOutside = (e: PointerEvent) => {
+        const target = e.target
+        if (!(target instanceof Node)) return
+        if (muteControlRef.current?.contains(target)) return
+
+        setIsVolumeSliderOpen(false)
+      }
+
+      document.addEventListener('pointerdown', handlePointerDownOutside)
+
+      return () => {
+        document.removeEventListener('pointerdown', handlePointerDownOutside)
+      }
+    }, [isVolumeSliderOpen])
 
     useEffect(() => {
       let animationFrameId = 0
@@ -154,23 +315,62 @@ const HeroMediaBackground = forwardRef<HeroMediaBackgroundRef, HeroMediaBackgrou
     }, [unmuteOnInteraction, playAudio])
 
     const muteButton = (
-      <button
-        type="button"
+      <div
+        ref={muteControlRef}
         className={cn(
-          'absolute top-4 right-4 z-[20] p-2 rounded-full backdrop-blur-sm border border-white/20',
-          'pointer-events-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50',
-          'transition-opacity hover:opacity-90',
-          'cursor-pointer'
+          'absolute top-4 right-4 z-[20]',
+          'pointer-events-auto'
         )}
-        onClick={toggleMute}
-        aria-label={isMuted ? '取消静音' : '静音'}
       >
-        {isMuted ? (
-          <MuteIcon className="w-5 h-5" />
-        ) : (
-          <VolumeIcon className="w-5 h-5" />
+        <button
+          type="button"
+          className={cn(
+            'p-2 rounded-full backdrop-blur-sm border border-white/20',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/50',
+            'transition-opacity hover:opacity-90',
+            'cursor-pointer'
+          )}
+          onClick={toggleMute}
+          onContextMenu={handleContextMenu}
+          onPointerDown={handlePointerDown}
+          onPointerUp={clearLongPressTimeout}
+          onPointerLeave={clearLongPressTimeout}
+          onPointerCancel={clearLongPressTimeout}
+          aria-label={isMuted ? '取消静音' : '静音'}
+          aria-haspopup="true"
+          aria-expanded={isVolumeSliderOpen}
+        >
+          {isMuted ? (
+            <MuteIcon className="w-5 h-5" />
+          ) : (
+            <VolumeIcon className="w-5 h-5" />
+          )}
+        </button>
+        {isVolumeSliderOpen && (
+          <div
+            className={cn(
+              'absolute left-1/2 top-full mt-2 -translate-x-1/2',
+              'flex h-32 w-10 items-center justify-center rounded-full border border-white/20 bg-black/35 backdrop-blur-md'
+            )}
+            onClick={(e) => e.stopPropagation()}
+            onContextMenu={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            }}
+          >
+            <input
+              type="range"
+              min="0"
+              max="100"
+              step="1"
+              value={Math.round(userVolume * 100)}
+              className="h-24 w-2 cursor-pointer accent-white [writing-mode:vertical-lr] [direction:rtl]"
+              onChange={handleVolumeChange}
+              aria-label="音量"
+            />
+          </div>
         )}
-      </button>
+      </div>
     )
 
     const portalTarget = portalTargetRef?.current
