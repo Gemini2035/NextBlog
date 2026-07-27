@@ -13,8 +13,9 @@ interface ProjectsSectionProps {
 
 export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
   const t = useTranslations('HomePage')
-  const { description, href } = item
+  const { description, href, items } = item
   const projectsDescription = description || 'Showcase my technical projects and portfolio'
+  const submenuItems = items
 
   return (
     <HomeSectionSkeleton index={index}>
@@ -26,7 +27,38 @@ export default function ProjectsSection({ index, item }: ProjectsSectionProps) {
           {projectsDescription}
         </p>
 
-        <div className="mt-8 sm:mt-10">
+        {submenuItems.length > 0 && (
+          <div className="mt-8 sm:mt-10">
+            <div className="space-y-6">
+              {submenuItems.map(({ href, label, items }, itemIndex) => (
+                <div key={itemIndex}>
+                  <Link
+                    href={href}
+                    className="block text-[17px] font-semibold text-[var(--site-text)] hover:text-[var(--site-action)] transition-colors mb-3"
+                  >
+                    {label}
+                  </Link>
+
+                  {items && items.length > 0 && (
+                    <div className="flex flex-wrap gap-x-4 gap-y-2">
+                      {items.map(({ href, label }, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={href}
+                          className="text-sm text-[var(--site-text-muted)] hover:text-[var(--site-action)] transition-colors"
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-6 sm:mt-8">
           <Link href={href}>
             <Button
               type="primary"

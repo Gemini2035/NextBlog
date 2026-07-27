@@ -1,0 +1,25 @@
+# Apodidae Full LLM Context
+
+Apodidae is a personal website for technical writing, open source project presentation, and software engineering notes.
+
+## Site Purpose
+
+The site publishes articles, project summaries, author profile data, technical stack notes, service links, and development history. Content is available in Chinese, English, and Japanese.
+
+## Important Sections
+
+- [Home](https://apodidae2035.com/zh/): Overview and featured site sections.
+- [Posts](https://apodidae2035.com/zh/posts/): Blog index for discovering technical articles.
+- [Projects](https://apodidae2035.com/zh/projects/): Project portfolio and repository metadata.
+- [About](https://apodidae2035.com/zh/about/): Author profile, skills, education, contact links, and related static content.
+- [Policies](https://apodidae2035.com/zh/policies/): Public site policy information.
+
+## Agent Use
+
+Use the sitemap for canonical URLs. Prefer primary pages over duplicated navigation links. When citing content, use the most specific page available. Do not crawl or infer access to admin interfaces.
+
+## Discovery Files
+
+- [llms.txt](https://apodidae2035.com/llms.txt)
+- [sitemap.xml](https://apodidae2035.com/sitemap.xml)
+- [robots.txt](https://apodidae2035.com/robots.txt)

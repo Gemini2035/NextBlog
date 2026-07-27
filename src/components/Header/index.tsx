@@ -3,14 +3,23 @@
 import { Link, Drawer } from '@/ui'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { usePathname } from 'next/navigation'
+import dynamic from 'next/dynamic'
+import { useLocale, useTranslations } from 'next-intl'
 import { useSiteConfig, useSiteData } from '@/components/SiteDataProvider'
 import type { SiteNavigationItem } from '@/types/site'
 import { ChevronDownIcon, MenuIcon, LogoIcon } from '@/assets/icons'
-import { useTranslations } from 'next-intl'
-import FullscreenDropdown from './FullscreenDropdown'
-import {SearchBar} from './Search'
-import { LanguageBar } from './LanguageToggle'
+import { withProjectSubmenu } from '@/utils/navigation'
+import SearchBar from './Search/SearchBar'
+import LanguageBar from './LanguageToggle/LanguageBar'
 import MobileNav from './MobileNav'
+
+const FullscreenDropdown = dynamic(() => import('./FullscreenDropdown'), {
+  ssr: false,
+})
+
+const preloadFullscreenDropdown = () => {
+  void import('./FullscreenDropdown')
+}
 
 interface NavItemProps {
   item: SiteNavigationItem
@@ -58,9 +67,14 @@ export default function Header() {
   const navItemsRef = useRef<HTMLElement>(null)
   const lastScrollYRef = useRef<number>(0)
   const t = useTranslations('Navigation')
+  const locale = useLocale()
   const pathname = usePathname()
   const siteConfig = useSiteConfig()
-  const { navigation: navigationItems } = useSiteData()
+  const { navigation } = useSiteData()
+  const navigationItems = useMemo(
+    () => withProjectSubmenu(navigation, locale),
+    [navigation, locale]
+  )
 
   // 处理滚动事件
   const handleScroll = useCallback(() => {
@@ -199,6 +213,8 @@ export default function Header() {
 
   // 处理搜索点击
   const handleSearchClick = useCallback(() => {
+    preloadFullscreenDropdown()
+
     if (activeSubmenu === 'search') {
       setActiveSubmenu(null)
       setIsExiting(false)
@@ -210,6 +226,8 @@ export default function Header() {
 
   // 处理语言切换点击
   const handleLanguageClick = useCallback(() => {
+    preloadFullscreenDropdown()
+
     if (activeSubmenu === 'language') {
       setActiveSubmenu(null)
       setIsExiting(false)
@@ -221,6 +239,8 @@ export default function Header() {
 
   // 处理导航项悬停
   const handleNavHover = useCallback((itemKey: string) => {
+    preloadFullscreenDropdown()
+
     const targetItem = navigationItems.find(item => item.key === itemKey)
     if (targetItem) {
       switchToNavigationItem(targetItem)
@@ -327,22 +347,22 @@ export default function Header() {
             </nav>
 
             {/* Action Bar */}
-            <ul className="flex items-center space-x-2" role="toolbar" aria-label={t('actionToolbar')}>
+            <div className="flex items-center space-x-2" role="toolbar" aria-label={t('actionToolbar')}>
               {/* 搜索功能 - 桌面端显示完整搜索栏，移动端显示图标 */}
-              <li className="hidden md:block lg:block">
+              <div className="hidden md:block lg:block">
                 <SearchBar onSearchClick={handleSearchClick} />
-              </li>
-              <li className="md:hidden">
+              </div>
+              <div className="md:hidden">
                 <SearchBar onSearchClick={handleSearchClick} />
-              </li>
+              </div>
 
               {/* 语言切换 */}
-              <li>
+              <div>
                 <LanguageBar onLanguageClick={handleLanguageClick} />
-              </li>
+              </div>
 
               {/* 移动端菜单按钮 */}
-              <li className="lg:hidden">
+              <div className="lg:hidden">
                 <button 
                   onClick={handleMobileMenuOpen}
                   className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition-all duration-200"
@@ -351,8 +371,8 @@ export default function Header() {
                 >
                   <MenuIcon className="h-6 w-6" />
                 </button>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
 

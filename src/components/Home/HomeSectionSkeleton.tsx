@@ -36,58 +36,62 @@ export default function HomeSectionSkeleton({ title, description, href, ctaText,
     <section
       ref={elementRef}
       className={cn(
-        'w-full overflow-hidden border-y transition-all duration-700 ease-out',
+        'w-full overflow-hidden border-y',
         'group relative isolate',
-        getBackgroundClass(),
-        shouldAnimate
-          ? 'opacity-100 translate-y-0 scale-100'
-          : 'opacity-0 translate-y-12 scale-95'
+        getBackgroundClass()
       )}
     >
       <div className={cn(
-        'mx-auto max-w-7xl px-6 py-16 text-[var(--site-text)] transition-all duration-700 ease-out delay-150 sm:px-10 sm:py-20 lg:px-16',
-        shouldAnimate
-          ? 'opacity-100 translate-y-0'
-          : 'opacity-0 translate-y-4'
+        'mx-auto max-w-7xl px-6 py-16 text-[var(--site-text)] sm:px-10 sm:py-20 lg:px-16'
       )}>
-        {children ? (
-          children
-        ) : (
-          <div className="max-w-3xl">
-            {title && (
-              <h2 className={cn('font-bold tracking-tight', 'text-3xl sm:text-4xl lg:text-5xl')}>
-                {title}
-              </h2>
-            )}
-            {description && (
-              <p className={cn(
-                'mt-4 sm:mt-6',
-                'text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]'
-              )}>
-                {description}
-              </p>
-            )}
+        <div
+          className={cn(
+            'transition-all duration-700 ease-out will-change-transform',
+            shouldAnimate
+              ? 'opacity-100 translate-y-0 scale-100'
+              : 'opacity-0 translate-y-12 scale-95'
+          )}
+          style={{ transitionDelay: `${150 + index * 70}ms` }}
+        >
+          {children ? (
+            children
+          ) : (
+            <div className="max-w-3xl">
+              {title && (
+                <h2 className={cn('font-bold tracking-tight', 'text-3xl sm:text-4xl lg:text-5xl')}>
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className={cn(
+                  'mt-4 sm:mt-6',
+                  'text-base sm:text-lg lg:text-xl text-[var(--site-text-muted)]'
+                )}>
+                  {description}
+                </p>
+              )}
 
-            {href && ctaText && (
-              <div className="mt-8 sm:mt-10">
-                <Link href={href}>
-                  <Button
-                    type="primary"
-                    size="sm"
-                    rounded={true}
-                    className={cn(
-                      'inline-flex items-center gap-2',
-                      'rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]'
-                    )}
-                  >
-                    <span>{ctaText}</span>
-                    <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
-                  </Button>
-                </Link>
-              </div>
+              {href && ctaText && (
+                <div className="mt-8 sm:mt-10">
+                  <Link href={href}>
+                    <Button
+                      type="primary"
+                      size="sm"
+                      rounded={true}
+                      className={cn(
+                        'inline-flex items-center gap-2',
+                        'rounded-[var(--site-radius-control)] border border-[var(--site-action)] bg-[var(--site-action)] text-white hover:bg-[var(--site-action)] focus-visible:outline-[var(--site-focus-ring)]'
+                      )}
+                    >
+                      <span>{ctaText}</span>
+                      <ArrowRightIcon className="w-4 h-4" strokeWidth={1.8} />
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
             )}
-          </div>
-        )}
+        </div>
       </div>
 
     </section>
