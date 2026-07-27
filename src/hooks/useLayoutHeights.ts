@@ -15,9 +15,9 @@ interface LayoutHeights {
  */
 export function useLayoutHeights(): LayoutHeights {
   const [heights, setHeights] = useState<LayoutHeights>({
-    headerHeight: 0,
+    headerHeight: 64,
     footerHeight: 0,
-    totalLayoutHeight: 0
+    totalLayoutHeight: 64
   })
 
   useIsomorphicLayoutEffect(() => {
