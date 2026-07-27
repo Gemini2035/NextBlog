@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Card, Modal } from '@/ui'
 import { cn, smoothScrollToElement } from '@/utils'
-import { useIntersectionObserver, useLayoutHeights } from '@/hooks'
+import { useIntersectionObserver, useIsomorphicLayoutEffect, useLayoutHeights } from '@/hooks'
 
 interface ExpandableWaterfallItem {
   id: string
@@ -107,21 +107,42 @@ interface ExpandableWaterfallProps {
   className?: string
 }
 
+interface WaterfallPosition {
+  top: number
+  left: number
+  width: number
+}
+
+const areNumberArraysEqual = (first: number[], second: number[]) =>
+  first.length === second.length && first.every((value, index) => value === second[index])
+
+const arePositionsEqual = (first: WaterfallPosition[], second: WaterfallPosition[]) =>
+  first.length === second.length &&
+  first.every((position, index) => {
+    const nextPosition = second[index]
+    return (
+      position.top === nextPosition.top &&
+      position.left === nextPosition.left &&
+      position.width === nextPosition.width
+    )
+  })
+
 export default function ExpandableWaterfall({ 
   items, 
   columns = 2,
   gap = 24,
   className 
 }: ExpandableWaterfallProps) {
+  const t = useTranslations('AboutPage')
   const containerRef = useRef<HTMLDivElement>(null)
   const { headerHeight } = useLayoutHeights()
   const [mounted, setMounted] = useState(false)
   const [columnHeights, setColumnHeights] = useState<number[]>([])
-  const [itemPositions, setItemPositions] = useState<Array<{ top: number; left: number; width: number }>>([])
+  const [itemPositions, setItemPositions] = useState<WaterfallPosition[]>([])
   const [expandedItem, setExpandedItem] = useState<string | null>(null)
   const [focusedItemId, setFocusedItemId] = useState<string | null>(null)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setMounted(true)
   }, [])
 
@@ -169,7 +190,7 @@ export default function ExpandableWaterfall({
     }
   }, [items, headerHeight])
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!mounted || !containerRef.current) return
 
     const calculateLayout = () => {
@@ -177,11 +198,11 @@ export default function ExpandableWaterfall({
 
       const container = containerRef.current
       const containerWidth = container.offsetWidth
-      const actualColumns = window.innerWidth >= 768 ? 2 : 1
+      const actualColumns = window.innerWidth >= 768 ? Math.max(1, columns) : 1
       const itemWidth = Math.floor((containerWidth - (gap * (actualColumns - 1))) / actualColumns)
       
       const newColumnHeights = new Array(actualColumns).fill(0)
-      const newItemPositions: Array<{ top: number; left: number; width: number }> = []
+      const newItemPositions: WaterfallPosition[] = []
 
       items.forEach((item, index) => {
         // 找到最短的列
@@ -201,8 +222,12 @@ export default function ExpandableWaterfall({
         newColumnHeights[shortestColumnIndex] += estimatedHeight + gap
       })
 
-      setColumnHeights(newColumnHeights)
-      setItemPositions(newItemPositions)
+      setColumnHeights((currentHeights) =>
+        areNumberArraysEqual(currentHeights, newColumnHeights) ? currentHeights : newColumnHeights
+      )
+      setItemPositions((currentPositions) =>
+        arePositionsEqual(currentPositions, newItemPositions) ? currentPositions : newItemPositions
+      )
     }
 
     // 初始计算
@@ -218,22 +243,26 @@ export default function ExpandableWaterfall({
   }, [mounted, items, columns, gap])
 
   // 实际渲染后重新计算高度和位置
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!mounted || !containerRef.current) return
 
     const recalculateLayout = () => {
       const container = containerRef.current
       if (!container) return
 
-      const actualColumns = window.innerWidth >= 768 ? 2 : 1
+      const actualColumns = window.innerWidth >= 768 ? Math.max(1, columns) : 1
       const containerWidth = container.offsetWidth
       const itemWidth = Math.floor((containerWidth - (gap * (actualColumns - 1))) / actualColumns)
       
       const newColumnHeights = new Array(actualColumns).fill(0)
-      const newItemPositions: Array<{ top: number; left: number; width: number }> = []
+      const newItemPositions: WaterfallPosition[] = []
       
       // 获取所有项目元素
       const itemElements = container.querySelectorAll('[data-waterfall-item]')
+
+      if (items.length > 0 && itemElements.length < items.length) {
+        return
+      }
       
       // 按原始顺序重新计算位置
       items.forEach((item, index) => {
@@ -253,14 +282,24 @@ export default function ExpandableWaterfall({
         newColumnHeights[shortestColumnIndex] += elementHeight + gap
       })
 
-      setColumnHeights(newColumnHeights)
-      setItemPositions(newItemPositions)
+      setColumnHeights((currentHeights) =>
+        areNumberArraysEqual(currentHeights, newColumnHeights) ? currentHeights : newColumnHeights
+      )
+      setItemPositions((currentPositions) =>
+        arePositionsEqual(currentPositions, newItemPositions) ? currentPositions : newItemPositions
+      )
     }
 
-    // 延迟重新计算，确保DOM已渲染
-    const timer = setTimeout(recalculateLayout, 100)
-    return () => clearTimeout(timer)
-  }, [mounted, items, gap])
+    recalculateLayout()
+
+    const resizeObserver = new ResizeObserver(recalculateLayout)
+    resizeObserver.observe(containerRef.current)
+    containerRef.current.querySelectorAll('[data-waterfall-item]').forEach((element) => {
+      resizeObserver.observe(element)
+    })
+
+    return () => resizeObserver.disconnect()
+  }, [mounted, items, columns, gap, itemPositions.length])
 
 
   const handleItemClick = (itemId: string) => {
@@ -284,6 +323,62 @@ export default function ExpandableWaterfall({
           ))}
         </div>
       </div>
+    )
+  }
+
+  if (itemPositions.length === 0) {
+    return (
+      <>
+        <div className={cn('relative', className)} ref={containerRef}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {items.map((item) => (
+              <div
+                key={item.id}
+                className="group cursor-pointer"
+                onClick={() => handleItemClick(item.id)}
+              >
+                <Card 
+                  border="sm" 
+                  rounded 
+                  disabledHover
+                  className={cn(
+                    'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
+                    'hover:border-[var(--site-action)]',
+                    item.cardClassName
+                  )}
+                >
+                  {item.content}
+                  {item.expandedContent && (
+                    <div className="mt-4 border-t border-[var(--site-border)] pt-4">
+                      <div className="flex items-center justify-between text-sm text-[var(--site-text-tertiary)]">
+                        <span>{t('clickToViewDetails')}</span>
+                        <div className="w-2 h-2 rounded-full bg-[var(--site-action)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <Modal
+          open={Boolean(expandedItem)}
+          onClose={handleCloseExpanded}
+          size="xl"
+          classNames={{
+            mask: 'bg-black/30 backdrop-blur-sm',
+            content: 'max-w-4xl max-h-[90vh] rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-none',
+            header: 'hidden',
+            body: 'max-h-[90vh] overflow-y-auto p-0',
+            closeButton: 'top-4 right-4 z-40 rounded-[var(--site-radius-control)] border border-[var(--site-border)] bg-[var(--site-canvas)] text-[var(--site-text-muted)] shadow-sm hover:bg-[var(--site-canvas-muted)] cursor-pointer',
+          }}
+        >
+          <div className="px-4 pt-0 pb-6 [--about-detail-category-top:0px] sm:px-8 sm:pb-8">
+            {expandedWaterfallItem?.expandedContent || expandedWaterfallItem?.content}
+          </div>
+        </Modal>
+      </>
     )
   }
 

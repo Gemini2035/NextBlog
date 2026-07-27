@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useLayoutHeights } from './useLayoutHeights'
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 export interface ScrollParallaxOptions {
   threshold?: number
@@ -18,7 +19,11 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
   const { headerHeight } = useLayoutHeights()
 
   // 客户端挂载检测
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
+    if (window.scrollY > 0) {
+      window.scrollTo({ top: 0, behavior: 'instant' })
+    }
+
     setIsClient(true)
   }, [])
 
@@ -27,13 +32,6 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
 
     let ticking = false
     let animationFrame: number
-
-    // 初始化时确保滚动位置在顶部
-    const initializeScroll = () => {
-      if (window.scrollY > 0) {
-        window.scrollTo({ top: 0, behavior: 'instant' })
-      }
-    }
 
     const handleScroll = () => {
       if (!ticking) {
@@ -56,9 +54,6 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
       })
       animationFrame = requestAnimationFrame(updateSmoothScroll)
     }
-    
-    // 初始化滚动位置
-    initializeScroll()
     
     window.addEventListener('scroll', handleScroll, { passive: true })
     updateSmoothScroll()

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils'
-import { useLayoutHeights, useAnchorScroll } from '@/hooks'
+import { useIsomorphicLayoutEffect, useLayoutHeights, useAnchorScroll } from '@/hooks'
 import { PostCard } from '../PostCard'
 import { Slider, Button } from '@/ui'
 import { CollapseIcon } from '@/assets/icons'
@@ -76,7 +76,7 @@ export function StickyWrapper({ featuredPosts, title }: StickyWrapperProps) {
     }
   }, [isSticky, isCollapsed, headerHeight])
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // 初始化：记录原始位置和高度
     const initPosition = () => {
       if (sectionRef.current) {

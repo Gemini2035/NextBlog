@@ -7,7 +7,7 @@ import { PostTag } from "../PostTag";
 import { formatDate, cn } from "@/utils";
 import { CollapseIcon } from "@/assets/icons";
 import type { BlogPostDetail } from "@/types/blog";
-import { useLayoutHeights, useWindowSize } from "@/hooks";
+import { useIsomorphicLayoutEffect, useLayoutHeights, useWindowSize } from "@/hooks";
 import { MobileStickyCard } from "./mobile";
 
 interface PostInfoCardProps {
@@ -26,7 +26,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
   const isMobile = width < 768;
   const lastScrollY = useRef(0);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // 测量卡片高度
     const measureCardHeight = () => {
       const element = document.getElementById("post-info-card");
