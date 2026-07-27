@@ -309,6 +309,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const descriptionSize = isCompact ? 'text-xs' : 'text-sm'
   const tagHeight = isCompact ? 'min-h-6' : 'min-h-8'
   const tagSize = isCompact ? 'text-xs px-2 py-1' : ''
+  const resolvedTitleScrollDistance = Math.max(titleScrollDistance, isCompact ? 32 : 48)
 
   const TitleComponent = titleTag as 'h2' | 'h3'
 
@@ -329,7 +330,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
     >
       <Link
         href={`/posts/${post.id}`}
-        className="block h-full"
+        className={cn("block h-full", styles.postCardLink)}
         onMouseEnter={() => {
           setIsHovered(true)
           if (isTitleScrolling || isDescriptionScrolling) {
@@ -361,10 +362,11 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     className={cn(
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? cn("w-max", styles.titleScrolling) : "w-full overflow-hidden"
+                      "w-full overflow-hidden",
+                      styles.titleScrollable
                     )}
                     style={{
-                      '--scroll-distance': `${titleScrollDistance}px`
+                      '--scroll-distance': `${resolvedTitleScrollDistance}px`
                     } as React.CSSProperties}
                     title={post.title}
                   >
@@ -406,10 +408,11 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     className={cn(
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? cn("w-max", styles.titleScrolling) : "w-full overflow-hidden"
+                      "w-full overflow-hidden",
+                      styles.titleScrollable
                     )}
                     style={{
-                      '--scroll-distance': `${titleScrollDistance}px`
+                      '--scroll-distance': `${resolvedTitleScrollDistance}px`
                     } as React.CSSProperties}
                     title={post.title}
                   >
