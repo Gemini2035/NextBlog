@@ -237,7 +237,7 @@ export default function WaterfallCore({
           <div
             key={item.id}
             data-waterfall-item
-            className="absolute animate-fade-in-up transition-all duration-500 ease-out"
+            className="absolute animate-in fade-in slide-in-from-bottom-5 transition-all duration-500 ease-out"
             style={{
               top: `${position.top}px`,
               left: `${position.left}px`,

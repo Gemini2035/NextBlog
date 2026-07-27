@@ -97,12 +97,12 @@ export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClien
               className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-[var(--site-action)] transition-colors duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
             >
               <div className="space-y-3 h-full flex flex-col">
-                <h4 className="text-lg font-medium text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                <h4 className="overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-lg font-medium text-gray-900 transition-colors group-hover:text-blue-600">
                   {relatedPost.title}
                 </h4>
 
                 {relatedPost.description && (
-                  <p className="text-gray-600 text-sm line-clamp-3 flex-1">
+                  <p className="flex-1 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] text-sm text-gray-600">
                     {relatedPost.description}
                   </p>
                 )}

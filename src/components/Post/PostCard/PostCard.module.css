@@ -1,0 +1,27 @@
+.titleScrolling {
+  animation: title-scroll 5.5s ease-in-out infinite alternate 0.25s;
+}
+
+.descriptionScrolling {
+  animation: description-scroll 4s ease-out forwards 0.3s;
+}
+
+@keyframes title-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(calc(-1 * var(--scroll-distance, 100px)));
+  }
+}
+
+@keyframes description-scroll {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(calc(-1 * var(--scroll-distance, 100px)));
+  }
+}

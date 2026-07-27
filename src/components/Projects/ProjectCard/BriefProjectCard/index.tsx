@@ -33,7 +33,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="flex h-full flex-col gap-4">
       {/* 项目头部 - 名称和状态 */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -67,7 +67,7 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
       </div>
 
       {/* 项目描述 */}
-      <p className="text-sm text-[var(--site-text-muted)] line-clamp-2 min-h-10">
+      <p className="min-h-10 overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-sm text-[var(--site-text-muted)]">
         {project.description || t('project.noDescription')}
       </p>
 
@@ -85,16 +85,6 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
         )}
       </div>
 
-      {/* 时间信息 */}
-      <div className="pt-2 border-t border-[var(--site-border)]">
-        <div className="flex items-center gap-2 text-xs text-[var(--site-text-tertiary)] flex-wrap">
-          <ClockIcon className="w-3.5 h-3.5 shrink-0" />
-          <span className="whitespace-nowrap">{t('project.created')}: {formatDate(project.createdAt)}</span>
-          <span className="text-[var(--site-border)]">|</span>
-          <span className="whitespace-nowrap">{t('project.updated')}: {formatDate(project.updatedAt)}</span>
-        </div>
-      </div>
-
       {/* 归档/Fork 状态标识 */}
       {(project.isArchived || project.isFork) && (
         <div className="flex gap-2 text-xs">
@@ -110,6 +100,16 @@ export function BriefProjectCard({ project, category }: BriefProjectCardProps) {
           )}
         </div>
       )}
+
+      {/* 时间信息 */}
+      <div className="mt-auto border-t border-[var(--site-border)] pt-3">
+        <div className="flex items-center gap-2 text-xs text-[var(--site-text-tertiary)] flex-wrap">
+          <ClockIcon className="w-3.5 h-3.5 shrink-0" />
+          <span className="whitespace-nowrap">{t('project.created')}: {formatDate(project.createdAt)}</span>
+          <span className="text-[var(--site-border)]">|</span>
+          <span className="whitespace-nowrap">{t('project.updated')}: {formatDate(project.updatedAt)}</span>
+        </div>
+      </div>
     </div>
   )
 }

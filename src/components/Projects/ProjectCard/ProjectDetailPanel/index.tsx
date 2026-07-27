@@ -2,8 +2,9 @@
 
 import useSWR from 'swr'
 import { getProjectDetail } from '@/apis/projects'
+import { SiteLoadingIcon } from '@/components/SiteLoadingIcon'
 import type { ProjectCategory } from '@/types/projects'
-import { DetailProjectCard } from './DetailProjectCard'
+import { DetailProjectCard } from '../DetailProjectCard'
 
 interface ProjectDetailPanelProps {
   projectId: number
@@ -24,12 +25,20 @@ export function ProjectDetailPanel({ projectId, category }: ProjectDetailPanelPr
   )
 
   if (isLoading) {
-    return <div className="py-10 text-center text-sm text-gray-500">加载中...</div>
+    return (
+      <div className="flex min-h-[420px] items-center justify-center py-12">
+        <SiteLoadingIcon className="text-[var(--site-action)]" />
+      </div>
+    )
   }
 
   if (error || !data) {
-    return <div className="py-10 text-center text-sm text-red-500">项目详情加载失败</div>
+    return <div className="min-h-[220px] py-12 text-center text-sm text-[var(--site-text-tertiary)]">项目详情加载失败</div>
   }
 
-  return <DetailProjectCard project={data} category={category} />
+  return (
+    <div className="pt-8 sm:pt-10">
+      <DetailProjectCard project={data} category={category} />
+    </div>
+  )
 }

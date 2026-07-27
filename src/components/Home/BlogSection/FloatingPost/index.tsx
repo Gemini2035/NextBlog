@@ -5,6 +5,7 @@ import { Link } from '@/ui'
 import { PostIcon } from '@/assets/icons/PostIcon'
 import { cn } from '@/utils'
 import type { BlogPostListItem } from '@/types/blog'
+import styles from './FloatingPost.module.css'
 
 interface FloatingPostProps {
   post: BlogPostListItem
@@ -26,12 +27,12 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
   // 为多个卡片分配不同的动画和位置
   const getAnimationClass = (itemIndex: number) => {
     const animations = [
-      'animate-float-1',
-      'animate-float-2',
-      'animate-float-3',
-      'animate-float-4',
-      'animate-float-5',
-      'animate-float-6'
+      styles.float1,
+      styles.float2,
+      styles.float3,
+      styles.float4,
+      styles.float5,
+      styles.float6
     ]
     return animations[itemIndex % animations.length]
   }
@@ -132,7 +133,7 @@ export const FloatingPost: React.FC<FloatingPostProps> = ({
             </div>
             
             <div className="flex-1 min-w-0 flex items-center">
-              <h3 className="text-xs font-semibold text-[var(--site-text)] line-clamp-2 leading-tight">
+              <h3 className="overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-xs font-semibold text-[var(--site-text)] leading-tight">
                 {post.title}
               </h3>
             </div>
