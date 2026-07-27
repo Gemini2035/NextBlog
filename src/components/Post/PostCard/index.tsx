@@ -4,7 +4,8 @@ import { Link, Card, Tooltip } from '@/ui'
 import { PostTag } from '../PostTag'
 import type { BlogPostListItem } from '@/types/blog'
 import { formatDate, cn } from '@/utils'
-import { useEffect, useRef, useState, useMemo } from 'react'
+import { useRef, useState, useMemo } from 'react'
+import { useIsomorphicLayoutEffect } from '@/hooks'
 import { useTranslations } from 'next-intl'
 
 interface PostCardProps {
@@ -217,15 +218,18 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const [descriptionScrollDistance, setDescriptionScrollDistance] = useState(0)
   const [tagContainerWidth, setTagContainerWidth] = useState(0)
   const tagContainerRef = useRef<HTMLDivElement>(null)
+  const isCompact = variant === 'compact'
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const titleElement = titleRef.current
     const descriptionElement = descriptionRef.current
     const tagContainerElement = tagContainerRef.current
-    if (!titleElement || !descriptionElement) return
+    if (!titleElement && !descriptionElement && !tagContainerElement) return
 
     // 检查标题是否超出容器宽度
     const checkTitleOverflow = () => {
+      if (!titleElement) return
+
       const containerWidth = titleElement.parentElement?.clientWidth || 0
       const textWidth = titleElement.scrollWidth
       const isOverflowing = textWidth > containerWidth
@@ -239,6 +243,12 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
 
     // 检查描述是否超出容器高度
     const checkDescriptionOverflow = () => {
+      if (!descriptionElement) {
+        setIsDescriptionScrolling(false)
+        setDescriptionScrollDistance(0)
+        return
+      }
+
       const containerHeight = descriptionElement.parentElement?.clientHeight || 0
       const textHeight = descriptionElement.scrollHeight
       const isOverflowing = textHeight > containerHeight
@@ -264,15 +274,32 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
       checkTagContainerWidth()
     }
 
-    // 延迟检查，确保DOM已渲染
-    setTimeout(checkOverflow, 100)
-    
-    // 监听窗口大小变化
-    window.addEventListener('resize', checkOverflow)
-    return () => window.removeEventListener('resize', checkOverflow)
-  }, [post.title, post.description, post.tags])
+    checkOverflow()
 
-  const isCompact = variant === 'compact'
+    const resizeObserver = new ResizeObserver(checkOverflow)
+    if (titleElement) {
+      resizeObserver.observe(titleElement)
+      if (titleElement.parentElement) {
+        resizeObserver.observe(titleElement.parentElement)
+      }
+    }
+    if (descriptionElement) {
+      resizeObserver.observe(descriptionElement)
+      if (descriptionElement.parentElement) {
+        resizeObserver.observe(descriptionElement.parentElement)
+      }
+    }
+    if (tagContainerElement) {
+      resizeObserver.observe(tagContainerElement)
+    }
+
+    window.addEventListener('resize', checkOverflow)
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', checkOverflow)
+    }
+  }, [post.title, post.description, post.tags, isCompact, showDescription])
+
   const padding = isCompact ? 'p-3 md:p-4' : 'p-4 md:p-6'
   const titleHeight = isCompact ? 'h-8' : 'h-[4rem]'
   const titleSize = isCompact ? 'text-lg' : 'text-xl'

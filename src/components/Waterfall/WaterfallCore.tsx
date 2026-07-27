@@ -1,7 +1,8 @@
 'use client'
 
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { ReactNode, useRef, useState } from 'react'
 import { Card } from '@/ui'
+import { useIsomorphicLayoutEffect } from '@/hooks'
 import { cn } from '@/utils'
 
 interface WaterfallItem {
@@ -18,6 +19,26 @@ interface WaterfallCoreProps {
   className?: string
 }
 
+interface WaterfallPosition {
+  top: number
+  left: number
+  width: number
+}
+
+const areNumberArraysEqual = (first: number[], second: number[]) =>
+  first.length === second.length && first.every((value, index) => value === second[index])
+
+const arePositionsEqual = (first: WaterfallPosition[], second: WaterfallPosition[]) =>
+  first.length === second.length &&
+  first.every((position, index) => {
+    const nextPosition = second[index]
+    return (
+      position.top === nextPosition.top &&
+      position.left === nextPosition.left &&
+      position.width === nextPosition.width
+    )
+  })
+
 export default function WaterfallCore({ 
   items, 
   columns = 2,
@@ -27,13 +48,13 @@ export default function WaterfallCore({
   const containerRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   const [columnHeights, setColumnHeights] = useState<number[]>([])
-  const [itemPositions, setItemPositions] = useState<Array<{ top: number; left: number; width: number }>>([])
+  const [itemPositions, setItemPositions] = useState<WaterfallPosition[]>([])
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!mounted || !containerRef.current) return
 
     const calculateLayout = () => {
@@ -41,11 +62,11 @@ export default function WaterfallCore({
 
       const container = containerRef.current
       const containerWidth = container.offsetWidth
-      const actualColumns = window.innerWidth >= 768 ? 2 : 1
+      const actualColumns = window.innerWidth >= 768 ? Math.max(1, columns) : 1
       const itemWidth = Math.floor((containerWidth - (gap * (actualColumns - 1))) / actualColumns)
       
       const newColumnHeights = new Array(actualColumns).fill(0)
-      const newItemPositions: Array<{ top: number; left: number; width: number }> = []
+      const newItemPositions: WaterfallPosition[] = []
 
       items.forEach((item, index) => {
         // 找到最短的列
@@ -65,8 +86,12 @@ export default function WaterfallCore({
         newColumnHeights[shortestColumnIndex] += estimatedHeight + gap
       })
 
-      setColumnHeights(newColumnHeights)
-      setItemPositions(newItemPositions)
+      setColumnHeights((currentHeights) =>
+        areNumberArraysEqual(currentHeights, newColumnHeights) ? currentHeights : newColumnHeights
+      )
+      setItemPositions((currentPositions) =>
+        arePositionsEqual(currentPositions, newItemPositions) ? currentPositions : newItemPositions
+      )
     }
 
     // 初始计算
@@ -82,22 +107,26 @@ export default function WaterfallCore({
   }, [mounted, items, columns, gap])
 
   // 实际渲染后重新计算高度和位置
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!mounted || !containerRef.current) return
 
     const recalculateLayout = () => {
       const container = containerRef.current
       if (!container) return
 
-      const actualColumns = window.innerWidth >= 768 ? 2 : 1
+      const actualColumns = window.innerWidth >= 768 ? Math.max(1, columns) : 1
       const containerWidth = container.offsetWidth
       const itemWidth = Math.floor((containerWidth - (gap * (actualColumns - 1))) / actualColumns)
       
       const newColumnHeights = new Array(actualColumns).fill(0)
-      const newItemPositions: Array<{ top: number; left: number; width: number }> = []
+      const newItemPositions: WaterfallPosition[] = []
       
       // 获取所有项目元素
       const itemElements = container.querySelectorAll('[data-waterfall-item]')
+
+      if (items.length > 0 && itemElements.length < items.length) {
+        return
+      }
       
       // 按原始顺序重新计算位置
       items.forEach((item, index) => {
@@ -117,14 +146,24 @@ export default function WaterfallCore({
         newColumnHeights[shortestColumnIndex] += elementHeight + gap
       })
 
-      setColumnHeights(newColumnHeights)
-      setItemPositions(newItemPositions)
+      setColumnHeights((currentHeights) =>
+        areNumberArraysEqual(currentHeights, newColumnHeights) ? currentHeights : newColumnHeights
+      )
+      setItemPositions((currentPositions) =>
+        arePositionsEqual(currentPositions, newItemPositions) ? currentPositions : newItemPositions
+      )
     }
 
-    // 延迟重新计算，确保DOM已渲染
-    const timer = setTimeout(recalculateLayout, 100)
-    return () => clearTimeout(timer)
-  }, [mounted, items, gap])
+    recalculateLayout()
+
+    const resizeObserver = new ResizeObserver(recalculateLayout)
+    resizeObserver.observe(containerRef.current)
+    containerRef.current.querySelectorAll('[data-waterfall-item]').forEach((element) => {
+      resizeObserver.observe(element)
+    })
+
+    return () => resizeObserver.disconnect()
+  }, [mounted, items, columns, gap, itemPositions.length])
 
   if (!mounted) {
     return (
@@ -133,6 +172,31 @@ export default function WaterfallCore({
           {items.map((item) => (
             <div key={item.id} className="opacity-0">
               {item.content}
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (itemPositions.length === 0) {
+    return (
+      <div className={cn('relative', className)} ref={containerRef}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {items.map((item) => (
+            <div key={item.id}>
+              <Card 
+                shadow="none"
+                border="sm" 
+                rounded 
+                disabledHover
+                className={cn(
+                  'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-8 shadow-none transition-colors hover:border-[var(--site-action)]',
+                  item.cardClassName
+                )}
+              >
+                {item.content}
+              </Card>
             </div>
           ))}
         </div>
@@ -150,7 +214,24 @@ export default function WaterfallCore({
     >
       {items.map((item, index) => {
         const position = itemPositions[index]
-        if (!position) return null
+        if (!position) {
+          return (
+            <div key={item.id} className="mb-6">
+              <Card 
+                shadow="none"
+                border="sm" 
+                rounded 
+                disabledHover
+                className={cn(
+                  'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-8 shadow-none transition-colors hover:border-[var(--site-action)]',
+                  item.cardClassName
+                )}
+              >
+                {item.content}
+              </Card>
+            </div>
+          )
+        }
 
         return (
           <div

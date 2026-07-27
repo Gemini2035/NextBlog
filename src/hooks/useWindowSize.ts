@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 /**
  * 使用窗口大小的 Hook
@@ -11,7 +12,7 @@ export function useWindowSize() {
     height: 0,
   })
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     function handleResize() {
       setWindowSize({
         width: window.innerWidth,

@@ -1,7 +1,8 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
+import { useIsomorphicLayoutEffect } from '@/hooks'
 import { cn } from '@/utils'
 
 interface StickySectionHeaderProps {
@@ -12,7 +13,7 @@ interface StickySectionHeaderProps {
 export function StickySectionHeader({ children, className }: StickySectionHeaderProps) {
   const headerRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const header = headerRef.current
     const container = header?.parentElement
     if (!header || !container) return

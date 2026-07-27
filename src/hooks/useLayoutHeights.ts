@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 
 interface LayoutHeights {
   headerHeight: number
@@ -19,7 +20,7 @@ export function useLayoutHeights(): LayoutHeights {
     totalLayoutHeight: 0
   })
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const measureHeights = () => {
       const header = document.querySelector('header')
       const footer = document.querySelector('footer')
@@ -27,34 +28,71 @@ export function useLayoutHeights(): LayoutHeights {
       const headerHeight = header ? header.offsetHeight : 0
       const footerHeight = footer ? footer.offsetHeight : 0
       
-      setHeights({
-        headerHeight,
-        footerHeight,
-        totalLayoutHeight: headerHeight + footerHeight
+      setHeights((currentHeights) => {
+        const nextHeights = {
+          headerHeight,
+          footerHeight,
+          totalLayoutHeight: headerHeight + footerHeight
+        }
+
+        if (
+          currentHeights.headerHeight === nextHeights.headerHeight &&
+          currentHeights.footerHeight === nextHeights.footerHeight &&
+          currentHeights.totalLayoutHeight === nextHeights.totalLayoutHeight
+        ) {
+          return currentHeights
+        }
+
+        return nextHeights
       })
+    }
+
+    const resizeObserver = new ResizeObserver(measureHeights)
+    let observedHeader: Element | null = null
+    let observedFooter: Element | null = null
+
+    const observeLayoutElements = () => {
+      const header = document.querySelector('header')
+      const footer = document.querySelector('footer')
+
+      if (header === observedHeader && footer === observedFooter) {
+        return
+      }
+
+      resizeObserver.disconnect()
+      observedHeader = header
+      observedFooter = footer
+
+      if (header) {
+        resizeObserver.observe(header)
+      }
+
+      if (footer) {
+        resizeObserver.observe(footer)
+      }
     }
 
     // 初始测量
     measureHeights()
+    observeLayoutElements()
 
     // 监听窗口大小变化
     window.addEventListener('resize', measureHeights)
 
-    // 使用 MutationObserver 监听 DOM 变化
+    // 使用 MutationObserver 监听 header/footer 节点替换
     const observer = new MutationObserver(() => {
       measureHeights()
+      observeLayoutElements()
     })
 
-    // 开始观察整个文档的变化
     observer.observe(document.body, {
       childList: true,
       subtree: true,
-      attributes: true,
-      attributeFilter: ['class', 'style']
     })
 
     return () => {
       window.removeEventListener('resize', measureHeights)
+      resizeObserver.disconnect()
       observer.disconnect()
     }
   }, [])
