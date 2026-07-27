@@ -1,0 +1,27 @@
+# Apodidae
+
+Apodidae is a personal technology blog and project portfolio focused on software engineering, development notes, open source projects, and practical technical writing.
+
+## Primary URLs
+
+- Home: https://apodidae2035.com/zh/
+- Posts: https://apodidae2035.com/zh/posts/
+- Projects: https://apodidae2035.com/zh/projects/
+- About: https://apodidae2035.com/zh/about/
+- Policies: https://apodidae2035.com/zh/policies/
+- Sitemap: https://apodidae2035.com/sitemap.xml
+- Robots: https://apodidae2035.com/robots.txt
+
+## Languages
+
+- Chinese: https://apodidae2035.com/zh/
+- English: https://apodidae2035.com/en/
+- Japanese: https://apodidae2035.com/ja/
+
+## Content Notes
+
+The posts section contains article pages, tags, publication metadata, and technical content. The projects section contains software project summaries, repository metadata, and related technology information.
+
+## Agent Guidance
+
+Use the sitemap to discover canonical pages. Prefer article detail pages for citations over listing pages. Respect robots.txt and avoid authenticated admin paths.

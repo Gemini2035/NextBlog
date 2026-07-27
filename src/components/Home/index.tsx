@@ -48,6 +48,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
   const blogSectionRef = useRef<HTMLDivElement>(null);
   const heroSectionRef = useRef<HTMLElement>(null);
   const heroMediaRef = useRef<HeroMediaBackgroundRef>(null);
+  const heroInitialHeight = "calc(100svh - var(--site-nav-height))";
 
   // 平滑滚动到博客区域，考虑 header 高度（不在此处播放声音，避免「渐入后立即渐出」）
   const scrollToBlogSection = useCallback(() => {
@@ -63,8 +64,8 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
         ref={heroSectionRef}
         className="relative flex items-center justify-center overflow-hidden bg-black will-change-transform cursor-default touch-manipulation"
         style={{
-          height: isClient ? `${currentHeight}px` : "600px",
-          minHeight: isClient ? `${currentHeight}px` : "600px",
+          height: isClient ? `${currentHeight}px` : heroInitialHeight,
+          minHeight: isClient ? `${currentHeight}px` : heroInitialHeight,
           paddingTop: isScrolling ? "2rem" : "0",
           paddingBottom: isScrolling ? "2rem" : "0",
           transition: isClient
