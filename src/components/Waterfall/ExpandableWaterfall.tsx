@@ -64,7 +64,7 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
         rounded 
         disabledHover
         className={cn(
-          'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
+          'flex h-full flex-col rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
           'hover:border-[var(--site-action)]',
           // 锚点聚焦时的卡片样式
           isFocused && 'border-[var(--site-action)]',
@@ -72,7 +72,7 @@ function WaterfallItem({ item, position, isExpanded, onItemClick, index, isFocus
         )}
       >
         <div className={cn(
-          'transition-all duration-700 ease-out delay-150',
+          'flex flex-1 flex-col transition-all duration-700 ease-out delay-150',
           // 内容动画 - 稍微延迟出现
           shouldAnimate 
             ? 'opacity-100 translate-y-0'
@@ -342,12 +342,14 @@ export default function ExpandableWaterfall({
                   rounded 
                   disabledHover
                   className={cn(
-                    'h-full rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
+                    'flex h-full flex-col rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] p-6 shadow-none transition-colors duration-200',
                     'hover:border-[var(--site-action)]',
                     item.cardClassName
                   )}
                 >
-                  {item.content}
+                  <div className="flex flex-1 flex-col">
+                    {item.content}
+                  </div>
                   {item.expandedContent && (
                     <div className="mt-4 border-t border-[var(--site-border)] pt-4">
                       <div className="flex items-center justify-between text-sm text-[var(--site-text-tertiary)]">

@@ -7,6 +7,7 @@ import { formatDate, cn } from '@/utils'
 import { useRef, useState, useMemo } from 'react'
 import { useIsomorphicLayoutEffect } from '@/hooks'
 import { useTranslations } from 'next-intl'
+import styles from './PostCard.module.css'
 
 interface PostCardProps {
   post: BlogPostListItem
@@ -360,10 +361,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     className={cn(
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? "w-max" : "w-full overflow-hidden"
+                      isTitleScrolling && isHovered ? cn("w-max", styles.titleScrolling) : "w-full overflow-hidden"
                     )}
                     style={{
-                      animation: isTitleScrolling && isHovered ? 'title-scroll 4s ease-out forwards 0.3s' : 'none',
                       '--scroll-distance': `${titleScrollDistance}px`
                     } as React.CSSProperties}
                     title={post.title}
@@ -380,15 +380,16 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
               </div>
               
               {/* 日期信息 */}
-              <div className="text-xs text-[var(--site-text-tertiary)] mb-3">
+              <div className="mb-3 flex min-h-9 flex-col justify-end text-xs text-[var(--site-text-tertiary)]">
                 <time dateTime={post.createdAt}>
                   {formatDate(post.createdAt)}
                 </time>
-                {post.updatedAt && post.updatedAt !== post.createdAt && (
-                  <div className="text-xs text-[var(--site-text-tertiary)] mt-1">
-                    更新于 {formatDate(post.updatedAt)}
-                  </div>
-                )}
+                <div className={cn(
+                  "mt-1 text-xs text-[var(--site-text-tertiary)]",
+                  !(post.updatedAt && post.updatedAt !== post.createdAt) && "invisible"
+                )}>
+                  更新于 {formatDate(post.updatedAt || post.createdAt)}
+                </div>
               </div>
             </div>
           ) : (
@@ -405,10 +406,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     className={cn(
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
-                      isTitleScrolling && isHovered ? "w-max" : "w-full overflow-hidden"
+                      isTitleScrolling && isHovered ? cn("w-max", styles.titleScrolling) : "w-full overflow-hidden"
                     )}
                     style={{
-                      animation: isTitleScrolling && isHovered ? 'title-scroll 4s ease-out forwards 0.3s' : 'none',
                       '--scroll-distance': `${titleScrollDistance}px`
                     } as React.CSSProperties}
                     title={post.title}
@@ -437,10 +437,10 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                         ref={descriptionRef}
                         className={cn(
                           "text-[var(--site-text-muted)] leading-relaxed transition-all duration-300",
-                          descriptionSize
+                          descriptionSize,
+                          isDescriptionScrolling && isHovered && styles.descriptionScrolling
                         )}
                         style={{
-                          animation: isDescriptionScrolling && isHovered ? 'description-scroll 4s ease-out forwards 0.3s' : 'none',
                           '--scroll-distance': `${descriptionScrollDistance}px`
                         } as React.CSSProperties}
                         title={post.description}
@@ -456,15 +456,16 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                     </div>
                   )}
                   
-                  <div className="text-sm text-[var(--site-text-tertiary)] flex-shrink-0">
+                  <div className="mt-auto flex min-h-10 flex-shrink-0 flex-col justify-end text-sm text-[var(--site-text-tertiary)]">
                     <time dateTime={post.createdAt}>
                       {formatDate(post.createdAt)}
                     </time>
-                    {post.updatedAt && post.updatedAt !== post.createdAt && (
-                      <div className="text-xs text-[var(--site-text-tertiary)] mt-1">
-                        更新于 {formatDate(post.updatedAt)}
-                      </div>
-                    )}
+                    <div className={cn(
+                      "mt-1 text-xs text-[var(--site-text-tertiary)]",
+                      !(post.updatedAt && post.updatedAt !== post.createdAt) && "invisible"
+                    )}>
+                      更新于 {formatDate(post.updatedAt || post.createdAt)}
+                    </div>
                   </div>
                 </div>
               )}

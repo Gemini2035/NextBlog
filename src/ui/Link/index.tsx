@@ -19,6 +19,34 @@ const isModifiedClick = (event: MouseEvent<HTMLAnchorElement>) => {
   return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
 }
 
+const shouldSkipTrailingSlash = (href: string) => {
+  return (
+    href.startsWith('#') ||
+    href.startsWith('mailto:') ||
+    href.startsWith('tel:') ||
+    /^[a-z][a-z\d+.-]*:\/\//i.test(href)
+  )
+}
+
+const normalizeInternalHref = (href: string) => {
+  if (shouldSkipTrailingSlash(href)) {
+    return href
+  }
+
+  const [pathWithQuery, hash = ''] = href.split('#')
+  const [pathname, query = ''] = pathWithQuery.split('?')
+
+  if (!pathname || pathname.endsWith('/')) {
+    return href
+  }
+
+  const normalizedPathname = `${pathname}/`
+  const normalizedQuery = query ? `?${query}` : ''
+  const normalizedHash = hash ? `#${hash}` : ''
+
+  return `${normalizedPathname}${normalizedQuery}${normalizedHash}`
+}
+
 const shouldStartNavigationLoading = (
   event: MouseEvent<HTMLAnchorElement>,
   external: boolean,
@@ -72,6 +100,7 @@ export default function Link({
   ...props 
 }: LinkProps) {
   const { startNavigationLoading } = useNavigationLoading()
+  const normalizedHref = external ? href : normalizeInternalHref(href)
 
   // 使用 cn 管理 className，合并默认样式
   const linkClassName = cn(
@@ -91,7 +120,7 @@ export default function Link({
   if (external) {
     return (
       <NextLink
-        href={href}
+        href={normalizedHref}
         className={linkClassName}
         target={target}
         rel={rel}
@@ -106,7 +135,7 @@ export default function Link({
   // 内部链接使用 next-intl Link（支持国际化）
   return (
     <IntlLink
-      href={href}
+      href={normalizedHref}
       className={linkClassName}
       target={target}
       rel={rel}

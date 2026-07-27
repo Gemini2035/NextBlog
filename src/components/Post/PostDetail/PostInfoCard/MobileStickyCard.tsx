@@ -44,7 +44,10 @@ export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps
             lineHeight: '1.5'
           }}
         >
-          <span className={cn(scrollProgress >= 1 ? "line-clamp-1" : "line-clamp-2")}>
+          <span className={cn(
+            "overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical]",
+            scrollProgress >= 1 ? "[-webkit-line-clamp:1]" : "[-webkit-line-clamp:2]"
+          )}>
             {post.title}
           </span>
         </h2>

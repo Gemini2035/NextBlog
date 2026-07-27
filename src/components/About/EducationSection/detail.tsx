@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { StickySectionHeader } from '@/components/About/StickySectionHeader'
 import { useEducationExperiences } from '@/components/About/AboutDataProvider'
+import styles from '@/components/SanitizedHtml/SanitizedHtml.module.css'
 
 interface EducationDetailProps {
   className?: string
@@ -48,7 +49,7 @@ export default function EducationDetail({ className }: EducationDetailProps) {
               ) : null}
             </div>
             <div
-              className="prose prose-gray max-w-none text-gray-700"
+              className={`${styles.prose} max-w-none text-gray-700`}
               dangerouslySetInnerHTML={{ __html: item.description }}
             />
           </article>

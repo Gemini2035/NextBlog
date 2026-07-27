@@ -3,12 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { Card, Button } from "@/ui";
-import { PostTag } from "../PostTag";
+import { PostTag } from "../../PostTag";
 import { formatDate, cn } from "@/utils";
 import { CollapseIcon } from "@/assets/icons";
 import type { BlogPostDetail } from "@/types/blog";
 import { useIsomorphicLayoutEffect, useLayoutHeights, useWindowSize } from "@/hooks";
-import { MobileStickyCard } from "./mobile";
+import { MobileStickyCard } from "./MobileStickyCard";
+import styles from "./PostInfoCard.module.css";
 
 interface PostInfoCardProps {
   post: BlogPostDetail;
@@ -150,10 +151,10 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
             rounded
             disabledHover
             className={cn(
-              "liquid-transform transition-all duration-500 ease-in-out",
+              "origin-center transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:scale-[1.02]",
               // 桌面端样式
-              !isMobile && !isSticky && "relative w-full mb-8 animate-slide-in-top",
-              !isMobile && isSticky && "relative animate-slide-in-right min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-md transform -translate-y-1/2",
+              !isMobile && !isSticky && cn("relative w-full mb-8", styles.slideInTop),
+              !isMobile && isSticky && cn("relative min-w-80 w-30vw max-h-[calc(100vh-2rem)] shadow-md transform -translate-y-1/2", styles.slideInRight),
               !isMobile && isCollapsed && "transform translate-x-full",
               // 移动端样式
               isMobile && "relative w-full mb-8",
