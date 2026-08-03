@@ -4,18 +4,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { FeaturedPostSection, RecentUpdatesSection, AllPostsSection } from '@/components/Post'
-import type { BlogPostListItem } from '@/types/blog'
+import { useInitialSearchParamScroll } from '@/hooks'
+import type { BlogPostsPayload } from '@/types/blog'
 import { useLocale } from 'next-intl'
 
 interface BlogPostsPageClientProps {
-  posts: BlogPostListItem[]
+  payload: BlogPostsPayload
 }
 
-export function BlogPostsPageClient({ posts }: BlogPostsPageClientProps) {
+export function BlogPostsPageClient({ payload }: BlogPostsPageClientProps) {
   const locale = useLocale()
   const searchParams = useSearchParams()
   const t = useTranslations('Posts')
   const [initialTag, setInitialTag] = useState<string | null>(null)
+  const posts = payload.posts
 
   const featuredPosts = useMemo(() => posts.filter((post) => post.featured), [posts])
   const recentPosts = useMemo(() => {
@@ -34,19 +36,7 @@ export function BlogPostsPageClient({ posts }: BlogPostsPageClientProps) {
     }
   }, [searchParams])
 
-  useEffect(() => {
-    const hasParams = searchParams.toString().length > 0
-    if (hasParams) {
-      setTimeout(() => {
-        const allPostsElement = document.getElementById('all-posts')
-        if (allPostsElement) {
-          const rect = allPostsElement.getBoundingClientRect()
-          const scrollTop = window.scrollY + rect.top - 100
-          window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
-        }
-      }, 300)
-    }
-  }, [searchParams])
+  useInitialSearchParamScroll({ targetId: 'all-posts' })
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -63,6 +53,10 @@ export function BlogPostsPageClient({ posts }: BlogPostsPageClientProps) {
       <RecentUpdatesSection recentPosts={recentPosts.length > 0 ? recentPosts : null} title={`${t('recentPosts')} (${t('updatedThisMonth', { count: recentPosts.length })})`} />
       <AllPostsSection
         posts={posts.length > 0 ? posts : null}
+        total={payload.total}
+        page={payload.page}
+        pageSize={payload.pageSize}
+        totalPages={payload.totalPages}
         title={t('articleList')}
         prevText={t('prevPage')}
         nextText={t('nextPage')}

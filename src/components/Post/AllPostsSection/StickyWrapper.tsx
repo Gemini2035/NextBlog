@@ -1,15 +1,25 @@
 'use client'
 
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
 import { PostCard } from '../PostCard'
 import { PostFilter } from '../FeaturedPostSection/PostFilter'
-import { Pagination, EmptyState } from '@/ui'
-import { useLayoutHeights, useAnchorScroll } from '@/hooks'
+import type { FilterState } from '../FeaturedPostSection/PostFilter/types'
+import { Button, EmptyState, Loading } from '@/ui'
+import { useAnchorScroll, useInfiniteScrollSentinel, useLayoutHeights } from '@/hooks'
+import { getBlogPosts } from '@/apis/blog'
+import { isStaleRequestError } from '@/apis/http'
+import { smoothScrollToElement } from '@/utils'
 import type { BlogPostListItem } from '@/types/blog'
+import { ChevronUpIcon } from '@/assets/icons'
 
 interface StickyWrapperProps {
   posts: BlogPostListItem[]
+  initialTotal?: number
+  initialPage?: number
+  initialPageSize?: number
+  initialTotalPages?: number
   title: string
   prevText?: string
   nextText?: string
@@ -17,103 +27,244 @@ interface StickyWrapperProps {
   initialTag?: string | null
 }
 
+const DEFAULT_PAGE_SIZE = 9
 
-export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrapperProps) {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [filteredPosts, setFilteredPosts] = useState<BlogPostListItem[]>(posts || [])
-  const pageSize = 9 // 3x3网格，每页显示9篇文章
-  
-  // 国际化翻译
-  const tEmpty = useTranslations('EmptyState')
-  const { headerHeight } = useLayoutHeights()
+const getPostApiKey = (filters: FilterState | null) =>
+  JSON.stringify(getPostParams(filters, 1, 1))
 
-  // 使用useCallback包装setFilteredPosts函数
-  const handleFilteredPostsChange = useCallback((newFilteredPosts: BlogPostListItem[]) => {
-    setFilteredPosts(newFilteredPosts)
-  }, [])
+const getPostSort = (filters: FilterState) => {
+  if (filters.wordCountSort) return `wordCount-${filters.wordCountSort}`
+  if (filters.createTimeSort) return `created-${filters.createTimeSort}`
+  if (filters.updateTimeSort) return `updated-${filters.updateTimeSort}`
+  return undefined
+}
 
-  // 使用筛选后的数据
-  const actualPosts = filteredPosts
+const getPostParams = (filters: FilterState | null, page: number, pageSize: number) => ({
+  keyword: filters?.keyword.trim() || undefined,
+  tag: filters?.selectedTags[0] || undefined,
+  featured: filters?.featuredFilter ?? undefined,
+  sort: filters ? getPostSort(filters) : undefined,
+  page,
+  pageSize,
+})
 
-  // 计算分页数据
-  const paginationData = useMemo(() => {
-    const totalPages = Math.ceil(actualPosts.length / pageSize)
-    const startIndex = (currentPage - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    const currentPosts = actualPosts.slice(startIndex, endIndex)
-
-    return {
-      totalPages,
-      currentPosts,
-      total: actualPosts.length
-    }
-  }, [actualPosts, currentPage, pageSize])
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
-    // 滚动到所有文章标题处而不是直接回顶部
-    // 使用setTimeout确保DOM更新后再滚动
-    setTimeout(() => {
-      // 查找所有文章标题（使用ID选择器更精确）
-      const allPostsTitle = document.getElementById('all-posts')
-      if (allPostsTitle) {
-        const titleRect = allPostsTitle.getBoundingClientRect()
-        const scrollTop = window.scrollY + titleRect.top - headerHeight - 10 // 使用动态headerHeight并预留10px空间
-        window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
-      } else {
-        // 如果找不到标题，则滚动到顶部
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      }
-    }, 100) // 100ms延迟确保DOM更新
+const getInitialPostFilters = (
+  searchParams: { get: (key: string) => string | null },
+  initialTag?: string | null,
+): FilterState => {
+  const filters: FilterState = {
+    keyword: searchParams.get('keyword') ?? '',
+    selectedTags: [],
+    wordCountSort: null,
+    featuredFilter: null,
+    createTimeSort: null,
+    updateTimeSort: null,
   }
 
-  // 当筛选结果变化时，重置到第一页
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [filteredPosts])
+  const tag = searchParams.get('tag')
+  if (tag) {
+    filters.selectedTags = [tag]
+  } else if (initialTag) {
+    filters.selectedTags = [initialTag]
+  }
 
-  // 当currentPage变化时，确保分页组件同步
-  useEffect(() => {
-    setCurrentPage(currentPage)
-  }, [currentPage])
+  const featured = searchParams.get('featured')
+  if (featured === 'true') {
+    filters.featuredFilter = true
+  } else if (featured === 'false') {
+    filters.featuredFilter = false
+  }
 
-  // 使用通用锚点滚动hook
+  const sort = searchParams.get('sort')
+  if (sort) {
+    const [sortKey, direction] = sort.split('-')
+    const sortDir = (direction === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc'
+
+    switch (sortKey) {
+      case 'wordCount':
+        filters.wordCountSort = sortDir
+        break
+      case 'created':
+        filters.createTimeSort = sortDir
+        break
+      case 'updated':
+        filters.updateTimeSort = sortDir
+        break
+    }
+  }
+
+  return filters
+}
+
+const dedupePosts = (posts: BlogPostListItem[]) => {
+  const seen = new Set<string>()
+  return posts.filter((post) => {
+    if (seen.has(post.id)) return false
+    seen.add(post.id)
+    return true
+  })
+}
+
+const ignoreStaleRequest = (error: unknown) => {
+  if (!isStaleRequestError(error)) {
+    throw error
+  }
+}
+
+export function StickyWrapper({
+  posts,
+  initialTotal,
+  initialPage = 1,
+  initialPageSize = DEFAULT_PAGE_SIZE,
+  initialTotalPages,
+  title,
+  locale,
+  initialTag,
+}: StickyWrapperProps) {
+  const searchParams = useSearchParams()
+  const initialFilters = useMemo(
+    () => getInitialPostFilters(searchParams, initialTag),
+    [initialTag, searchParams],
+  )
+  const [loadedPosts, setLoadedPosts] = useState<BlogPostListItem[]>(posts)
+  const [page, setPage] = useState(initialPage)
+  const [total, setTotal] = useState(initialTotal ?? posts.length)
+  const [totalPages, setTotalPages] = useState(initialTotalPages ?? 1)
+  const [activeFilters, setActiveFilters] = useState<FilterState | null>(initialFilters)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
+  const apiKeyRef = useRef(getPostApiKey(initialFilters))
+  const filterRequestIdRef = useRef(0)
+
+  const tEmpty = useTranslations('EmptyState')
+  const { headerHeight } = useLayoutHeights()
+  const pageSize = initialPageSize || DEFAULT_PAGE_SIZE
+
   useAnchorScroll({ anchorId: 'all-posts' })
 
-  // 当有initialTag时，自动滚动到all-posts区域
   useEffect(() => {
     if (initialTag) {
-      // 延迟执行，确保DOM已渲染
       setTimeout(() => {
         const allPostsTitle = document.getElementById('all-posts')
         if (allPostsTitle) {
-          const titleRect = allPostsTitle.getBoundingClientRect()
-          const scrollTop = window.scrollY + titleRect.top - headerHeight - 20 // 预留更多空间
-          window.scrollTo({ top: Math.max(0, scrollTop), behavior: 'smooth' })
+          smoothScrollToElement(allPostsTitle, headerHeight + 20)
         }
-      }, 300) // 增加延迟确保筛选器已初始化
+      }, 300)
     }
   }, [initialTag, headerHeight])
 
+  const fetchPage = useCallback(
+    async (nextPage: number, mode: 'replace' | 'append') => {
+      try {
+        const response = await getBlogPosts({
+          siteLanguage: locale,
+          ...getPostParams(activeFilters, nextPage, pageSize),
+        })
+        const payload = response.data
+
+        setLoadedPosts((currentPosts) =>
+          mode === 'append' ? dedupePosts([...currentPosts, ...payload.posts]) : payload.posts,
+        )
+        setPage(payload.page)
+        setTotal(payload.total)
+        setTotalPages(payload.totalPages)
+      } catch (error) {
+        ignoreStaleRequest(error)
+      }
+    },
+    [activeFilters, locale, pageSize],
+  )
+
+  const handleFilterStateChange = useCallback(
+    (filters: FilterState) => {
+      setActiveFilters(filters)
+      const nextApiKey = getPostApiKey(filters)
+      if (nextApiKey === apiKeyRef.current) {
+        return
+      }
+
+      apiKeyRef.current = nextApiKey
+      const requestId = filterRequestIdRef.current + 1
+      filterRequestIdRef.current = requestId
+      setIsResetting(true)
+      getBlogPosts({
+        siteLanguage: locale,
+        ...getPostParams(filters, 1, pageSize),
+      })
+        .then((response) => {
+          if (filterRequestIdRef.current !== requestId) {
+            return
+          }
+
+          const payload = response.data
+          setLoadedPosts(payload.posts)
+          setPage(payload.page)
+          setTotal(payload.total)
+          setTotalPages(payload.totalPages)
+        })
+        .catch(ignoreStaleRequest)
+        .finally(() => {
+          if (filterRequestIdRef.current === requestId) {
+            setIsResetting(false)
+          }
+        })
+    },
+    [locale, pageSize],
+  )
+
+  const hasMore = page < totalPages
+
+  const loadMore = useCallback(() => {
+    if (!hasMore || isLoadingMore || isResetting) {
+      return
+    }
+
+    setIsLoadingMore(true)
+    fetchPage(page + 1, 'append').finally(() => setIsLoadingMore(false))
+  }, [fetchPage, hasMore, isLoadingMore, isResetting, page])
+
+  const sentinelRef = useInfiniteScrollSentinel({
+    enabled: hasMore && !isLoadingMore && !isResetting,
+    onLoadMore: loadMore,
+  })
+
+  const handleCollapse = useCallback(() => {
+    setLoadedPosts((currentPosts) => currentPosts.slice(0, pageSize))
+    setPage(1)
+    const allPostsTitle = document.getElementById('all-posts')
+    if (allPostsTitle) {
+      smoothScrollToElement(allPostsTitle, headerHeight + 10)
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }, [headerHeight, pageSize])
+
+  const statusText = useMemo(
+    () => `已显示 ${loadedPosts.length} / ${total} 篇`,
+    [loadedPosts.length, total],
+  )
+
   return (
-    <div className="mb-12">
-      {/* 标题 */}
-      <h2 id="all-posts" className="text-2xl font-bold text-gray-900 mb-6">
-        {title}
-      </h2>
-      
-      {/* 筛选器 */}
+    <div className="relative mb-12">
+      <div id="all-posts" />
+      <div
+        className="sticky z-30 mb-6 border-b border-[var(--site-border)] bg-gray-50 py-3"
+        style={{ top: `${headerHeight}px` }}
+      >
+        <h2 className="text-2xl font-bold text-[var(--site-text)]">{title}</h2>
+      </div>
+
       <div className="mb-8">
         <PostFilter
-          posts={posts}
-          onFilteredPostsChange={handleFilteredPostsChange}
+          posts={loadedPosts}
+          onFilterStateChange={handleFilterStateChange}
+          isLoading={isResetting}
           locale={locale}
           initialTag={initialTag}
         />
       </div>
-      
-      {/* 文章列表或空状态 */}
-      {paginationData.currentPosts.length === 0 ? (
+
+      {loadedPosts.length === 0 && !isResetting ? (
         <EmptyState
           icon="search"
           title={tEmpty('noPosts')}
@@ -122,46 +273,33 @@ export function StickyWrapper({ posts, title, locale, initialTag }: StickyWrappe
           variant="card"
         />
       ) : (
-        <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-          {paginationData.currentPosts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+        <div className={`mb-8 transition-opacity duration-200 ${isResetting ? 'opacity-60' : 'opacity-100'}`}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            {loadedPosts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
         </div>
       )}
 
-      {/* 分页组件 */}
-      {paginationData.totalPages > 1 && (
-        <div className="flex flex-col items-center gap-4">
-          <Pagination
-            current={currentPage}
-            total={paginationData.total}
-            pageSize={pageSize}
-            onChange={handlePageChange}
-            showTotal={(total: number, range: [number, number]) => 
-              `第 ${range[0]}-${range[1]} 条，共 ${total} 条`
-            }
-            showQuickJumper={paginationData.totalPages > 5}
-            showSizeChanger={false}
-            hideOnSinglePage={true}
-            size="small"
-            align="center"
-            className="mt-4"
-            texts={{
-              itemsPerPage: '每页条数',
-              items: '条',
-              jumpTo: '跳转到',
-              page: '页',
-              total: '共 {total} 条',
-              first: '首页',
-              previous: '上一页',
-              next: '下一页',
-              last: '末页',
-              jumpPrev: '向前5页',
-              jumpNext: '向后5页'
-            }}
-          />
-        </div>
-      )}
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <span className="text-xs text-[var(--site-text-tertiary)]">{statusText}</span>
+        {page > 1 && (
+          <Button
+            type="ghost"
+            size="sm"
+            onClick={handleCollapse}
+            className="text-[var(--site-action)]! hover:text-[var(--site-action-hover)] hover:bg-[var(--site-canvas-muted)]"
+          >
+            <ChevronUpIcon className="h-4 w-4" />
+            <span className="ml-2 text-sm">收起</span>
+          </Button>
+        )}
+      </div>
+
+      <div ref={sentinelRef} className="flex min-h-12 items-center justify-center py-4">
+        {(isLoadingMore || isResetting) && <Loading variant="spinner" size="sm" />}
+      </div>
     </div>
   )
 }

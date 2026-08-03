@@ -4,134 +4,101 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useFilterUrlSync } from '@/hooks'
-import { Collapse, CollapsePanel } from '@/ui'
+import { Collapse, CollapsePanel, Loading } from '@/ui'
 import { FilterHeader } from './FilterHeader'
 import { FilterRow } from './FilterRow'
 import { ClearButton } from './ClearButton'
-import { applyFilters } from './utils'
 import type { ProjectFilterProps, ProjectFilterState } from './types'
 
-export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFilterProps) {
+export function ProjectFilter({ projects, onFilterStateChange, isLoading = false }: ProjectFilterProps) {
   const t = useTranslations('ProjectFilter')
   const searchParams = useSearchParams()
-  
-  const [filters, setFilters] = useState<ProjectFilterState>({
-    keyword: '',
-    showPinned: null,
-    showOwned: null,
-    showContributed: null,
-    showFork: null,
-    showArchived: null,
-    starSort: null,
-    forkSort: null,
-    weightSort: null,
-    createTimeSort: null,
-    updateTimeSort: null,
-    pushTimeSort: null
-  })
 
-  const [isOpen, setIsOpen] = useState(false)
-
-  // 从URL参数初始化筛选条件（仅在首次加载时）
-  useEffect(() => {
-    const newFilters: Partial<ProjectFilterState> = {}
-    let hasFilters = false
-
-    // 读取关键词
-    const keyword = searchParams.get('keyword')
-    if (keyword) {
-      newFilters.keyword = keyword
-      hasFilters = true
+  const getInitialFilters = useCallback((): ProjectFilterState => {
+    const initialFilters: ProjectFilterState = {
+      keyword: '',
+      showPinned: null,
+      showOwned: null,
+      showContributed: null,
+      showFork: null,
+      showArchived: null,
+      starSort: null,
+      forkSort: null,
+      weightSort: null,
+      createTimeSort: null,
+      updateTimeSort: null,
+      pushTimeSort: null
     }
 
-    // 读取布尔筛选
+    const keyword = searchParams.get('keyword')
+    if (keyword) {
+      initialFilters.keyword = keyword
+    }
+
     const parseBoolParam = (param: string | null) => {
       if (param === 'true') return true
       if (param === 'false') return false
       return null
     }
 
-    const pinned = parseBoolParam(searchParams.get('pinned'))
-    if (pinned !== null) {
-      newFilters.showPinned = pinned
-      hasFilters = true
-    }
+    initialFilters.showPinned = parseBoolParam(searchParams.get('pinned'))
+    initialFilters.showOwned = parseBoolParam(searchParams.get('owned'))
+    initialFilters.showContributed = parseBoolParam(searchParams.get('contributed'))
+    initialFilters.showFork = parseBoolParam(searchParams.get('fork'))
+    initialFilters.showArchived = parseBoolParam(searchParams.get('archived'))
 
-    const owned = parseBoolParam(searchParams.get('owned'))
-    if (owned !== null) {
-      newFilters.showOwned = owned
-      hasFilters = true
-    }
-
-    const contributed = parseBoolParam(searchParams.get('contributed'))
-    if (contributed !== null) {
-      newFilters.showContributed = contributed
-      hasFilters = true
-    }
-
-    const fork = parseBoolParam(searchParams.get('fork'))
-    if (fork !== null) {
-      newFilters.showFork = fork
-      hasFilters = true
-    }
-
-    const archived = parseBoolParam(searchParams.get('archived'))
-    if (archived !== null) {
-      newFilters.showArchived = archived
-      hasFilters = true
-    }
-
-    // 读取排序（只能有一个）
     const sort = searchParams.get('sort')
     if (sort) {
       const [sortKey, direction] = sort.split('-')
       const sortDir = (direction === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc'
-      
+
       switch (sortKey) {
         case 'stars':
-          newFilters.starSort = sortDir
-          hasFilters = true
+          initialFilters.starSort = sortDir
           break
         case 'forks':
-          newFilters.forkSort = sortDir
-          hasFilters = true
+          initialFilters.forkSort = sortDir
           break
         case 'weight':
-          newFilters.weightSort = sortDir
-          hasFilters = true
+          initialFilters.weightSort = sortDir
           break
         case 'created':
-          newFilters.createTimeSort = sortDir
-          hasFilters = true
+          initialFilters.createTimeSort = sortDir
           break
         case 'updated':
-          newFilters.updateTimeSort = sortDir
-          hasFilters = true
+          initialFilters.updateTimeSort = sortDir
           break
         case 'pushed':
-          newFilters.pushTimeSort = sortDir
-          hasFilters = true
+          initialFilters.pushTimeSort = sortDir
           break
       }
     }
 
-    // 应用筛选条件
-    if (hasFilters) {
-      setFilters(prev => ({ ...prev, ...newFilters }))
-      setIsOpen(true)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // 仅在首次加载时执行
+    return initialFilters
+  }, [searchParams])
 
-  // 应用筛选条件
-  const filteredProjects = useMemo(() => {
-    return applyFilters(projects, filters)
-  }, [projects, filters])
+  const [filters, setFilters] = useState<ProjectFilterState>(() => getInitialFilters())
+  const [keywordUrlValue, setKeywordUrlValue] = useState(() => searchParams.get('keyword') ?? '')
+  const [isOpen, setIsOpen] = useState(() => {
+    const initialFilters = getInitialFilters()
+    return (
+      initialFilters.showPinned !== null ||
+      initialFilters.showOwned !== null ||
+      initialFilters.showContributed !== null ||
+      initialFilters.showFork !== null ||
+      initialFilters.showArchived !== null ||
+      initialFilters.starSort !== null ||
+      initialFilters.forkSort !== null ||
+      initialFilters.weightSort !== null ||
+      initialFilters.createTimeSort !== null ||
+      initialFilters.updateTimeSort !== null ||
+      initialFilters.pushTimeSort !== null
+    )
+  })
 
-  // 通知父组件筛选结果变化
   useEffect(() => {
-    onFilteredProjectsChange(filteredProjects)
-  }, [filteredProjects, onFilteredProjectsChange])
+    onFilterStateChange?.(filters)
+  }, [filters, onFilterStateChange])
 
   // 关键词搜索不自动展开；其他筛选条件激活时保持原有展开行为。
   const hasActivePanelFilters = useMemo(() => {
@@ -160,8 +127,8 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
     const newSearchParams = new URLSearchParams()
 
     // 写入关键词
-    if (filters.keyword.trim()) {
-      newSearchParams.set('keyword', filters.keyword)
+    if (keywordUrlValue.trim()) {
+      newSearchParams.set('keyword', keywordUrlValue)
     }
 
     // 写入布尔筛选条件
@@ -197,7 +164,7 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
     }
 
     return newSearchParams
-  }, [filters])
+  }, [filters, keywordUrlValue])
 
   // URL同步 - 当筛选条件变化时更新URL
   useFilterUrlSync(filterSearchParams)
@@ -236,8 +203,13 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
     updateFilter('keyword', value)
   }, [updateFilter])
 
+  const handleSearchInputChange = useCallback((value: string) => {
+    setKeywordUrlValue(value)
+  }, [])
+
   // 清除所有筛选条件
   const clearAllFilters = useCallback(() => {
+    setKeywordUrlValue('')
     setFilters({
       keyword: '',
       showPinned: null,
@@ -272,8 +244,9 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
             <FilterHeader
               title={t('title')}
               description={t('description')}
-              searchValue={filters.keyword}
+              searchValue={keywordUrlValue}
               onSearchChange={handleSearchChange}
+              onSearchInputChange={handleSearchInputChange}
               searchPlaceholder={t('searchPlaceholder')}
             />
           }
@@ -309,13 +282,15 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
             {/* 清除按钮和统计信息 */}
             <div className="mt-4 sm:mt-6 pt-4 border-t border-gray-200">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="text-xs sm:text-sm text-gray-600 text-center sm:text-left">
-                  {t('filteredCount', { count: filteredProjects.length, total: projects.length })}
+                <div className="flex items-center justify-center gap-2 text-xs text-gray-600 sm:justify-start sm:text-sm">
+                  {isLoading && <Loading variant="spinner" size="xs" />}
+                  {t('filteredCount', { count: projects.length, total: projects.length })}
                 </div>
                 <div className="w-full sm:w-auto">
                   <ClearButton
                     onClear={clearAllFilters}
                     label={t('clearAll')}
+                    disabled={isLoading}
                   />
                 </div>
               </div>

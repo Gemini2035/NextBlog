@@ -8,6 +8,7 @@ interface FilterHeaderProps {
   description: string
   searchValue: string
   onSearchChange: (value: string) => void
+  onSearchInputChange?: (value: string) => void
   searchPlaceholder: string
 }
 
@@ -16,6 +17,7 @@ export function FilterHeader({
   description, 
   searchValue, 
   onSearchChange, 
+  onSearchInputChange,
   searchPlaceholder 
 }: FilterHeaderProps) {
   const handleSearchAreaClick = (e: React.MouseEvent) => {
@@ -33,10 +35,10 @@ export function FilterHeader({
         <InlineSearch
           value={searchValue}
           onChange={onSearchChange}
+          onInputChange={onSearchInputChange}
           placeholder={searchPlaceholder}
         />
       </div>
     </div>
   )
 }
-

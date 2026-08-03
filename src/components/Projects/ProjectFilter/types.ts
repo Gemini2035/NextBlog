@@ -17,7 +17,8 @@ export interface ProjectFilterState {
 
 export interface ProjectFilterProps {
   projects: ProjectListItem[]
-  onFilteredProjectsChange: (filteredProjects: ProjectListItem[]) => void
+  onFilterStateChange?: (filters: ProjectFilterState) => void
+  isLoading?: boolean
 }
 
 export interface SortOption {

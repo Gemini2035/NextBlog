@@ -307,6 +307,14 @@ export interface components {
             /** Projects */
             projects: components["schemas"]["ProjectListItem"][];
             stats: components["schemas"]["ProjectStats"];
+            /** Total */
+            total: number;
+            /** Page */
+            page: number;
+            /** Page Size */
+            pageSize: number;
+            /** Total Pages */
+            totalPages: number;
             rateLimit?: components["schemas"]["RateLimit"] | null;
             /**
              * Source

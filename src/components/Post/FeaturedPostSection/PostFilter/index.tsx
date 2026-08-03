@@ -4,108 +4,86 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useFilterUrlSync } from '@/hooks'
-import { Collapse, CollapsePanel } from '@/ui'
+import { Collapse, CollapsePanel, Loading } from '@/ui'
 import { FilterHeader } from './FilterHeader'
 import { FilterRow } from './FilterRow'
 import { ClearButton } from './ClearButton'
-import { applyFilters, getAllTagsWithCount } from './utils'
+import { getAllTagsWithCount } from './utils'
 import type { PostFilterProps, FilterState } from './types'
 
-export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFilterProps) {
+export function PostFilter({ posts, onFilterStateChange, isLoading = false, initialTag }: PostFilterProps) {
   const t = useTranslations('PostFilter')
   const searchParams = useSearchParams()
-  
-  const [filters, setFilters] = useState<FilterState>({
-    keyword: '',
-    selectedTags: [],
-    wordCountSort: null,
-    featuredFilter: null,
-    createTimeSort: null,
-    updateTimeSort: null
-  })
 
-  const [isOpen, setIsOpen] = useState(false)
+  const getInitialFilters = useCallback((): FilterState => {
+    const initialFilters: FilterState = {
+      keyword: '',
+      selectedTags: [],
+      wordCountSort: null,
+      featuredFilter: null,
+      createTimeSort: null,
+      updateTimeSort: null
+    }
 
-  // 获取所有标签
-  const allTags = useMemo(() => getAllTagsWithCount(posts), [posts])
-
-  // 从URL参数初始化筛选条件（仅在首次加载时）
-  useEffect(() => {
-    const newFilters: Partial<FilterState> = {}
-    let hasFilters = false
-
-    // 读取关键词
     const keyword = searchParams.get('keyword')
     if (keyword) {
-      newFilters.keyword = keyword
-      hasFilters = true
+      initialFilters.keyword = keyword
     }
 
-    // 读取标签
     const tag = searchParams.get('tag')
     if (tag) {
-      newFilters.selectedTags = [tag]
-      hasFilters = true
+      initialFilters.selectedTags = [tag]
+    } else if (initialTag) {
+      initialFilters.selectedTags = [initialTag]
     }
 
-    // 读取featured筛选
     const featured = searchParams.get('featured')
     if (featured === 'true') {
-      newFilters.featuredFilter = true
-      hasFilters = true
+      initialFilters.featuredFilter = true
     } else if (featured === 'false') {
-      newFilters.featuredFilter = false
-      hasFilters = true
+      initialFilters.featuredFilter = false
     }
 
-    // 读取排序（只能有一个）
     const sort = searchParams.get('sort')
     if (sort) {
       const [sortKey, direction] = sort.split('-')
       const sortDir = (direction === 'asc' ? 'asc' : 'desc') as 'asc' | 'desc'
-      
+
       switch (sortKey) {
         case 'wordCount':
-          newFilters.wordCountSort = sortDir
-          hasFilters = true
+          initialFilters.wordCountSort = sortDir
           break
         case 'created':
-          newFilters.createTimeSort = sortDir
-          hasFilters = true
+          initialFilters.createTimeSort = sortDir
           break
         case 'updated':
-          newFilters.updateTimeSort = sortDir
-          hasFilters = true
+          initialFilters.updateTimeSort = sortDir
           break
       }
     }
 
-    // 应用筛选条件
-    if (hasFilters) {
-      setFilters(prev => ({ ...prev, ...newFilters }))
-      setIsOpen(true)
-    }
+    return initialFilters
+  }, [initialTag, searchParams])
 
-    // 如果有initialTag（从其他页面跳转），优先使用
-    if (initialTag && !hasFilters) {
-      setFilters(prev => ({
-        ...prev,
-        selectedTags: [initialTag]
-      }))
-      setIsOpen(true)
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []) // 仅在首次加载时执行
+  const [filters, setFilters] = useState<FilterState>(() => getInitialFilters())
+  const [keywordUrlValue, setKeywordUrlValue] = useState(() => searchParams.get('keyword') ?? '')
+  const [isOpen, setIsOpen] = useState(() => {
+    const initialFilters = getInitialFilters()
+    return (
+      initialFilters.selectedTags.length > 0 ||
+      initialFilters.featuredFilter !== null ||
+      initialFilters.wordCountSort !== null ||
+      initialFilters.createTimeSort !== null ||
+      initialFilters.updateTimeSort !== null
+    )
+  })
 
-  // 应用筛选条件
-  const filteredPosts = useMemo(() => {
-    return applyFilters(posts, filters)
-  }, [posts, filters])
+  // 获取所有标签
+  const allTags = useMemo(() => getAllTagsWithCount(posts), [posts])
 
-  // 通知父组件筛选结果变化
   useEffect(() => {
-    onFilteredPostsChange(filteredPosts)
-  }, [filteredPosts, onFilteredPostsChange])
+    onFilterStateChange?.(filters)
+  }, [filters, onFilterStateChange])
 
   // 关键词搜索不自动展开；其他筛选条件激活时保持原有展开行为。
   const hasActivePanelFilters = useMemo(() => {
@@ -128,8 +106,8 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     const newSearchParams = new URLSearchParams()
 
     // 写入关键词
-    if (filters.keyword.trim()) {
-      newSearchParams.set('keyword', filters.keyword)
+    if (keywordUrlValue.trim()) {
+      newSearchParams.set('keyword', keywordUrlValue)
     }
 
     // 写入标签（支持多个标签）
@@ -152,7 +130,7 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     }
 
     return newSearchParams
-  }, [filters])
+  }, [filters, keywordUrlValue])
 
   // URL同步 - 当筛选条件变化时更新URL
   useFilterUrlSync(filterSearchParams)
@@ -185,9 +163,14 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     updateFilter('keyword', value)
   }, [updateFilter])
 
+  const handleSearchInputChange = useCallback((value: string) => {
+    setKeywordUrlValue(value)
+  }, [])
+
 
   // 清除所有筛选条件
   const clearAllFilters = useCallback(() => {
+    setKeywordUrlValue('')
     setFilters({
       keyword: '',
       selectedTags: [],
@@ -215,8 +198,9 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
             <FilterHeader
               title={t('title')}
               description={t('description')}
-              searchValue={filters.keyword}
+              searchValue={keywordUrlValue}
               onSearchChange={handleSearchChange}
+              onSearchInputChange={handleSearchInputChange}
               searchPlaceholder={t('keywordPlaceholder')}
             />
           }
@@ -240,13 +224,15 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
 
             {/* 清除按钮和统计信息 */}
             <div className="mt-4 md:mt-6 pt-3 md:pt-4 border-t border-gray-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="text-xs text-gray-600">
-                {t('filteredCount', { count: filteredPosts.length, total: posts.length })}
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                {isLoading && <Loading variant="spinner" size="xs" />}
+                {t('filteredCount', { count: posts.length, total: posts.length })}
               </div>
               <div className="sm:w-auto w-full">
                 <ClearButton
                   onClear={clearAllFilters}
                   label={t('clearAll')}
+                  disabled={isLoading}
                 />
               </div>
             </div>

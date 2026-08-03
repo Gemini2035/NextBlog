@@ -12,7 +12,8 @@ export interface FilterState {
 
 export interface PostFilterProps {
   posts: BlogPostListItem[]
-  onFilteredPostsChange: (filteredPosts: BlogPostListItem[]) => void
+  onFilterStateChange?: (filters: FilterState) => void
+  isLoading?: boolean
   locale?: string
   initialTag?: string | null
 }
