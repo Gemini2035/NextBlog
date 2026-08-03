@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useFilterUrlSync } from '@/hooks'
 import { Collapse, CollapsePanel } from '@/ui'
 import { FilterHeader } from './FilterHeader'
 import { FilterRow } from './FilterRow'
@@ -12,7 +13,6 @@ import type { PostFilterProps, FilterState } from './types'
 
 export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFilterProps) {
   const t = useTranslations('PostFilter')
-  const router = useRouter()
   const searchParams = useSearchParams()
   
   const [filters, setFilters] = useState<FilterState>({
@@ -107,10 +107,9 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     onFilteredPostsChange(filteredPosts)
   }, [filteredPosts, onFilteredPostsChange])
 
-  // 检查是否有活跃的筛选条件
-  const hasActiveFilters = useMemo(() => {
+  // 关键词搜索不自动展开；其他筛选条件激活时保持原有展开行为。
+  const hasActivePanelFilters = useMemo(() => {
     return (
-      filters.keyword.trim() !== '' ||
       filters.selectedTags.length > 0 ||
       filters.featuredFilter !== null ||
       filters.wordCountSort !== null ||
@@ -119,15 +118,13 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
     )
   }, [filters])
 
-  // 当有活跃筛选条件时，自动打开面板
   useEffect(() => {
-    if (hasActiveFilters) {
+    if (hasActivePanelFilters) {
       setIsOpen(true)
     }
-  }, [hasActiveFilters])
+  }, [hasActivePanelFilters])
 
-  // URL同步 - 当筛选条件变化时更新URL
-  useEffect(() => {
+  const filterSearchParams = useMemo(() => {
     const newSearchParams = new URLSearchParams()
 
     // 写入关键词
@@ -154,20 +151,11 @@ export function PostFilter({ posts, onFilteredPostsChange, initialTag }: PostFil
       newSearchParams.set('sort', `updated-${filters.updateTimeSort}`)
     }
 
-    // 构建新URL
-    const newUrl = newSearchParams.toString()
-      ? `?${newSearchParams.toString()}`
-      : window.location.pathname
+    return newSearchParams
+  }, [filters])
 
-    // 获取当前URL
-    const currentParams = searchParams.toString()
-    const currentUrl = currentParams ? `?${currentParams}` : window.location.pathname
-
-    // 只在URL确实需要变化时更新
-    if (newUrl !== currentUrl) {
-      router.replace(newUrl, { scroll: false })
-    }
-  }, [filters, router, searchParams])
+  // URL同步 - 当筛选条件变化时更新URL
+  useFilterUrlSync(filterSearchParams)
 
   // 更新筛选条件，并重置其他排序
   const updateFilter = useCallback(<K extends keyof FilterState>(key: K, value: FilterState[K]) => {
