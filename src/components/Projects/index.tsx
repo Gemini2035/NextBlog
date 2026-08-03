@@ -25,10 +25,6 @@ export default function ProjectsClient({
   const [filteredProjects, setFilteredProjects] = useState<ProjectListItem[]>(projects)
 
   useEffect(() => {
-    setFilteredProjects(projects)
-  }, [projects])
-
-  useEffect(() => {
     const hasParams = searchParams.toString().length > 0
     if (hasParams) {
       setTimeout(() => {

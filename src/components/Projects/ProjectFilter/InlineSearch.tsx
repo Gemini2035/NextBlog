@@ -13,7 +13,7 @@ interface InlineSearchProps {
 
 export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps) {
   const [inputValue, setInputValue] = useState(value)
-  const [debouncedValue] = useDebounce(inputValue, 300)
+  const [debouncedValue] = useDebounce(inputValue, 600)
   const inputRef = useRef<HTMLInputElement>(null)
 
   // 防抖搜索
@@ -24,6 +24,12 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     setInputValue(newValue)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.stopPropagation()
+    }
   }
 
   const handleClear = (e: React.MouseEvent) => {
@@ -42,6 +48,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
           type="text"
           value={inputValue}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         />
@@ -59,4 +66,3 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
     </div>
   )
 }
-

@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useFilterUrlSync } from '@/hooks'
 import { Collapse, CollapsePanel } from '@/ui'
 import { FilterHeader } from './FilterHeader'
 import { FilterRow } from './FilterRow'
@@ -12,7 +13,6 @@ import type { ProjectFilterProps, ProjectFilterState } from './types'
 
 export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFilterProps) {
   const t = useTranslations('ProjectFilter')
-  const router = useRouter()
   const searchParams = useSearchParams()
   
   const [filters, setFilters] = useState<ProjectFilterState>({
@@ -123,10 +123,19 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // 仅在首次加载时执行
 
-  // 检查是否有活跃的筛选条件
-  const hasActiveFilters = useMemo(() => {
+  // 应用筛选条件
+  const filteredProjects = useMemo(() => {
+    return applyFilters(projects, filters)
+  }, [projects, filters])
+
+  // 通知父组件筛选结果变化
+  useEffect(() => {
+    onFilteredProjectsChange(filteredProjects)
+  }, [filteredProjects, onFilteredProjectsChange])
+
+  // 关键词搜索不自动展开；其他筛选条件激活时保持原有展开行为。
+  const hasActivePanelFilters = useMemo(() => {
     return (
-      filters.keyword.trim() !== '' ||
       filters.showPinned !== null ||
       filters.showOwned !== null ||
       filters.showContributed !== null ||
@@ -141,25 +150,13 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
     )
   }, [filters])
 
-  // 当有活跃筛选条件时，自动打开面板
   useEffect(() => {
-    if (hasActiveFilters) {
+    if (hasActivePanelFilters) {
       setIsOpen(true)
     }
-  }, [hasActiveFilters])
+  }, [hasActivePanelFilters])
 
-  // 应用筛选条件
-  const filteredProjects = useMemo(() => {
-    return applyFilters(projects, filters)
-  }, [projects, filters])
-
-  // 通知父组件筛选结果变化
-  useEffect(() => {
-    onFilteredProjectsChange(filteredProjects)
-  }, [filteredProjects, onFilteredProjectsChange])
-
-  // URL同步 - 当筛选条件变化时更新URL
-  useEffect(() => {
+  const filterSearchParams = useMemo(() => {
     const newSearchParams = new URLSearchParams()
 
     // 写入关键词
@@ -199,20 +196,11 @@ export function ProjectFilter({ projects, onFilteredProjectsChange }: ProjectFil
       newSearchParams.set('sort', `pushed-${filters.pushTimeSort}`)
     }
 
-    // 构建新URL
-    const newUrl = newSearchParams.toString()
-      ? `?${newSearchParams.toString()}`
-      : '/projects'
+    return newSearchParams
+  }, [filters])
 
-    // 获取当前URL（不含locale前缀）
-    const currentParams = searchParams.toString()
-    const currentUrl = currentParams ? `?${currentParams}` : '/projects'
-
-    // 只在URL确实需要变化时更新
-    if (newUrl !== currentUrl) {
-      router.replace(newUrl, { scroll: false })
-    }
-  }, [filters, router, searchParams])
+  // URL同步 - 当筛选条件变化时更新URL
+  useFilterUrlSync(filterSearchParams)
 
   // 更新筛选条件，并重置其他排序
   const updateFilter = useCallback(<K extends keyof ProjectFilterState>(
