@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/http'
-import { getSiteInit } from '@/apis/site/server'
 import { RouteLoadingMask } from '@/components/RouteLoadingMask'
 import { PostInfoCard, PostContent, RelatedPostsClient, ContactButton } from '@/components/Post'
-import type { BlogPostDetailPayload, BlogPostsPayload } from '@/types/blog'
+import type { BlogPostDetailPayload, BlogPostRecommendationsPayload } from '@/types/blog'
 
 interface PostPageProps {
   params: Promise<{
@@ -35,17 +34,15 @@ export async function generateMetadata({ params }: PostPageProps) {
 
 async function PostPageContent({ params }: PostPageProps) {
   const { id, locale } = await params
-  const siteInitPromise = getSiteInit(locale)
   const postPayloadPromise = serverHttpData<BlogPostDetailPayload>(`/post/${id}`, {
     headers: { 'X-Locale': locale },
   }).catch(() => null)
 
-  const siteInit = await siteInitPromise
-  const [payload, postsPayload] = await Promise.all([
+  const [payload, recommendationsPayload] = await Promise.all([
     postPayloadPromise,
-    serverHttpData<BlogPostsPayload>('/post', {
+    serverHttpData<BlogPostRecommendationsPayload>(`/post/${id}/recommendations`, {
       headers: { 'X-Locale': locale },
-      params: { pageSize: siteInit.siteConfig.postsPerPage ?? 6 },
+      params: { limit: 3 },
     }).catch(() => null),
   ])
   const post = payload?.post
@@ -66,7 +63,12 @@ async function PostPageContent({ params }: PostPageProps) {
         <ContactButton postId={id} title={post.title} />
         
         {/* 相关文章 */}
-        <RelatedPostsClient post={post} posts={postsPayload?.posts ?? []} limit={3} />
+        <RelatedPostsClient
+          postId={id}
+          initialPosts={recommendationsPayload?.items ?? []}
+          initialCursor={recommendationsPayload?.cursor ?? null}
+          limit={3}
+        />
       </div>
     </>
   )
