@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from 'react'
 import { useLocale, useTranslations } from 'next-intl'
+import { getBlogPostRecommendations } from '@/apis/blog'
 import { Button, Link } from '@/ui'
 import { PostTag } from '../PostTag'
-import type { BlogPostDetail, BlogPostListItem } from '@/types/blog'
+import type { BlogPostListItem } from '@/types/blog'
 
 const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
   <svg
@@ -24,30 +25,22 @@ const RefreshIcon = ({ isRotating }: { isRotating: boolean }) => (
 )
 
 interface RelatedPostsClientProps {
-  post: BlogPostDetail
-  posts: BlogPostListItem[]
+  postId: string
+  initialPosts: BlogPostListItem[]
+  initialCursor?: number | null
   limit?: number
 }
 
-const getRelatedPostsData = (
-  post: BlogPostDetail,
-  posts: BlogPostListItem[],
-  limit: number = 6
-) => {
-  const sameLocalePosts = posts.filter((candidate) => candidate.id !== post.id)
-  const relatedByTags = sameLocalePosts.filter((candidate) =>
-    candidate.tags.some((tag) => post.tags.includes(tag))
-  )
-  const otherPosts = sameLocalePosts.filter((candidate) => !relatedByTags.includes(candidate))
-
-  return [...relatedByTags, ...otherPosts].slice(0, limit)
-}
-
-export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClientProps) {
+export function RelatedPostsClient({
+  postId,
+  initialPosts,
+  initialCursor = null,
+  limit = 3,
+}: RelatedPostsClientProps) {
   const locale = useLocale()
   const t = useTranslations('Posts')
-  const allRelatedPosts = useMemo(() => getRelatedPostsData(post, posts, limit), [post, posts, limit])
-  const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>(allRelatedPosts.slice(0, 3))
+  const [currentPosts, setCurrentPosts] = useState<BlogPostListItem[]>(initialPosts)
+  const [cursor, setCursor] = useState<number | null>(initialCursor)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const dateFormatter = useMemo(() => {
     return new Intl.DateTimeFormat(locale, {
@@ -58,16 +51,23 @@ export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClien
     })
   }, [locale])
 
-  if (allRelatedPosts.length === 0) {
+  if (currentPosts.length === 0) {
     return null
   }
 
   const handleRefresh = async () => {
     setIsRefreshing(true)
-    await new Promise((resolve) => setTimeout(resolve, 500))
-    const shuffled = [...allRelatedPosts].sort(() => Math.random() - 0.5)
-    setCurrentPosts(shuffled.slice(0, 3))
-    setIsRefreshing(false)
+    try {
+      const response = await getBlogPostRecommendations(postId, {
+        siteLanguage: locale,
+        limit,
+        cursor,
+      })
+      setCurrentPosts(response.data.items)
+      setCursor(response.data.cursor)
+    } finally {
+      setIsRefreshing(false)
+    }
   }
 
   return (
@@ -88,13 +88,13 @@ export function RelatedPostsClient({ post, posts, limit = 6 }: RelatedPostsClien
         </Button>
       </div>
 
-      <div className="flex justify-start overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 pb-4 md:pb-0">
-        <div className="flex gap-4 max-w-4xl">
+      <div className="-mx-4 px-4 md:mx-0 md:px-0">
+        <div className="grid w-full max-w-4xl grid-cols-1 gap-4 md:grid-cols-3">
           {currentPosts.map((relatedPost) => (
             <Link
               key={relatedPost.id}
               href={`/posts/${relatedPost.id}`}
-              className="group block p-6 bg-white rounded-lg border border-gray-200 hover:border-[var(--site-action)] transition-colors duration-200 flex-1 min-w-[280px] md:min-w-0 max-w-sm"
+              className="group block min-w-0 p-6 bg-white rounded-lg border border-gray-200 hover:border-[var(--site-action)] transition-colors duration-200"
             >
               <div className="space-y-3 h-full flex flex-col">
                 <h4 className="overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] text-lg font-medium text-gray-900 transition-colors group-hover:text-blue-600">
