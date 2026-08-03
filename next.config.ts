@@ -7,6 +7,10 @@ const apiProxyTarget = (process.env.NEXT_API_PROXY_TARGET || '').replace(
   /\/$/,
   ''
 );
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(
+  /\/$/,
+  ''
+);
 
 const securityHeaders = [
   {
@@ -45,6 +49,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  env: {
+    NEXT_PUBLIC_SITE_URL: siteUrl,
+  },
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   async redirects() {
