@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { routing } from '@/i18n/routing'
-
-const siteUrl = 'https://apodidae2035.com'
+import { siteUrl } from '@/config/site'
 
 const localizedRoutes = ['', '/posts', '/projects', '/about', '/policies']
 

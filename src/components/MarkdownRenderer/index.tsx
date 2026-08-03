@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import clsx from 'clsx'
+import { isExternalWebHref, mergeLinkRel } from '@/utils/link'
 import styles from './MarkdownRenderer.module.css'
 
 export interface MarkdownAutoLinkTarget {
@@ -20,14 +21,13 @@ interface MarkdownRendererProps {
 
 const createMarkdownComponents = (linkTarget?: MarkdownRendererProps['linkTarget']): Components => ({
   a: ({ href, children }) => {
-    const isExternalLink = typeof href === 'string' && /^https?:\/\//.test(href)
-    const target = linkTarget ?? (isExternalLink ? '_blank' : undefined)
-    const shouldUseNoReferrer = target === '_blank'
+    const target = linkTarget ?? (isExternalWebHref(href) ? '_blank' : undefined)
+    const rel = target === '_blank' ? mergeLinkRel(undefined, 'noopener', 'noreferrer') : undefined
 
     return (
       <a
         href={href}
-        rel={shouldUseNoReferrer ? 'noreferrer' : undefined}
+        rel={rel}
         target={target}
       >
         {children}
