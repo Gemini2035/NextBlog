@@ -8,13 +8,18 @@ import { Button } from '@/ui'
 interface InlineSearchProps {
   value: string
   onChange: (value: string) => void
+  onInputChange?: (value: string) => void
   placeholder: string
 }
 
-export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps) {
+export function InlineSearch({ value, onChange, onInputChange, placeholder }: InlineSearchProps) {
   const [inputValue, setInputValue] = useState(value)
   const [debouncedValue] = useDebounce(inputValue, 600)
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setInputValue(value)
+  }, [value])
 
   // 防抖搜索
   useEffect(() => {
@@ -24,6 +29,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     setInputValue(newValue)
+    onInputChange?.(newValue)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -36,6 +42,7 @@ export function InlineSearch({ value, onChange, placeholder }: InlineSearchProps
     e.preventDefault()
     e.stopPropagation()
     setInputValue('')
+    onInputChange?.('')
     onChange('')
   }
 

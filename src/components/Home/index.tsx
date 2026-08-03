@@ -25,7 +25,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
   const siteConfig = useSiteConfig();
   const { navigation } = useSiteData();
   const { headerHeight } = useLayoutHeights();
-  const { scrollY, isScrolling, opacity } = useScrollParallax({
+  const { scrollY, opacity } = useScrollParallax({
     threshold: 400,
   });
 
@@ -95,9 +95,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
           <p
             className="mt-4 sm:mt-6 text-lg sm:text-xl font-medium max-w-3xl mx-auto text-white/90 will-change-transform transition-[transform,opacity] duration-100 ease-out"
             style={{
-              transform: isScrolling
-                ? "translateY(0)"
-                : `translateY(${scrollY * 0.2}px)`,
+              transform: `translateY(${scrollY * 0.2}px)`,
               opacity,
             }}
           >
@@ -108,9 +106,7 @@ export default function HomeClient({ homeInit }: HomeClientProps) {
           <div
             className="mt-8 sm:mt-12 cursor-pointer flex items-center justify-center text-sm text-white/90 will-change-transform transition-[transform,opacity] duration-100 ease-out"
             style={{
-              transform: isScrolling
-                ? "translateY(0)"
-                : `translateY(${scrollY * 0.1}px)`,
+              transform: `translateY(${scrollY * 0.1}px)`,
               opacity: opacity * 0.8,
             }}
             onClick={scrollToBlogSection}

@@ -86,10 +86,11 @@ export function useScrollParallax(options: ScrollParallaxOptions = {}) {
   const opacity = Math.max(0.1, 1 - smoothScrollY / (threshold * 1.5))
 
   return {
-    scrollY,
+    scrollY: smoothScrollY,
+    rawScrollY: scrollY,
     isScrolling,
     opacity,
-    progress: Math.min(1, scrollY / threshold),
+    progress: Math.min(1, smoothScrollY / threshold),
     isClient
   }
 }

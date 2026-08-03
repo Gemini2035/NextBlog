@@ -10,6 +10,9 @@ export interface GetBlogPostsParams {
   siteLanguage?: string
   keyword?: string
   search?: string
+  tag?: string
+  featured?: boolean | null
+  sort?: string | null
   page?: number
   pageSize?: number
 }

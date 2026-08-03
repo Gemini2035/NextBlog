@@ -3,6 +3,10 @@ import type { BlogPostListItem } from '@/types/blog'
 
 interface AllPostsSectionProps {
   posts: BlogPostListItem[] | null | undefined
+  total?: number
+  page?: number
+  pageSize?: number
+  totalPages?: number
   title: string
   prevText?: string
   nextText?: string
@@ -10,7 +14,18 @@ interface AllPostsSectionProps {
   initialTag?: string | null
 }
 
-export function AllPostsSection({ posts, title, prevText, nextText, locale, initialTag }: AllPostsSectionProps) {
+export function AllPostsSection({
+  posts,
+  total,
+  page,
+  pageSize,
+  totalPages,
+  title,
+  prevText,
+  nextText,
+  locale,
+  initialTag,
+}: AllPostsSectionProps) {
   if (!posts || posts.length === 0) {
     return null
   }
@@ -18,6 +33,10 @@ export function AllPostsSection({ posts, title, prevText, nextText, locale, init
   return (
     <StickyWrapper 
       posts={posts}
+      initialTotal={total}
+      initialPage={page}
+      initialPageSize={pageSize}
+      initialTotalPages={totalPages}
       title={title}
       prevText={prevText}
       nextText={nextText}

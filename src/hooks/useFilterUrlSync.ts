@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 interface UseFilterUrlSyncOptions {
   skipInitialSync?: boolean
@@ -11,8 +11,7 @@ export function useFilterUrlSync(
   nextSearchParams: URLSearchParams,
   { skipInitialSync = true }: UseFilterUrlSyncOptions = {},
 ) {
-  const router = useRouter()
-  const currentSearchParams = useSearchParams()
+  const pathname = usePathname()
   const isInitialSyncRef = useRef(true)
 
   useEffect(() => {
@@ -24,12 +23,11 @@ export function useFilterUrlSync(
     isInitialSyncRef.current = false
 
     const nextQuery = nextSearchParams.toString()
-    const nextUrl = nextQuery ? `?${nextQuery}` : window.location.pathname
-    const currentQuery = currentSearchParams.toString()
-    const currentUrl = currentQuery ? `?${currentQuery}` : window.location.pathname
+    const nextUrl = nextQuery ? `${pathname}?${nextQuery}` : pathname
+    const currentUrl = `${pathname}${window.location.search}`
 
     if (nextUrl !== currentUrl) {
-      router.replace(nextUrl, { scroll: false })
+      window.history.replaceState(window.history.state, '', nextUrl)
     }
-  }, [currentSearchParams, nextSearchParams, router, skipInitialSync])
+  }, [nextSearchParams, pathname, skipInitialSync])
 }
