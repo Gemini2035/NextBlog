@@ -1,6 +1,7 @@
 import { httpRequest } from '@/apis/http'
 import type {
   BlogPostDetailPayload,
+  BlogPostRecommendationsPayload,
   BlogPostWritePayload,
   BlogPostsPayload,
   BlogPostWriteRequest,
@@ -32,6 +33,24 @@ export const getBlogPostDetail = (postId: number | string, siteLanguage?: string
   return httpRequest<BlogPostDetailPayload>({
     url: `/post/${postId}`,
     method: 'GET',
+    headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
+  })
+}
+
+export const getBlogPostRecommendations = (
+  postId: number | string,
+  params?: {
+    siteLanguage?: string
+    limit?: number
+    cursor?: number | null
+  }
+) => {
+  const { siteLanguage, ...queryParams } = params ?? {}
+
+  return httpRequest<BlogPostRecommendationsPayload>({
+    url: `/post/${postId}/recommendations`,
+    method: 'GET',
+    params: queryParams,
     headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
   })
 }

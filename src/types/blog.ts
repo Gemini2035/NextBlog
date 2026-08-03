@@ -41,6 +41,12 @@ export interface BlogPostDetailPayload {
   post: BlogPostDetail
 }
 
+export interface BlogPostRecommendationsPayload {
+  items: BlogPostListItem[]
+  cursor: number | null
+  reason: string
+}
+
 export interface BlogPostWritePayload {
   post: BlogPostListItem
   embeddingUpdated: boolean
