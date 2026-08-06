@@ -8,16 +8,32 @@ import parse, {
   Text as ParserText,
   type HTMLReactParserOptions,
 } from 'html-react-parser'
-import { useEffect, useMemo, useState, type AnchorHTMLAttributes, type ReactNode } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type AnchorHTMLAttributes,
+  type ReactNode,
+} from 'react'
 import { resolveResourceUrl } from '@/apis/resources'
+import { useLayoutHeights } from '@/hooks'
+import { smoothScrollToElement } from '@/utils'
 import { isExternalWebHref, mergeLinkRel } from '@/utils/link'
 import { PostContentCodeBlock } from './PostContentCodeBlock'
 import { PostContentImage } from './PostContentImage'
 import styles from './PostContent.module.css'
 
+export interface PostHeading {
+  id: string
+  title: string
+  level: 2 | 3 | 4
+}
+
 interface PostContentProps {
   content: string
   frameless?: boolean
+  onHeadingsChange?: (headings: PostHeading[]) => void
 }
 
 const sanitizePostContent = (content: string) => {
@@ -25,6 +41,73 @@ const sanitizePostContent = (content: string) => {
     ADD_ATTR: ['decoding', 'loading'],
     FORBID_ATTR: ['style'],
   })
+}
+
+const headingSelector = 'h2, h3, h4'
+
+const createHeadingId = (text: string, index: number) => {
+  const slug = text
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^\p{L}\p{N}-]/gu, '')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '')
+
+  return slug || `section-${index + 1}`
+}
+
+const createUniqueHeadingId = (baseId: string, usedIds: Map<string, number>) => {
+  const count = usedIds.get(baseId) ?? 0
+  usedIds.set(baseId, count + 1)
+
+  if (count === 0) {
+    return baseId
+  }
+
+  return `${baseId}-${count + 1}`
+}
+
+const preparePostContent = (content: string) => {
+  const sanitizedContent = sanitizePostContent(content)
+  const document = new DOMParser().parseFromString(sanitizedContent, 'text/html')
+  const usedIds = new Map<string, number>()
+  const headings: PostHeading[] = []
+
+  document.querySelectorAll<HTMLHeadingElement>(headingSelector).forEach((heading, index) => {
+    const title = heading.textContent?.trim().replace(/\s+/g, ' ') ?? ''
+
+    if (!title) {
+      return
+    }
+
+    const existingId = heading.id.trim()
+    const baseId = existingId || createHeadingId(title, index)
+    const id = createUniqueHeadingId(baseId, usedIds)
+    const level = Number(heading.tagName.slice(1)) as PostHeading['level']
+
+    heading.id = id
+    headings.push({ id, title, level })
+  })
+
+  return {
+    html: document.body.innerHTML,
+    headings,
+  }
+}
+
+const getCurrentHashId = () => {
+  const hash = window.location.hash.slice(1)
+
+  if (!hash) {
+    return ''
+  }
+
+  try {
+    return decodeURIComponent(hash)
+  } catch {
+    return hash
+  }
 }
 
 const isParserElement = (node: unknown): node is ParserElement => {
@@ -59,8 +142,10 @@ const getCodeLanguage = (codeElement?: ParserElement) => {
     .find((className) => className.startsWith('language-'))
 }
 
-export function PostContent({ content, frameless = false }: PostContentProps) {
+export function PostContent({ content, frameless = false, onHeadingsChange }: PostContentProps) {
   const [nodes, setNodes] = useState<ReactNode>(null)
+  const { headerHeight } = useLayoutHeights()
+  const headerHeightRef = useRef(headerHeight)
   const options = useMemo<HTMLReactParserOptions>(() => {
     const parserOptions: HTMLReactParserOptions = {
       replace: (node) => {
@@ -125,8 +210,28 @@ export function PostContent({ content, frameless = false }: PostContentProps) {
   }, [])
 
   useEffect(() => {
-    setNodes(parse(sanitizePostContent(content), options))
-  }, [content, options])
+    headerHeightRef.current = headerHeight
+  }, [headerHeight])
+
+  useEffect(() => {
+    const { html, headings } = preparePostContent(content)
+    const hashId = getCurrentHashId()
+
+    setNodes(parse(html, options))
+    onHeadingsChange?.(headings)
+
+    const timeoutId = window.setTimeout(() => {
+      const element = hashId ? document.getElementById(hashId) : null
+
+      if (element) {
+        smoothScrollToElement(element, headerHeightRef.current + 16, 'auto')
+      }
+    }, 100)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [content, onHeadingsChange, options])
 
   return (
     <article

@@ -1,5 +1,6 @@
 export { PostCard } from './PostCard'
-export { PostInfoCard, PostContent, ContactButton } from './PostDetail'
+export { PostInfoCard, PostContent, ContactButton, PostDetailLayout } from './PostDetail'
+export type { PostHeading } from './PostDetail'
 export { RelatedPostsClient } from './PostDetail/RelatedPostsClient'
 export { FeaturedPostSection } from './FeaturedPostSection'
 export { RecentUpdatesSection } from './RecentUpdatesSection'

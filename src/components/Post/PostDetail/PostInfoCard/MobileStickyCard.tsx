@@ -8,23 +8,26 @@ import type { BlogPostDetail } from '@/types/blog'
 interface MobileStickyCardProps {
   post: BlogPostDetail
   scrollProgress: number
+  headerHeight: number
 }
 
 /**
  * 移动端 Sticky 卡片
  * 渐进式缩小动画，从完整信息到只显示标题
  */
-export function MobileStickyCard({ post, scrollProgress }: MobileStickyCardProps) {
+export function MobileStickyCard({ post, scrollProgress, headerHeight }: MobileStickyCardProps) {
   const t = useTranslations('Posts')
   
   return (
     <div
       className={cn(
-        "fixed left-0 right-0 top-0 z-50",
+        "fixed left-0 right-0 z-40",
         "bg-white border-b border-gray-200 shadow-sm",
         "transition-all duration-300 ease-out",
         "animate-in slide-in-from-top"
       )}
+      data-mobile-post-sticky
+      style={{ top: `${headerHeight}px` }}
     >
       <div 
         className="transition-all duration-300 ease-out"

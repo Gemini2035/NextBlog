@@ -208,6 +208,7 @@ function OverflowIndicator({ isVisible, direction, size = 'md', position }: Over
 export function PostCard({ post, variant = 'default', showDescription = true }: PostCardProps) {
   const t = useTranslations('PostCard')
   const titleRef = useRef<HTMLHeadingElement>(null)
+  const titleMeasureRef = useRef<HTMLSpanElement>(null)
   const descriptionRef = useRef<HTMLParagraphElement>(null)
   const titleContainerRef = useRef<HTMLDivElement>(null)
   const descriptionContainerRef = useRef<HTMLDivElement>(null)
@@ -223,16 +224,22 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
 
   useIsomorphicLayoutEffect(() => {
     const titleElement = titleRef.current
+    const titleMeasureElement = titleMeasureRef.current
+    const titleContainerElement = titleContainerRef.current
     const descriptionElement = descriptionRef.current
     const tagContainerElement = tagContainerRef.current
-    if (!titleElement && !descriptionElement && !tagContainerElement) return
+    if (!titleElement && !titleMeasureElement && !titleContainerElement && !descriptionElement && !tagContainerElement) return
 
     // 检查标题是否超出容器宽度
     const checkTitleOverflow = () => {
       if (!titleElement) return
 
-      const containerWidth = titleElement.parentElement?.clientWidth || 0
-      const textWidth = titleElement.scrollWidth
+      const containerWidth = titleContainerElement?.clientWidth || titleElement.parentElement?.clientWidth || 0
+      if (containerWidth <= 0) return
+
+      const textWidth = Math.ceil(
+        titleMeasureElement?.getBoundingClientRect().width || titleMeasureElement?.scrollWidth || titleElement.scrollWidth
+      )
       const isOverflowing = textWidth > containerWidth
       
       // 计算滚动距离：让标题最右侧刚好到达容器最右侧
@@ -284,6 +291,12 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
         resizeObserver.observe(titleElement.parentElement)
       }
     }
+    if (titleContainerElement) {
+      resizeObserver.observe(titleContainerElement)
+    }
+    if (titleMeasureElement) {
+      resizeObserver.observe(titleMeasureElement)
+    }
     if (descriptionElement) {
       resizeObserver.observe(descriptionElement)
       if (descriptionElement.parentElement) {
@@ -310,6 +323,10 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
   const tagHeight = isCompact ? 'min-h-6' : 'min-h-8'
   const tagSize = isCompact ? 'text-xs px-2 py-1' : ''
   const resolvedTitleScrollDistance = Math.max(titleScrollDistance, isCompact ? 32 : 48)
+  const titleStyle = {
+    '--scroll-distance': `${resolvedTitleScrollDistance}px`,
+    width: isTitleScrolling && isHovered ? 'max-content' : undefined
+  } as React.CSSProperties
 
   const TitleComponent = titleTag as 'h2' | 'h3'
 
@@ -330,7 +347,7 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
     >
       <Link
         href={`/posts/${post.id}`}
-        className={cn("block h-full", styles.postCardLink)}
+        className="block h-full"
         onMouseEnter={() => {
           setIsHovered(true)
           if (isTitleScrolling || isDescriptionScrolling) {
@@ -356,6 +373,16 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                 "flex flex-col justify-center overflow-hidden relative mb-3"
               )}>
                 <div ref={titleContainerRef} className="w-full overflow-hidden">
+                  <span
+                    ref={titleMeasureRef}
+                    aria-hidden="true"
+                    className={cn(
+                      titleSize,
+                      "pointer-events-none absolute invisible whitespace-nowrap font-semibold leading-tight"
+                    )}
+                  >
+                    {post.title}
+                  </span>
                   <TitleComponent 
                     key={animationKey}
                     ref={titleRef}
@@ -363,11 +390,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
                       "w-full overflow-hidden",
-                      styles.titleScrollable
+                      isTitleScrolling && isHovered && styles.titleScrolling
                     )}
-                    style={{
-                      '--scroll-distance': `${resolvedTitleScrollDistance}px`
-                    } as React.CSSProperties}
+                    style={titleStyle}
                     title={post.title}
                   >
                     {post.title}
@@ -402,6 +427,16 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                 "flex flex-col justify-center overflow-hidden relative"
               )}>
                 <div ref={titleContainerRef} className="w-full overflow-hidden">
+                  <span
+                    ref={titleMeasureRef}
+                    aria-hidden="true"
+                    className={cn(
+                      titleSize,
+                      "pointer-events-none absolute invisible whitespace-nowrap font-semibold leading-tight"
+                    )}
+                  >
+                    {post.title}
+                  </span>
                   <TitleComponent 
                     key={animationKey}
                     ref={titleRef}
@@ -409,11 +444,9 @@ export function PostCard({ post, variant = 'default', showDescription = true }: 
                       titleSize, "font-semibold text-[var(--site-text)] leading-tight",
                       "whitespace-nowrap relative transition-all duration-300",
                       "w-full overflow-hidden",
-                      styles.titleScrollable
+                      isTitleScrolling && isHovered && styles.titleScrolling
                     )}
-                    style={{
-                      '--scroll-distance': `${resolvedTitleScrollDistance}px`
-                    } as React.CSSProperties}
+                    style={titleStyle}
                     title={post.title}
                   >
                     {post.title}

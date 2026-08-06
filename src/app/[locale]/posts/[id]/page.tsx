@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import { serverHttpData } from '@/apis/http'
 import { RouteLoadingMask } from '@/components/RouteLoadingMask'
-import { PostInfoCard, PostContent, RelatedPostsClient, ContactButton } from '@/components/Post'
+import { PostDetailLayout } from '@/components/Post'
 import type { BlogPostDetailPayload, BlogPostRecommendationsPayload } from '@/types/blog'
 
 interface PostPageProps {
@@ -52,25 +52,12 @@ async function PostPageContent({ params }: PostPageProps) {
   }
 
   return (
-    <>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 文章信息卡片 - 初始显示在顶部 */}
-        <PostInfoCard post={post} />
-        
-        <PostContent content={post.content} />
-        
-        {/* AI article support entry */}
-        <ContactButton postId={id} title={post.title} />
-        
-        {/* 相关文章 */}
-        <RelatedPostsClient
-          postId={id}
-          initialPosts={recommendationsPayload?.items ?? []}
-          initialCursor={recommendationsPayload?.cursor ?? null}
-          limit={3}
-        />
-      </div>
-    </>
+    <PostDetailLayout
+      post={post}
+      postId={id}
+      recommendations={recommendationsPayload?.items ?? []}
+      recommendationCursor={recommendationsPayload?.cursor ?? null}
+    />
   )
 }
 

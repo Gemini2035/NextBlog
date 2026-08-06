@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
-import { Card, Button } from "@/ui";
-import { PostTag } from "../../PostTag";
-import { formatDate, cn } from "@/utils";
-import { CollapseIcon } from "@/assets/icons";
-import type { BlogPostDetail } from "@/types/blog";
-import { useIsomorphicLayoutEffect, useLayoutHeights, useWindowSize } from "@/hooks";
-import { MobileStickyCard } from "./MobileStickyCard";
-import styles from "./PostInfoCard.module.css";
+import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
+import { Card, Button } from '@/ui'
+import { PostTag } from '../../PostTag'
+import { formatDate, cn } from '@/utils'
+import { CollapseIcon } from '@/assets/icons'
+import type { BlogPostDetail } from '@/types/blog'
+import { useIsomorphicLayoutEffect, useLayoutHeights, useWindowSize } from '@/hooks'
+import { MobileStickyCard } from './MobileStickyCard'
+import styles from './PostInfoCard.module.css'
 
 interface PostInfoCardProps {
   post: BlogPostDetail;
@@ -25,7 +25,6 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
   const { headerHeight } = useLayoutHeights();
   const { width } = useWindowSize();
   const isMobile = width < 768;
-  const lastScrollY = useRef(0);
 
   useIsomorphicLayoutEffect(() => {
     // 测量卡片高度
@@ -38,41 +37,28 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
     };
 
     let ticking = false;
-    const MIN_SCROLL_THRESHOLD = 50; // 最小滚动阈值
-    const SCROLL_STEP = 0.02; // 每次滚动改变的进度步长
+    const SHRINK_DISTANCE = 240; // Sticky 卡片从完整到简化的滚动距离
 
     // 添加滚动事件监听器
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-          const previousScrollY = lastScrollY.current;
-          
           // 移动端逻辑
           if (isMobile) {
-            // 判断是否显示 sticky
-            if (currentScrollY > MIN_SCROLL_THRESHOLD) {
+            const cardElement = document.getElementById("post-info-card");
+            const cardRect = cardElement?.getBoundingClientRect();
+            const shouldShowSticky = Boolean(cardRect && cardRect.bottom <= headerHeight);
+
+            if (shouldShowSticky && cardRect) {
               setIsScrolled(true);
               setIsSticky(true);
-              
-              // 判断滚动方向
-              const isScrollingDown = currentScrollY > previousScrollY;
-              const scrollDelta = Math.abs(currentScrollY - previousScrollY);
-              
-              // 根据滚动距离调整步长（滚动越快，变化越大）
-              const dynamicStep = Math.min(SCROLL_STEP * (scrollDelta / 5), 0.08);
-              
-              setScrollProgress(prev => {
-                if (isScrollingDown) {
-                  // 下滑：缩小（progress 增加）
-                  return Math.min(prev + dynamicStep, 1);
-                } else {
-                  // 上滑：放大（progress 减少）
-                  return Math.max(prev - dynamicStep, 0);
-                }
-              });
+
+              const progress = Math.min(
+                Math.max((headerHeight - cardRect.bottom) / SHRINK_DISTANCE, 0),
+                1
+              );
+              setScrollProgress(progress);
             } else {
-              // 滚动位置小于阈值，隐藏 sticky
               setIsScrolled(false);
               setIsSticky(false);
               setScrollProgress(0);
@@ -89,9 +75,6 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
               setIsSticky(isArticleTopAboveThreshold);
             }
           }
-          
-          // 更新上次滚动位置
-          lastScrollY.current = currentScrollY;
           ticking = false;
         });
         
@@ -100,8 +83,8 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
     };
 
     // 初始化
-    lastScrollY.current = window.scrollY;
     measureCardHeight();
+    handleScroll();
 
     // 监听窗口大小变化
     window.addEventListener("resize", measureCardHeight);
@@ -123,7 +106,7 @@ export function PostInfoCard({ post }: PostInfoCardProps) {
     <>
       {/* 移动端 sticky 卡片 - 提取到独立组件 */}
       {isMobile && isScrolled && (
-        <MobileStickyCard post={post} scrollProgress={scrollProgress} />
+        <MobileStickyCard post={post} scrollProgress={scrollProgress} headerHeight={headerHeight} />
       )}
 
       {/* 主卡片 - 移动端滚动时隐藏 */}
