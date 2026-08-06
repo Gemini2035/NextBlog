@@ -29,6 +29,7 @@
 .content h4,
 .content h5,
 .content h6 {
+  scroll-margin-top: calc(var(--site-nav-height) + 1rem);
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: var(--site-text);

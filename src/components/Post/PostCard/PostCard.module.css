@@ -1,8 +1,4 @@
 .titleScrolling {
-  animation: title-scroll 3s ease-in-out infinite alternate 0.15s;
-}
-
-.postCardLink:hover .titleScrollable {
   width: max-content;
   animation: title-scroll 3s ease-in-out infinite alternate 0.15s;
 }

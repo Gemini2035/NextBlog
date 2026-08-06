@@ -1,4 +1,7 @@
 export { PostInfoCard } from './PostInfoCard'
 export { PostContent } from './PostContent'
+export type { PostHeading } from './PostContent'
+export { PostDetailLayout } from './PostDetailLayout'
 export { ContactButton } from './ContactButton'
 export { RelatedPostsClient } from './RelatedPostsClient'
+export { PostTableOfContents } from './PostTableOfContents'
