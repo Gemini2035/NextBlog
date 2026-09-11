@@ -30,7 +30,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
     clearSearch,
     refreshRecommendations,
   } = useSearch()
-  const chatAgentHref = `/agent/chat${query.trim() ? `?question=${encodeURIComponent(query.trim())}` : ''}`
+  const agentHref = `/agent${query.trim() ? `?question=${encodeURIComponent(query.trim())}` : ''}`
 
   // 处理输入变化
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +120,7 @@ export default function SearchDropdown({ itemVariants, isOpen, onClose }: Search
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <Link
-          href={chatAgentHref}
+          href={agentHref}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-900 transition-colors hover:text-gray-600"

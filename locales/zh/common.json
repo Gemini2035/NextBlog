@@ -338,6 +338,25 @@
     "contextUsage": "上下文 {percent}%",
     "currentContextUsage": "当前对话上下文 {percent}%",
     "thinking": "思考中...",
+    "title": "NextBlog 统一助手",
+    "subtitle": "搜索并理解本站的文章、项目、导航和其他内容。",
+    "placeholder": "询问本站任意内容",
+    "empty": "输入问题，助手会基于站点内容进行回答。",
+    "composer": {
+      "add": "添加附件",
+      "approval": "请求批准"
+    },
+    "tool": {
+      "searchSite": "正在检索站点内容",
+      "searchPosts": "正在查找相关文章",
+      "readArticle": "正在阅读相关段落"
+    },
+    "articles": {
+      "title": "相关文章",
+      "button": "文章引用（{count}）",
+      "open": "打开文章",
+      "close": "关闭"
+    },
     "send": "发送",
     "stop": "停止生成",
     "editMessage": "编辑消息",

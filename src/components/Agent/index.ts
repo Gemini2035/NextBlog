@@ -1,1 +1,1 @@
-export { AgentChatPage } from './AgentChatPage'
+export { UnifiedAgentPage } from './UnifiedAgentPage'

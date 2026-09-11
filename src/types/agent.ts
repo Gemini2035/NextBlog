@@ -1,78 +1,43 @@
-export type AgentType = 'chat' | 'article_support'
-export type AgentHandoffTarget = AgentType
-
-export interface AgentSource {
-  type: string
-  id: string
+export interface AgentCitation {
+  sourceType: string
+  sourceId: string
   title: string
-  description?: string | null
   href: string
-  score?: number | null
-}
-
-export interface AgentHandoff {
-  targetAgent: AgentHandoffTarget
-  reason: string
-  question: string
-  postId?: string | null
+  chunkId?: string | number
+  excerpt?: string
 }
 
 export interface AgentMessage {
-  id: number
+  id: string | number
   role: 'user' | 'assistant'
   content: string
-  sources: AgentSource[]
-  handoff?: AgentHandoff | null
-  meta?: Record<string, unknown>
+  citations: AgentCitation[]
   createdAt: string
 }
 
 export interface AgentSession {
-  id: number
-  agentType: AgentType
-  targetPostId?: string | null
+  id: string | number
   messages: AgentMessage[]
   createdAt: string
   updatedAt: string
 }
 
-export interface AgentMessageCreatePayload {
-  userMessage: AgentMessage
-  assistantMessage: AgentMessage
-}
-
 export interface AgentMessageStreamPayload {
-  userMessage?: AgentMessage
-  assistantMessage?: AgentMessage
-  timelineEvent?: AgentStreamTimelineEvent
-  delta?: string
+  message?: AgentMessage
+  citations?: AgentCitation[]
   content?: string
-  done?: boolean
+  delta?: string
+  runId?: string | number
+  sessionId?: string | number
+  tool?: string
   error?: string
-  retryAfterSeconds?: number
 }
 
-export interface AgentStreamTimelineEvent {
-  type:
-    | 'run_started'
-    | 'step_started'
-    | 'step_finished'
-    | 'step_failed'
-    | 'run_finished'
-    | 'stage'
-  runId?: number
-  sessionId?: number
-  agentType?: AgentType
-  question?: string
-  step?: string
-  stepId?: number
-  order?: number
-  name?: string
-  labelKey?: string
-  label?: string
-  status?: string
-  input?: Record<string, unknown>
-  output?: Record<string, unknown>
-  summary?: Record<string, unknown>
-  error?: string
-}
+export type AgentStreamEventType =
+  | 'run.started'
+  | 'tool.started'
+  | 'tool.completed'
+  | 'message.delta'
+  | 'message.completed'
+  | 'run.completed'
+  | 'error'

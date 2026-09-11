@@ -15,9 +15,9 @@ interface ContactButtonProps {
  * Desktop: fixed floating button.
  * Mobile: inline card.
  */
-export function ContactButton({ postId, title }: ContactButtonProps) {
+export function ContactButton({ title }: ContactButtonProps) {
   const t = useTranslations('Agent')
-  const href = `/agent/article-support?target_post=${encodeURIComponent(postId)}`
+  const href = `/agent?question=${encodeURIComponent('关于《' + title + '》：')}`
 
   return (
     <>

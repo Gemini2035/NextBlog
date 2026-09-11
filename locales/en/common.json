@@ -337,6 +337,25 @@
     "contextUsage": "Context {percent}%",
     "currentContextUsage": "Current context {percent}%",
     "thinking": "Thinking...",
+    "title": "NextBlog Unified Agent",
+    "subtitle": "Search and understand posts, projects, navigation, and site content.",
+    "placeholder": "Ask anything about this site",
+    "empty": "Ask a question and the agent will use site context to answer.",
+    "composer": {
+      "add": "Add attachment",
+      "approval": "Request approval"
+    },
+    "tool": {
+      "searchSite": "Searching site content",
+      "searchPosts": "Finding related posts",
+      "readArticle": "Reading relevant paragraphs"
+    },
+    "articles": {
+      "title": "Related posts",
+      "button": "Article citations ({count})",
+      "open": "Open post",
+      "close": "Close"
+    },
     "send": "Send",
     "stop": "Stop generating",
     "editMessage": "Edit message",
