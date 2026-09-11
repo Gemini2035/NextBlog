@@ -12,6 +12,7 @@ export interface AgentMessage {
   role: 'user' | 'assistant'
   content: string
   citations: AgentCitation[]
+  sources?: AgentCitation[]
   createdAt: string
 }
 
@@ -25,6 +26,7 @@ export interface AgentSession {
 export interface AgentMessageStreamPayload {
   message?: AgentMessage
   citations?: AgentCitation[]
+  sources?: AgentCitation[]
   content?: string
   delta?: string
   runId?: string | number

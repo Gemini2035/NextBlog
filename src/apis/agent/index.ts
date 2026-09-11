@@ -36,9 +36,22 @@ const isAgentMessage = (value: unknown): value is AgentMessage => {
 
 const normalizeCitations = (value: unknown): AgentCitation[] => {
   if (!Array.isArray(value)) return []
-  return value.filter((item): item is AgentCitation => {
-    if (!isRecord(item)) return false
-    return typeof item.title === 'string' && typeof item.href === 'string'
+  return value.flatMap((item) => {
+    if (!isRecord(item) || typeof item.title !== 'string') return []
+    const href = typeof item.href === 'string'
+      ? item.href
+      : typeof item.url === 'string'
+        ? item.url
+        : ''
+    if (!href) return []
+    return [{
+      sourceType: typeof item.sourceType === 'string' ? item.sourceType : typeof item.type === 'string' ? item.type : 'post',
+      sourceId: typeof item.sourceId === 'string' ? item.sourceId : typeof item.id === 'string' ? item.id : href,
+      title: item.title,
+      href,
+      chunkId: typeof item.chunkId === 'string' || typeof item.chunkId === 'number' ? item.chunkId : undefined,
+      excerpt: typeof item.excerpt === 'string' ? item.excerpt : typeof item.description === 'string' ? item.description : undefined,
+    }]
   })
 }
 
@@ -50,10 +63,14 @@ const parsePayload = (data: string): AgentMessageStreamPayload => {
     if (!isRecord(parsed)) return { delta: data }
     const payload = isRecord(parsed.data) ? parsed.data : parsed
     const message = isRecord(payload.message) ? payload.message : undefined
+    const citations = normalizeCitations(payload.citations ?? payload.sources ?? message?.citations ?? message?.sources)
     return {
       ...payload,
-      message: isAgentMessage(message) ? message : undefined,
-      citations: normalizeCitations(payload.citations ?? message?.citations),
+      message: isAgentMessage(message)
+        ? { ...message, citations: citations.length > 0 ? citations : message.citations ?? message.sources ?? [] }
+        : undefined,
+      citations,
+      sources: citations,
       content: typeof payload.content === 'string' ? payload.content : undefined,
       delta: typeof payload.delta === 'string' ? payload.delta : undefined,
       error: typeof payload.error === 'string' ? payload.error : undefined,
@@ -101,7 +118,7 @@ const emitPayload = (
       id: `assistant-${Date.now()}`,
       role: 'assistant',
       content: payload.content,
-      citations: payload.citations ?? [],
+      citations: payload.citations ?? payload.sources ?? [],
       createdAt: new Date().toISOString(),
     })
   }

@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { createAgentSession, streamUnifiedAgentMessage } from '@/apis/agent'
 import { OpenAIIcon } from '@/assets/icons'
 import { MarkdownRenderer } from '@/components/MarkdownRenderer'
-import type { AgentCitation, AgentMessage, AgentSession } from '@/types/agent'
+import type { AgentMessage, AgentSession } from '@/types/agent'
 
 interface UnifiedAgentPageProps {
   initialQuestion?: string
@@ -26,41 +26,6 @@ const getToolLabel = (tool: string, t: ReturnType<typeof useTranslations>) => {
   return t('tool.searchSite')
 }
 
-const citationKey = (citation: AgentCitation) => (
-  `${citation.sourceType}:${citation.sourceId || citation.href}`
-)
-
-function ArticleCitationCards({ citations, t }: {
-  citations: AgentCitation[]
-  t: ReturnType<typeof useTranslations>
-}) {
-  const unique = new Map<string, AgentCitation>()
-  for (const citation of citations) unique.set(citationKey(citation), citation)
-  const articles = [...unique.values()]
-  if (articles.length === 0) return null
-
-  return (
-    <div className="mt-4 w-full self-end">
-      <div className="mb-2 text-right text-xs text-[var(--site-text-tertiary)]">{t('articles.title')}</div>
-      <div className="flex justify-end gap-3 overflow-x-auto pb-2">
-        {articles.map((citation) => (
-          <a
-            key={citationKey(citation)}
-            href={citation.href}
-            target="_blank"
-            rel="noreferrer"
-            className="group block min-w-56 max-w-64 shrink-0 rounded-xl border border-[var(--site-border)] bg-[var(--site-canvas)] px-4 py-3 text-left shadow-sm transition hover:border-[var(--site-action)] hover:shadow-md"
-          >
-            <span className="line-clamp-2 text-sm font-medium leading-5 text-[var(--site-text)] group-hover:text-[var(--site-action)]">{citation.title}</span>
-            {citation.excerpt ? <span className="mt-2 line-clamp-2 block text-xs leading-5 text-[var(--site-text-muted)]">{citation.excerpt}</span> : null}
-            <span className="mt-2 block text-xs text-[var(--site-action)]">{t('articles.open')}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
   const t = useTranslations('Agent')
   const locale = useLocale()
@@ -73,13 +38,11 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
   const cleanupRef = useRef<(() => void) | null>(null)
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const bottomRef = useRef<HTMLDivElement | null>(null)
-  const shouldFollowOutputRef = useRef(true)
   const draftIdRef = useRef<string | number | null>(null)
   const deltaBufferRef = useRef('')
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const streamFinishedRef = useRef(false)
   const finalMessageRef = useRef<AgentMessage | null>(null)
-  const streamCitationsRef = useRef<AgentCitation[]>([])
 
   useEffect(() => {
     let active = true
@@ -101,19 +64,6 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
     }
   }, [locale])
 
-  useEffect(() => {
-    const messageList = messageListRef.current
-    if (!messageList || !shouldFollowOutputRef.current) return
-    messageList.scrollTop = messageList.scrollHeight
-  }, [messages, loading])
-
-  const handleMessageListScroll = () => {
-    const messageList = messageListRef.current
-    if (!messageList) return
-    const distanceFromBottom = messageList.scrollHeight - messageList.scrollTop - messageList.clientHeight
-    shouldFollowOutputRef.current = distanceFromBottom <= 80
-  }
-
   const finishDisplayedMessage = () => {
     if (!streamFinishedRef.current || deltaBufferRef.current) return
     const finalMessage = finalMessageRef.current
@@ -123,7 +73,6 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
       )))
     }
     finalMessageRef.current = null
-    streamCitationsRef.current = []
     draftIdRef.current = null
     streamFinishedRef.current = false
     setLoading(false)
@@ -188,9 +137,12 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
     cleanupRef.current?.()
     const pendingId = `pending-${Date.now()}`
     resetStreamDisplay()
-    shouldFollowOutputRef.current = true
     draftIdRef.current = null
     setMessages((current) => [...current, { id: pendingId, role: 'user', content, citations: [], createdAt: new Date().toISOString() }])
+    setTimeout(() => {
+      const messageList = messageListRef.current
+      if (messageList) messageList.scrollTop = messageList.scrollHeight
+    }, 0)
     setInput('')
     setMessageErrors((current) => {
       const next = { ...current }
@@ -206,24 +158,18 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
       locale,
       {
         onDelta: appendDelta,
-        onCitation: (citation) => {
-          if (!streamCitationsRef.current.some((item) => citationKey(item) === citationKey(citation))) {
-            streamCitationsRef.current.push(citation)
-          }
-        },
         onToolStatus: (tool, completed) => setToolStatus(completed ? '' : getToolLabel(tool, t)),
         onAssistantMessage: (message) => {
-          finalMessageRef.current = streamCitationsRef.current.length > 0
-            ? { ...message, citations: streamCitationsRef.current }
-            : message
+          finalMessageRef.current = message
           if (!deltaBufferRef.current && !typingTimerRef.current) {
             setMessages((current) => {
               const draftId = draftIdRef.current
-              if (draftId) return current.map((item) => item.id === draftId ? message : item)
+              const finalMessage = finalMessageRef.current ?? message
+              if (draftId) return current.map((item) => item.id === draftId ? finalMessage : item)
               const lastAssistantIndex = current.findLastIndex((item) => item.role === 'assistant')
               const lastAssistant = lastAssistantIndex >= 0 ? current[lastAssistantIndex] : undefined
-              if (lastAssistant?.content === message.content) return current
-              return [...current, message]
+              if (lastAssistant?.content === finalMessage.content) return current
+              return [...current, finalMessage]
             })
             draftIdRef.current = null
           }
@@ -266,16 +212,15 @@ export function UnifiedAgentPage({ initialQuestion }: UnifiedAgentPageProps) {
           </div>
         </header>
         <section className="relative flex h-[calc(100dvh-13rem)] min-h-0 flex-col rounded-[var(--site-radius-card)] border border-[var(--site-border)] bg-[var(--site-canvas)] shadow-sm">
-          <div ref={messageListRef} onScroll={handleMessageListScroll} className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-6">
+          <div ref={messageListRef} className="min-h-0 flex-1 overflow-y-auto overscroll-contain [overflow-anchor:none] px-4 py-5 sm:px-6">
             {messages.length === 0 && !loading ? <div className="grid h-full min-h-48 place-items-center text-sm text-[var(--site-text-tertiary)]">{t('empty')}</div> : null}
             <div className="space-y-5">
               {messages.map((message) => (
                 <div key={message.id} className={message.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
-                  <div className="flex max-w-[88%] flex-col">
-                  <div className={message.role === 'user' ? 'self-end rounded-[var(--site-radius-control)] bg-[var(--site-text)] px-4 py-3 text-sm leading-6 text-white' : 'rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] px-4 py-3 text-sm leading-6 text-[var(--site-text)]'}>
+                  <div className="flex w-full flex-col">
+                  <div className={message.role === 'user' ? 'max-w-[88%] self-end rounded-[var(--site-radius-control)] bg-[var(--site-text)] px-4 py-3 text-sm leading-6 text-white' : 'max-w-[88%] rounded-[var(--site-radius-control)] border border-[var(--site-border-subtle)] bg-[var(--site-surface)] px-4 py-3 text-sm leading-6 text-[var(--site-text)]'}>
                     {message.role === 'assistant' ? <MarkdownRenderer content={message.content} linkTarget="_blank" /> : <div className="whitespace-pre-wrap">{message.content}</div>}
                   </div>
-                  {message.role === 'assistant' ? <ArticleCitationCards citations={message.citations ?? []} t={t} /> : null}
                   {message.role === 'user' && messageErrors[String(message.id)] ? <div className="mt-2 self-end text-right text-sm text-red-600">{messageErrors[String(message.id)]}</div> : null}
                   </div>
                 </div>
