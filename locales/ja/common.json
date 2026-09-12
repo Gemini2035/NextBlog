@@ -338,6 +338,25 @@
     "contextUsage": "コンテキスト {percent}%",
     "currentContextUsage": "現在のコンテキスト {percent}%",
     "thinking": "考えています...",
+    "title": "NextBlog 統合アシスタント",
+    "subtitle": "記事、プロジェクト、ナビゲーションなどのサイト情報を検索します。",
+    "placeholder": "サイトについて質問してください",
+    "empty": "質問を入力すると、サイトの内容に基づいて回答します。",
+    "composer": {
+      "add": "添付ファイルを追加",
+      "approval": "承認をリクエスト"
+    },
+    "tool": {
+      "searchSite": "サイト情報を検索中",
+      "searchPosts": "関連記事を検索中",
+      "readArticle": "関連する段落を読んでいます"
+    },
+    "articles": {
+      "title": "関連記事",
+      "button": "記事の引用（{count}）",
+      "open": "記事を開く",
+      "close": "閉じる"
+    },
     "send": "送信",
     "stop": "生成を停止",
     "editMessage": "メッセージを編集",

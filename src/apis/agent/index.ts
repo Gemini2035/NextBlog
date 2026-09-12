@@ -1,357 +1,206 @@
 import { httpRequest } from '@/apis/http'
 import type {
+  AgentCitation,
   AgentMessage,
-  AgentMessageCreatePayload,
   AgentMessageStreamPayload,
-  AgentStreamTimelineEvent,
   AgentSession,
-  AgentType,
+  AgentStreamEventType,
 } from '@/types/agent'
-
-interface CreateAgentSessionRequest {
-  deviceKey: string
-  question?: string
-  targetPostId?: string | null
-}
 
 interface CreateAgentMessageRequest {
   content: string
-  deviceKey: string
-  messages?: Array<Pick<AgentMessage, 'role' | 'content'>>
+  clientMessageId: string
 }
 
 interface StreamAgentMessageOptions {
-  onUserMessage?: (message: AgentMessage) => void
   onAssistantMessage?: (message: AgentMessage) => void
+  onCitation?: (citation: AgentCitation) => void
   onDelta?: (delta: string) => void
-  onTimelineEvent?: (event: AgentStreamTimelineEvent) => void
+  onToolStatus?: (tool: string, completed: boolean) => void
   onDone?: () => void
   onError?: (error: Error) => void
 }
 
-const getAgentQueryType = (agentType: AgentType) => {
-  return agentType === 'chat' ? 'chat' : 'article-support'
+const isRecord = (value: unknown): value is Record<string, unknown> => (
+  typeof value === 'object' && value !== null
+)
+
+const isAgentMessage = (value: unknown): value is AgentMessage => {
+  if (!isRecord(value)) return false
+  return (
+    (typeof value.id === 'string' || typeof value.id === 'number')
+    && (value.role === 'user' || value.role === 'assistant')
+    && typeof value.content === 'string'
+  )
 }
 
-export const createAgentSession = (
-  agentType: AgentType,
-  data: CreateAgentSessionRequest,
-  siteLanguage?: string
-) => {
-  return httpRequest<AgentSession, CreateAgentSessionRequest>({
-    url: `/agent/sessions?type=${getAgentQueryType(agentType)}`,
-    method: 'POST',
-    data,
-    headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
+const normalizeCitations = (value: unknown): AgentCitation[] => {
+  if (!Array.isArray(value)) return []
+  return value.flatMap((item) => {
+    if (!isRecord(item) || typeof item.title !== 'string') return []
+    const href = typeof item.href === 'string'
+      ? item.href
+      : typeof item.url === 'string'
+        ? item.url
+        : ''
+    if (!href) return []
+    return [{
+      sourceType: typeof item.sourceType === 'string' ? item.sourceType : typeof item.type === 'string' ? item.type : 'post',
+      sourceId: typeof item.sourceId === 'string' ? item.sourceId : typeof item.id === 'string' ? item.id : href,
+      title: item.title,
+      href,
+      chunkId: typeof item.chunkId === 'string' || typeof item.chunkId === 'number' ? item.chunkId : undefined,
+      excerpt: typeof item.excerpt === 'string' ? item.excerpt : typeof item.description === 'string' ? item.description : undefined,
+    }]
   })
 }
 
-export const createAgentMessage = (
-  agentType: AgentType,
-  sessionId: number,
-  data: CreateAgentMessageRequest,
-  siteLanguage?: string
-) => {
-  return httpRequest<AgentMessageCreatePayload, CreateAgentMessageRequest>({
-    url: `/agent/sessions/${sessionId}/messages?type=${getAgentQueryType(agentType)}`,
-    method: 'POST',
-    data,
-    headers: siteLanguage ? { 'X-Locale': siteLanguage } : undefined,
-  })
-}
-
-const createAgentStreamUrl = (
-  agentType: AgentType,
-  sessionId: number,
-  data: CreateAgentMessageRequest,
-  siteLanguage?: string
-) => {
-  const searchParams = new URLSearchParams({
-    type: getAgentQueryType(agentType),
-    content: data.content,
-    deviceKey: data.deviceKey,
-  })
-
-  if (siteLanguage) {
-    searchParams.set('locale', siteLanguage)
-  }
-
-  return `/agent-stream/sessions/${sessionId}/messages/stream?${searchParams.toString()}`
-}
-
-const isStreamPayload = (value: unknown): value is AgentMessageStreamPayload => {
-  return typeof value === 'object' && value !== null
-}
-
-const isRecord = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === 'object' && value !== null
-}
-
-const parseStreamPayload = (data: string, eventType?: string): AgentMessageStreamPayload => {
-  if (!data || data === '[DONE]') {
-    return {
-      done: true,
-    }
-  }
-
-  let parsed: unknown
-
+const parsePayload = (data: string): AgentMessageStreamPayload => {
+  if (!data || data === '[DONE]') return {}
   try {
-    parsed = JSON.parse(data) as unknown
+    const parsed: unknown = JSON.parse(data)
+    if (typeof parsed === 'string') return { delta: parsed }
+    if (!isRecord(parsed)) return { delta: data }
+    const payload = isRecord(parsed.data) ? parsed.data : parsed
+    const message = isRecord(payload.message) ? payload.message : undefined
+    const citations = normalizeCitations(payload.citations ?? payload.sources ?? message?.citations ?? message?.sources)
+    return {
+      ...payload,
+      message: isAgentMessage(message)
+        ? { ...message, citations: citations.length > 0 ? citations : message.citations ?? message.sources ?? [] }
+        : undefined,
+      citations,
+      sources: citations,
+      content: typeof payload.content === 'string' ? payload.content : undefined,
+      delta: typeof payload.delta === 'string' ? payload.delta : undefined,
+      error: typeof payload.error === 'string' ? payload.error : undefined,
+    }
   } catch {
-    return {
-      delta: data,
-    }
+    return { delta: data }
   }
-
-  if (typeof parsed === 'string') {
-    return {
-      delta: parsed,
-    }
-  }
-
-  if (!isStreamPayload(parsed)) {
-    return {}
-  }
-
-  const parsedRecord = parsed as Record<string, unknown>
-  const envelopeType = typeof parsedRecord.type === 'string' ? parsedRecord.type : undefined
-  const resolvedEventType = envelopeType ?? eventType
-  const payloadData = envelopeType && 'data' in parsedRecord ? parsedRecord.data : parsed
-
-  if (resolvedEventType === 'ready') {
-    return {}
-  }
-
-  if (
-    resolvedEventType === 'stage'
-    || resolvedEventType === 'run_started'
-    || resolvedEventType === 'step_started'
-    || resolvedEventType === 'step_finished'
-    || resolvedEventType === 'step_failed'
-    || resolvedEventType === 'run_finished'
-  ) {
-    return {
-      timelineEvent: {
-        type: resolvedEventType,
-        ...(isRecord(payloadData) ? payloadData : {}),
-      } as AgentStreamTimelineEvent,
-    }
-  }
-
-  if (resolvedEventType === 'error_message') {
-    if (isRecord(payloadData)) {
-      const message = payloadData.message ?? payloadData.error
-      return {
-        error: typeof message === 'string' ? message : 'Agent stream failed',
-        retryAfterSeconds: typeof payloadData.retryAfterSeconds === 'number'
-          ? payloadData.retryAfterSeconds
-          : undefined,
-      }
-    }
-    return {
-      error: typeof payloadData === 'string' ? payloadData : 'Agent stream failed',
-    }
-  }
-
-  if (resolvedEventType === 'done') {
-    return {
-      done: true,
-    }
-  }
-
-  if (resolvedEventType === 'user_message') {
-    return {
-      userMessage: payloadData as AgentMessage,
-    }
-  }
-
-  if (resolvedEventType === 'assistant_message') {
-    return {
-      assistantMessage: payloadData as AgentMessage,
-    }
-  }
-
-  if (resolvedEventType === 'delta' || resolvedEventType === 'message_delta') {
-    return {
-      delta: isRecord(payloadData) && typeof payloadData.content === 'string'
-        ? payloadData.content
-        : typeof payloadData === 'string'
-          ? payloadData
-          : data,
-    }
-  }
-
-  return parsed
 }
 
-const applyStreamPayload = (payload: AgentMessageStreamPayload, options: StreamAgentMessageOptions) => {
-  if (payload.error) {
-    const error = new Error(payload.error) as Error & { retryAfterSeconds?: number }
-    error.retryAfterSeconds = payload.retryAfterSeconds
-    options.onError?.(error)
+const parseSseEvent = (eventText: string) => {
+  let eventType: AgentStreamEventType | undefined
+  const dataLines: string[] = []
+  for (const line of eventText.split(/\r?\n/)) {
+    if (!line || line.startsWith(':')) continue
+    const separator = line.indexOf(':')
+    const field = separator < 0 ? line : line.slice(0, separator)
+    const value = separator < 0 ? '' : line.slice(separator + 1).replace(/^ /, '')
+    if (field === 'event' && value) eventType = value as AgentStreamEventType
+    if (field === 'data') dataLines.push(value)
+  }
+  return eventType && dataLines.length > 0
+    ? { eventType, payload: parsePayload(dataLines.join('\n')) }
+    : null
+}
+
+const emitPayload = (
+  eventType: AgentStreamEventType,
+  payload: AgentMessageStreamPayload,
+  options: StreamAgentMessageOptions,
+  finish: () => void,
+) => {
+  if (eventType === 'error' || payload.error) {
+    options.onError?.(new Error(payload.error ?? 'Agent stream failed'))
     return
   }
-
-  if (payload.userMessage) {
-    options.onUserMessage?.(payload.userMessage)
+  if (eventType === 'tool.started') options.onToolStatus?.(payload.tool ?? '', false)
+  if (eventType === 'tool.completed') options.onToolStatus?.(payload.tool ?? '', true)
+  if (eventType === 'message.delta' && (payload.delta ?? payload.content)) {
+    options.onDelta?.(payload.delta ?? payload.content ?? '')
   }
-
-  if (payload.assistantMessage) {
-    options.onAssistantMessage?.(payload.assistantMessage)
-  }
-
-  if (payload.timelineEvent) {
-    options.onTimelineEvent?.(payload.timelineEvent)
-  }
-
-  const delta = payload.delta ?? payload.content
-  if (delta) {
-    options.onDelta?.(delta)
-  }
-
-  if (payload.done) {
-    options.onDone?.()
-  }
-}
-
-const parseSseChunk = (chunk: string): Array<{ eventType?: string; data: string }> => {
-  return chunk
-    .split(/\r?\n\r?\n+/)
-    .map((eventText) => {
-      let eventType: string | undefined
-      const dataLines: string[] = []
-
-      for (const line of eventText.split(/\r?\n/)) {
-        if (!line || line.startsWith(':')) continue
-        if (line.startsWith('event:')) {
-          eventType = line.slice('event:'.length).trim()
-          continue
-        }
-        if (line.startsWith('data:')) {
-          dataLines.push(line.slice('data:'.length).trimStart())
-        }
-      }
-
-      return {
-        eventType,
-        data: dataLines.join('\n'),
-      }
+  if (eventType === 'message.completed' && payload.message) {
+    options.onAssistantMessage?.(payload.message)
+  } else if (eventType === 'message.completed' && payload.content) {
+    options.onAssistantMessage?.({
+      id: `assistant-${Date.now()}`,
+      role: 'assistant',
+      content: payload.content,
+      citations: payload.citations ?? payload.sources ?? [],
+      createdAt: new Date().toISOString(),
     })
-    .filter((event) => event.data)
+  }
+  for (const citation of payload.citations ?? []) options.onCitation?.(citation)
+  if (eventType === 'run.completed') finish()
 }
 
-export const streamAgentMessage = (
-  agentType: AgentType,
-  sessionId: number,
+export const createAgentSession = (deviceKey: string, siteLanguage?: string) => (
+  httpRequest<AgentSession, Record<string, never>>({
+    url: '/agent/sessions',
+    method: 'POST',
+    data: {},
+    headers: {
+      'X-Device-Key': deviceKey,
+      ...(siteLanguage ? { 'X-Locale': siteLanguage } : {}),
+    },
+  })
+)
+
+export const streamUnifiedAgentMessage = (
+  sessionId: string | number,
   data: CreateAgentMessageRequest,
+  deviceKey: string,
   siteLanguage: string | undefined,
-  options: StreamAgentMessageOptions
+  options: StreamAgentMessageOptions,
 ) => {
   const abortController = new AbortController()
   let finished = false
   let reader: ReadableStreamDefaultReader<Uint8Array> | null = null
 
-  const cancelReader = () => {
-    const currentReader = reader
-    reader = null
-    if (!currentReader) return
-    void currentReader.cancel().catch(() => undefined)
-  }
-
   const finish = () => {
     if (finished) return
     finished = true
-    abortController.abort()
-    cancelReader()
+    reader = null
     options.onDone?.()
-  }
-
-  const handlePayload = (eventData: string, eventType?: string) => {
-    try {
-      const payload = parseStreamPayload(eventData, eventType)
-      applyStreamPayload(payload, {
-        ...options,
-        onDone: finish,
-        onError: (error) => {
-          finished = true
-          abortController.abort()
-          cancelReader()
-          options.onError?.(error)
-        },
-      })
-    } catch (error) {
-      finished = true
-      abortController.abort()
-      cancelReader()
-      options.onError?.(error instanceof Error ? error : new Error('Failed to parse agent stream'))
-    }
   }
 
   void (async () => {
     try {
-      const response = await fetch(createAgentStreamUrl(agentType, sessionId, data, siteLanguage), {
-        method: 'GET',
+      const response = await fetch(`/agent-stream/sessions/${sessionId}/messages/stream`, {
+        method: 'POST',
         headers: {
           Accept: 'text/event-stream',
+          'Content-Type': 'application/json',
+          'X-Device-Key': deviceKey,
           ...(siteLanguage ? { 'X-Locale': siteLanguage } : {}),
         },
+        body: JSON.stringify(data),
         signal: abortController.signal,
       })
-
-      if (!response.ok) {
-        const errorPayload = await response.json().catch(() => null) as unknown
-        if (isRecord(errorPayload)) {
-          const message = errorPayload.message ?? errorPayload.error
-          if (typeof message === 'string') {
-            throw new Error(message)
-          }
-        }
-        throw new Error(`Agent stream failed with status ${response.status}`)
-      }
-
-      if (!response.body) {
-        throw new Error('Agent stream response body is empty')
-      }
+      if (!response.ok) throw new Error(`Agent stream failed with status ${response.status}`)
+      if (!response.body) throw new Error('Agent stream response body is empty')
 
       reader = response.body.getReader()
       const decoder = new TextDecoder()
       let buffer = ''
-
       while (!finished) {
         const { done, value } = await reader.read()
         if (done) break
-
         buffer += decoder.decode(value, { stream: true })
-        const eventBoundaryMatch = /\r?\n\r?\n(?![\s\S]*\r?\n\r?\n)/.exec(buffer)
-        const eventBoundary = eventBoundaryMatch?.index ?? -1
-        if (eventBoundary < 0) continue
-
-        const completeEvents = buffer.slice(0, eventBoundary)
-        buffer = buffer.slice(eventBoundary + (eventBoundaryMatch?.[0].length ?? 2))
-
-        for (const event of parseSseChunk(completeEvents)) {
-          handlePayload(event.data, event.eventType)
+        const parts = buffer.split(/\r?\n\r?\n/)
+        buffer = parts.pop() ?? ''
+        for (const part of parts) {
+          const event = parseSseEvent(part)
+          if (event) emitPayload(event.eventType, event.payload, options, finish)
         }
       }
-
-      const trailing = `${buffer}${decoder.decode()}`
-      for (const event of parseSseChunk(trailing)) {
-        handlePayload(event.data, event.eventType)
-      }
-
-      finish()
+      buffer += decoder.decode()
+      const trailingEvent = parseSseEvent(buffer)
+      if (trailingEvent) emitPayload(trailingEvent.eventType, trailingEvent.payload, options, finish)
+      if (!finished) finish()
     } catch (error) {
-      if (finished || abortController.signal.aborted) return
+      if (abortController.signal.aborted) return
       finished = true
-      cancelReader()
       options.onError?.(error instanceof Error ? error : new Error('Agent stream disconnected'))
     }
   })()
 
   return () => {
+    if (finished) return
     finished = true
     abortController.abort()
-    cancelReader()
+    void reader?.cancel().catch(() => undefined)
   }
 }
